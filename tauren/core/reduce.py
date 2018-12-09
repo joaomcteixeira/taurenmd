@@ -22,6 +22,11 @@ along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 
 import mdtraj as md
 
+from tauren import logger
+
+log = logger.get_log(__name__)
+
+
 def equidistant_frames(traj, step):
     """
     Reduces trajectory in equidistant frames separated by
@@ -39,7 +44,38 @@ def equidistant_frames(traj, step):
         - modified trajectory (MDTraj.Trajectory)
     """
     
-    assert isinstance(traj, md.Trajectory), "Not valid trajectory type"
+    assert isinstance(traj, md.Trajectory), "Not a valid trajectory type"
     assert isinstance(step, int), "<step> must be integer type"
     
-    return traj[::step]
+    log.info("* received trajectory: {}".format(traj))
+    
+    new_traj = traj[::step]
+    
+    log.debug("* reduced trajectory: {}".format(new_traj))
+    
+    return new_traj
+
+
+def remove_solvent(traj):
+    """
+    Removes solvent from Trajectory.
+    
+    Parameters:
+    
+        - traj (MDTraj.Trajectory)
+    
+    Returns:
+        
+        - solventless trajectory (MDTraj.Trajectory)
+    """
+    
+    assert isinstance(traj, md.Trajectory), "Not a valid trajectory type"
+    
+    log.info("** Removing solvent...")
+    log.info("* received trajectory: {}".format(traj))
+    
+    traj.remove_solvent(inplace=True)
+    
+    log.info("* solventless trajectory: {}".format(traj))
+    
+    return traj
