@@ -1,7 +1,7 @@
 {
-    "trajectory_path":"",
-    "topology_path":"",
-    "remove_solvent": true,
-    "reduce_equidistant": true,
-    "reduce_equidistant_step": 10
+    "actions": {
+        "remove_solvent": [true, {}],
+        "reduce_equidistant": [true, {"step":10}],
+        "frames2PDB": [true, {"frames": "all", "suffix":"_"}]
+    }
 }

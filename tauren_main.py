@@ -23,7 +23,7 @@ along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 import argparse
 
 from tauren import system, logger
-from tauren.core import openlib, transform
+from tauren.core import openlib
 
 log = logger.get_log(__name__)
 ap = argparse.ArgumentParser(description=__doc__)
@@ -31,17 +31,19 @@ ap = argparse.ArgumentParser(description=__doc__)
 # Mandatory
 ap.add_argument(
     'config',
-    help="Tauren-MD configuration (.json) file"
+    help="Tauren-MD configuration JSON file"
     )
 
 # Options
 ap.add_argument(
+    '-traj',
     '--trajectory',
     default=None,
     help="Trajectory file ({})".format(system.trajectory_types)
     )
 
 ap.add_argument(
+    '-top',
     '--topology',
     default=None,
     help="Topology file ({})".format(system.topology_types)
@@ -51,14 +53,16 @@ cmd = ap.parse_args()
 
 # set path configuration
 conf = openlib.load_json_config(cmd.config)
-conf.trajectory = cmd.trajectory or conf.trajectory
-conf.topology = cmd.topology or conf.topology
 
-    
-traj = openlib.load_traj(conf.trajectory, conf.topology)
+traj = openlib.load_traj(cmd.trajectory, cmd.topology)
 
-if conf.reduce_equidistant:
-    traj = transform.reduce_equidistant(traj, conf.reduce_equidistant_step)
+for action, arguments in conf.actions.items():
+    log.info("Performing '{}' with args: '{}'".format(action, arguments))
+    if arguments[0]:
+        traj = system.actions_dict[action](traj, **arguments[1])
 
-if conf.remove_solvent:
-    traj = transform.remove_solvent(traj)
+# if conf.reduce_equidistant:
+    # traj = transform.reduce_equidistant(traj, conf.reduce_equidistant_step)
+
+# if conf.remove_solvent:
+    # traj = transform.remove_solvent(traj)

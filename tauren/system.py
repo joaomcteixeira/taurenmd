@@ -20,5 +20,13 @@ You should have received a copy of the GNU General Public License
 along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 """
 
+from tauren.core import transform, export
+
 trajectory_types = (".xtc", ".nc", ".trr", ".h5", ".pdb", ".binpos", ".dcd")
 topology_types = (".pdb", ".cif")
+
+actions_dict = {
+    "remove_solvent": transform.remove_solvent,
+    "reduce_equidistant": transform.reduce_equidistant,
+    "frames2PDB": export.frames2PDB
+    }
