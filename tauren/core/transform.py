@@ -27,7 +27,7 @@ from tauren import logger
 log = logger.get_log(__name__)
 
 
-def equidistant_frames(traj, step):
+def reduce_equidistant(traj, step):
     """
     Reduces trajectory in equidistant frames separated by
     <step> frames.
@@ -77,5 +77,34 @@ def remove_solvent(traj):
     traj.remove_solvent(inplace=True)
     
     log.info("* solventless trajectory: {}".format(traj))
+    
+    return traj
+
+
+def try_mdtraj_image_molecules(
+        traj,
+        anchor_molecules=None,
+        other_molecules=None,
+        sorted_bonds=None,
+        make_whole=True
+        ):
+    """
+    Performs MDTraj.Trajectory.image_molecules, accepts same arguments.
+    
+    Returns:
+    
+        - modified trajectory
+    """
+    log.info("*Trying imaging molecules")
+    
+    traj.image_molecules(
+        inplace=True,
+        anchor_molecules=anchor_molecules,
+        other_molecules=other_molecules,
+        sorted_bonds=sorted_bonds,
+        make_whole=make_whole
+        )
+    
+    log.info("    completed")
     
     return traj
