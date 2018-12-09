@@ -29,22 +29,10 @@ import numpy as np
 import mdtraj as md
 import simtk.openmm.app as app
 
-log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)
+from tauren import logger
 
-# create a file handler
-debug_ = logging.FileHandler('md-tools.log')
-debug_.setLevel(logging.DEBUG)
-ch = logging.StreamHandler(sys.stdout)
-ch.setLevel(logging.INFO)
+log = logger.get_log(__name__)
 
-# create a logging format
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(filename)s:%(name)s:%(funcName)s:%(lineno)d - %(message)s')
-debug_.setFormatter(formatter)
-
-# add the handlers to the logger
-log.addHandler(debug_)
-log.addHandler(ch)
 
 def load_traj(traj_file, topo_file):
     """
