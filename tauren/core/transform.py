@@ -27,7 +27,7 @@ from tauren import logger
 log = logger.get_log(__name__)
 
 
-def reduce_equidistant(traj, step):
+def reduce_equidistant(traj, step=1):
     """
     Reduces trajectory in equidistant frames separated by
     <step> frames.
@@ -37,7 +37,7 @@ def reduce_equidistant(traj, step):
         - traj (MDTraj.Trajectory): the trajectory to modify
         
         - step (int): the number of steps between
-        equidistant frames.
+        equidistant frames. Defaults to 1.
     
     Returns:
     
@@ -56,7 +56,7 @@ def reduce_equidistant(traj, step):
     return new_traj
 
 
-def remove_solvent(traj):
+def remove_solvent(traj, **kwargs):
     """
     Removes solvent from Trajectory.
     

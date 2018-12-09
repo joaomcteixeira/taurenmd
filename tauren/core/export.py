@@ -25,7 +25,7 @@ from tauren import logger
 log = logger.get_log(__name__)
 
 
-def frames2PDB(traj, frames=None, suffix="_"):
+def frames2PDB(traj, frames="all", suffix="_"):
     """
     Extracts trajectory frames to PDB files using <sufix> name.
     
@@ -33,48 +33,47 @@ def frames2PDB(traj, frames=None, suffix="_"):
     
         - frames (opt, str): frame or range of frames to extract
             (INCLUSIVE), examples:
-                "0", "0:", ":500", "10:50"
-            Defaults to None -> extracts all frames
+                "0", "0:", ":500", "10:50", "1,40,65,100"
+            Defaults to "all" -> extracts all frames
         
     """
     
     assert isinstance(suffix, str), "<suffix> must be str type."
+        
+    assert isinstance(frames, str), \
+        "<suffix> must be str type."
     
-    if frames:
+    if frames == "all":
         
-        assert isinstance(frames, str), \
-            "<suffix> must be str type."
-        
-        if frames.startswith(":"):
-            try:
-                frames_to_extract = list(range(0, int(frames[0:])))
-            except ValueError:
-                log.info("<frames> not valid: '{}'".format(frames))
-                return
-        
-        elif frames.endswith(":"):
-            try:
-                frames_to_extrat = \
-                    list(range(int(frames[:-1]), traj.n_frames + 1))
-            except ValueError:
-                log.info("<frames> not valid: '{}'".format(frames))
-                return
-        
-        elif frames.find(","):
-            try:
-                frames_to_extract = [int(f) for f in frames.split(',')]
-            except ValueError:
-                log.info("<frames> not valid: '{}'".format(frames))
-                return
-        else:
-            try:
-                frames_to_extract = list(int(frames))
-            except ValueError:
-                log.info("<frames> not valid: '{}'".format(frames))
-                return
-    
-    else:
         frames_to_extract = range(traj.n_frames)
+    
+    elif frames.startswith(":"):
+        try:
+            frames_to_extract = list(range(0, int(frames[1:]) + 1))
+        except ValueError:
+            log.info("<frames> not valid: '{}'".format(frames))
+            return
+    
+    elif frames.endswith(":"):
+        try:
+            frames_to_extract = \
+                list(range(int(frames[:-1]), traj.n_frames + 1))
+        except ValueError:
+            log.info("<frames> not valid: '{}'".format(frames))
+            return
+    
+    elif frames.find(","):
+        try:
+            frames_to_extract = [int(f) for f in frames.split(',')]
+        except ValueError:
+            log.info("<frames> not valid: '{}'".format(frames))
+            return
+    else:
+        try:
+            frames_to_extract = list(int(frames))
+        except ValueError:
+            log.info("<frames> not valid: '{}'".format(frames))
+            return
     
     if not(frames_to_extract):
         msg1 = "* ERROR * Couldn't identify the frames to extract: '{}'"
@@ -86,10 +85,10 @@ def frames2PDB(traj, frames=None, suffix="_"):
         return
     
     log.debug("<frames>: {}".format(frames))
-    log.debug("<all_frames>: {}".format(all_frames))
     
-    leading_zeros = len(str(traj.n_frames))
-    pdb_name_fmt = suffix + "{:0>" + leading_zeros + "}"
+    leading_zeros = str(len(str(traj.n_frames)))
+    pdb_name_fmt = suffix + "{:0>" + leading_zeros + "}.pdb"
+    print(pdb_name_fmt)
     
     for frame in frames_to_extract:
         
@@ -102,8 +101,8 @@ def frames2PDB(traj, frames=None, suffix="_"):
             log.info(msg)
             continue
         
-        pdb_name = pdb_name_fmt.format(suffix, frame)
+        pdb_name = pdb_name_fmt.format(frame)
         slice_.save_pdb(pdb_name)
         log.info("* extracted {}".format(pdb_name))
     
-    return
+    return traj

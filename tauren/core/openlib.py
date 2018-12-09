@@ -33,6 +33,22 @@ from tauren import system
 
 log = logger.get_log(__name__)
 
+_traj_details = """
+*** Loaded ***
+
+trajectory: {}
+topology: {}
+
+* details:
+
+n_frames: {}
+n_residues: {}
+n_atmos: {}
+
+time_step: {} ps or {} ns
+total_time: {} ps or {} ns
+"""
+
 
 def load_json_config(config_path):
     """
@@ -51,11 +67,11 @@ def load_json_config(config_path):
     assert config_path.endswith('.json'), \
         "config file should be JSON (.json) type"
     
-    assert os.path.isfile(config_path), \
-        "'{}' is not a file".format(config_path)
-    
     assert os.path.exists(config_path), \
         "'{}' file does not exists".format(config_path)
+    
+    assert os.path.isfile(config_path), \
+        "'{}' is not a file".format(config_path)
     
     with open(config_path, 'r') as conf:
         config = json.load(conf)
@@ -122,32 +138,17 @@ def load_traj(traj_file, topo_file):
             )
         sys.exit(1)
         
-    info = \
-"""
-*** Loaded ***
-
-trajectory: {}
-topology: {}
-
-* details:
-
-n_frames: {}
-n_residues: {}
-n_atmos: {}
-
-time_step: {} ps or {} ns
-total_time: {} ps or {} ns
-""".format(
-    traj_file,
-    topo_file,
-    traj.n_frames,
-    traj.n_residues,
-    traj.n_atoms,
-    traj.timestep,
-    traj.timestep / 1000,
-    traj.time[-1],
-    traj.time[-1] / 1000
-    )
+    info = _traj_details.format(
+        traj_file,
+        topo_file,
+        traj.n_frames,
+        traj.n_residues,
+        traj.n_atoms,
+        traj.timestep,
+        traj.timestep / 1000,
+        traj.time[-1],
+        traj.time[-1] / 1000
+        )
     
     log.info(info)
     
