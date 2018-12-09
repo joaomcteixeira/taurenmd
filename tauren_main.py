@@ -58,8 +58,7 @@ conf.topology = cmd.topology or conf.topology
 traj = openlib.load_traj(conf.trajectory, conf.topology)
 
 if conf.reduce_equidistant:
-    traj = transform.reduce_equidistant(traj, c.reduce_equidistant_step)
+    traj = transform.reduce_equidistant(traj, conf.reduce_equidistant_step)
 
 if conf.remove_solvent:
     traj = transform.remove_solvent(traj)
-    
