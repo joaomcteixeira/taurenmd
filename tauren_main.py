@@ -60,9 +60,3 @@ for action, arguments in conf.actions.items():
     log.info("Performing '{}' with args: '{}'".format(action, arguments))
     if arguments[0]:
         traj = system.actions_dict[action](traj, **arguments[1])
-
-# if conf.reduce_equidistant:
-    # traj = transform.reduce_equidistant(traj, conf.reduce_equidistant_step)
-
-# if conf.remove_solvent:
-    # traj = transform.remove_solvent(traj)
