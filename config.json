@@ -1,1 +1,7 @@
-
+{
+    "trajectory_path":"",
+    "topology_path":"",
+    "remove_solvent": true,
+    "reduce_equidistant": true,
+    "reduce_equidistant_step": 10
+}
