@@ -23,9 +23,6 @@ along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 import os
 import sys
 
-import logging
-import numpy as np
-
 import mdtraj as md
 import simtk.openmm.app as app
 
@@ -50,7 +47,7 @@ def load_traj(traj_file, topo_file):
     Returns:
     
         - mdtraj.Trajectory object
-        (http://mdtraj.org/1.9.0/api/generated/mdtraj.Trajectory.html) 
+        (http://mdtraj.org/1.9.0/api/generated/mdtraj.Trajectory.html)
     """
     
     log.info("loading trajectory...")
@@ -85,7 +82,9 @@ def load_traj(traj_file, topo_file):
     
     else:
         sys.stderr.write("trajectory file not suited")
-        sys.stderr.write("should end with {}".format(", ".join(trajectory_type)))
+        sys.stderr.write(
+            "should end with {}".format(", ".join(trajectory_type))
+            )
         sys.exit(1)
         
     info = \
@@ -104,16 +103,16 @@ n_atmos: {}
 time_step: {} ps or {} ns
 total_time: {} ps or {} ns
 """.format(
-        traj_file,
-        topo_file,
-        traj.n_frames,
-        traj.n_residues,
-        traj.n_atoms,
-        traj.timestep,
-        traj.timestep/1000,
-        traj.time[-1],
-        traj.time[-1]/1000
-        )
+    traj_file,
+    topo_file,
+    traj.n_frames,
+    traj.n_residues,
+    traj.n_atoms,
+    traj.timestep,
+    traj.timestep / 1000,
+    traj.time[-1],
+    traj.time[-1] / 1000
+    )
     
     log.info(info)
     
