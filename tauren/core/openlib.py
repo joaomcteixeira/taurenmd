@@ -22,13 +22,50 @@ along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 
 import os
 import sys
+import json
+from collections import namedtuple
 
 import mdtraj as md
 import simtk.openmm.app as app
 
 from tauren import logger
+from tauren import system
 
 log = logger.get_log(__name__)
+
+
+def load_json_config(config_path):
+    """
+    Loads configuration JSON file into a collections.namedtuple()
+    
+    Parameters:
+    
+        - config_path (str): path to .json file
+    
+    Returns:
+    
+        - namedtuple() with 'typename' = 'config and 'field_names'
+            the JSON config keys.
+    """
+    
+    assert config_path.endswith('.json'), \
+        "config file should be JSON (.json) type"
+    
+    assert os.path.isfile(config_path), \
+        "'{}' is not a file".format(config_path)
+    
+    assert os.path.exists(config_path), \
+        "'{}' file does not exists".format(config_path)
+    
+    with open(config_path, 'r') as conf:
+        config = json.load(conf)
+    
+    a = namedtuple("config", config.keys())
+    config_tuple = a(**config)
+    
+    log.debug("<config_tuple>: {}".format(config_tuple))
+    
+    return config_tuple
 
 
 def load_traj(traj_file, topo_file):
@@ -75,15 +112,13 @@ def load_traj(traj_file, topo_file):
         sys.stderr.write("should have extention: 'pdb' or 'cif")
         sys.exit(1)
     
-    trajectory_type = (".xtc", ".nc", ".trr", ".h5", ".pdb", ".binpos", ".dcd")
-    
-    if traj_file.endswith(trajectory_type):
+    if traj_file.endswith(system.trajectory_types):
         traj = md.load(traj_file, top=topology)
     
     else:
         sys.stderr.write("trajectory file not suited")
         sys.stderr.write(
-            "should end with {}".format(", ".join(trajectory_type))
+            "should end with {}".format(", ".join(system.trajectory_types))
             )
         sys.exit(1)
         
