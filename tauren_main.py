@@ -20,6 +20,7 @@ You should have received a copy of the GNU General Public License
 along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 """
 import sys
+import os
 import argparse
 
 from tauren import system, logger
@@ -28,10 +29,23 @@ from tauren.core import openlib
 log = logger.get_log(__name__)
 ap = argparse.ArgumentParser(description=__doc__)
 
+path_to_default_config = os.path.abspath(
+    os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        'tauren_config.json'
+        )
+    )
+
 # Mandatory
 ap.add_argument(
-    'config',
-    help="Tauren-MD configuration JSON file"
+    '-c',
+    '--config',
+    help=(
+        "Tauren-MD configuration JSON file. "
+        "If not provided runs the default config: "
+        "simply loads trajectory and shows information"
+        ),
+    default=path_to_default_config
     )
 
 # Options
