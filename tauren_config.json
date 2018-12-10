@@ -1,7 +1,13 @@
 {
+    "input_data": {
+            "trajectory": "",
+            "topology": ""
+        },
+    
     "actions": {
         "remove_solvent": [true, {}],
         "reduce_equidistant": [true, {"step":10}],
+        "try_mdtraj_image_molecules": [true, {"anchor_molecules": null, "other_molecules": null, "sorted_bonds": null, "make_whole": null}],
         "frames2PDB": [true, {"frames": "all", "suffix":"_"}]
     }
 }
