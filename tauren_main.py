@@ -19,7 +19,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 """
-
+import sys
 import argparse
 
 from tauren import system, logger
@@ -54,7 +54,27 @@ cmd = ap.parse_args()
 # set path configuration
 conf = openlib.load_json_config(cmd.config)
 
-traj = openlib.load_traj(cmd.trajectory, cmd.topology)
+if cmd.trajectory:
+    trajectory_path = cmd.trajectory
+
+elif conf.input_data["trajectory"]:
+    trajectory_path = conf.input_data["trajectory"]
+
+else:
+    log.info("* ERROR * No trajectory file provided")
+    sys.exit(1)
+
+if cmd.topology:
+    topology_path = cmd.topology
+
+elif conf.input_data["topology"]:
+    topology_path = conf.input_data["topology"]
+
+else:
+    log.info("* ERROR * No topology file provided")
+    sys.exit(1)
+
+traj = openlib.load_traj(trajectory_path, topology_path)
 
 for action, arguments in conf.actions.items():
     log.info("Performing '{}' with args: '{}'".format(action, arguments))
