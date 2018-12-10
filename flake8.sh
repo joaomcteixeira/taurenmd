@@ -1,4 +1,4 @@
 #!/bin/bash
 
 clear
-flake8 --ignore=E123,W293 $1
+flake8 --hang-closing --ignore=W293 $1
