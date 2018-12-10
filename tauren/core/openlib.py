@@ -107,11 +107,29 @@ def load_traj(traj_file, topo_file):
     
     if not(os.path.exists(topo_file)):
         
-        sys.stderr.write("topology file: '{topo_file}' does not exists")
+        sys.stderr.write(
+            "topology file: '{}' does not exists\n".format(topo_file)
+            )
+        sys.exit(1)
+    
+    elif not(topo_file.endswith(system.topology_types)):
+        sys.stderr.write("topology file not suited\n")
+        sys.stderr.write(
+            "should have extention: '{}'\n".format(system.topology_types)
+            )
         sys.exit(1)
     
     if not(os.path.exists(traj_file)):
-        sys.stderr.write("trajectory file: '{traj_file}' does not exists")
+        sys.stderr.write(
+            "trajectory file: '{}' does not exists\n".format(traj_file)
+            )
+        sys.exit(1)
+    
+    elif not(traj_file.endswith(system.trajectory_types)):
+        sys.stderr.write("trajectory file not suited\n")
+        sys.stderr.write(
+            "should end with '{}'\n".format(system.trajectory_types)
+            )
         sys.exit(1)
     
     if topo_file.endswith(".cif"):
@@ -123,21 +141,8 @@ def load_traj(traj_file, topo_file):
     elif topo_file.endswith('.pdf'):
         topology = topo_file
     
-    else:
-        sys.stderr.write("topology file not suited")
-        sys.stderr.write("should have extention: 'pdb' or 'cif")
-        sys.exit(1)
+    traj = md.load(traj_file, top=topology)
     
-    if traj_file.endswith(system.trajectory_types):
-        traj = md.load(traj_file, top=topology)
-    
-    else:
-        sys.stderr.write("trajectory file not suited")
-        sys.stderr.write(
-            "should end with {}".format(", ".join(system.trajectory_types))
-            )
-        sys.exit(1)
-        
     info = _traj_details.format(
         traj_file,
         topo_file,
