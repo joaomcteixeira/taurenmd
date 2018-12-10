@@ -138,7 +138,7 @@ def load_traj(traj_file, topo_file):
         topology = md.Topology.from_openmm(structure.topology)
         log.info("loaded topology with md.Topology.from_openmm")
     
-    elif topo_file.endswith('.pdf'):
+    elif topo_file.endswith('.pdb'):
         topology = topo_file
     
     traj = md.load(traj_file, top=topology)
