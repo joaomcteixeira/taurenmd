@@ -107,29 +107,21 @@ def load_traj(traj_file, topo_file):
     
     if not(os.path.exists(topo_file)):
         
-        sys.stderr.write(
-            "topology file: '{}' does not exists\n".format(topo_file)
-            )
+        log.info("topology file: '{}' does not exists\n".format(topo_file))
         sys.exit(1)
     
     elif not(topo_file.endswith(system.topology_types)):
-        sys.stderr.write("topology file not suited\n")
-        sys.stderr.write(
-            "should have extention: '{}'\n".format(system.topology_types)
-            )
+        log.info("topology file not suited\n")
+        log.info("should have extention: '{}'\n".format(system.topology_types))
         sys.exit(1)
     
     if not(os.path.exists(traj_file)):
-        sys.stderr.write(
-            "trajectory file: '{}' does not exists\n".format(traj_file)
-            )
+        log.info("trajectory file: '{}' does not exists\n".format(traj_file))
         sys.exit(1)
     
     elif not(traj_file.endswith(system.trajectory_types)):
-        sys.stderr.write("trajectory file not suited\n")
-        sys.stderr.write(
-            "should end with '{}'\n".format(system.trajectory_types)
-            )
+        log.info("trajectory file not suited\n")
+        log.info("should end with '{}'\n".format(system.trajectory_types))
         sys.exit(1)
     
     if topo_file.endswith(".cif"):
