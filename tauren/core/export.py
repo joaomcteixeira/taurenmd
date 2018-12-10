@@ -20,7 +20,7 @@ You should have received a copy of the GNU General Public License
 along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 """
 
-from tauren import logger
+from tauren import logger, system
 
 log = logger.get_log(__name__)
 
@@ -62,7 +62,7 @@ def frames2PDB(traj, frames="all", suffix="_"):
             log.info("<frames> not valid: '{}'".format(frames))
             return
     
-    elif frames.find(","):
+    elif bool(frames.find(",")):
         try:
             frames_to_extract = [int(f) for f in frames.split(',')]
         except ValueError:
@@ -104,5 +104,33 @@ def frames2PDB(traj, frames="all", suffix="_"):
         pdb_name = pdb_name_fmt.format(frame)
         slice_.save_pdb(pdb_name)
         log.info("* extracted {}".format(pdb_name))
+    
+    return traj
+
+
+def save_traj(traj, file_name="traj_output.dcd", overwrite=True):
+    """
+    Saves trajectory to <file_name>.
+    Trajectory format is given by extension name.
+    
+    Uses mdtraj.Trajectory.save()
+    
+    Parameters:
+    
+        - file_name (str): name of the output trajectory file.
+        
+        - overwrite (bool): if file_name already exists, overwrites it.
+    """
+    log.info("* Exporting trajectory to: {}".format(file_name))
+    
+    if not(file_name.endswith(system.trajectory_types)):
+        log.info("* ERROR * not a valid traj extension")
+        log.info("* ERROR * should be '{}'".format(system.trajectory_types))
+        log.info("* ignoring...")
+        return
+    
+    traj.save(file_name, force_overwrite=overwrite)
+    
+    log.info("    ... saved")
     
     return traj

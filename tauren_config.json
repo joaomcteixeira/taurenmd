@@ -8,6 +8,7 @@
         "remove_solvent": [true, {}],
         "reduce_equidistant": [true, {"step":10}],
         "try_mdtraj_image_molecules": [true, {"anchor_molecules": null, "other_molecules": null, "sorted_bonds": null, "make_whole": null}],
-        "frames2PDB": [true, {"frames": "all", "suffix":"_"}]
+        "frames2PDB": [true, {"frames": "all", "suffix":"_"}],
+        "save_traj": [true, {"file_name": "traj_OUTPUT.dcd", "overwrite":true}]
     }
 }

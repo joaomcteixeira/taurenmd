@@ -77,6 +77,7 @@ else:
 traj = openlib.load_traj(trajectory_path, topology_path)
 
 for action, arguments in conf.actions.items():
-    log.info("Performing '{}' with args: '{}'".format(action, arguments))
     if arguments[0]:
+        log_msg = "Performing '{}' with args: '{}'"
+        log.info(log_msg.format(action, arguments[1]))
         traj = system.actions_dict[action](traj, **arguments[1])
