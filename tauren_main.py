@@ -22,9 +22,14 @@ along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 import sys
 import os
 import argparse
+from pathlib import Path
 
 from tauren import system, logger
 from tauren.core import openlib
+
+log_path = Path(logger.log_file_name)
+if log_path.exists():
+    log_path.unlink()
 
 log = logger.get_log(__name__)
 ap = argparse.ArgumentParser(description=__doc__)

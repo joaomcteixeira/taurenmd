@@ -23,6 +23,8 @@ along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 import sys
 import logging
 
+log_file_name = 'tauren-md.log'
+
 
 def get_log(name):
     """
@@ -33,7 +35,7 @@ def get_log(name):
     log.setLevel(logging.DEBUG)
     
     # create a file handler
-    debug_ = logging.FileHandler('tauren-md.log')
+    debug_ = logging.FileHandler(log_file_name)
     debug_.setLevel(logging.DEBUG)
     ch = logging.StreamHandler(sys.stdout)
     ch.setLevel(logging.INFO)
