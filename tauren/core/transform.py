@@ -56,13 +56,18 @@ def reduce_equidistant(traj, step=1):
     return new_traj
 
 
-def remove_solvent(traj, **kwargs):
+def remove_solvent(traj, exclude=None):
     """
     Removes solvent from Trajectory.
+    
+    Performs: MDTraj.Trajectory.remove_solvent()
     
     Parameters:
     
         - traj (MDTraj.Trajectory)
+        
+        - exclude: List of solvent residue names to retain
+            in the new trajectory.
     
     Returns:
         
