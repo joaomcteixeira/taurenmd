@@ -32,6 +32,8 @@ if log_path.exists():
     log_path.unlink()
 
 log = logger.get_log(__name__)
+log.info("*Tauren-MD initiated!")
+
 ap = argparse.ArgumentParser(description=__doc__)
 
 path_to_default_config = os.path.abspath(
@@ -97,6 +99,10 @@ traj = openlib.load_traj(trajectory_path, topology_path)
 
 for action, arguments in conf.actions.items():
     if arguments[0]:
+        action_name = action.rstrip("_")
         log_msg = "Performing '{}' with args: '{}'"
-        log.info(log_msg.format(action, arguments[1]))
-        traj = system.actions_dict[action](traj, **arguments[1])
+        log.info(log_msg.format(action_name, arguments[1]))
+        
+        traj = system.actions_dict[action_name](traj, **arguments[1])
+
+log.info("* Tauren-MD completed!")
