@@ -123,12 +123,6 @@ def save_traj(traj, file_name="traj_output.dcd", overwrite=True):
     """
     log.info("* Exporting trajectory to: {}".format(file_name))
     
-    if not(file_name.endswith(system.trajectory_types)):
-        log.info("* ERROR * not a valid traj extension")
-        log.info("* ERROR * should be '{}'".format(system.trajectory_types))
-        log.info("* ignoring...")
-        return
-    
     traj.save(file_name, force_overwrite=overwrite)
     
     log.info("    ... saved")
