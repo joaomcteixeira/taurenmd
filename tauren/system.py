@@ -28,6 +28,7 @@ topology_types = (".pdb", ".cif")
 actions_dict = {
     "remove_solvent": transform.remove_solvent,
     "reduce_equidistant": transform.reduce_equidistant,
+    "try_mdtraj_image_molecules": transform.try_mdtraj_image_molecules,
     "frames2PDB": export.frames2PDB,
     "save_traj": export.save_traj
     }
