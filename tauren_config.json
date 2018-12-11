@@ -5,7 +5,7 @@
         },
     
     "actions": {
-        "remove_solvent": [false, {}],
+        "remove_solvent": [false, {"exclude":null}],
         "reduce_equidistant": [false, {"step":10}],
         "try_mdtraj_image_molecules": [false, {"anchor_molecules": null, "other_molecules": null, "sorted_bonds": null, "make_whole": null}],
         "frames2PDB": [false, {"frames": "all", "suffix":"_"}],
