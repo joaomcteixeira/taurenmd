@@ -1,3 +1,4 @@
+#! /home/joao/Programming/Tauren-MD/miniconda/envs/taurenmd/bin/python
 """
 MANAGES TAUREN WORKFLOW
 
@@ -32,7 +33,7 @@ if log_path.exists():
     log_path.unlink()
 
 log = logger.get_log(__name__)
-log.info("*Tauren-MD initiated!")
+log.info("* Tauren-MD initiated!")
 
 ap = argparse.ArgumentParser(description=__doc__)
 
