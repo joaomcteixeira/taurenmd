@@ -1,4 +1,3 @@
-#! /home/joao/Programming/Tauren-MD/miniconda/envs/taurenmd/bin/python
 """
 MANAGES TAUREN WORKFLOW
 
