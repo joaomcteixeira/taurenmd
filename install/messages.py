@@ -33,8 +33,8 @@ from install import system
 from install import executables
 
 # provide a link and e-mail with further documentation on the install process
-install_wiki = "https://github.com/joaomcteixeira/Tree-of-Life/wiki"
-mailist = "https://github.com/joaomcteixeira/Tree-of-Life/issues"
+install_wiki = "https://github.com/joaomcteixeira/Tauren-MD/wiki"
+mailist = "https://github.com/joaomcteixeira/Tauren-MD/issues"
 
 # configure textwrapper
 
