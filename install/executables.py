@@ -90,7 +90,7 @@ ap = argparse.ArgumentParser(description=__doc__)
 
 path_to_default_config = os.path.abspath(
     os.path.join(
-        os.path.dirname(os.path.realpath(__file__)),
+        software_folder,
         'tauren_config.json'
         )
     )
