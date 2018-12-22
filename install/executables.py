@@ -183,6 +183,7 @@ if sys.version_info[0] != 3:
 from install import logger
 from install import messages
 from install import system
+from install import executables
 
 try:
     import installation_vars
@@ -253,8 +254,10 @@ from install import condamanager
 upf = updater.Updater(install_dir)
 upf.run()
 
-# reloads the updated version of system lib
+# reloads the libs updated version
 importlib.reload(system)
+importlib.reload(executables)
+importlib.reload(commons)
 
 log.info("* Checking Conda environment...")
 
