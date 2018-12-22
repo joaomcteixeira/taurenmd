@@ -32,7 +32,7 @@ import os
 
 # configure accordingly to the host project
 software_name = "Tauren-MD"
-software_version = (0, 1, 0)  # v1.0.0
+software_version = (1, 0, 0)  # v1.0.0
 min_space_allowed = 5  # min GB required to install your software
 installation_log_name = "install.log"
 update_log_name = "update.log"
