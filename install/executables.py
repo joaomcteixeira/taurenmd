@@ -67,8 +67,14 @@ import os
 import argparse
 from pathlib import Path
 
-_installation_path = Path(__file__)
-sys.path.append(os.fspath(_installation_path.parent.parent))
+software_folder = os.path.abspath(
+    os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        os.pardir
+        )
+    )
+
+sys.path.append(software_folder)
 
 from tauren import system, logger
 from tauren.core import openlib
