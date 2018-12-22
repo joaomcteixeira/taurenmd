@@ -43,7 +43,7 @@ shebang = "#! {}\n"
 # define your executable scripts
 exec1_code = r"""'''
 MANAGES TAUREN WORKFLOW
-testing...
+
 Copyright © 2018-2019 Tauren-MD Project
 
 Contributors to this file:
