@@ -52,9 +52,9 @@ from install import commons
 from install import messages
 
 _new_version_url = \
-    "https://github.com/joaomcteixeira/Tree-of-Life/archive/master.zip"
+    "https://github.com/joaomcteixeira/Tauren-MD/archive/master.zip"
 _new_version_zip = "master.zip"
-_folders_to_remove = ["install", ".github"]
+_folders_to_remove = ["install", "tauren"]
 
 
 class Updater():
