@@ -54,7 +54,7 @@ from install import messages
 _new_version_url = \
     "https://github.com/joaomcteixeira/Tauren-MD/archive/master.zip"
 _new_version_zip = "master.zip"
-_folders_to_remove = ["install", "tauren"]
+_folders_to_remove = ["install", "tauren", ".github"]
 
 
 class Updater():
