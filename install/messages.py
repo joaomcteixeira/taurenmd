@@ -306,7 +306,7 @@ abort = """
 
 terminate = "Press ENTER to TERMINATE"
 
-# http://patorjk.com/software/taag/#p=display&h=1&f=Sweet&t=Tree%20of%20Life
+# http://patorjk.com/software/taag/#p=display&h=0&v=0&f=ANSI%20Shadow&t=tauren-md%0Av1.0.0
 banner = r"""
 ████████╗ █████╗ ██╗   ██╗██████╗ ███████╗███╗   ██╗      ███╗   ███╗██████╗ 
 ╚══██╔══╝██╔══██╗██║   ██║██╔══██╗██╔════╝████╗  ██║      ████╗ ████║██╔══██╗
