@@ -28,7 +28,13 @@ my_func(
 - **Always** submit a Pull Request from a cloned or forked repository.
 - Pull Requests title should start with a proposal of version change and, if helpful, followed by a short title: `v1.3.12 - corrected bug in updater`
   - follow versioning standards: [_major/visible_ [ _new feature_ [ _bug correction_]]
-  - new version number should be updated in the README.md file.
+  - new version number should be updated in the README.md file and updated in `install/system.py` variable `software_version`.
+  - be nice and update the installation banner at `install/messages.py` using this ASCII text generator, just change the version number in the following link `:-)`:
+```
+                                                                                   here
+                                                                                   |||||
+http://patorjk.com/software/taag/#p=display&h=0&v=0&f=ANSI%20Shadow&t=tauren-md%0Av1.0.0
+```
 - Pull Request description should state the added improvements and corrections.
 - Pull Request should close issues whenever applicable.
 
