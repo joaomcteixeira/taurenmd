@@ -1,5 +1,7 @@
 # Tauren-MD
 
+_version: 1.0.0_
+
 An interface that streamlines analisis routines for Molecular Dynamics.
 
 Designed mostly for users without programming skills, but that serves also those proficient Python programmers.
