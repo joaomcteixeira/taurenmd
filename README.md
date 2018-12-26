@@ -1,11 +1,14 @@
 # Tauren-MD
 
-An interface that streamlines analisis routines for Molecular Dynamics. Designed mostly for users without programming skills, but that serves also those proficient Python programmers.
+An interface that streamlines analisis routines for Molecular Dynamics.
+
+Designed mostly for users without programming skills, but that serves also those proficient Python programmers.
 
 Tauren-MD wraps around high performance MD analysis libraries, currently: [MDTraj](https://github.com/mdtraj/mdtraj), [MDAnalysis](https://www.mdanalysis.org/) and [OpenMM](https://github.com/pandegroup/openmm); and other Python libraries, such as [matplotlib](https://matplotlib.org/), to allow simple yet dynamic analysis workflows.
-Tauren-MD contains sets of predefined functions for loading, transforming and exporting trajectories, for calculating restraints from trajectories and also predifined plotting routines to maximize the output quality. Tauren-MD is an _À la carte_ menu where the user can easily chose what she/he wants from hers/his trajectories.
 
-Tauren-MD does not require any programming skills to be used, you can easily configure the `tauren_config.json` file with the routines you wish to execute and run it via `tauren_main.py` that is created after installation.
+Tauren-MD contains sets of predefined functions for _loading_, _transforming_ and _exporting_ trajectories, for calculating restraints from trajectories and also predifined plotting routines to maximize the output quality. Tauren-MD is an _À la carte_ menu where the user can easily chose what she/he wants from hers/his trajectories.
+
+Tauren-MD does not require any programming skills to be used, you can easily configure the `tauren_config.json` file with the routines you wish to execute and run it via `tauren_main.py` (created after installation).
 
 ```
 python tauren_main.py -c your_config.json
