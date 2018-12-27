@@ -1,9 +1,7 @@
 """
 Manages software updates.
 
-Copyright © 2018-2019 Tauren-MD
-
-THIS FILE WAS ADAPTED FROM TREE-OF-LIFE PROJECT (version 1.0.1 - LGPLv3)
+THIS FILE WAS ADAPTED FROM TREE-OF-LIFE PROJECT (version 1.1.1 - LGPLv3)
 AND MODIFIED ACCORDINGLY TO THE NEEDS OF THE TAUREN-MD PROJECT.
 
 Visit the original Tree-of-Life project at:
@@ -48,13 +46,13 @@ import zipfile
 import time
 
 from install import logger
+from install import host_project_vars
 from install import commons
 from install import messages
 
-_new_version_url = \
-    "https://github.com/joaomcteixeira/Tauren-MD/archive/master.zip"
-_new_version_zip = "master.zip"
-_folders_to_remove = ["install", "tauren", ".github"]
+_new_version_url = host_project_vars.new_version_url
+_new_version_zip = host_project_vars.new_version_zip
+_folders_to_remove = host_project_vars.folders_to_remove
 
 
 class Updater():

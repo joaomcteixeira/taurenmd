@@ -1,6 +1,6 @@
 # Tauren-MD
 
-_version: 1.0.0_
+_version: 1.0.1_
 
 An interface that streamlines analisis routines for Molecular Dynamics.
 
