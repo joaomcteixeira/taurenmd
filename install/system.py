@@ -2,9 +2,7 @@
 MANAGES SYSTEM INFORMATION AND OTHER NECESSARY PARAMETERS
     FOR INSTALLATION AND UPDATE.
 
-Copyright © 2018-2019 Tauren-MD
-
-THIS FILE WAS ADAPTED FROM TREE-OF-LIFE PROJECT (version 1.0.1 - LGPLv3)
+THIS FILE WAS ADAPTED FROM TREE-OF-LIFE PROJECT (version 1.1.1 - LGPLv3)
 AND MODIFIED ACCORDINGLY TO THE NEEDS OF THE TAUREN-MD PROJECT.
 
 Visit the original Tree-of-Life project at:
@@ -29,15 +27,7 @@ along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 """
 import platform as pltfrm
 import os
-
-# configure accordingly to the host project
-software_name = "Tauren-MD"
-software_version = (1, 0, 0)  # v1.0.0
-min_space_allowed = 5  # min GB required to install your software
-installation_log_name = "install.log"
-update_log_name = "update.log"
-_lastest_env_file = "taurenmd.yml"
-_miniconda_folder = "miniconda"
+from install import host_project_vars
 
 # about the default installation folder
 _file_path = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
@@ -52,8 +42,11 @@ bits = "x86_64" if (pltfrm.machine().endswith('64')) else "x86"
 exec_file_extension = _executable_file_extensions[platform]
 
 # about conda env
-latest_env_file = os.path.join(_file_path, _lastest_env_file)
-default_miniconda_folder = os.path.join(installation_folder, _miniconda_folder)
+latest_env_file = os.path.join(_file_path, host_project_vars.env_file)
+default_miniconda_folder = os.path.join(
+    installation_folder,
+    host_project_vars.miniconda_folder
+    )
 
 with open(latest_env_file, 'r') as f:
     for line in f:

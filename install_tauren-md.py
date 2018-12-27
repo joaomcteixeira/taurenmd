@@ -1,9 +1,7 @@
 """
 Tauren-MD installer.
 
-Copyright © 2018-2019 Tauren-MD
-
-THIS FILE WAS ADAPTED FROM TREE-OF-LIFE PROJECT (version 1.0.1 - LGPLv3)
+THIS FILE WAS ADAPTED FROM TREE-OF-LIFE PROJECT (version 1.1.1 - LGPLv3)
 AND MODIFIED ACCORDINGLY TO THE NEEDS OF THE TAUREN-MD PROJECT.
 
 Visit the original Tree-of-Life project at:
@@ -35,6 +33,7 @@ libs_folder = os.path.abspath(os.path.dirname(os.path.realpath(__file__)))
 # appends 'install' folder to allow lib import
 sys.path.append(os.path.join(libs_folder, "install"))
 
+from install import host_project_vars
 from install import system
 from install import messages
 # logging is required before importing the other package libs
@@ -43,7 +42,7 @@ from install import logger
 # STARTS LOGGING
 logfile_name = os.path.join(
     system.installation_folder,
-    system.installation_log_name
+    host_project_vars.installation_log_name
     )
 
 if os.path.exists(logfile_name):
@@ -64,7 +63,7 @@ elif python_version == 3:
 else:
     log.info(messages.unknown_python)
     log.info("* You are running Python version: {}".format(python_version))
-    _name = system.software_name
+    _name = host_project_vars.software_name
     log.info("* {} requires Python 2.7 or 3.x to execute".format(_name))
     log.info(messages.additional_help)
     log.info(messages.abort)
@@ -83,7 +82,7 @@ from install import commons
 from install import condamanager
 
 # STARTS INSTALLATION
-log.debug("{} installation initiated".format(system.software_name))
+log.debug("{} installation initiated".format(host_project_vars.software_name))
 log.debug("<installation_folder>: {}".format(system.installation_folder))
 log.info(messages.banner)
 log.info(messages.start_install)

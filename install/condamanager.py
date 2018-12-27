@@ -2,9 +2,7 @@
 """
 Manages Miniconda and ENV installation.
 
-Copyright © 2018-2019 Tauren-MD
-
-THIS FILE WAS ADAPTED FROM TREE-OF-LIFE PROJECT (version 1.0.1 - LGPLv3)
+THIS FILE WAS ADAPTED FROM TREE-OF-LIFE PROJECT (version 1.1.1 - LGPLv3)
 AND MODIFIED ACCORDINGLY TO THE NEEDS OF THE TAUREN-MD PROJECT.
 
 Visit the original Tree-of-Life project at:
@@ -42,8 +40,8 @@ else:
     sys.exit("* ABORTING * You are using a Python '{}', \
 you should use versions 2 or 3.".format(python_version))
 
-from install import system
 from install import logger
+from install import system
 from install import messages
 from install import commons
 

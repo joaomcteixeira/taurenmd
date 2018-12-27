@@ -1,9 +1,7 @@
 """
 Commons fuctions that serve installation and update
 
-Copyright © 2018-2019 Tauren-MD
-
-THIS FILE WAS ADAPTED FROM TREE-OF-LIFE PROJECT (version 1.0.1 - LGPLv3)
+THIS FILE WAS ADAPTED FROM TREE-OF-LIFE PROJECT (version 1.1.1 - LGPLv3)
 AND MODIFIED ACCORDINGLY TO THE NEEDS OF THE TAUREN-MD PROJECT.
 
 Visit the original Tree-of-Life project at:
@@ -34,6 +32,7 @@ import shutil
 import ctypes
 
 from install import logger
+from install import host_project_vars
 from install import system
 from install import messages
 from install import executables
@@ -72,11 +71,11 @@ def check_available_disk_space(min_space=None):
     Parameters:
     
         - min_space (float): the minimum space allowed in GBs.
-            Defaults to system.min_space_allowed
+            Defaults to host_project_vars.min_space_allowed
     
     """
     
-    min_space = min_space or system.min_space_allowed
+    min_space = min_space or host_project_vars.min_space_allowed
     log.debug("<min_space>: {}".format(min_space))
     
     try:
@@ -306,7 +305,6 @@ def create_executables(installation_folder, python_exec):
         fout = open(exec_file, 'w')
         log.debug("opened {}".format(exec_file))
         
-        # changed from Tree-of-Life v1.0.0 to fit Tauren-MD
         fout.write(executables.shebang.format(python_exec) + code)
         fout.close()
         
