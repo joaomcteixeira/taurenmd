@@ -20,12 +20,13 @@ You should have received a copy of the GNU General Public License
 along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 """
 
-import tauren.core as trncore
+from tauren import logger
+from tauren import _core as trncore
 
-log = trncore.logger.get_log(__name__)
+log = logger.get_log(__name__)
 
 
-@trncore._decorators.validate_trajectory
+@trncore.validators.validate_trajectory
 def reduce_equidistant(
         traj,
         *args,
@@ -61,7 +62,7 @@ def reduce_equidistant(
     return (new_traj, )
 
 
-@trncore._decorators.validate_trajectory
+@trncore.validators.validate_trajectory
 def remove_solvent(
         traj,
         *args,
@@ -94,7 +95,7 @@ def remove_solvent(
     return (traj, )
 
 
-@trncore._decorators.validate_trajectory
+@trncore.validators.validate_trajectory
 def mdtraj_image_molecules(
         traj,
         *args,

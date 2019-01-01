@@ -21,12 +21,14 @@ along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 """
 
 import sys
-import tauren.core as trncore
 
-log = trncore.logger.get_log(__name__)
+from tauren import logger
+from tauren import _core as trncore
+
+log = logger.get_log(__name__)
 
 
-@trncore._decorators.validate_trajectory
+@trncore.validators.validate_trajectory
 def frames2PDB(
         traj,
         *args,
@@ -112,7 +114,7 @@ def frames2PDB(
     return (traj, )
 
 
-@trncore._decorators.validate_trajectory
+@trncore.validators.validate_trajectory
 def save_traj(
         traj,
         *args,

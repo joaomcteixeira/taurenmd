@@ -30,10 +30,15 @@ tauren_log_config = {
     "disable_existing_loggers": False,
     "formatters": {
         "debug_format": {
-            "format": "%(asctime)s - %(levelname)s - %(filename)s:%(name)s:%(funcName)s:%(lineno)d - %(message)s"
-        },
+            "format":  (
+                "%(asctime)s - "
+                "%(levelname)s - "
+                "%(filename)s:%(name)s:%(funcName)s:%(lineno)d - "
+                "%(message)s"
+                )
+            },
         "info_format": {}
-    },
+        },
     
     "handlers": {
         "console": {
@@ -41,7 +46,7 @@ tauren_log_config = {
             "level": "INFO",
             "formatter": "info_format",
             "stream": "ext://sys.stdout"
-        },
+            },
         "debug_file_handler": {
             "class": "logging.handlers.RotatingFileHandler",
             "level": "DEBUG",
@@ -50,16 +55,17 @@ tauren_log_config = {
             "maxBytes": 10485760,
             "backupCount": 20,
             "encoding": "utf8"
-        }
-    },
+            }
+        },
     
     "loggers": {},
     
     "root": {
         "level": "DEBUG",
         "handlers": ["console", "debug_file_handler"]
+        }
     }
-}
+
 
 def get_log(name):
     """

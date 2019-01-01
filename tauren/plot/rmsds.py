@@ -24,9 +24,10 @@ import numpy as np
 import mdtraj as md
 from matplotlib import pyplot as plt
 
-import tauren.core as trncore
+from tauren import logger
+from tauren import _core as trncore
 
-log = trncore.logger.get_log(__name__)
+log = logger.get_log(__name__)
 
 
 def _get_rmsds(traj):
@@ -41,7 +42,7 @@ def _get_rmsds(traj):
     return rmsds
 
 
-@trncore._decorators.validate_trajectory
+@trncore.validators.validate_trajectory
 def plot_overall_rmsd(
         traj,
         *args,

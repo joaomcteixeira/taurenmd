@@ -20,9 +20,9 @@ You should have received a copy of the GNU General Public License
 along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 """
 
-import tauren.communicate as trncomm
-import tauren.transform as trntrans
-import tauren.plot as trnplt
+from tauren import communicate as trncomm
+from tauren import transform as trntrans
+from tauren import plot as trnplt
 
 trajectory_types = (".xtc", ".nc", ".trr", ".h5", ".pdb", ".binpos", ".dcd")
 topology_types = (".pdb", ".cif")

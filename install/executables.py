@@ -75,14 +75,15 @@ software_folder = os.path.abspath(
 
 sys.path.append(software_folder)
 
-import tauren.core as trncore
-import tauren.communicate as trncomm
+from tauren import logger
+from tauren import communicate as trncomm
+from tauren import interface as trnint
 
-log_path = Path(trncore.logger.log_file_name)
+log_path = Path(logger.log_file_name)
 if log_path.exists():
     log_path.unlink()
 
-log = trncore.logger.get_log(__name__)
+log = logger.get_log(__name__)
 log.info("* Tauren-MD initiated!")
 
 ap = argparse.ArgumentParser(description=__doc__)
@@ -111,14 +112,14 @@ ap.add_argument(
     '-traj',
     '--trajectory',
     default=None,
-    help="Trajectory file ({})".format(trncore.system.trajectory_types)
+    help="Trajectory file ({})".format(trnint.interface.trajectory_types)
     )
 
 ap.add_argument(
     '-top',
     '--topology',
     default=None,
-    help="Topology file ({})".format(trncore.system.topology_types)
+    help="Topology file ({})".format(trnint.interface.topology_types)
     )
 
 cmd = ap.parse_args()
@@ -155,10 +156,10 @@ for action, arguments in conf.actions.items():
     
     if perform_action:
         action_name = action.rstrip("_")
-        log_msg = "Performing '{}' with args: '{}'"
+        log_msg = "*** Performing '{}' with args: '{}'"
         log.debug(log_msg.format(action_name, action_kwargs))
         
-        traj_and_args = trncore.system.actions_dict[action_name](
+        traj_and_args = trnint.interface.actions_dict[action_name](
             traj_and_args[0],
             *traj_and_args[1:],
             **action_kwargs,
