@@ -20,17 +20,18 @@ You should have received a copy of the GNU General Public License
 along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 """
 
-from tauren.core import transform, export
-from tauren.plot import general
+import tauren.communicate as trncomm
+import tauren.transform as trntrans
+import tauren.plot as trnplt
 
 trajectory_types = (".xtc", ".nc", ".trr", ".h5", ".pdb", ".binpos", ".dcd")
 topology_types = (".pdb", ".cif")
 
 actions_dict = {
-    "remove_solvent": transform.remove_solvent,
-    "reduce_equidistant": transform.reduce_equidistant,
-    "try_mdtraj_image_molecules": transform.try_mdtraj_image_molecules,
-    "frames2PDB": export.frames2PDB,
-    "save_traj": export.save_traj,
-    "plot_overall_rmsd": general.plot_overall_rmsd
+    "remove_solvent": trntrans.transform.remove_solvent,
+    "reduce_equidistant": trntrans.transform.reduce_equidistant,
+    "try_mdtraj_image_molecules": trntrans.transform.mdtraj_image_molecules,
+    "frames2PDB": trncomm.export.frames2PDB,
+    "save_traj": trncomm.export.save_traj,
+    "plot_overall_rmsd": trnplt.rmsds.plot_overall_rmsd,
     }
