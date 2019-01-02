@@ -1,8 +1,3 @@
-# import sys
-# import os
-
-# sys.path.append(os.path.abspath(os.path.dirname(os.path.realpath(__file__))))
-
 __all__ = [
     "tlog",
     "_core",
@@ -18,5 +13,3 @@ from tauren import communicate as tcomm
 from tauren import transform as ttrans
 from tauren import plot as tplot
 from tauren import interface as tinter
-
-
