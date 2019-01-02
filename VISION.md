@@ -79,7 +79,8 @@ Tauren-MD `actions`:
 General project organization:
 
 - `tauren/`: _main_ lib folder
-    - `core/`: libs that are used system wide, commons, decorators, helpers...
-    - `communicate/`: deals with input (_read_) and output (_export_) of data
-    - `transform/`: transforms trajectory or data
-    - `plot/`: plotting templates
+    - `_core/`: libs that are used system wide, commons, decorators, helpers... but not supposed to be used directly.
+    - `interface`: connection between the user interface and routines.
+    - `communicate/`: deals with input (_read_) and output (_export_) of data.
+    - `transform/`: transforms trajectory or data.
+    - `plot/`: plotting templates.
