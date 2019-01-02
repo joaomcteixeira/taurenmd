@@ -1,5 +1,5 @@
 """
-CONTAINS GENERAL AND SYSTEM VARIABLES
+Functions to calculate parameters from single trajectories.
 
 Copyright © 2018-2019 Tauren-MD Project
 
@@ -20,18 +20,32 @@ You should have received a copy of the GNU General Public License
 along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 """
 
-from tauren import tcomm, ttrans, tplot
+import mdtraj as md
 
-trajectory_types = (".xtc", ".nc", ".trr", ".h5", ".pdb", ".binpos", ".dcd")
-topology_types = (".pdb", ".cif")
+from tauren import tlog
+from tauren._core import validators
 
-actions_dict = {
-    "remove_solvent": ttrans.transform.remove_solvent,
-    "reduce_equidistant": ttrans.transform.reduce_equidistant,
-    "try_mdtraj_image_molecules": ttrans.transform.mdtraj_image_molecules,
-    "frames2PDB": tcomm.export.frames2PDB,
-    "save_traj": tcomm.export.save_traj,
-    "plot_combined": tplot.rmsds.plot_combined,
-    "plot_chain_per_subplot": tplot.rmsds.plot_chain_per_subplot,
-    "plot_chains_single_subplot": tplot.rmsds.plot_chains_single_subplot,
-    }
+log = tlog.get_log(__name__)
+
+
+@validators.validate_trajectory
+def calc_rmsds(traj, *args, ref_frame=0, **kwargs):
+    """
+    Calculates RMSDs from trajectory.
+    """
+    
+    rmsds = md.rmsd(
+        traj,
+        traj,
+        frame=ref_frame,
+        parallel=True,
+        precentered=False,
+        )
+    
+    log.debug(
+        f"<rmsds>: max {rmsds.max()},"
+        f" min {rmsds.min()},"
+        f" average {rmsds.mean()}"
+        )
+    
+    return (traj, rmsds)

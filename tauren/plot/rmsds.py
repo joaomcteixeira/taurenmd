@@ -1,5 +1,5 @@
 """
-CONTAINS GENERAL FUNCTIONS FOR PLOTTING
+Fuctions to plot RMSDs.
 
 Copyright © 2018-2019 Tauren-MD Project
 
@@ -20,64 +20,301 @@ You should have received a copy of the GNU General Public License
 along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 """
 
+import sys
 import numpy as np
-import mdtraj as md
 from matplotlib import pyplot as plt
 
 from tauren import tlog
 from tauren._core import validators
+from tauren.plot import _commons as pltcommons
+from tauren.calculate import fromtraj
 
 log = tlog.get_log(__name__)
 
 
-def _get_rmsds(traj):
-    """
-    Gets RMSD from traj.
-    """
-    
-    rmsds = md.rmsd(traj, traj, frame=0, parallel=True, precentered=False)
-    
-    log.debug("<rmsds>: {}".format(rmsds))
-    
-    return rmsds
-
-
 @validators.validate_trajectory
-def plot_overall_rmsd(
+def plot_combined(
         traj,
         *args,
         color='blue',
-        fig_name='overall_rmsds.pdf',
+        chains="all",
+        fig_name='RMSDS_plot_combined.pdf',
         **kwargs,
         ):
     """
     Plots a single plot with the combined RMSD for all chains.
+    
+    Parameters:
+    
+        - color (str, opt): plot color
+        
+        - chains (str, opt, def: "all"): the chains to consider for
+            plotting. Accepts integer slicer: 1:, :50, 2:30:2, etc...
+        
+        - fig_name (str, opt, def: "RMSDS_plot_combined.pdf"): the
+            name of the output figure.
     """
     
-    log.info("* Plotting overall RMSDs...")
+    log.info("* Plotting combined RMSDs...")
     
-    rmsds = _get_rmsds(traj)
+    validators.validate_args(
+        (
+            (color, str),
+            (chains, str),
+            (fig_name, str),
+            ),
+        func_name=plot_combined.__name__,
+        )
+    
+    if chains != "all":
+        chain_list = pltcommons._get_chain_list(traj, chains)
+        selector_traj_str = [f"chainid {chain}" for chain in chain_list]
+        selector = " or ".join(selector_traj_str)
+        slicer = traj.topology.select(selector)
+        try:
+            sliced_traj = traj.atom_slice(slicer, inplace=False)
+        except IndexError:
+            log.expection("Could not slice traj")
+            sys.exit(1)
+        
+        _, rmsds = fromtraj.calc_rmsds(sliced_traj)
+    
+    else:
+        _, rmsds = fromtraj.calc_rmsds(traj)
     
     fig, ax = plt.subplots(nrows=1, ncols=1)
     
-    x_range = np.arange(1, traj.n_frames + 1)
+    plt.tight_layout(rect=[0.05, 0.02, 0.995, 0.985])
+    fig.suptitle("Combined RMSDs", x=0.5, y=0.990, va="top", ha="center")
+    
+    x_range = np.arange(0, traj.n_frames)
     
     ax.plot(
         x_range,
         rmsds,
-        label='all chains',
+        label=chains,
         color=color,
         alpha=0.7
         )
     
-    ax.set_title('Overall RMSDs', weight='bold')
-    ax.set_xlabel("Number of frames", weight='bold')
-    ax.set_ylabel("RMSD", weight='bold')
+    ax.set_xlabel("Frame Number", weight='bold')
+    ax.set_ylabel("RMSDs", weight='bold')
     ax.grid(color='lightgrey', linestyle='-', linewidth=1, alpha=0.7)
     
     ax.set_xlim(x_range[0], x_range[-1])
     ax.set_ylim(0)
     
+    ax.legend(fontsize=6, loc=4)
+    
+    fig.savefig(fig_name)
+    log.info(f"    saved figure '{fig_name}'")
+    
+    return (traj, )
+
+
+@validators.validate_trajectory
+def plot_chain_per_subplot(
+        traj,
+        *args,
+        chains="all",
+        colors="None",
+        fig_name="RMSDS_plot_chain_per_subplot.pdf",
+        **kwargs,
+        ):
+    """
+    Plots RMSD for individual chains.
+    
+    Draws a figure with one subplot for each chain.
+    
+    Parameters:
+    
+        - chains (str, opt, def: "all"): the chains to consider for
+            plotting. Accepts integer slicer: 1:, :50, 2:30:2, etc...
+        
+        - colors (str of comma separated values): "blue,red,green".
+        
+        - fig_name (str, opt, def: "RMSDS_plot_combined.pdf"): the
+            name of the output figure.
+    """
+    
+    log.info("* Plotting RMSDs per chain...")
+    
+    validators.validate_args(
+        (
+            (chains, str),
+            (colors, str),
+            (fig_name, str),
+            ),
+        func_name=plot_chain_per_subplot.__name__,
+        )
+    
+    chain_list = pltcommons._get_chain_list(traj, chains)
+    colors = pltcommons._get_colors(colors)
+    figsize = pltcommons._fig_size(len(chain_list), ncols=1, irow=3)
+    
+    fig, ax = plt.subplots(
+        nrows=len(chain_list),
+        ncols=1,
+        figsize=figsize,
+        sharex=True,
+        )
+    
+    plt.tight_layout(rect=[0.05, 0.02, 0.995, 0.985])
+    fig.suptitle("RMSDs per chain", x=0.5, y=0.990, va="top", ha="center")
+    
+    ax = ax.ravel()
+    
+    # https://matplotlib.org/gallery/subplots_axes_and_figures/ganged_plots.html#sphx-glr-gallery-subplots-axes-and-figures-ganged-plots-py
+    fig.subplots_adjust(hspace=0)
+    
+    x_range = np.arange(0, traj.n_frames)
+    
+    max_rmsd = 0
+    for ii, chain in enumerate(chain_list):
+        
+        selector = f"chainid {chain}"
+        slicer = traj.topology.select(selector)
+        log.debug(
+            f"performing on: selector {selector} "
+            f"with slicer len {len(slicer)}"
+            )
+        
+        if slicer.size == 0:
+            errmsg = f"chainid '{chain}' does not exists. Ignoring..."
+            log.info(errmsg)
+            ax[ii].text(
+                0.5,
+                0.5,
+                errmsg,
+                fontsize=10,
+                va='center',
+                ha='center',
+                transform=ax[ii].transAxes
+                )
+            rmsds = np.zeros(traj.n_frames)
+            continue
+        
+        else:
+            chain_traj = traj.atom_slice(slicer, inplace=False)
+            _, rmsds = fromtraj.calc_rmsds(chain_traj)
+        
+        ax[ii].plot(
+            x_range,
+            rmsds,
+            label=chain,
+            color=next(colors),
+            alpha=0.7,
+            )
+        
+        ax[ii].set_xlim(x_range[0], x_range[-1])
+        
+        ax[ii].set_ylabel("RMSDs", weight='bold')
+        
+        ax[ii].grid(color='lightgrey', linestyle='-', linewidth=1, alpha=0.7)
+        ax[ii].legend(fontsize=6, loc=4)
+        
+        if rmsds.max() > max_rmsd:
+            max_rmsd = rmsds.max()
+        
+    else:
+        ax[ii].set_xlabel("Frame Number", weight='bold')
+    
+    log.debug(f"<max_rmsds>: {max_rmsd}")
+    
+    for i, z in enumerate(ax):
+        
+        ax[i].set_ylim(0, max_rmsd + max_rmsd * 0.1)
+        all_ticks = ax[i].get_yticks()
+        ax[i].set_yticks(all_ticks[1:-1])
+    
+    else:
+        ax[i].set_yticks(all_ticks[:-1])
+    
+    fig.savefig(fig_name)
+    log.info(f"    saved figure '{fig_name}'")
+    
+    return (traj, )
+
+
+@validators.validate_trajectory
+def plot_chains_single_subplot(
+        traj,
+        *args,
+        chains="all",
+        fig_name="RMSDS_plot_chains_single_subplot.pdf",
+        colors="None",
+        **kwargs,
+        ):
+    """
+    Plots the RMSDs of the selected chains in a single subplot.
+    
+    Parameters:
+    
+        - chains (str, opt, def: "all"): the chains to consider for
+            plotting. Accepts integer slicer: 1:, :50, 2:30:2, etc...
+        
+        - colors (str of comma separated values): "blue,red,green".
+        
+        - fig_name (str, opt, def: "RMSDS_plot_combined.pdf"): the
+            name of the output figure.
+    """
+    
+    log.info("* Plotting chains RMSDs single subplot...")
+    
+    validators.validate_args(
+        (
+            (chains, str),
+            (fig_name, str),
+            (colors, str),
+            ),
+        func_name=plot_chains_single_subplot.__name__,
+        )
+    
+    chain_list = pltcommons._get_chain_list(traj, chains)
+    colors = pltcommons._get_colors(colors)
+        
+    fig, ax = plt.subplots(nrows=1, ncols=1)
+    
+    plt.tight_layout(rect=[0.05, 0.02, 0.995, 0.985])
+    fig.suptitle("Chains' RMSDs", x=0.5, y=0.990, va="top", ha="center")
+    
+    x_range = np.arange(0, traj.n_frames)
+    max_rmsds = 0
+    for chain in chain_list:
+        
+        selector = f"chainid {chain}"
+        slicer = traj.topology.select(selector)
+        log.debug(
+            f"performing on: selector {selector} "
+            f"with slicer len {len(slicer)}"
+            )
+        
+        if slicer.size == 0:
+            log.debug("This chains is NOT found in trajectory... ignoring...")
+            continue
+        
+        else:
+            chain_traj = traj.atom_slice(slicer, inplace=False)
+            _, rmsds = fromtraj.calc_rmsds(chain_traj)
+        
+        ax.plot(
+            x_range,
+            rmsds,
+            label=chain,
+            color=next(colors),
+            alpha=0.7,
+            )
+        
+        if rmsds.max() > max_rmsds:
+            max_rmsds = rmsds.max()
+    
+    ax.set_xlim(x_range[0], x_range[-1])
+    ax.set_ylim(0, max_rmsds + max_rmsds * 0.1)
+    
+    ax.set_xlabel("Frame Number", weight='bold')
+    ax.set_ylabel("RMSDs", weight='bold')
+    
+    ax.grid(color='lightgrey', linestyle='-', linewidth=1, alpha=0.7)
     ax.legend(fontsize=6, loc=4)
     
     fig.savefig(fig_name)
