@@ -24,9 +24,11 @@ import numpy as np
 import mdtraj as md
 from matplotlib import pyplot as plt
 
-from tauren import logger
+from tauren import tlog
+from tauren._core import validators
 
-log = logger.get_log(__name__)
+log = tlog.get_log(__name__)
+
 
 def _get_rmsds(traj):
     """
@@ -40,19 +42,25 @@ def _get_rmsds(traj):
     return rmsds
 
 
+@validators.validate_trajectory
 def plot_overall_rmsd(
         traj,
-        color='blue'
+        *args,
+        color='blue',
+        fig_name='overall_rmsds.pdf',
+        **kwargs,
         ):
     """
     Plots a single plot with the combined RMSD for all chains.
     """
     
+    log.info("* Plotting overall RMSDs...")
+    
     rmsds = _get_rmsds(traj)
     
     fig, ax = plt.subplots(nrows=1, ncols=1)
     
-    x_range = np.arange(1, traj.n_frames+1)
+    x_range = np.arange(1, traj.n_frames + 1)
     
     ax.plot(
         x_range,
@@ -61,7 +69,6 @@ def plot_overall_rmsd(
         color=color,
         alpha=0.7
         )
-    
     
     ax.set_title('Overall RMSDs', weight='bold')
     ax.set_xlabel("Number of frames", weight='bold')
@@ -73,21 +80,7 @@ def plot_overall_rmsd(
     
     ax.legend(fontsize=6, loc=4)
     
-    fig.savefig('overall_rmsds.pdf')
+    fig.savefig(fig_name)
+    log.info(f"    saved figure '{fig_name}'")
     
-    return traj
-
-
-def plot_rmsd_chain(traj, chains="all"):
-    """
-    Plots RMSD for single chains.
-    
-    Writes a figure with one subplot for each chain.
-    
-    Parameters:
-    
-        - chains (str or sequence of strs): "A", "A,B", "A,B,E"
-            Defaults to "all" -> plots RMSDs for all chains
-    """
-    return
-    
+    return (traj, )

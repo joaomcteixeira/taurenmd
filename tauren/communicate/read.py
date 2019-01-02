@@ -20,36 +20,19 @@ You should have received a copy of the GNU General Public License
 along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 """
 
-import os
-import sys
 import json
 from collections import namedtuple
 
 import mdtraj as md
 import simtk.openmm.app as app
 
-from tauren import logger
-from tauren import system
+from tauren import tlog
+from tauren._core import validators
 
-log = logger.get_log(__name__)
-
-_traj_details = """
-*** Loaded ***
-
-trajectory: {}
-topology: {}
-
-* details:
-
-n_frames: {}
-n_residues: {}
-n_atmos: {}
-
-time_step: {} ps or {} ns
-total_time: {} ps or {} ns
-"""
+log = tlog.get_log(__name__)
 
 
+@validators.validate_file_paths
 def load_json_config(config_path):
     """
     Loads configuration JSON file into a collections.namedtuple()
@@ -64,26 +47,22 @@ def load_json_config(config_path):
             the JSON config keys.
     """
     
-    assert config_path.endswith('.json'), \
-        "config file should be JSON (.json) type"
-    
-    assert os.path.exists(config_path), \
-        "'{}' file does not exists".format(config_path)
-    
-    assert os.path.isfile(config_path), \
-        "'{}' is not a file".format(config_path)
+    if not config_path.endswith('.json'):
+        raise TypeError("config file should have '.json' extension.")
     
     with open(config_path, 'r') as conf:
         config = json.load(conf)
     
+    # python dictionaries are OrderedDicts from +3.6
     a = namedtuple("config", config.keys())
     config_tuple = a(**config)
     
-    log.debug("<config_tuple>: {}".format(config_tuple))
+    log.debug(f"<config_tuple>: {config_tuple}")
     
     return config_tuple
 
 
+@validators.validate_file_paths
 def load_traj(traj_file, topo_file):
     """
     Loads MD trajectory.
@@ -99,30 +78,11 @@ def load_traj(traj_file, topo_file):
     
     Returns:
     
-        - mdtraj.Trajectory object
+        - tuple (mdtraj.Trajectory object, )
         (http://mdtraj.org/1.9.0/api/generated/mdtraj.Trajectory.html)
     """
     
     log.info("loading trajectory...")
-    
-    if not(os.path.exists(topo_file)):
-        
-        log.info("topology file: '{}' does not exists\n".format(topo_file))
-        sys.exit(1)
-    
-    elif not(topo_file.endswith(system.topology_types)):
-        log.info("topology file not suited\n")
-        log.info("should have extention: '{}'\n".format(system.topology_types))
-        sys.exit(1)
-    
-    if not(os.path.exists(traj_file)):
-        log.info("trajectory file: '{}' does not exists\n".format(traj_file))
-        sys.exit(1)
-    
-    elif not(traj_file.endswith(system.trajectory_types)):
-        log.info("trajectory file not suited\n")
-        log.info("should end with '{}'\n".format(system.trajectory_types))
-        sys.exit(1)
     
     if topo_file.endswith(".cif"):
         structure = app.PDBxFile(topo_file)
@@ -133,20 +93,25 @@ def load_traj(traj_file, topo_file):
     elif topo_file.endswith('.pdb'):
         topology = topo_file
     
+    # Exceptions are handled directly by md.load()
     traj = md.load(traj_file, top=topology)
     
-    info = _traj_details.format(
-        traj_file,
-        topo_file,
-        traj.n_frames,
-        traj.n_residues,
-        traj.n_atoms,
-        traj.timestep,
-        traj.timestep / 1000,
-        traj.time[-1],
-        traj.time[-1] / 1000
-        )
+    info = f"""
+*** Loaded ***
+
+trajectory: {traj_file}
+topology: {topo_file}
+
+* details:
+
+n_frames: {traj.n_frames}
+n_residues: {traj.n_residues}
+n_atmos: {traj.n_atoms}
+
+time_step: {traj.timestep} ps or {traj.timestep / 1000} ns
+total_time: {traj.time[-1]} ps or {traj.time[-1] / 1000} ns
+"""
     
     log.info(info)
     
-    return traj
+    return (traj, )

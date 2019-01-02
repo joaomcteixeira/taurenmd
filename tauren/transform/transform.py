@@ -20,14 +20,19 @@ You should have received a copy of the GNU General Public License
 along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 """
 
-import mdtraj as md
+from tauren import tlog
+from tauren._core import validators
 
-from tauren import logger
-
-log = logger.get_log(__name__)
+log = tlog.get_log(__name__)
 
 
-def reduce_equidistant(traj, step=1):
+@validators.validate_trajectory
+def reduce_equidistant(
+        traj,
+        *args,
+        step=1,
+        **kwargs,
+        ):
     """
     Reduces trajectory in equidistant frames separated by
     <step> frames.
@@ -43,20 +48,27 @@ def reduce_equidistant(traj, step=1):
     
         - modified trajectory (MDTraj.Trajectory)
     """
+    log.info("* Reducing Trajectory to equidistant frames...")
+        
+    if not isinstance(step, int):
+        raise ValueError(f"<step> must be integer type: '{step}'")
     
-    assert isinstance(traj, md.Trajectory), "Not a valid trajectory type"
-    assert isinstance(step, int), "<step> must be integer type"
-    
-    log.info("* received trajectory: {}".format(traj))
+    log.info(f"    received trajectory: {traj}")
     
     new_traj = traj[::step]
     
-    log.debug("* reduced trajectory: {}".format(new_traj))
+    log.info(f"    reduced trajectory: {new_traj}")
     
-    return new_traj
+    return (new_traj, )
 
 
-def remove_solvent(traj, exclude=None):
+@validators.validate_trajectory
+def remove_solvent(
+        traj,
+        *args,
+        exclude=None,
+        **kwargs,
+        ):
     """
     Removes solvent from Trajectory.
     
@@ -73,25 +85,25 @@ def remove_solvent(traj, exclude=None):
         
         - solventless trajectory (MDTraj.Trajectory)
     """
+    log.info("* Removing solvent...")
+    log.info(f"    received trajectory: {traj}")
     
-    assert isinstance(traj, md.Trajectory), "Not a valid trajectory type"
+    traj.remove_solvent(inplace=True, exclude=exclude)
     
-    log.info("** Removing solvent...")
-    log.info("* received trajectory: {}".format(traj))
+    log.info(f"    solventless trajectory: {traj}")
     
-    traj.remove_solvent(inplace=True)
-    
-    log.info("* solventless trajectory: {}".format(traj))
-    
-    return traj
+    return (traj, )
 
 
-def try_mdtraj_image_molecules(
+@validators.validate_trajectory
+def mdtraj_image_molecules(
         traj,
+        *args,
         anchor_molecules=None,
         other_molecules=None,
         sorted_bonds=None,
-        make_whole=True
+        make_whole=True,
+        **kwargs,
         ):
     """
     Performs MDTraj.Trajectory.image_molecules, accepts same arguments.
@@ -100,16 +112,16 @@ def try_mdtraj_image_molecules(
     
         - modified trajectory
     """
-    log.info("*Trying imaging molecules")
+    log.info("* Trying imaging molecules... this can take a while...")
     
     traj.image_molecules(
         inplace=True,
         anchor_molecules=anchor_molecules,
         other_molecules=other_molecules,
         sorted_bonds=sorted_bonds,
-        make_whole=make_whole
+        make_whole=make_whole,
         )
     
-    log.info("    completed")
+    log.info("    completed.")
     
-    return traj
+    return (traj, )

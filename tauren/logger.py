@@ -20,10 +20,51 @@ You should have received a copy of the GNU General Public License
 along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 """
 
-import sys
 import logging
+import logging.config
 
-log_file_name = 'tauren-md.log'
+log_file_name = "tauren-md.log"
+
+tauren_log_config = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "debug_format": {
+            "format":  (
+                "%(asctime)s - "
+                "%(levelname)s - "
+                "%(filename)s:%(name)s:%(funcName)s:%(lineno)d - "
+                "%(message)s"
+                )
+            },
+        "info_format": {}
+        },
+    
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "level": "INFO",
+            "formatter": "info_format",
+            "stream": "ext://sys.stdout"
+            },
+        "debug_file_handler": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "DEBUG",
+            "formatter": "debug_format",
+            "filename": log_file_name,
+            "maxBytes": 10485760,
+            "backupCount": 20,
+            "encoding": "utf8"
+            }
+        },
+    
+    "loggers": {},
+    
+    "root": {
+        "level": "DEBUG",
+        "handlers": ["console", "debug_file_handler"]
+        }
+    }
 
 
 def get_log(name):
@@ -31,22 +72,5 @@ def get_log(name):
     Configures logger for Tauren MD.
     """
     
-    log = logging.getLogger(name)
-    log.setLevel(logging.DEBUG)
-    
-    # create a file handler
-    debug_ = logging.FileHandler(log_file_name)
-    debug_.setLevel(logging.DEBUG)
-    ch = logging.StreamHandler(sys.stdout)
-    ch.setLevel(logging.INFO)
-    
-    # create a logging format
-    formatter = logging.Formatter('%(asctime)s - %(levelname)s - \
-%(filename)s:%(name)s:%(funcName)s:%(lineno)d - %(message)s')
-    debug_.setFormatter(formatter)
-    
-    # add the handlers to the logger
-    log.addHandler(debug_)
-    log.addHandler(ch)
-    
-    return log
+    logging.config.dictConfig(tauren_log_config)
+    return logging.getLogger(name)

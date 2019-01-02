@@ -75,14 +75,14 @@ software_folder = os.path.abspath(
 
 sys.path.append(software_folder)
 
-from tauren import system, logger
-from tauren.core import openlib
+from tauren import tlog
+from tauren import tcomm, tinter
 
-log_path = Path(logger.log_file_name)
+log_path = Path(tlog.log_file_name)
 if log_path.exists():
     log_path.unlink()
 
-log = logger.get_log(__name__)
+log = tlog.get_log(__name__)
 log.info("* Tauren-MD initiated!")
 
 ap = argparse.ArgumentParser(description=__doc__)
@@ -111,20 +111,20 @@ ap.add_argument(
     '-traj',
     '--trajectory',
     default=None,
-    help="Trajectory file ({})".format(system.trajectory_types)
+    help="Trajectory file ({})".format(tinter.interface.trajectory_types)
     )
 
 ap.add_argument(
     '-top',
     '--topology',
     default=None,
-    help="Topology file ({})".format(system.topology_types)
+    help="Topology file ({})".format(tinter.interface.topology_types)
     )
 
 cmd = ap.parse_args()
 
 # set path configuration
-conf = openlib.load_json_config(cmd.config)
+conf = tcomm.read.load_json_config(cmd.config)
 
 if cmd.trajectory:
     trajectory_path = cmd.trajectory
@@ -146,18 +146,25 @@ else:
     log.info("* ERROR * No topology file provided")
     sys.exit(1)
 
-traj = openlib.load_traj(trajectory_path, topology_path)
+traj_and_args = tcomm.read.load_traj(trajectory_path, topology_path)
 
 for action, arguments in conf.actions.items():
-    if arguments[0]:
+    
+    perform_action = arguments[0]
+    action_kwargs = arguments[1]
+    
+    if perform_action:
         action_name = action.rstrip("_")
-        log_msg = "Performing '{}' with args: '{}'"
-        log.info(log_msg.format(action_name, arguments[1]))
+        log_msg = "*** Performing '{}' with args: '{}'"
+        log.debug(log_msg.format(action_name, action_kwargs))
         
-        traj = system.actions_dict[action_name](traj, **arguments[1])
+        traj_and_args = tinter.interface.actions_dict[action_name](
+            traj_and_args[0],
+            *traj_and_args[1:],
+            **action_kwargs,
+            )
 
 log.info("* Tauren-MD completed!")
-
 """
 
 update_script_code = r"""
