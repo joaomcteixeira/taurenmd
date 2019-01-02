@@ -1,22 +1,22 @@
-import sys
-import os
+# import sys
+# import os
 
-sys.path.append(os.path.abspath(os.path.dirname(os.path.realpath(__file__))))
+# sys.path.append(os.path.abspath(os.path.dirname(os.path.realpath(__file__))))
 
 __all__ = [
-    "logger",
+    "tlog",
     "_core",
-    "communicate",
-    "transform",
-    "plot",
-    "interface",
+    "tcomm",
+    "ttrans",
+    "tplot",
+    "tinter",
     ]
 
-from tauren import logger as logger
-from tauren import _core as _core
-from tauren import communicate as communicate
-from tauren import transform as transform
-from tauren import plot as plot
-from tauren import interface as interface
+from tauren import logger as tlog
+from tauren import _core
+from tauren import communicate as tcomm
+from tauren import transform as ttrans
+from tauren import plot as tplot
+from tauren import interface as tinter
 
 

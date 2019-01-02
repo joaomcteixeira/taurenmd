@@ -26,13 +26,13 @@ from collections import namedtuple
 import mdtraj as md
 import simtk.openmm.app as app
 
-from tauren import logger
-from tauren import _core as trncore
+from tauren import tlog
+from tauren._core import validators
 
-log = logger.get_log(__name__)
+log = tlog.get_log(__name__)
 
 
-@trncore.validators.validate_file_paths
+@validators.validate_file_paths
 def load_json_config(config_path):
     """
     Loads configuration JSON file into a collections.namedtuple()
@@ -62,7 +62,7 @@ def load_json_config(config_path):
     return config_tuple
 
 
-@trncore.validators.validate_file_paths
+@validators.validate_file_paths
 def load_traj(traj_file, topo_file):
     """
     Loads MD trajectory.
