@@ -1,6 +1,14 @@
+- [v2.1.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v2.1.0)
 - [v2.0.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v2.0.0)
 - [v1.0.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v1.0.1)
 - [v1.0.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v1.0.0)
+
+# v2.0.1
+
+-Added three plotting routines to plot RMSDs:
+    - combined RMSDs
+    - RMSDs per chain in different subplots
+    - RMSDs per chain in single subplots
 
 # v2.0.0
 

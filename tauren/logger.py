@@ -30,7 +30,7 @@ tauren_log_config = {
     "disable_existing_loggers": False,
     "formatters": {
         "debug_format": {
-            "format":  (
+            "format": (
                 "%(asctime)s - "
                 "%(levelname)s - "
                 "%(filename)s:%(name)s:%(funcName)s:%(lineno)d - "

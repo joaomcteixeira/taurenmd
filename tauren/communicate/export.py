@@ -20,9 +20,7 @@ You should have received a copy of the GNU General Public License
 along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 """
 
-import sys
-
-from tauren import tlog
+from tauren import tlog, tcommons
 from tauren._core import validators
 
 log = tlog.get_log(__name__)
@@ -60,37 +58,10 @@ def frames2PDB(
     log.debug(f"<frames>: {frames}")
     log.debug(f"<prefix>: {prefix}")
     
-    frames_not_valid_str = f"<frames> input not valid: '{frames}'"
-    frames_to_extract = 0
-    
-    possible_inputs = (
-        "all" in frames,
-        frames.startswith(":"),
-        frames.endswith(":"),
-        False if frames.find(",") < 0 else True,
-        True,
-        )
-    
-    dict_of_actions = {
-        0: range(traj.n_frames),
-        1: list(range(0, int(frames[1:]) + 1)),
-        2: list(range(int(frames[:-1]), traj.n_frames + 1)),
-        3: [int(f) for f in frames.split(',')],
-        4: list(int(frames)),
-        }
-    
-    which_action = possible_inputs.index(True)
-    
-    try:
-        frames_to_extract = dict_of_actions[which_action]
-    
-    except ValueError as e:
-        log.info(e)
-        log.info(frames_not_valid_str)
-        sys.exit(1)
-    
-    assert bool(frames_to_extract), \
-        "* ERROR * Couldn't identify the frames to extract."
+    if frames == "all":
+        frames_to_extract = range(traj.n_frames)
+    else:
+        frames_to_extract = tcommons.int_slicer(frames, traj.n_frames)
     
     leading_zeros = str(len(str(traj.n_frames)))
     pdb_name_fmt = prefix + "{:0>" + leading_zeros + "}.pdb"
@@ -101,7 +72,7 @@ def frames2PDB(
             slice_ = traj.slice(frame, copy=True)
         
         except IndexError:
-            log.info(
+            log.exception(
                 f"* Frame '{frame}' does NOT exist in trajectory, ",
                 "ignoring...",
                 )

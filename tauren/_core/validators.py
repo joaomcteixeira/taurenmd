@@ -24,6 +24,11 @@ import functools
 import mdtraj as md
 from pathlib import Path
 
+from tauren import tlog
+from tauren._core import errors
+
+log = tlog.get_log(__name__)
+
 
 def validate_file_paths(func):
     """
@@ -65,3 +70,27 @@ def validate_trajectory(func):
         return func(*args, **kwargs)
     
     return wrapper
+
+
+def validate_args(args, func_name="not defined"):
+    """
+    Validates arguments againts type.
+    
+    If failure raises InvalidArgumentError.
+    
+    Parameters:
+    
+        - args (list of tuples)
+            - tuple[0]: the argument variable
+            - tuple[1]: the object type to validate against
+    
+    """
+    
+    log.debug(f"validating args for function: {func_name}")
+    
+    for var, type_ in args:
+        if not isinstance(var, type_):
+            log.debug(f"'{var}' is not of type '{type_}'")
+            raise errors.IllegalArgumentError("Illegal argument")
+    
+    return
