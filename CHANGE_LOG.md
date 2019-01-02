@@ -3,7 +3,7 @@
 - [v1.0.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v1.0.1)
 - [v1.0.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v1.0.0)
 
-# v2.0.1
+# v2.1.0
 
 -Added three plotting routines to plot RMSDs:
     - combined RMSDs
