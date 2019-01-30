@@ -31,7 +31,7 @@ actions_dict = {
     "try_mdtraj_image_molecules": ttrans.transform.mdtraj_image_molecules,
     "frames2PDB": tcomm.export.frames2PDB,
     "save_traj": tcomm.export.save_traj,
-    "plot_combined": tplot.rmsds.plot_combined,
-    "plot_chain_per_subplot": tplot.rmsds.plot_chain_per_subplot,
-    "plot_chains_single_subplot": tplot.rmsds.plot_chains_single_subplot,
+    "plot_rmsd_combined": tplot.rmsds.plot_rmsd_combined,
+    "plot_rmsd_chain_per_subplot": tplot.rmsds.plot_rmsd_chain_per_subplot,
+    "plot_rmsd_all_chains_one_subplot": tplot.rmsds.plot_rmsd_all_chains_one_subplot,
     }

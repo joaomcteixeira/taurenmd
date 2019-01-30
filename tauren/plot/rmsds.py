@@ -33,7 +33,7 @@ log = tlog.get_log(__name__)
 
 
 @validators.validate_trajectory
-def plot_combined(
+def plot_rmsd_combined(
         traj,
         *args,
         color='blue',
@@ -113,7 +113,7 @@ def plot_combined(
 
 
 @validators.validate_trajectory
-def plot_chain_per_subplot(
+def plot_rmsd_chain_per_subplot(
         traj,
         *args,
         chains="all",
@@ -237,7 +237,7 @@ def plot_chain_per_subplot(
 
 
 @validators.validate_trajectory
-def plot_chains_single_subplot(
+def plot_rmsd_all_chains_one_subplot(
         traj,
         *args,
         chains="all",
