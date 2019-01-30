@@ -4,6 +4,11 @@
 - [v1.0.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v1.0.1)
 - [v1.0.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v1.0.0)
 
+# v2.1.2
+
+- Added data export function `communicate.export.save_data_array_to_file()`
+  - now each plotting routine exports used data in .csv files.
+
 # v2.1.1
 
 - improved names of RMSD plotting functions
