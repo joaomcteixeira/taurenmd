@@ -33,5 +33,6 @@ actions_dict = {
     "save_traj": tcomm.export.save_traj,
     "plot_rmsd_combined": tplot.rmsds.plot_rmsd_combined,
     "plot_rmsd_chain_per_subplot": tplot.rmsds.plot_rmsd_chain_per_subplot,
-    "plot_rmsd_all_chains_one_subplot": tplot.rmsds.plot_rmsd_all_chains_one_subplot,
+    "plot_rmsd_all_chains_one_subplot":
+        tplot.rmsds.plot_rmsd_all_chains_one_subplot,
     }
