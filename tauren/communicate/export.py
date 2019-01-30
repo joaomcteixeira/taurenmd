@@ -19,6 +19,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 """
+import numpy as np
 
 from tauren import tlog, tcommons
 from tauren._core import validators
@@ -112,3 +113,43 @@ def save_traj(
     log.info("    ... saved")
     
     return (traj, )
+
+
+def save_data_array_to_file(
+        data,
+        name="table.csv",
+        sep=",",
+        header="",
+        do_log=True,
+        ):
+    """
+    Exports data to a .csv file.
+    
+    Parameters
+    ----------
+    data : numpy.ndarray
+    
+    name : str, optional
+        The name of the output file.
+    
+    sep : str, optional
+        The column separator (def: ",")
+    
+    header : str, optional
+        The file header. You can write column names here.
+    
+    do_log : bool, optional
+        Writes function info to log. Defaults to True.
+    """
+    
+    np.savetxt(
+        name,
+        data,
+        delimiter=sep,
+        header=header,
+        )
+    
+    if do_log:
+        log.info(f"* Saved {name}")
+    
+    return

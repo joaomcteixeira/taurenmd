@@ -26,6 +26,7 @@ from matplotlib import pyplot as plt
 
 from tauren import tlog
 from tauren._core import validators
+from tauren.communicate import export as cmexport
 from tauren.plot import _commons as pltcommons
 from tauren.calculate import fromtraj
 
@@ -80,6 +81,7 @@ def plot_rmsd_combined(
         _, rmsds = fromtraj.calc_rmsds(sliced_traj)
     
     else:
+        chain_list = ["all"]  # used for data export
         _, rmsds = fromtraj.calc_rmsds(traj)
     
     fig, ax = plt.subplots(nrows=1, ncols=1)
@@ -108,6 +110,18 @@ def plot_rmsd_combined(
     
     fig.savefig(fig_name)
     log.info(f"    saved figure '{fig_name}'")
+    
+    # exports rmsd data to csv file
+    csv_file_name = fig_name.split(".")[0] + ".csv"
+    
+    cmexport.save_data_array_to_file(
+        np.stack((x_range, rmsds), axis=-1),
+        name=csv_file_name,
+        header="frame," + ",".join(chain_list),
+        do_log=False,
+        )
+    
+    log.info(f"    saved {csv_file_name}")
     
     return (traj, )
 
@@ -169,6 +183,7 @@ def plot_rmsd_chain_per_subplot(
     
     x_range = np.arange(0, traj.n_frames)
     
+    total_rmsds = np.empty((traj.n_frames, 1))
     max_rmsd = 0
     for ii, chain in enumerate(chain_list):
         
@@ -197,6 +212,10 @@ def plot_rmsd_chain_per_subplot(
         else:
             chain_traj = traj.atom_slice(slicer, inplace=False)
             _, rmsds = fromtraj.calc_rmsds(chain_traj)
+            total_rmsds = np.concatenate(
+                (total_rmsds, np.expand_dims(rmsds, axis=1)),
+                axis=1
+                )
         
         ax[ii].plot(
             x_range,
@@ -232,6 +251,21 @@ def plot_rmsd_chain_per_subplot(
     
     fig.savefig(fig_name)
     log.info(f"    saved figure '{fig_name}'")
+    
+    # exports rmsd data to csv file
+    csv_file_name = fig_name.split(".")[0] + ".csv"
+    
+    cmexport.save_data_array_to_file(
+        np.concatenate(
+            (np.expand_dims(x_range, axis=1), total_rmsds[:, 1:]),
+            axis=1
+            ),
+        name=csv_file_name,
+        header="frame," + ",".join([str(_) for _ in chain_list]),
+        do_log=False,
+        )
+    
+    log.info(f"    saved {csv_file_name}")
     
     return (traj, )
 
@@ -278,6 +312,7 @@ def plot_rmsd_all_chains_one_subplot(
     plt.tight_layout(rect=[0.05, 0.02, 0.995, 0.985])
     fig.suptitle("Chains' RMSDs", x=0.5, y=0.990, va="top", ha="center")
     
+    total_rmsds = np.empty((traj.n_frames, 1))
     x_range = np.arange(0, traj.n_frames)
     max_rmsds = 0
     for chain in chain_list:
@@ -296,6 +331,10 @@ def plot_rmsd_all_chains_one_subplot(
         else:
             chain_traj = traj.atom_slice(slicer, inplace=False)
             _, rmsds = fromtraj.calc_rmsds(chain_traj)
+            total_rmsds = np.concatenate(
+                (total_rmsds, np.expand_dims(rmsds, axis=1)),
+                axis=1
+                )
         
         ax.plot(
             x_range,
@@ -319,5 +358,20 @@ def plot_rmsd_all_chains_one_subplot(
     
     fig.savefig(fig_name)
     log.info(f"    saved figure '{fig_name}'")
+    
+    # exports rmsd data to csv file
+    csv_file_name = fig_name.split(".")[0] + ".csv"
+    
+    cmexport.save_data_array_to_file(
+        np.concatenate(
+            (np.expand_dims(x_range, axis=1), total_rmsds[:, 1:]),
+            axis=1
+            ),
+        name=csv_file_name,
+        header="frame," + ",".join([str(_) for _ in chain_list]),
+        do_log=False,
+        )
+    
+    log.info(f"    saved {csv_file_name}")
     
     return (traj, )
