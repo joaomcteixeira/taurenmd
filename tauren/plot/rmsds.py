@@ -63,7 +63,7 @@ def plot_rmsd_combined(
             (chains, str),
             (fig_name, str),
             ),
-        func_name=plot_combined.__name__,
+        func_name=plot_rmsd_combined.__name__,
         )
     
     if chains != "all":
@@ -145,7 +145,7 @@ def plot_rmsd_chain_per_subplot(
             (colors, str),
             (fig_name, str),
             ),
-        func_name=plot_chain_per_subplot.__name__,
+        func_name=plot_rmsd_chain_per_subplot.__name__,
         )
     
     chain_list = pltcommons._get_chain_list(traj, chains)
@@ -267,7 +267,7 @@ def plot_rmsd_all_chains_one_subplot(
             (fig_name, str),
             (colors, str),
             ),
-        func_name=plot_chains_single_subplot.__name__,
+        func_name=plot_rmsd_all_chains_one_subplot.__name__,
         )
     
     chain_list = pltcommons._get_chain_list(traj, chains)
