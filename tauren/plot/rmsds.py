@@ -38,7 +38,7 @@ def plot_rmsd_combined(
         *args,
         color='blue',
         chains="all",
-        fig_name='RMSDS_plot_combined.pdf',
+        fig_name='plot_rmsd_combined.pdf',
         **kwargs,
         ):
     """
@@ -118,7 +118,7 @@ def plot_rmsd_chain_per_subplot(
         *args,
         chains="all",
         colors="None",
-        fig_name="RMSDS_plot_chain_per_subplot.pdf",
+        fig_name="plot_rmsd_chain_per_subplot.pdf",
         **kwargs,
         ):
     """
@@ -241,7 +241,7 @@ def plot_rmsd_all_chains_one_subplot(
         traj,
         *args,
         chains="all",
-        fig_name="RMSDS_plot_chains_single_subplot.pdf",
+        fig_name="plot_rmsd_all_chains_one_subplot.pdf",
         colors="None",
         **kwargs,
         ):
