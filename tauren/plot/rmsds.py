@@ -117,7 +117,7 @@ def plot_rmsd_combined(
     cmexport.save_data_array_to_file(
         np.stack((x_range, rmsds), axis=-1),
         name=csv_file_name,
-        header=",".join(chain_list),
+        header="frame," + ",".join(chain_list),
         do_log=False,
         )
     
@@ -256,14 +256,16 @@ def plot_rmsd_chain_per_subplot(
     csv_file_name = fig_name.split(".")[0] + ".csv"
     
     cmexport.save_data_array_to_file(
-        np.concatenate((np.expand_dims(x_range, axis=1), total_rmsds[:,1:]), axis=1),
+        np.concatenate(
+            (np.expand_dims(x_range, axis=1), total_rmsds[:, 1:]),
+            axis=1
+            ),
         name=csv_file_name,
         header="frame," + ",".join([str(_) for _ in chain_list]),
         do_log=False,
         )
     
     log.info(f"    saved {csv_file_name}")
-    
     
     return (traj, )
 
@@ -361,7 +363,10 @@ def plot_rmsd_all_chains_one_subplot(
     csv_file_name = fig_name.split(".")[0] + ".csv"
     
     cmexport.save_data_array_to_file(
-        np.concatenate((np.expand_dims(x_range, axis=1), total_rmsds[:,1:]), axis=1),
+        np.concatenate(
+            (np.expand_dims(x_range, axis=1), total_rmsds[:, 1:]),
+            axis=1
+            ),
         name=csv_file_name,
         header="frame," + ",".join([str(_) for _ in chain_list]),
         do_log=False,
