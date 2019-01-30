@@ -9,6 +9,9 @@
         "reduce_equidistant": [false, {"step":10}],
         "mdtraj_image_molecules": [false, {"anchor_molecules": null, "other_molecules": null, "sorted_bonds": null, "make_whole": null}],
         "frames2PDB": [false, {"frames": "all", "suffix":"_"}],
-        "save_traj": [false, {"file_name": "traj_OUTPUT.dcd", "overwrite":true}]
+        "save_traj": [false, {"file_name": "traj_OUTPUT.dcd", "overwrite":true}],
+        "plot_rmsd_combined": [false, {"color":"blue", "chains":"all", "fig_name":"plot_rmsd_combined.pdf"}],
+        "plot_rmsd_chain_per_subplot": [false, {"color":"blue", "chains":"all", "fig_name":"plot_rmsd_chain_per_subplot.pdf"}],
+        "plot_rmsd_all_chains_one_subplot": [false, {"color":"blue", "chains":"all", "fig_name":"plot_rmsd_all_chains_one_subplot.pdf"}]
     }
 }

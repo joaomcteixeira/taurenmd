@@ -1,7 +1,14 @@
+- [v2.1.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v2.1.1)
 - [v2.1.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v2.1.0)
 - [v2.0.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v2.0.0)
 - [v1.0.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v1.0.1)
 - [v1.0.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v1.0.0)
+
+# v2.1.1
+
+- improved names of RMSD plotting functions
+- Added RMSD plotting functions to configuration file
+
 
 # v2.1.0
 

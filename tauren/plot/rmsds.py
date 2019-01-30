@@ -33,12 +33,12 @@ log = tlog.get_log(__name__)
 
 
 @validators.validate_trajectory
-def plot_combined(
+def plot_rmsd_combined(
         traj,
         *args,
         color='blue',
         chains="all",
-        fig_name='RMSDS_plot_combined.pdf',
+        fig_name='plot_rmsd_combined.pdf',
         **kwargs,
         ):
     """
@@ -63,7 +63,7 @@ def plot_combined(
             (chains, str),
             (fig_name, str),
             ),
-        func_name=plot_combined.__name__,
+        func_name=plot_rmsd_combined.__name__,
         )
     
     if chains != "all":
@@ -113,12 +113,12 @@ def plot_combined(
 
 
 @validators.validate_trajectory
-def plot_chain_per_subplot(
+def plot_rmsd_chain_per_subplot(
         traj,
         *args,
         chains="all",
         colors="None",
-        fig_name="RMSDS_plot_chain_per_subplot.pdf",
+        fig_name="plot_rmsd_chain_per_subplot.pdf",
         **kwargs,
         ):
     """
@@ -145,7 +145,7 @@ def plot_chain_per_subplot(
             (colors, str),
             (fig_name, str),
             ),
-        func_name=plot_chain_per_subplot.__name__,
+        func_name=plot_rmsd_chain_per_subplot.__name__,
         )
     
     chain_list = pltcommons._get_chain_list(traj, chains)
@@ -237,11 +237,11 @@ def plot_chain_per_subplot(
 
 
 @validators.validate_trajectory
-def plot_chains_single_subplot(
+def plot_rmsd_all_chains_one_subplot(
         traj,
         *args,
         chains="all",
-        fig_name="RMSDS_plot_chains_single_subplot.pdf",
+        fig_name="plot_rmsd_all_chains_one_subplot.pdf",
         colors="None",
         **kwargs,
         ):
@@ -267,7 +267,7 @@ def plot_chains_single_subplot(
             (fig_name, str),
             (colors, str),
             ),
-        func_name=plot_chains_single_subplot.__name__,
+        func_name=plot_rmsd_all_chains_one_subplot.__name__,
         )
     
     chain_list = pltcommons._get_chain_list(traj, chains)
