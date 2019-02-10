@@ -1,5 +1,5 @@
 """
-Tauren-MD ExceptionErros.
+Contains variables to manage user-software interface.
 
 Copyright © 2018-2019 Tauren-MD Project
 
@@ -20,9 +20,17 @@ You should have received a copy of the GNU General Public License
 along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 """
 
+from tauren import produce
 
-class IllegalArgumentError(ValueError):
-    """
-    Thrown when an argument is illegal type.
-    """
-    pass
+actions_dict = {
+    "remove_solvent": lambda x, y: x.remove_solvent(**y),
+    "reduce_equidistant": lambda x, y: x.reduce_equidistant(**y),
+    "slice": lambda x, y: x.slice(**y),
+    "try_image_molecules": lambda x, y: x.image_molecules(**y),
+    "frames2PDB": lambda x, y: x.frames2PDB(**y),
+    "save_traj": lambda x, y: x.save_traj(**y),
+    "produce_rmsds_combined_chains":
+        lambda x, y: produce.rmsds_combined_chains(x, **y),
+    "produce_rmsds_separated_chains":
+        lambda x, y: produce.rmsds_separated_chains(x, **y),
+    }

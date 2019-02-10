@@ -75,14 +75,14 @@ software_folder = os.path.abspath(
 
 sys.path.append(software_folder)
 
-from tauren import tlog
-from tauren import tcomm, tinter
+from tauren import logger, core, load, _interface
 
-log_path = Path(tlog.log_file_name)
+log_path = Path(logger.log_file_name)
+
 if log_path.exists():
     log_path.unlink()
 
-log = tlog.get_log(__name__)
+log = logger.get_log(__name__)
 log.info("* Tauren-MD initiated!")
 
 ap = argparse.ArgumentParser(description=__doc__)
@@ -94,7 +94,7 @@ path_to_default_config = os.path.abspath(
         )
     )
 
-# Mandatory
+# Optional arguments
 ap.add_argument(
     '-c',
     '--config',
@@ -106,26 +106,38 @@ ap.add_argument(
     default=path_to_default_config
     )
 
-# Options
 ap.add_argument(
     '-traj',
     '--trajectory',
     default=None,
-    help="Trajectory file ({})".format(tinter.interface.trajectory_types)
+    help="Trajectory file ({})".format(core.trajectory_types)
     )
 
 ap.add_argument(
     '-top',
     '--topology',
     default=None,
-    help="Topology file ({})".format(tinter.interface.topology_types)
+    help="Topology file ({})".format(core.topology_types)
+    )
+
+ap.add_argument(
+    "-tt",
+    "--trajtype",
+    default=None,
+    choices=["mdtraj"],
+    help=(
+        "Library to use as trajectory type, in lower case. "
+        "Current libraries available: "
+        "MDTraj (http://mdtraj.org/1.9.0/)"
+        )
     )
 
 cmd = ap.parse_args()
 
-# set path configuration
-conf = tcomm.read.load_json_config(cmd.config)
+# set config file
+conf = load.load_json_config(cmd.config)
 
+# set trajectory path
 if cmd.trajectory:
     trajectory_path = cmd.trajectory
 
@@ -136,6 +148,7 @@ else:
     log.info("* ERROR * No trajectory file provided")
     sys.exit(1)
 
+# set topology path
 if cmd.topology:
     topology_path = cmd.topology
 
@@ -146,23 +159,29 @@ else:
     log.info("* ERROR * No topology file provided")
     sys.exit(1)
 
-traj_and_args = tcomm.read.load_traj(trajectory_path, topology_path)
+# set trajectory type
+if cmd.trajtype:
+    trajtype = cmd.trajtype
+
+elif conf.traj_type:
+    trajtype = conf.traj_type
+
+else:
+    log.info("* ERROR * No trajectory type selected")
+    sys.exit(1)
+
+traj = load.load_traj(
+    trajectory_path,
+    topology_path,
+    traj_type=trajtype,
+    )
 
 for action, arguments in conf.actions.items():
     
-    perform_action = arguments[0]
-    action_kwargs = arguments[1]
+    action_name = action.rstrip("_")
+    log.debug(f"*** Performing '{action_name}' with options: '{arguments}'")
     
-    if perform_action:
-        action_name = action.rstrip("_")
-        log_msg = "*** Performing '{}' with args: '{}'"
-        log.debug(log_msg.format(action_name, action_kwargs))
-        
-        traj_and_args = tinter.interface.actions_dict[action_name](
-            traj_and_args[0],
-            *traj_and_args[1:],
-            **action_kwargs,
-            )
+    _interface.actions_dict[action_name](traj, arguments)
 
 log.info("* Tauren-MD completed!")
 """

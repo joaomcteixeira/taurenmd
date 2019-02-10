@@ -19,20 +19,47 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 """
-
+import functools
 import json
+from pathlib import Path
 from collections import namedtuple
 
 import mdtraj as md
 import simtk.openmm.app as app
 
-from tauren import tlog
-from tauren._core import validators
+from tauren import logger
+from tauren import tauren
 
-log = tlog.get_log(__name__)
+log = logger.get_log(__name__)
 
 
-@validators.validate_file_paths
+def _validate_file_paths(func):
+    """
+    Validates paths. Paths should exists and be files.
+    Raises Erros otherwise.
+    
+    Used in functions where all positional arguments are paths.
+    """
+    
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        
+        for file_ in args:
+            
+            path_ = Path(file_)
+            
+            if not path_.exists():
+                raise FileNotFoundError(f"'{path_}' does NOT exist.")
+            
+            if not path_.is_file():
+                raise ValueError(f"'{path_}' is NOT a file.")
+            
+        return func(*args, **kwargs)
+    
+    return wrapper
+
+
+@_validate_file_paths
 def load_json_config(config_path):
     """
     Loads configuration JSON file into a collections.namedtuple()
@@ -62,24 +89,33 @@ def load_json_config(config_path):
     return config_tuple
 
 
-@validators.validate_file_paths
-def load_traj(traj_file, topo_file):
+@_validate_file_paths
+def load_traj(
+        traj_file,
+        topo_file,
+        traj_type="mdtraj",
+        ):
     """
     Loads MD trajectory.
     
-    Parameters:
-    
-        - traj_file (str): trajectory file name (path)
+    Parameters
+    ----------
+    traj_file : str
+        Trajectory file name (path)
             Formats allowed: ".xtc", ".nc", ".trr", ".h5", ".pdb",
                 ".binpos", ".dcd"
         
-        - topo_file (str): topology file name (path)
+    topo_file : str
+        Topology file name (path)
             Formats allowed: ".pdb" and ".cif"
     
-    Returns:
+    traj_type : str
+        Defaults to "mdtraj".
+        The type of trajectory generated.
     
-        - tuple (mdtraj.Trajectory object, )
-        (http://mdtraj.org/1.9.0/api/generated/mdtraj.Trajectory.html)
+    Returns
+    -------
+    Tauren Trajectory
     """
     
     log.info("loading trajectory...")
@@ -94,24 +130,20 @@ def load_traj(traj_file, topo_file):
         topology = topo_file
     
     # Exceptions are handled directly by md.load()
-    traj = md.load(traj_file, top=topology)
+    
+    if traj_type == "mdtraj":
+        
+        traj = tauren.TaurenMDTraj(traj_file, topology)
     
     info = f"""
 *** Loaded ***
 
 trajectory: {traj_file}
 topology: {topo_file}
-
-* details:
-
-n_frames: {traj.n_frames}
-n_residues: {traj.n_residues}
-n_atmos: {traj.n_atoms}
-
-time_step: {traj.timestep} ps or {traj.timestep / 1000} ns
-total_time: {traj.time[-1]} ps or {traj.time[-1] / 1000} ns
 """
     
     log.info(info)
     
-    return (traj, )
+    traj.report()
+    
+    return traj
