@@ -1,0 +1,14 @@
+# version: 2
+name: taurenmd
+channels:
+  - conda-forge
+  - omnia
+dependencies:
+  - matplotlib=3.0
+  - numpy=1.15
+  - python=3.7
+  - mdtraj
+  - openmm
+  - mdanalysis
+  - sphinx
+  - numpydoc
