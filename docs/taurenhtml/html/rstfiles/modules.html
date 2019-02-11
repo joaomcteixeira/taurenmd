@@ -1,0 +1,410 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Tauren-MD Library Documentation &mdash; Tauren-MD 0.4.0b documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="License" href="license.html" />
+    <link rel="prev" title="Run Tauren-MD" href="command_line_interface.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Tauren-MD
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="vision.html">Vision</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guided_user_interface.html">Guided User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line_interface.html">Run Tauren-MD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="command_line_interface.html#list-of-actions">List of Actions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tauren-MD Library Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-tauren.plot">Plotting Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-tauren.logger">Logger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-tauren.core">Core Unit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Tauren-MD</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Tauren-MD Library Documentation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/rstfiles/modules.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tauren-md-library-documentation">
+<h1>Tauren-MD Library Documentation<a class="headerlink" href="#tauren-md-library-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-tauren.plot">
+<span id="plotting-library"></span><h2>Plotting Library<a class="headerlink" href="#module-tauren.plot" title="Permalink to this headline">¶</a></h2>
+<p>Tauren-MD Plotting Functions.</p>
+<p>Copyright © 2018-2019 Tauren-MD Project</p>
+<p>Contributors to this file:
+- João M.C. Teixeira (<a class="reference external" href="https://github.com/joaomcteixeira">https://github.com/joaomcteixeira</a>)</p>
+<p>Tauren-MD is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>Tauren-MD is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with Tauren-MD. If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;.</p>
+<dl class="function">
+<dt id="tauren.plot.rmsd_chain_per_subplot">
+<code class="descclassname">tauren.plot.</code><code class="descname">rmsd_chain_per_subplot</code><span class="sig-paren">(</span><em>x_data, y_data, *, labels='No labels provided', suptitle='RMSDs per chain', x_label='Frame Number', y_label='RMSDs', colors=['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w'], alpha=0.7, grid=True, grid_color='lightgrey', grid_ls='-', grid_lw=1, grid_alpha=0.5, legend=True, legend_fs=6, legend_loc=4, fig_name='rmsd_chain_per_subplot.pdf', **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tauren/plot.html#rmsd_chain_per_subplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tauren.plot.rmsd_chain_per_subplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots a single plot with the combined RMSD.</p>
+<p>Bellow parameters concern data representation and are considered
+of highest importance because their incorrect use can mislead
+data analysis and consequent conclusions.</p>
+<p>Plot style parameters concernning only plot style, i.e., colors,
+shapes, fonts, etc… and which do not distort the actual data,
+are not listed in the paremeter list bellow. We hope these
+parameter names are self-explanatory and are listed in the function
+definition.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>x_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">interable</span></dt>
+<dd><p class="first last">Container of the X axis data. Should be accepted
+by matplotlib.</p>
+</dd>
+<dt><strong>y_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarray, shape=(N, M)</span></dt>
+<dd><p class="first last">Container of the Y axis data.
+Where N is the number of chains (data series), and
+M the data for each series (RMSDs of a given chain)</p>
+</dd>
+<dt><strong>labels</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd><p class="first last">The chain labels to represent in plot legend.
+Defauts to: “no labels provided”.</p>
+</dd>
+<dt><strong>fig_name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd><p class="first last">The file name with which the plot figure will be saved
+in disk. Defaults to rmsd_individual_chains_one_subplot.pdf.
+You can change the file type by specifying its extention in
+the file name.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tauren.plot.rmsd_combined_chains">
+<code class="descclassname">tauren.plot.</code><code class="descname">rmsd_combined_chains</code><span class="sig-paren">(</span><em>x_data</em>, <em>y_data</em>, <em>*</em>, <em>label='No labels provided'</em>, <em>suptitle='Combined Chain RMSDs'</em>, <em>x_label='Frame Number'</em>, <em>y_label='RMSDs'</em>, <em>color='blue'</em>, <em>alpha=0.7</em>, <em>grid=True</em>, <em>grid_color='lightgrey'</em>, <em>grid_ls='-'</em>, <em>grid_lw=1</em>, <em>grid_alpha=0.5</em>, <em>legend=True</em>, <em>legend_fs=6</em>, <em>legend_loc=4</em>, <em>fig_name='plot_rmsd_combined.pdf'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tauren/plot.html#rmsd_combined_chains"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tauren.plot.rmsd_combined_chains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots a single plot with the combined RMSD.</p>
+<p>Bellow parameters concern data representation and are considered
+of highest importance because their incorrect use can mislead
+data analysis and consequent conclusions.</p>
+<p>Plot style parameters concernning only plot style, i.e., colors,
+shapes, fonts, etc… and which do not distort the actual data,
+are not listed in the paremeter list bellow. We hope these
+parameter names are self-explanatory and are listed in the function
+definition.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>x_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">interable of numbers</span></dt>
+<dd><p class="first last">Container of the X axis data. Should be accepted
+by matplotlib.</p>
+</dd>
+<dt><strong>y_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarray, shape=(M,)</span></dt>
+<dd><p class="first last">Container of the Y axis data.
+Where M is the RMSDs data for the combined chains.</p>
+</dd>
+<dt><strong>label</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd><p class="first last">The label to represent in plot legend.
+Defauts to: “no labels provided”.</p>
+</dd>
+<dt><strong>fig_name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd><p class="first last">The file name with which the plot figure will be saved
+in disk. Defaults to rmsd_individual_chains_one_subplot.pdf.
+You can change the file type by specifying its extention in
+the file name.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tauren.plot.rmsd_individual_chains_one_subplot">
+<code class="descclassname">tauren.plot.</code><code class="descname">rmsd_individual_chains_one_subplot</code><span class="sig-paren">(</span><em>x_data, y_data, *, labels='No labels provided', suptitle=&quot;Chains' RMSDs&quot;, x_label='Frame Number', y_label='RMSDs', colors=['b', 'g', 'r', 'c', 'm', 'y', 'k', 'w'], alpha=0.7, grid=True, grid_color='lightgrey', grid_ls='-', grid_lw=1, grid_alpha=0.5, legend=True, legend_fs=6, legend_loc=4, fig_name='rmsd_individual_chains_one_subplot.pdf', **kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tauren/plot.html#rmsd_individual_chains_one_subplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tauren.plot.rmsd_individual_chains_one_subplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots a single plot with the combined RMSD.</p>
+<p>Bellow parameters concern data representation and are considered
+of highest importance because their incorrect use can mislead
+data analysis and consequent conclusions.</p>
+<p>Plot style parameters concernning only plot style, i.e., colors,
+shapes, fonts, etc… and which do not distort the actual data,
+are not listed in the paremeter list bellow. We hope these
+parameter names are self-explanatory and are listed in the function
+definition.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>x_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">interable</span></dt>
+<dd><p class="first last">Contains X axis data.
+Should be accepted by matplotlib.</p>
+</dd>
+<dt><strong>y_data</strong> <span class="classifier-delimiter">:</span> <span class="classifier">np.ndarray, shape=(N, M)</span></dt>
+<dd><p class="first last">Container of the Y axis data.
+Where N is the number of chains (data series), and
+M the data for each series (RMSDs of a given chain)</p>
+</dd>
+<dt><strong>labels</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd><p class="first last">The chain labels to represent in plot legend.
+Defauts to: “no labels provided”.</p>
+</dd>
+<dt><strong>fig_name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd><p class="first last">The file name with which the plot figure will be saved
+in disk. Defaults to rmsd_individual_chains_one_subplot.pdf.
+You can change the file type by specifying its extention in
+the file name.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tauren.logger">
+<span id="logger"></span><h2>Logger<a class="headerlink" href="#module-tauren.logger" title="Permalink to this headline">¶</a></h2>
+<p>MODULE PROVIDES LOGGER TO TAUREN-MD</p>
+<p>Copyright © 2018-2019 Tauren-MD Project</p>
+<p>Contributors to this file:
+- João M.C. Teixeira (<a class="reference external" href="https://github.com/joaomcteixeira">https://github.com/joaomcteixeira</a>)</p>
+<p>Tauren-MD is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+<p>Tauren-MD is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License
+along with Tauren-MD. If not, see &lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;.</p>
+<dl class="function">
+<dt id="tauren.logger.get_log">
+<code class="descclassname">tauren.logger.</code><code class="descname">get_log</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tauren/logger.html#get_log"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tauren.logger.get_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configures logger for Tauren MD.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tauren.core">
+<span id="core-unit"></span><h2>Core Unit<a class="headerlink" href="#module-tauren.core" title="Permalink to this headline">¶</a></h2>
+<dl class="data">
+<dt id="tauren.core.topology_types">
+<code class="descclassname">tauren.core.</code><code class="descname">topology_types</code><em class="property"> = ('.pdb', '.cif')</em><a class="headerlink" href="#tauren.core.topology_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Types of topologies accepted.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="tauren.core.trajectory_types">
+<code class="descclassname">tauren.core.</code><code class="descname">trajectory_types</code><em class="property"> = ('.xtc', '.nc', '.trr', '.h5', '.pdb', '.binpos', '.dcd')</em><a class="headerlink" href="#tauren.core.trajectory_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Types os trajectories accepted.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="license.html" class="btn btn-neutral float-right" title="License" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="command_line_interface.html" class="btn btn-neutral" title="Run Tauren-MD" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, João M.C. Teixeira
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
