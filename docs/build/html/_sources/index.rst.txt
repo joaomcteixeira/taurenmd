@@ -6,7 +6,7 @@
 Welcome to Tauren-MD's documentation!
 =====================================
 
-An interface that streamlines analisis routines for Molecular Dynamics.
+Tauren-MD is an interface that streamlines analisis routines for Molecular Dynamics.
 
 Designed mostly for non-developer users, but that serves also those
 proficient Python programmers.
