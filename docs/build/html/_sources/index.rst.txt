@@ -31,6 +31,7 @@ after installation).
    :maxdepth: 2
    :caption: Contents:
     
+   rstfiles/vision
    rstfiles/installation
    rstfiles/guided_user_interface
    rstfiles/command_line_interface
