@@ -1,0 +1,548 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>tauren.plot &#8212; Tauren-MD 0.4.0b documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for tauren.plot</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Tauren-MD Plotting Functions.</span>
+
+<span class="sd">Copyright © 2018-2019 Tauren-MD Project</span>
+
+<span class="sd">Contributors to this file:</span>
+<span class="sd">- João M.C. Teixeira (https://github.com/joaomcteixeira)</span>
+
+<span class="sd">Tauren-MD is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">Tauren-MD is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with Tauren-MD. If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">itertools</span> <span class="k">as</span> <span class="nn">it</span>
+
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">colors</span> <span class="k">as</span> <span class="n">mcolors</span>
+
+<span class="kn">from</span> <span class="nn">tauren</span> <span class="k">import</span> <span class="n">logger</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">get_log</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">_msg_fig_saved</span> <span class="o">=</span> <span class="s2">&quot;* Saved figure: </span><span class="si">{}</span><span class="s2">&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">_calc_fig_size</span><span class="p">(</span>
+        <span class="n">nsubplots</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">irow</span><span class="o">=</span><span class="mf">4.8</span><span class="p">,</span>
+        <span class="n">icol</span><span class="o">=</span><span class="mf">6.4</span><span class="p">,</span>
+        <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the figure dimensions (size in inches).</span>
+<span class="sd">    </span>
+<span class="sd">    Figure dimensions are calculated based on the following parameters:</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    nsubplots : int</span>
+<span class="sd">        The total number of subplots</span>
+<span class="sd">    </span>
+<span class="sd">    ncols : int, optional, defaults 1</span>
+<span class="sd">        The desired number of columns</span>
+<span class="sd">    </span>
+<span class="sd">    irow : float, optional, defaults 4.8</span>
+<span class="sd">        Number os inches per row.</span>
+<span class="sd">    </span>
+<span class="sd">    icol : float, optional, defaults 6.4</span>
+<span class="sd">        Number of inches per column.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    A tuple (width, height) in inches.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># https://matplotlib.org/api/_as_gen/matplotlib.pyplot.figure.html</span>
+    
+    <span class="n">width</span> <span class="o">=</span> <span class="n">ncols</span> <span class="o">*</span> <span class="n">icol</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="p">(</span><span class="n">nsubplots</span> <span class="o">//</span> <span class="n">ncols</span><span class="p">)</span> <span class="o">*</span> <span class="n">irow</span>
+    
+    <span class="n">fs</span> <span class="o">=</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+    
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;returning: </span><span class="si">{fs}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">fs</span>
+
+
+<div class="viewcode-block" id="rmsd_chain_per_subplot"><a class="viewcode-back" href="../../docs/modules.html#tauren.plot.rmsd_chain_per_subplot">[docs]</a><span class="k">def</span> <span class="nf">rmsd_chain_per_subplot</span><span class="p">(</span>
+        <span class="n">x_data</span><span class="p">,</span>
+        <span class="n">y_data</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">labels</span><span class="o">=</span><span class="s2">&quot;No labels provided&quot;</span><span class="p">,</span>
+        <span class="n">suptitle</span><span class="o">=</span><span class="s2">&quot;RMSDs per chain&quot;</span><span class="p">,</span>
+        <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;Frame Number&quot;</span><span class="p">,</span>
+        <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;RMSDs&quot;</span><span class="p">,</span>
+        <span class="n">colors</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">mcolors</span><span class="o">.</span><span class="n">BASE_COLORS</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+        <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">grid_color</span><span class="o">=</span><span class="s2">&quot;lightgrey&quot;</span><span class="p">,</span>
+        <span class="n">grid_ls</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+        <span class="n">grid_lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">grid_alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">legend_fs</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="n">legend_loc</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">fig_name</span><span class="o">=</span><span class="s2">&quot;rmsd_chain_per_subplot.pdf&quot;</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots a single plot with the combined RMSD.</span>
+<span class="sd">    </span>
+<span class="sd">    Bellow parameters concern data representation and are considered</span>
+<span class="sd">    of highest importance because their incorrect use can mislead</span>
+<span class="sd">    data analysis and consequent conclusions.</span>
+<span class="sd">    </span>
+<span class="sd">    Plot style parameters concernning only plot style, i.e., colors,</span>
+<span class="sd">    shapes, fonts, etc... and which do not distort the actual data,</span>
+<span class="sd">    are not listed in the paremeter list bellow. We hope these</span>
+<span class="sd">    parameter names are self-explanatory and are listed in the function</span>
+<span class="sd">    definition.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x_data : interable</span>
+<span class="sd">        Container of the X axis data. Should be accepted</span>
+<span class="sd">        by matplotlib.</span>
+<span class="sd">    </span>
+<span class="sd">    y_data : np.ndarray, shape=(N, M)</span>
+<span class="sd">        Container of the Y axis data.</span>
+<span class="sd">        Where N is the number of chains (data series), and</span>
+<span class="sd">        M the data for each series (RMSDs of a given chain)</span>
+<span class="sd">    </span>
+<span class="sd">    labels : str, optional</span>
+<span class="sd">        The chain labels to represent in plot legend.</span>
+<span class="sd">        Defauts to: &quot;no labels provided&quot;.</span>
+<span class="sd">    </span>
+<span class="sd">    fig_name : str, optional</span>
+<span class="sd">        The file name with which the plot figure will be saved</span>
+<span class="sd">        in disk. Defaults to rmsd_individual_chains_one_subplot.pdf.</span>
+<span class="sd">        You can change the file type by specifying its extention in</span>
+<span class="sd">        the file name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;* Plotting RMSDs per chain...&quot;</span><span class="p">)</span>
+    
+    <span class="n">figsize</span> <span class="o">=</span> <span class="n">_calc_fig_size</span><span class="p">(</span>
+        <span class="n">y_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">irow</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="p">)</span>
+    
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
+        <span class="n">nrows</span><span class="o">=</span><span class="n">y_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span>
+        <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+    
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span>
+        <span class="n">suptitle</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="mf">0.990</span><span class="p">,</span>
+        <span class="n">va</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">,</span>
+        <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    
+    <span class="n">axs</span> <span class="o">=</span> <span class="n">axs</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.995</span><span class="p">,</span> <span class="mf">0.985</span><span class="p">])</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    
+    <span class="n">colors_it</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+    
+    <span class="c1"># avoids iterator recycling as in it.cycle</span>
+    <span class="n">labels_it</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+    
+    <span class="n">max_rmsd</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">chain_rmsds</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">y_data</span><span class="p">):</span>
+        
+        <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="n">x_data</span><span class="p">,</span>
+            <span class="n">chain_rmsds</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="nb">next</span><span class="p">(</span><span class="n">labels_it</span><span class="p">),</span>
+            <span class="n">color</span><span class="o">=</span><span class="nb">next</span><span class="p">(</span><span class="n">colors_it</span><span class="p">),</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+            <span class="p">)</span>
+        
+        <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">x_data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        
+        <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">grid</span><span class="p">:</span>
+            <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span>
+                <span class="n">color</span><span class="o">=</span><span class="n">grid_color</span><span class="p">,</span>
+                <span class="n">linestyle</span><span class="o">=</span><span class="n">grid_ls</span><span class="p">,</span>
+                <span class="n">linewidth</span><span class="o">=</span><span class="n">grid_lw</span><span class="p">,</span>
+                <span class="n">alpha</span><span class="o">=</span><span class="n">grid_alpha</span><span class="p">,</span>
+                <span class="p">)</span>
+    
+        <span class="k">if</span> <span class="n">legend</span><span class="p">:</span>
+            <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
+                <span class="n">fontsize</span><span class="o">=</span><span class="n">legend_fs</span><span class="p">,</span>
+                <span class="n">loc</span><span class="o">=</span><span class="n">legend_loc</span><span class="p">,</span>
+                <span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">chain_rmsds</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">max_rmsd</span><span class="p">:</span>
+            <span class="n">max_rmsd</span> <span class="o">=</span> <span class="n">chain_rmsds</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">x_label</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+    
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&lt;max_rmsds&gt;: </span><span class="si">{max_rmsd}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">axis</span> <span class="ow">in</span> <span class="n">axs</span><span class="p">:</span>
+        
+        <span class="n">axis</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_rmsd</span> <span class="o">*</span> <span class="mf">1.1</span><span class="p">)</span>
+        <span class="n">all_ticks</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">get_yticks</span><span class="p">()</span>
+        <span class="n">axis</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">all_ticks</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">axis</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">all_ticks</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig_name</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_msg_fig_saved</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fig_name</span><span class="p">))</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="rmsd_combined_chains"><a class="viewcode-back" href="../../docs/modules.html#tauren.plot.rmsd_combined_chains">[docs]</a><span class="k">def</span> <span class="nf">rmsd_combined_chains</span><span class="p">(</span>
+        <span class="n">x_data</span><span class="p">,</span>
+        <span class="n">y_data</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;No labels provided&quot;</span><span class="p">,</span>
+        <span class="n">suptitle</span><span class="o">=</span><span class="s2">&quot;Combined Chain RMSDs&quot;</span><span class="p">,</span>
+        <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;Frame Number&quot;</span><span class="p">,</span>
+        <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;RMSDs&quot;</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+        <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">grid_color</span><span class="o">=</span><span class="s2">&quot;lightgrey&quot;</span><span class="p">,</span>
+        <span class="n">grid_ls</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+        <span class="n">grid_lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">grid_alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">legend_fs</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="n">legend_loc</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">fig_name</span><span class="o">=</span><span class="s1">&#39;plot_rmsd_combined.pdf&#39;</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots a single plot with the combined RMSD.</span>
+<span class="sd">    </span>
+<span class="sd">    Bellow parameters concern data representation and are considered</span>
+<span class="sd">    of highest importance because their incorrect use can mislead</span>
+<span class="sd">    data analysis and consequent conclusions.</span>
+<span class="sd">    </span>
+<span class="sd">    Plot style parameters concernning only plot style, i.e., colors,</span>
+<span class="sd">    shapes, fonts, etc... and which do not distort the actual data,</span>
+<span class="sd">    are not listed in the paremeter list bellow. We hope these</span>
+<span class="sd">    parameter names are self-explanatory and are listed in the function</span>
+<span class="sd">    definition.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x_data : interable of numbers</span>
+<span class="sd">        Container of the X axis data. Should be accepted</span>
+<span class="sd">        by matplotlib.</span>
+<span class="sd">    </span>
+<span class="sd">    y_data : np.ndarray, shape=(M,)</span>
+<span class="sd">        Container of the Y axis data.</span>
+<span class="sd">        Where M is the RMSDs data for the combined chains.</span>
+<span class="sd">    </span>
+<span class="sd">    label : str, optional</span>
+<span class="sd">        The label to represent in plot legend.</span>
+<span class="sd">        Defauts to: &quot;no labels provided&quot;.</span>
+<span class="sd">    </span>
+<span class="sd">    fig_name : str, optional</span>
+<span class="sd">        The file name with which the plot figure will be saved</span>
+<span class="sd">        in disk. Defaults to rmsd_individual_chains_one_subplot.pdf.</span>
+<span class="sd">        You can change the file type by specifying its extention in</span>
+<span class="sd">        the file name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;* Plotting combined Chain RMSDs...&quot;</span><span class="p">)</span>
+        
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.995</span><span class="p">,</span> <span class="mf">0.985</span><span class="p">])</span>
+    
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span>
+        <span class="n">suptitle</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="mf">0.990</span><span class="p">,</span>
+        <span class="n">va</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">,</span>
+        <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">x_data</span><span class="p">,</span>
+        <span class="n">y_data</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+        <span class="p">)</span>
+    
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">x_label</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+    
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">x_data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">grid</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">grid_color</span><span class="p">,</span>
+            <span class="n">linestyle</span><span class="o">=</span><span class="n">grid_ls</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="n">grid_lw</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">grid_alpha</span><span class="p">,</span>
+            <span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">legend</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="n">legend_fs</span><span class="p">,</span>
+            <span class="n">loc</span><span class="o">=</span><span class="n">legend_loc</span><span class="p">,</span>
+            <span class="p">)</span>
+    
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig_name</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_msg_fig_saved</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fig_name</span><span class="p">))</span>
+        
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="rmsd_individual_chains_one_subplot"><a class="viewcode-back" href="../../docs/modules.html#tauren.plot.rmsd_individual_chains_one_subplot">[docs]</a><span class="k">def</span> <span class="nf">rmsd_individual_chains_one_subplot</span><span class="p">(</span>
+        <span class="n">x_data</span><span class="p">,</span>
+        <span class="n">y_data</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">labels</span><span class="o">=</span><span class="s2">&quot;No labels provided&quot;</span><span class="p">,</span>
+        <span class="n">suptitle</span><span class="o">=</span><span class="s2">&quot;Chains&#39; RMSDs&quot;</span><span class="p">,</span>
+        <span class="n">x_label</span><span class="o">=</span><span class="s2">&quot;Frame Number&quot;</span><span class="p">,</span>
+        <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;RMSDs&quot;</span><span class="p">,</span>
+        <span class="n">colors</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">mcolors</span><span class="o">.</span><span class="n">BASE_COLORS</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+        <span class="n">grid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">grid_color</span><span class="o">=</span><span class="s2">&quot;lightgrey&quot;</span><span class="p">,</span>
+        <span class="n">grid_ls</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+        <span class="n">grid_lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">grid_alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">legend_fs</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="n">legend_loc</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">fig_name</span><span class="o">=</span><span class="s2">&quot;rmsd_individual_chains_one_subplot.pdf&quot;</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots a single plot with the combined RMSD.</span>
+<span class="sd">    </span>
+<span class="sd">    Bellow parameters concern data representation and are considered</span>
+<span class="sd">    of highest importance because their incorrect use can mislead</span>
+<span class="sd">    data analysis and consequent conclusions.</span>
+<span class="sd">    </span>
+<span class="sd">    Plot style parameters concernning only plot style, i.e., colors,</span>
+<span class="sd">    shapes, fonts, etc... and which do not distort the actual data,</span>
+<span class="sd">    are not listed in the paremeter list bellow. We hope these</span>
+<span class="sd">    parameter names are self-explanatory and are listed in the function</span>
+<span class="sd">    definition.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x_data : interable</span>
+<span class="sd">        Contains X axis data.</span>
+<span class="sd">        Should be accepted by matplotlib.</span>
+<span class="sd">    </span>
+<span class="sd">    y_data : np.ndarray, shape=(N, M)</span>
+<span class="sd">        Container of the Y axis data.</span>
+<span class="sd">        Where N is the number of chains (data series), and</span>
+<span class="sd">        M the data for each series (RMSDs of a given chain)</span>
+<span class="sd">    </span>
+<span class="sd">    labels : str, optional</span>
+<span class="sd">        The chain labels to represent in plot legend.</span>
+<span class="sd">        Defauts to: &quot;no labels provided&quot;.</span>
+<span class="sd">    </span>
+<span class="sd">    fig_name : str, optional</span>
+<span class="sd">        The file name with which the plot figure will be saved</span>
+<span class="sd">        in disk. Defaults to rmsd_individual_chains_one_subplot.pdf.</span>
+<span class="sd">        You can change the file type by specifying its extention in</span>
+<span class="sd">        the file name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;* Plotting chains RMSDs single subplot...&quot;</span><span class="p">)</span>
+    
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.995</span><span class="p">,</span> <span class="mf">0.985</span><span class="p">])</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span>
+        <span class="n">suptitle</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="mf">0.990</span><span class="p">,</span>
+        <span class="n">va</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">,</span>
+        <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+    
+    <span class="n">colors_it</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+    
+    <span class="c1"># avoids iterator recycling as in it.cycle</span>
+    <span class="n">labels_it</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+    
+    <span class="n">max_rmsds</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="k">for</span> <span class="n">chain_rmsd_data</span> <span class="ow">in</span> <span class="n">y_data</span><span class="p">:</span>
+        
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="n">x_data</span><span class="p">,</span>
+            <span class="n">chain_rmsd_data</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="nb">next</span><span class="p">(</span><span class="n">labels_it</span><span class="p">),</span>
+            <span class="n">color</span><span class="o">=</span><span class="nb">next</span><span class="p">(</span><span class="n">colors_it</span><span class="p">),</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+            <span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">chain_rmsd_data</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">max_rmsds</span><span class="p">:</span>
+            <span class="n">max_rmsds</span> <span class="o">=</span> <span class="n">chain_rmsd_data</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">x_data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_rmsds</span> <span class="o">*</span> <span class="mf">1.1</span><span class="p">)</span>
+    
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">x_label</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">grid</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">grid_color</span><span class="p">,</span>
+            <span class="n">linestyle</span><span class="o">=</span><span class="n">grid_ls</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="n">grid_lw</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">grid_alpha</span><span class="p">,</span>
+            <span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">legend</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="n">legend_fs</span><span class="p">,</span>
+            <span class="n">loc</span><span class="o">=</span><span class="n">legend_loc</span><span class="p">,</span>
+            <span class="p">)</span>
+    
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig_name</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_msg_fig_saved</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fig_name</span><span class="p">))</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Tauren-MD</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/guided_user_interface.html">Guided User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/command_line_interface.html">Run Tauren-MD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/command_line_interface.html#list-of-actions">List of Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/modules.html">Tauren-MD Library Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, João M.C. Teixeira.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

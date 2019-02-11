@@ -1,0 +1,931 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>tauren.tauren &#8212; Tauren-MD 0.4.0b documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for tauren.tauren</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">TAUREN OBJECTS</span>
+
+<span class="sd">Copyright © 2018-2019 Tauren-MD Project</span>
+
+<span class="sd">Contributors to this file:</span>
+<span class="sd">- João M.C. Teixeira (https://github.com/joaomcteixeira)</span>
+
+<span class="sd">Tauren-MD is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">Tauren-MD is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with Tauren-MD. If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">mdtraj</span>
+
+<span class="kn">from</span> <span class="nn">tauren</span> <span class="k">import</span> <span class="n">logger</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">get_log</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">_wrong_traj_type</span> <span class="o">=</span> <span class="s2">&quot;Trajectory argument should be a </span><span class="si">{}</span><span class="s2"> trajectory type.&quot;</span>
+<span class="n">_msg_key_exists</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;The storage keyword </span><span class="si">{}</span><span class="s2"> already exists in the &quot;</span>
+    <span class="s2">&quot;trajectory observables data base. &quot;</span>
+    <span class="s2">&quot;Ignoring...&quot;</span>
+    <span class="p">)</span>
+<span class="n">_msg_wrong_chains_list</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;The list of chains provided &#39;</span><span class="si">{}</span><span class="s2">&#39; &quot;</span>
+    <span class="s2">&quot;contains values which are not of integer type&quot;</span>
+    <span class="p">)</span>
+<span class="n">_msg_wrong_param_type</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;The parameter &#39;</span><span class="si">{}</span><span class="s2">&#39; is of wrong type &#39;</span><span class="si">{}</span><span class="s2">&#39; &quot;</span><span class="p">,</span>
+    <span class="s2">&quot;should be &#39;</span><span class="si">{}</span><span class="s2">&#39;.&quot;</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="TaurenTraj"><a class="viewcode-back" href="../../index.html#tauren.tauren.TaurenTraj">[docs]</a><span class="k">class</span> <span class="nc">TaurenTraj</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Stores and handles trajectory data.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    trajectory : Molecular Dynamics trajectory</span>
+<span class="sd">    </span>
+<span class="sd">    topology : topology used to initiate the trajectory</span>
+<span class="sd">        </span>
+<span class="sd">    Exceptions:</span>
+<span class="sd">        raise TypeError if trajectory is not of trajtype.type.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">observables</span> <span class="o">=</span> <span class="n">TrajObservables</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rmsds_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="k">return</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_pdb_name_format</span><span class="p">(</span><span class="n">frames</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a formatting string to apply leading zeros.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        frames : int or str</span>
+<span class="sd">            The number of frames.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">leading_zeros</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">frames</span><span class="p">)))</span>
+        <span class="n">pdb_name_fmt</span> <span class="o">=</span> <span class="s2">&quot;{:0&gt;&quot;</span> <span class="o">+</span> <span class="n">leading_zeros</span> <span class="o">+</span> <span class="s2">&quot;}.pdb&quot;</span>
+        
+        <span class="k">return</span> <span class="n">pdb_name_fmt</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_int_slicer</span><span class="p">(</span><span class="n">slicer</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a list of (integer) frames from a slicer string.</span>
+<span class="sd">        </span>
+<span class="sd">        Slicer can be of the following formats (INCLUSIVE):</span>
+<span class="sd">            - &quot;0&quot;</span>
+<span class="sd">            - &quot;0,1,5,100&quot;</span>
+<span class="sd">            - &quot;0:&quot;</span>
+<span class="sd">            - &quot;:500&quot;</span>
+<span class="sd">            - &quot;10:50&quot;</span>
+<span class="sd">            - &quot;10:100:2&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">slicer</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&lt;slicer&gt; &#39;</span><span class="si">{slicer}</span><span class="s2">&#39; should be of string type.&quot;</span><span class="p">)</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&lt;slicer&gt;: </span><span class="si">{slicer}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="n">list_of_slices</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="n">possible_inputs</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">slicer</span><span class="o">.</span><span class="n">isdigit</span><span class="p">(),</span>
+            <span class="p">(</span><span class="n">slicer</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">slicer</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="n">slicer</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">),</span>
+            <span class="n">slicer</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">),</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">slicer</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">))</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="n">slicer</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="p">)</span>
+        
+        <span class="n">dict_of_actions</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="mi">0</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)],</span>
+            <span class="mi">1</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)],</span>
+            <span class="mi">2</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">top</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span>
+            <span class="mi">3</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span>
+            <span class="mi">4</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="p">),</span>
+            <span class="mi">5</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                <span class="p">))</span>
+            <span class="p">}</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">possible_inputs</span><span class="p">)</span>
+        
+        <span class="n">slicer_not_valid</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&lt;slicer&gt; input not valid: &#39;</span><span class="si">{slicer}</span><span class="s2">&#39;&quot;</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">which_action</span> <span class="o">=</span> <span class="n">possible_inputs</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">slicer_not_valid</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&lt;index&gt;: </span><span class="si">{which_action}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">list_of_slices</span> <span class="o">=</span> <span class="n">dict_of_actions</span><span class="p">[</span><span class="n">which_action</span><span class="p">](</span><span class="n">slicer</span><span class="p">)</span>
+        
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">slicer_not_valid</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">slicer_not_valid</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">list_of_slices</span><span class="p">]),</span> \
+            <span class="s2">&quot;Not all items in slicer are integers&quot;</span>
+        
+        <span class="k">return</span> <span class="n">list_of_slices</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_items_list</span><span class="p">(</span><span class="n">slicer</span><span class="p">,</span> <span class="n">max_num_of_items</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a list of indexes for the object_</span>
+<span class="sd">        based on slicer.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        slicer : str or list of integers</span>
+<span class="sd">        </span>
+<span class="sd">        max_num_of_items : int</span>
+<span class="sd">            The maximum number of items</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">slicer</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> \
+                <span class="ow">and</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">slicer</span><span class="p">]):</span>
+            
+            <span class="n">items_list</span> <span class="o">=</span> <span class="n">slicer</span>
+        
+        <span class="k">elif</span> <span class="n">slicer</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+            
+            <span class="n">items_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">max_num_of_items</span><span class="p">))</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+            
+            <span class="n">items_list</span> <span class="o">=</span> <span class="n">TaurenTraj</span><span class="o">.</span><span class="n">_int_slicer</span><span class="p">(</span><span class="n">slicer</span><span class="p">,</span> <span class="n">max_num_of_items</span><span class="p">)</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&lt;intems_list&gt;: </span><span class="si">{items_list}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">items_list</span></div>
+
+
+<div class="viewcode-block" id="TaurenMDTraj"><a class="viewcode-back" href="../../index.html#tauren.tauren.TaurenMDTraj">[docs]</a><span class="k">class</span> <span class="nc">TaurenMDTraj</span><span class="p">(</span><span class="n">TaurenTraj</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span> <span class="n">topology</span><span class="p">):</span>
+        
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span> <span class="o">=</span> <span class="n">mdtraj</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">trajectory</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="n">topology</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">topology</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">topology</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_frames_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        
+        <span class="k">return</span>
+    
+    <span class="k">def</span> <span class="nf">_update_frames_list</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">end</span><span class="p">,</span>
+            <span class="n">step</span><span class="p">,</span>
+            <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates frames range.</span>
+<span class="sd">        </span>
+<span class="sd">        Useful to represent accurate plot axis.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">index_update</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">frames_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="n">index_update</span><span class="p">,</span>
+            <span class="p">))</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;frame_range updated: </span><span class="si">{self.frames_list}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span>
+    
+<div class="viewcode-block" id="TaurenMDTraj.slice_in_chains"><a class="viewcode-back" href="../../index.html#tauren.tauren.TaurenMDTraj.slice_in_chains">[docs]</a>    <span class="k">def</span> <span class="nf">slice_in_chains</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">chain_list</span><span class="p">,</span>
+            <span class="n">operator</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">,</span>
+            <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Slices the trajectory according to a list of chains.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        chain_list : list of ints or int convertable strings</span>
+<span class="sd">            Example: [1, 4, 6, 7]</span>
+<span class="sd">        </span>
+<span class="sd">        operator : str, optional [&quot;or&quot;, &quot;and&quot;], defaults &quot;or&quot;</span>
+<span class="sd">            The logical operator to perform slicing.</span>
+<span class="sd">            According to MDTraj.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        The sliced trajectory.</span>
+<span class="sd">        </span>
+<span class="sd">        Exceptions</span>
+<span class="sd">        ----------</span>
+<span class="sd">        IndexError</span>
+<span class="sd">            If trajectory can not be sliced according to chains.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">selector_traj_str</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="s2">&quot;chainid </span><span class="si">{chain}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">chain</span> <span class="ow">in</span> <span class="n">chain_list</span><span class="p">]</span>
+        <span class="n">selector</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot; </span><span class="si">{operator}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">selector_traj_str</span><span class="p">)</span>
+        <span class="n">slicer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sliced_traj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">atom_slice</span><span class="p">(</span><span class="n">slicer</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">expection</span><span class="p">(</span><span class="s2">&quot;Could not slice traj&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">sliced_traj</span></div>
+    
+<div class="viewcode-block" id="TaurenMDTraj.slice"><a class="viewcode-back" href="../../index.html#tauren.tauren.TaurenMDTraj.slice">[docs]</a>    <span class="k">def</span> <span class="nf">slice</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">start</span><span class="p">,</span>
+            <span class="n">stop</span><span class="p">,</span>
+            <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Slices trajectory.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        start : int</span>
+<span class="sd">            The starting frame</span>
+<span class="sd">        </span>
+<span class="sd">        stop : int</span>
+<span class="sd">            The ending frame (EXCLUDED)</span>
+<span class="sd">        </span>
+<span class="sd">        step : int, optional</span>
+<span class="sd">            Slicing step.</span>
+<span class="sd">            Defaults to 1.</span>
+<span class="sd">        </span>
+<span class="sd">        inplace : bool</span>
+<span class="sd">            Whether trajectory is modified in place or a copy</span>
+<span class="sd">            is created (returned).</span>
+<span class="sd">            Defaults to True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;* Slicing trajectory&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;    current traj: </span><span class="si">{self.trajectory}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;    start: </span><span class="si">{start}</span><span class="s2">, stop: </span><span class="si">{stop}</span><span class="s2">, step: </span><span class="si">{step}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="n">new_traj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">:</span><span class="n">step</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_frames_list</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span> <span class="o">=</span> <span class="n">new_traj</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;    new traj: </span><span class="si">{self.trajectory}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;    returned traj: </span><span class="si">{new_traj}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">new_traj</span></div>
+    
+<div class="viewcode-block" id="TaurenMDTraj.reduce_equidistant"><a class="viewcode-back" href="../../index.html#tauren.tauren.TaurenMDTraj.reduce_equidistant">[docs]</a>    <span class="k">def</span> <span class="nf">reduce_equidistant</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reduces trajectory in equidistant frames separated by</span>
+<span class="sd">        step frames.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        step : int</span>
+<span class="sd">            The number of steps between equidistant frames.</span>
+<span class="sd">            Defaults to 1.</span>
+<span class="sd">        </span>
+<span class="sd">        inplace : bool</span>
+<span class="sd">            Whether trajectory is modified in place or a copy</span>
+<span class="sd">            is created (returned).</span>
+<span class="sd">            Defaults to True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;* Reducing Trajectory to equidistant frames...&quot;</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&lt;step&gt; must be integer type: &#39;</span><span class="si">{step}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;    current trajectory status: </span><span class="si">{self.trajectory}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="n">new_traj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="p">[::</span><span class="n">step</span><span class="p">]</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;    reduced trajectory status: </span><span class="si">{new_traj}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_frames_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span> <span class="o">=</span> <span class="n">new_traj</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">new_traj</span></div>
+    
+<div class="viewcode-block" id="TaurenMDTraj.remove_solvent"><a class="viewcode-back" href="../../index.html#tauren.tauren.TaurenMDTraj.remove_solvent">[docs]</a>    <span class="k">def</span> <span class="nf">remove_solvent</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="o">*</span><span class="p">,</span>
+            <span class="n">exclude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Removes solvent from Trajectory.</span>
+<span class="sd">        </span>
+<span class="sd">        Performs: MDTraj.Trajectory.remove_solvent()</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        exclude : list</span>
+<span class="sd">            List of solvent residue names to retain</span>
+<span class="sd">                in the new trajectory.</span>
+<span class="sd">            Defaults to None.</span>
+<span class="sd">        </span>
+<span class="sd">        inplace : bool</span>
+<span class="sd">            Whether trajectory is modified in place or a copy</span>
+<span class="sd">            is created (returned).</span>
+<span class="sd">            Defaults to True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;* Removing solvent...&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;    received trajectory: </span><span class="si">{self.trajectory}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="n">new_traj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">remove_solvent</span><span class="p">(</span>
+            <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">exclude</span><span class="o">=</span><span class="n">exclude</span>
+            <span class="p">)</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;    solventless trajectory: </span><span class="si">{self.trajectory}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span> <span class="o">=</span> <span class="n">new_traj</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">new_traj</span></div>
+    
+<div class="viewcode-block" id="TaurenMDTraj.image_molecules"><a class="viewcode-back" href="../../index.html#tauren.tauren.TaurenMDTraj.image_molecules">[docs]</a>    <span class="k">def</span> <span class="nf">image_molecules</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="o">*</span><span class="p">,</span>
+            <span class="n">anchor_molecules</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">other_molecules</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">sorted_bonds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">make_whole</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Performs MDTraj.Trajectory.image_molecules, accepts same arguments.</span>
+<span class="sd">        </span>
+<span class="sd">        Other Parameters</span>
+<span class="sd">        ----------------</span>
+<span class="sd">        inplace : bool</span>
+<span class="sd">            Whether trajectory is modified in place or a copy</span>
+<span class="sd">            is created (returned).</span>
+<span class="sd">            Defaults to True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;* Trying imaging molecules... this can take a while...&quot;</span><span class="p">)</span>
+        
+        <span class="n">new_traj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">image_molecules</span><span class="p">(</span>
+            <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">anchor_molecules</span><span class="o">=</span><span class="n">anchor_molecules</span><span class="p">,</span>
+            <span class="n">other_molecules</span><span class="o">=</span><span class="n">other_molecules</span><span class="p">,</span>
+            <span class="n">sorted_bonds</span><span class="o">=</span><span class="n">sorted_bonds</span><span class="p">,</span>
+            <span class="n">make_whole</span><span class="o">=</span><span class="n">make_whole</span><span class="p">,</span>
+            <span class="p">)</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;    completed.&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span> <span class="o">=</span> <span class="n">new_traj</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">new_traj</span></div>
+    
+<div class="viewcode-block" id="TaurenMDTraj.calc_rmsds"><a class="viewcode-back" href="../../index.html#tauren.tauren.TaurenMDTraj.calc_rmsds">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">calc_rmsds</span><span class="p">(</span>
+            <span class="n">trajectory</span><span class="p">,</span>
+            <span class="o">*</span><span class="p">,</span>
+            <span class="n">ref_frame</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates trajectory RMSDs.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        trajectory : mdtraj.Trajectory</span>
+<span class="sd">            The trajectory upon which operate.</span>
+<span class="sd">        </span>
+<span class="sd">        ref_frame : int, optional</span>
+<span class="sd">            Defaults to 0.</span>
+<span class="sd">            The reference frame for RMSDs calculation.</span>
+<span class="sd">        </span>
+<span class="sd">        Return</span>
+<span class="sd">        ------</span>
+<span class="sd">        np.ndarray : float</span>
+<span class="sd">            The calculated RMSDs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rmsds</span> <span class="o">=</span> <span class="n">mdtraj</span><span class="o">.</span><span class="n">rmsd</span><span class="p">(</span>
+            <span class="n">trajectory</span><span class="p">,</span>
+            <span class="n">trajectory</span><span class="p">,</span>
+            <span class="n">frame</span><span class="o">=</span><span class="n">ref_frame</span><span class="p">,</span>
+            <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">precentered</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+    
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="n">f</span><span class="s2">&quot;&lt;rmsds&gt;: max {rmsds.max()},&quot;</span>
+            <span class="n">f</span><span class="s2">&quot; min {rmsds.min()},&quot;</span>
+            <span class="n">f</span><span class="s2">&quot; average {rmsds.mean()}&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">rmsds</span></div>
+    
+<div class="viewcode-block" id="TaurenMDTraj.calc_rmsds_separated_chains"><a class="viewcode-back" href="../../index.html#tauren.tauren.TaurenMDTraj.calc_rmsds_separated_chains">[docs]</a>    <span class="k">def</span> <span class="nf">calc_rmsds_separated_chains</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="o">*</span><span class="p">,</span>
+            <span class="n">chains</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+            <span class="n">storage_key</span><span class="o">=</span><span class="s2">&quot;rmsds_separated_chains&quot;</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates RMSDs for each chain separately.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        chains : str or list of int, optional</span>
+<span class="sd">            Defaults to &quot;all&quot;, all chains are used.</span>
+<span class="sd">            </span>
+<span class="sd">            If str type</span>
+<span class="sd">            -----------</span>
+<span class="sd">            The chains slicer identifying the chains upon which</span>
+<span class="sd">            perform the combined RMSD calculation.</span>
+<span class="sd">            </span>
+<span class="sd">            Slicer the standard Python slicing formats</span>
+<span class="sd">            BUT these are INCLUSIVE:</span>
+<span class="sd">            - &quot;0&quot;</span>
+<span class="sd">            - &quot;0,1,5,100&quot;</span>
+<span class="sd">            - &quot;0:&quot;</span>
+<span class="sd">            - &quot;:500&quot;</span>
+<span class="sd">            - &quot;10:50&quot;</span>
+<span class="sd">            - &quot;10:100:2&quot;</span>
+<span class="sd">            </span>
+<span class="sd">            If list if int</span>
+<span class="sd">            --------------</span>
+<span class="sd">            The exact chain numbers.</span>
+<span class="sd">            </span>
+<span class="sd">        </span>
+<span class="sd">        ref_frame : int</span>
+<span class="sd">            The reference frame for the RMSD calculation.</span>
+<span class="sd">        </span>
+<span class="sd">        storage_key : str, optional</span>
+<span class="sd">            The first element of the key tuple with which the</span>
+<span class="sd">            calculated RMSD data will be stored in the trajectory&#39;s</span>
+<span class="sd">            observables&#39; dictionary. Defaults to &quot;rmsds_separated_chains&quot;.</span>
+<span class="sd">        </span>
+<span class="sd">        Exceptions</span>
+<span class="sd">        ----------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If chains is list of ints and list contains</span>
+<span class="sd">            other then int type elements.</span>
+<span class="sd">        </span>
+<span class="sd">        IndexError</span>
+<span class="sd">            If trajectory can not be sliced according to chains.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_chains</span><span class="p">(</span><span class="n">chains</span><span class="p">)</span>
+        
+        <span class="n">chain_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_items_list</span><span class="p">(</span>
+            <span class="n">chains</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_num_of_chains</span><span class="p">(),</span>
+            <span class="p">)</span>
+        
+        <span class="n">rmsds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">chain_list</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">n_frames</span><span class="p">))</span>
+        
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">chain</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chain_list</span><span class="p">):</span>
+            
+            <span class="n">sliced_traj_single_chain</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">slice_in_chains</span><span class="p">([</span><span class="n">chain</span><span class="p">])</span>
+            
+            <span class="n">rmsds</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_rmsds</span><span class="p">(</span><span class="n">sliced_traj_single_chain</span><span class="p">)</span>
+        
+        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">storage_key</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">chain_list</span><span class="p">)))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">observables</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">rmsds</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">key</span></div>
+    
+<div class="viewcode-block" id="TaurenMDTraj.calc_rmsds_combined_chains"><a class="viewcode-back" href="../../index.html#tauren.tauren.TaurenMDTraj.calc_rmsds_combined_chains">[docs]</a>    <span class="k">def</span> <span class="nf">calc_rmsds_combined_chains</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="o">*</span><span class="p">,</span>
+            <span class="n">chains</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+            <span class="n">ref_frame</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">storage_key</span><span class="o">=</span><span class="s2">&quot;rmsds_combined_chains&quot;</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates combined RMSDs for a set of chains.</span>
+<span class="sd">        </span>
+<span class="sd">        Calculated RMSDs are stored in the form of np.ndarray</span>
+<span class="sd">        in trajectory&#39;s observables attribute.</span>
+<span class="sd">        Storage key is the tuple of strings: (storage_key, chains).</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        chains : str or list of int, optional</span>
+<span class="sd">            Defaults to &quot;all&quot;, all chains are used.</span>
+<span class="sd">            </span>
+<span class="sd">            If str type</span>
+<span class="sd">            -----------</span>
+<span class="sd">            The chains slicer identifying the chains upon which</span>
+<span class="sd">            perform the combined RMSD calculation.</span>
+<span class="sd">            </span>
+<span class="sd">            Slicer the standard Python slicing formats</span>
+<span class="sd">            BUT these are INCLUSIVE:</span>
+<span class="sd">            - &quot;0&quot;</span>
+<span class="sd">            - &quot;0,1,5,100&quot;</span>
+<span class="sd">            - &quot;0:&quot;</span>
+<span class="sd">            - &quot;:500&quot;</span>
+<span class="sd">            - &quot;10:50&quot;</span>
+<span class="sd">            - &quot;10:100:2&quot;</span>
+<span class="sd">            </span>
+<span class="sd">            If list of integers</span>
+<span class="sd">            --------------</span>
+<span class="sd">            The exact chain numbers.</span>
+<span class="sd">            </span>
+<span class="sd">        </span>
+<span class="sd">        ref_frame : int</span>
+<span class="sd">            The reference frame for the RMSD calculation.</span>
+<span class="sd">        </span>
+<span class="sd">        storage_key : str, optional</span>
+<span class="sd">            The first element of the key tuple with which the</span>
+<span class="sd">            calculated RMSD data will be stored in the trajectory&#39;s</span>
+<span class="sd">            observables&#39; dictionary. Defaults to &quot;rmsds_combined_chains&quot;.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        key : tuple</span>
+<span class="sd">        The key with which data was stored in observables</span>
+<span class="sd">        attribute dictionary.</span>
+<span class="sd">        </span>
+<span class="sd">        Exceptions</span>
+<span class="sd">        ----------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If chains is list of ints and list contains</span>
+<span class="sd">            other then int type elements.</span>
+<span class="sd">        </span>
+<span class="sd">        IndexError</span>
+<span class="sd">            If trajectory can not be sliced according to chains.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_chains</span><span class="p">(</span><span class="n">chains</span><span class="p">)</span>
+        
+        <span class="n">chain_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_items_list</span><span class="p">(</span>
+            <span class="n">chains</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_num_of_chains</span><span class="p">(),</span>
+            <span class="p">)</span>
+        
+        <span class="n">sliced_traj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">slice_in_chains</span><span class="p">(</span><span class="n">chain_list</span><span class="p">)</span>
+        
+        <span class="n">combined_rmsds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_rmsds</span><span class="p">(</span>
+            <span class="n">sliced_traj</span><span class="p">,</span>
+            <span class="p">)</span>
+        
+        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">storage_key</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">chain_list</span><span class="p">)))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">observables</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">combined_rmsds</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">key</span></div>
+    
+<div class="viewcode-block" id="TaurenMDTraj.frames2PDB"><a class="viewcode-back" href="../../index.html#tauren.tauren.TaurenMDTraj.frames2PDB">[docs]</a>    <span class="k">def</span> <span class="nf">frames2PDB</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">frames</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+            <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;_&quot;</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extracts trajectory frames to PDB files using prefix name.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        frames : str, optional</span>
+<span class="sd">            Frame or range of frames to extract.</span>
+<span class="sd">            Defaults to &quot;all&quot;, all chains are used.</span>
+<span class="sd">            </span>
+<span class="sd">            If str type</span>
+<span class="sd">            -----------</span>
+<span class="sd">            The chains slicer identifying the chains upon which</span>
+<span class="sd">            perform the combined RMSD calculation.</span>
+<span class="sd">            </span>
+<span class="sd">            Slicer the standard Python slicing formats</span>
+<span class="sd">            BUT these are INCLUSIVE:</span>
+<span class="sd">            - &quot;0&quot;</span>
+<span class="sd">            - &quot;0,1,5,100&quot;</span>
+<span class="sd">            - &quot;0:&quot;</span>
+<span class="sd">            - &quot;:500&quot;</span>
+<span class="sd">            - &quot;10:50&quot;</span>
+<span class="sd">            - &quot;10:100:2&quot;</span>
+<span class="sd">            </span>
+<span class="sd">            If list of integers</span>
+<span class="sd">            --------------</span>
+<span class="sd">            The exact chain numbers.</span>
+<span class="sd">            </span>
+<span class="sd">        prefix  : str, optional</span>
+<span class="sd">            The prefix name for extracted PDBs.</span>
+<span class="sd">            Defaults to &quot;_&quot;.</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;* Extracting frames...&quot;</span><span class="p">)</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&lt;frames&gt;: </span><span class="si">{frames}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&lt;prefix&gt;: </span><span class="si">{prefix}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="n">frames_to_extract</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_items_list</span><span class="p">(</span>
+            <span class="n">frames</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span>
+            <span class="p">)</span>
+        
+        <span class="n">pdb_name_fmt</span> <span class="o">=</span> \
+            <span class="n">prefix</span> \
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_pdb_name_format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">n_frames</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frames_to_extract</span><span class="p">:</span>
+        
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">slice_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">slice</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span>
+                    <span class="n">f</span><span class="s2">&quot;    frame &#39;</span><span class="si">{frame}</span><span class="s2">&#39; does NOT exist in trajectory, &quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;ignoring...&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">continue</span>
+        
+            <span class="n">pdb_name</span> <span class="o">=</span> <span class="n">pdb_name_fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+            <span class="n">slice_</span><span class="o">.</span><span class="n">save_pdb</span><span class="p">(</span><span class="n">pdb_name</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;    extracted </span><span class="si">{pdb_name}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span></div>
+    
+<div class="viewcode-block" id="TaurenMDTraj.export_data"><a class="viewcode-back" href="../../index.html#tauren.tauren.TaurenMDTraj.export_data">[docs]</a>    <span class="k">def</span> <span class="nf">export_data</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">key</span><span class="p">,</span>
+            <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;table.csv&quot;</span><span class="p">,</span>
+            <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span>
+            <span class="n">header</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Exports data arrays to file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">header</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{header}</span><span class="se">\n</span><span class="s2">frames,</span><span class="si">{key[1]}</span><span class="s2">&quot;</span>
+        
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frames_list</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">observables</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="p">))</span>
+        
+        <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span>
+            <span class="n">file_name</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+            <span class="n">fmt</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;</span><span class="si">%i</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%.18e</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">delimiter</span><span class="o">=</span><span class="n">sep</span><span class="p">,</span>
+            <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span>
+            <span class="p">)</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;saved </span><span class="si">{file_name}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span></div>
+    
+<div class="viewcode-block" id="TaurenMDTraj.save_traj"><a class="viewcode-back" href="../../index.html#tauren.tauren.TaurenMDTraj.save_traj">[docs]</a>    <span class="k">def</span> <span class="nf">save_traj</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;traj_output.dcd&quot;</span><span class="p">,</span>
+            <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Saves trajectory to file.</span>
+<span class="sd">        </span>
+<span class="sd">        Trajectory format is given by extension name,</span>
+<span class="sd">        must be compatible with mdtraj.Trajectory.save().</span>
+<span class="sd">    </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_name : str</span>
+<span class="sd">            Name of the output trajectory file.</span>
+<span class="sd">        </span>
+<span class="sd">        overwrite : bool</span>
+<span class="sd">            If file_name already exists, overwrites it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;* Exporting trajectory to: </span><span class="si">{file_name}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+        <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">force_overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
+    
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;    ... saved&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span></div>
+    
+    <span class="k">def</span> <span class="nf">report</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="n">info</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">* Trajectory details:</span>
+
+<span class="s2">n_frames: </span><span class="si">{self.trajectory.n_frames}</span><span class="s2"></span>
+<span class="s2">n_residues: </span><span class="si">{self.trajectory.n_residues}</span><span class="s2"></span>
+<span class="s2">n_atmos: </span><span class="si">{self.trajectory.n_atoms}</span><span class="s2"></span>
+
+<span class="s2">time_step: </span><span class="si">{self.trajectory.timestep}</span><span class="s2"> ps</span>
+<span class="s2">    or {self.trajectory.timestep / 1000} ns</span>
+
+<span class="s2">total_time: </span><span class="si">{self.trajectory.time[-1]}</span><span class="s2"> ps</span>
+<span class="s2">    or {self.trajectory.time[-1] / 1000} ns</span>
+<span class="s2">&quot;&quot;&quot;</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+        
+        <span class="k">return</span>
+    
+<div class="viewcode-block" id="TaurenMDTraj.get_num_of_chains"><a class="viewcode-back" href="../../index.html#tauren.tauren.TaurenMDTraj.get_num_of_chains">[docs]</a>    <span class="k">def</span> <span class="nf">get_num_of_chains</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the number (integer) of chains in topology.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">chains</span><span class="p">)</span></div>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_check_chains</span><span class="p">(</span><span class="n">chains</span><span class="p">):</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">chains</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span>
+        
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">chains</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            
+            <span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">chains</span><span class="p">]):</span>
+                <span class="k">return</span>
+            
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">_msg_wrong_chains_list</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chains</span><span class="p">))</span>
+            
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="n">_msg_wrong_param_type</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="s2">&quot;chains&quot;</span><span class="p">,</span>
+                    <span class="nb">type</span><span class="p">(</span><span class="n">chains</span><span class="p">),</span>
+                    <span class="s2">&quot;string or list&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+        
+        <span class="k">return</span></div>
+
+
+<div class="viewcode-block" id="TrajObservables"><a class="viewcode-back" href="../../index.html#tauren.tauren.TrajObservables">[docs]</a><span class="k">class</span> <span class="nc">TrajObservables</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Stores observables obtained from traj analysis.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="TrajObservables.store"><a class="viewcode-back" href="../../index.html#tauren.tauren.TrajObservables.store">[docs]</a>    <span class="k">def</span> <span class="nf">store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stored data with key.</span>
+<span class="sd">        </span>
+<span class="sd">        Warns user and ignores execution if key exists.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">_msg_key_exists</span><span class="p">)</span>
+                
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        
+        <span class="k">return</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Tauren-MD</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/guided_user_interface.html">Guided User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/command_line_interface.html">Run Tauren-MD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/command_line_interface.html#list-of-actions">List of Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/modules.html">Tauren-MD Library Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../docs/license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, João M.C. Teixeira.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
