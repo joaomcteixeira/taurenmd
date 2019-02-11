@@ -99,13 +99,18 @@ def rmsd_chain_per_subplot(
     """
     Plots a single plot with the combined RMSD.
     
-    Data Relevant Parameters
-    ----------
-    
-    These parameters concern data representation and are considered
+    Bellow parameters concern data representation and are considered
     of highest importance because their incorrect use can mislead
     data analysis and consequent conclusions.
     
+    Plot style parameters concernning only plot style, i.e., colors,
+    shapes, fonts, etc... and which do not distort the actual data,
+    are not listed in the paremeter list bellow. We hope these
+    parameter names are self-explanatory and are listed in the function
+    definition.
+    
+    Parameters
+    ----------
     x_data : interable
         Container of the X axis data. Should be accepted
         by matplotlib.
@@ -124,16 +129,6 @@ def rmsd_chain_per_subplot(
         in disk. Defaults to rmsd_individual_chains_one_subplot.pdf.
         You can change the file type by specifying its extention in
         the file name.
-    
-    Plot Style Parameters
-    ---------------------
-    
-    Plot style parameters concern only plot style, i.e., colors, shapes,
-    fonts, etc... and do not distort the actual data. The large number
-    of style parameters available renders unpractical their complete
-    description in this docstring. Parameter names are self-explanatory
-    and are listed in the function definition as represented by
-    help() called on this function.
     """
     log.info("* Plotting RMSDs per chain...")
     
@@ -246,13 +241,18 @@ def rmsd_combined_chains(
     """
     Plots a single plot with the combined RMSD.
     
-    Data Relevant Parameters
-    ----------
-    
-    These parameters concern data representation and are considered
+    Bellow parameters concern data representation and are considered
     of highest importance because their incorrect use can mislead
     data analysis and consequent conclusions.
     
+    Plot style parameters concernning only plot style, i.e., colors,
+    shapes, fonts, etc... and which do not distort the actual data,
+    are not listed in the paremeter list bellow. We hope these
+    parameter names are self-explanatory and are listed in the function
+    definition.
+    
+    Parameters
+    ----------
     x_data : interable of numbers
         Container of the X axis data. Should be accepted
         by matplotlib.
@@ -270,16 +270,6 @@ def rmsd_combined_chains(
         in disk. Defaults to rmsd_individual_chains_one_subplot.pdf.
         You can change the file type by specifying its extention in
         the file name.
-    
-    Plot Style Parameters
-    ---------------------
-    
-    Plot style parameters concern only plot style, i.e., colors, shapes,
-    fonts, etc... and do not distort the actual data. The large number
-    of style parameters available renders unpractical their complete
-    description in this docstring. Parameter names are self-explanatory
-    and are listed in the function definition as represented by
-    help() called on this function.
     """
     log.info("* Plotting combined Chain RMSDs...")
         
@@ -355,12 +345,18 @@ def rmsd_individual_chains_one_subplot(
     """
     Plots a single plot with the combined RMSD.
     
-    Data Relevant Parameters
-    ----------
-    These parameters concern data representation and are considered
+    Bellow parameters concern data representation and are considered
     of highest importance because their incorrect use can mislead
     data analysis and consequent conclusions.
     
+    Plot style parameters concernning only plot style, i.e., colors,
+    shapes, fonts, etc... and which do not distort the actual data,
+    are not listed in the paremeter list bellow. We hope these
+    parameter names are self-explanatory and are listed in the function
+    definition.
+    
+    Parameters
+    ----------
     x_data : interable
         Contains X axis data.
         Should be accepted by matplotlib.
@@ -379,16 +375,6 @@ def rmsd_individual_chains_one_subplot(
         in disk. Defaults to rmsd_individual_chains_one_subplot.pdf.
         You can change the file type by specifying its extention in
         the file name.
-    
-    Plot Style Parameters
-    ---------------------
-    
-    Plot style parameters concern only plot style, i.e., colors, shapes,
-    fonts, etc... and do not distort the actual data. The large number
-    of style parameters available renders unpractical their complete
-    description in this docstring. Parameter names are self-explanatory
-    and are listed in the function definition as represented by
-    help() called on this function.
     """
     
     log.info("* Plotting chains RMSDs single subplot...")
