@@ -14,7 +14,7 @@
 #
 # import os
 # import sys
-# sys.path.insert(0, os.path.abspath('.'))
+# sys.path.insert(0, os.path.abspath(os.path.join(os.pardir, "tauren")))
 
 
 # -- Project information -----------------------------------------------------
@@ -24,9 +24,9 @@ copyright = '2019, João M.C. Teixeira'
 author = 'João M.C. Teixeira'
 
 # The short X.Y version
-version = ''
+version = '0.4'
 # The full version, including alpha/beta/rc tags
-release = '0.4.0'
+release = '0.4.0b'
 
 
 # -- General configuration ---------------------------------------------------
@@ -40,6 +40,7 @@ release = '0.4.0'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'numpydoc',
     'sphinx.ext.todo',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
