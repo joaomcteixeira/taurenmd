@@ -6,20 +6,20 @@ Problem definition
 
 Powerful libraries for the analysis of Molecular Dynamics’ trajectories
 and derived data are being actively developed; a `Python`_ interface
-serves the most known libraries: `MDTraj`_, `MDAnalysis`_ and `OpenMM`_.
+serves the most known libraries: `MDTraj`_, `MDAnalysis`_, `OpenMM`_, `ProDy`_, `nglview`_, and others.
 
 Many researchers with strong Biochemical and Biophysics background use
 Molecular Dynamics (MD) to generate *ab initio* models or to module
 their *in vitro* or *in vivo* acquired data. This collective of
 researchers use MD as a tool and not necessary have (or need to have)
-programming skills.
+programming/scripting skills.
 
 *Problem 1:* There is a growing gap in accessibility between the
-libraries being developed and the non-developer users that use them.
+libraries being developed and the non-developer users that use them. 
 
 *Problem 2:* Data analysis rapidly reach routine. Providing pre-defined
 routines for data mining, parameter calculation and plotting,
-considerably enhances analysis speed of multiple datasets.
+considerably speeds up analysis of multiple datasets.
 
 Proposed Solutions
 ------------------
@@ -29,11 +29,11 @@ programming skills to this research collective, asking them to be
 self-taught, or by providing an interface for them to use the MD
 analysis libraries without the need to learn how to program.
 
-*Solution 1:* Tauren-MD aims to provide such interface for users without
+*Solution 1:* Tauren-MD aims to provide such interface for non-developer users, i.e., users without
 programming skills.
 
-Also for users with programming skills, it is time consuming, and even
-challenging, to assemble routines that automate analysis steps.
+Also for users with programming skills, repetitive data analysis is time consuming, and even
+challenging is one considers the time required to assemble and organize routines that automate analysis steps.
 
 *Solution 2:* Tauren-MD aims to provide predefined set routines to
 stream-line analysis procedures and, therefore, boost deliverables’
@@ -162,5 +162,7 @@ General project organization:
 .. _Python: https://www.python.org/
 .. _MDTraj: https://github.com/mdtraj/mdtraj
 .. _MDAnalysis: https://www.mdanalysis.org/
+.. _Prody: http://prody.csb.pitt.edu/index.html
+.. _nglview: https://github.com/arose/nglview
 .. _OpenMM: https://github.com/pandegroup/openmm
 .. _Tree-of-Life project: https://github.com/joaomcteixeira/Tree-of-Life
