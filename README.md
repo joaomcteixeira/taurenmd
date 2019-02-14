@@ -8,9 +8,9 @@ _This is an experimental project under strong development, expect small to drast
 
 Tauren-MD was designed to facilitate the usage MD analysis libraries to non-developer users, but it also serves proficient Pythonistas. 
 
-Tauren-MD wraps around high performance MD analysis libraries, such as: [MDTraj](https://github.com/mdtraj/mdtraj), [OpenMM](https://github.com/pandegroup/openmm), [ProDy]() and others; and implements other routines for data representation and export, such as curated plotting templates through [matplotlib](https://matplotlib.org/).
+Tauren-MD wraps around high performance MD analysis libraries, such as: [MDTraj](https://github.com/mdtraj/mdtraj), [OpenMM](https://github.com/pandegroup/openmm), [ProDy]() and others; and implements additional routines for data representation and export, such as curated plotting templates through [matplotlib](https://matplotlib.org/).
 
-In this way, Tauren-MD attempts to be an _À la carte_ menu where the user can easily chose from a predifined action list what she/he wants from hers/his trajectories, you can easily configure the `tauren_config.json` file with the routines you wish to execute and run it via `taurenmd` executable file (created after installation).
+In this way, Tauren-MD attempts to be an _À la carte_ menu where the user can easily chose from a predifined list of _actions_ what she/he wants from hers/his trajectories: a configuration file can be easily setup with the desired routines and executed via the `taurenmd` executable file (created after installation).
 
 ## Documentation
 
