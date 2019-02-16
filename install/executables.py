@@ -178,6 +178,9 @@ traj = load.load_traj(
 
 for action, arguments in conf.actions.items():
     
+    if action.startswith("#"):
+        continue
+    
     action_name = action.rstrip("_")
     log.debug(f"*** Performing '{action_name}' with options: '{arguments}'")
     

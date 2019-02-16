@@ -1,3 +1,4 @@
+- [v0.4.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.4.1)
 - [v0.4.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.4.0)
 - [v0.3.2](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.3.2)
 - [v0.3.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.3.1)
@@ -6,9 +7,14 @@
 - [v0.1.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.1.1)
 - [v0.0.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.0.0)
 
+# v0.4.1
+
+- Actions in config JSON file can be commented with `#` for deactivation.
+- Updated `core` module with docstrings.
+
 # v0.4.0
 
-- Refactore of the Tauren module architecture:
+- Refactored Tauren module's architecture:
   - prepared polymorphism-based interface,
   - Improved plotting configuration.
 - Improved configuration file.
