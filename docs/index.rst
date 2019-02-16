@@ -8,38 +8,17 @@
 Welcome to Tauren-MD's documentation!
 =====================================
 
-Tauren-MD is an interface that streamlines analisis routines for Molecular Dynamics.
+Tauren-MD is an interface that streamlines analisis routines for Molecular Dynamics (MD).
 
-It is designed mostly for non-developer users, but can serve also those
-proficient Python programmers.
+Tauren-MD was designed to facilitate the usage of scientific MD analysis libraries to non-developer users, though it can be very useful also for the proficient Pythonistas out there. 
 
-Tauren-MD contains sets of predefined functions for *loading*,
-*transforming* and *exporting* trajectories from different sources, for *calculating* and *extracting* restraints from trajectories and also predifined plotting routines to maximize the
-output quality. Tauren-MD is an *À la carte* menu from which the user can
-easily chose what she/he wants from hers/his trajectories by applying the different predifined actions.
+Tauren-MD wraps around high performance MD analysis libraries, such as: `MDTraj`_, `OpenMM`_, `ProDy`_ and others; and implements additional routines for data representation and export, such as curated plotting templates through `matplotlib`_.
 
-Tauren-MD does not require any programming skills to be used, you can
-easily configure the ``tauren_config.json`` file with the routines you
-wish to execute and run it via ``taurenmd`` executable file (created
-after installation).
-
-Tauren-MD does not implement new core functionalities on MD analisis by itself, instead, it wraps around high performance MD analysis libraries that have been developed by the scientific community worldwide, thus providing a simple yet dynamic preconfigured interface to use them. The current version incorporates:
-
-- `MDTraj`_
-- `OpenMM`_
-
-but we are looking forward to include also other MD analysis libraries as new functionalities are implemented, such as:
-
-- `MDAnalysis`_
-- `ProDy`_
-- `nglview`_
-- and others...
-
-... other Python libraries are used, such as `matplotlib`_.
+In this way, Tauren-MD attempts to be an *à la carte* menu where the user can easily chose from a predifined list of _actions_ what she/he wants from hers/his trajectories: a configuration file can be easily setup with the desired routines and executed via the `taurenmd` executable file (created after installation).
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 1
+   :caption: General Contents:
     
    rstfiles/vision
    rstfiles/installation
@@ -48,10 +27,9 @@ but we are looking forward to include also other MD analysis libraries as new fu
    rstfiles/modules
    rstfiles/license
 
-
-Indices and tables
-==================
-
+Special Contents
+~~~~~~~~~~~~~~~~
+* :ref:`complete_index`
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`

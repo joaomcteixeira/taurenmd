@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation &mdash; Tauren-MD 0.4.0b documentation</title>
+  <title>Installation &mdash; Tauren-MD 0.4.0-a08bbbf documentation</title>
   
 
   
@@ -83,10 +83,14 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption"><span class="caption-text">General Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="vision.html">Vision</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#click-install-for-non-developers">Click-install for non-developers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-tauren-md-python-library">Installing Tauren-MD Python Library</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="guided_user_interface.html">Guided User Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="command_line_interface.html">Run Tauren-MD</a></li>
 <li class="toctree-l1"><a class="reference internal" href="command_line_interface.html#list-of-actions">List of Actions</a></li>
@@ -113,7 +117,7 @@
 
       <div class="wy-nav-content">
         
-        <div class="rst-content">
+        <div class="rst-content style-external-links">
         
           
 
@@ -158,15 +162,24 @@
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<p>Tauren-MD installation is supported by the <a class="reference external" href="https://github.com/joaomcteixeira/Tree-of-Life">Tree-of-Life project</a>,
-which was designed with a very specific <a class="reference external" href="https://github.com/joaomcteixeira/Tree-of-Life/blob/master/VISION.md">vision</a> aimed at non-developer
-users. To install a stand-alone Taren-MD, simply:</p>
+<div class="section" id="click-install-for-non-developers">
+<h2>Click-install for non-developers<a class="headerlink" href="#click-install-for-non-developers" title="Permalink to this headline">¶</a></h2>
+<p>Tauren-MD installation is supported by the <a class="reference external" href="https://github.com/joaomcteixeira/Tree-of-Life">Tree-of-Life project</a>, which was designed with the very specific <a class="reference external" href="https://github.com/joaomcteixeira/Tree-of-Life/blob/master/VISION.md">vision</a> of facilitate the installation process of scientific software to non-developer users. To install a stand-alone Taren-MD, simply:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">install_tauren</span><span class="o">-</span><span class="n">md</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>If you are a proficient Python developer/user and wish to manually
 setup the required Python environment for Tauren-MD simply use the
 <cite>installation/taurenmd.yml</cite> file as guide.</p>
+</div>
+<div class="section" id="installing-tauren-md-python-library">
+<h2>Installing Tauren-MD Python Library<a class="headerlink" href="#installing-tauren-md-python-library" title="Permalink to this headline">¶</a></h2>
+<p>If you are a proficient Pythonista, either using <a class="reference external" href="https://pypi.org/project/pip/">PyPI</a> or <a class="reference external" href="https://www.anaconda.com/distribution/">Anaconda</a>, and want to install Tauren-MD Python library within your Python distribution use the <cite>install/taurenmd.yml</cite> file to create the Tauren-MD environment and add the Tauren-MD folder to the ENV <cite>site-packages</cite> or to your system PATH.</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Add Tauren-MD package to PyPI and/or Conda repository.</p>
+</div>
+</div>
 </div>
 
 
@@ -225,7 +238,15 @@ setup the required Python environment for Tauren-MD simply use the
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #f0b27a ;
+    }
+  </style>
+
 
 </body>
 </html>
