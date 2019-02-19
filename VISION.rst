@@ -6,7 +6,7 @@ Problem definition
 
 Powerful libraries for the analysis of Molecular Dynamics’ trajectories
 and derived data are being actively developed; a `Python`_ interface
-serves the most known libraries: :mdtraj:`MDTraj <mdtraj>`, :mdanalysis:`MDAnalysis <>`, :pandegroup:`OpenMM <openmm>`, :prody:`ProDy <>`, :nglview:`nglview <>`, and others.
+serves the most known libraries: `MDTraj`_, `MDAnalysis`_, `OpenMM`_, `ProDy`_, `nglview`_, and others.
 
 Many researchers with strong Biochemical and Biophysics background use
 Molecular Dynamics (MD) to generate *ab initio* models or to module
