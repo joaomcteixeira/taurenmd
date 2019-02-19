@@ -8,7 +8,7 @@ Complete Index
     
    vision
    installation
-   guided_user_interface
-   command_line_interface
+   run_taurenmd
+   configuration_file
    modules
    license

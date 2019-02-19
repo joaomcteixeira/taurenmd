@@ -1,0 +1,638 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Tauren-MD configuration file &mdash; Tauren-MD 0.4.1-034795b documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tauren-MD Library Documentation" href="modules.html" />
+    <link rel="prev" title="Run Tauren-MD" href="run_taurenmd.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Tauren-MD
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="vision.html">Vision</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run_taurenmd.html">Run Tauren-MD</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tauren-MD configuration file</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-use-the-conf-file">How to use the conf file</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#input-data">Input Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#trajectory-type">Trajectory Type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#actions">Actions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#reorder-actions">Reorder actions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#add-and-remove-actions">Add and remove actions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deactivate-actions">Deactivate actions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#repeating-actions">Repeating actions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#other-notes">Other notes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#list-of-actions">List of Actions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-copy-the-actions">How to copy the actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transform">Transform</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#remove-solvent">remove solvent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#image-molecules">image molecules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#reduce-equidistant">reduce equidistant</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#slice">slice</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#export">Export</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#frames-to-pdb">Frames to PDB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#save-trajectory">save trajectory</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#data-calculation-and-plotting">Data calculation and plotting</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#rmsds-of-combined-chains">RMSDs of combined chains</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rmsds-of-separated-chains">RMSDs of separated chains</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Tauren-MD Library Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Tauren-MD</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Tauren-MD configuration file</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/rstfiles/configuration_file.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tauren-md-configuration-file">
+<h1>Tauren-MD configuration file<a class="headerlink" href="#tauren-md-configuration-file" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="how-to-use-the-conf-file">
+<h2>How to use the conf file<a class="headerlink" href="#how-to-use-the-conf-file" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/joaomcteixeira/Tauren-MD/blob/master/tauren_config.json">Tauren-MD configuration file</a>, is a <a class="reference external" href="https://en.wikipedia.org/wiki/JSON">JSON</a>
+dictionary composed of three main blocks, in the follwing form:</p>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;input_data&quot;</span><span class="p">:</span> <span class="p">{},</span>
+    <span class="s2">&quot;traj_type&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">{}</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;input_data&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;traj_type&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;actions&quot;</span></code> keyswords are <em>subdictionaries</em> that should be populated with the desired configuration values. Read bellow to understand how to populate those subdictionaries.</p>
+<ol class="arabic simple">
+<li><a class="reference internal" href="#input-data"><span class="std std-ref">Input Data</span></a></li>
+<li><a class="reference internal" href="#trajtype"><span class="std std-ref">Trajectory Type</span></a></li>
+<li><a class="reference internal" href="#actions"><span class="std std-ref">Actions</span></a></li>
+</ol>
+<div class="section" id="input-data">
+<span id="id1"></span><h3>Input Data<a class="headerlink" href="#input-data" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;input_data&quot;</span></code> dictionary inside the <code class="docutils literal notranslate"><span class="pre">tauren_config.json</span></code> file,
+contains the <code class="docutils literal notranslate"><span class="pre">PATHS</span></code> to the necessary input data. In the current
+version, those are <code class="docutils literal notranslate"><span class="pre">trajectory</span></code> and <code class="docutils literal notranslate"><span class="pre">topology</span></code> file paths.</p>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;input_data&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;trajectory&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;topology&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+    <span class="p">},</span>
+</pre></div>
+</div>
+<p>If the input data is not provided in the JSON file, it should be
+provided via the OPTIONAL ARGUMENTS <code class="docutils literal notranslate"><span class="pre">--trajectory</span></code> and <code class="docutils literal notranslate"><span class="pre">--topology</span></code>
+of the <code class="docutils literal notranslate"><span class="pre">taurenmd</span></code> executable. If input data is provided in the JSON
+file but also in the OPTIONAL ARGUMENTS, the OPTIONAL ARGUMENTS will
+prevail.</p>
+</div>
+<div class="section" id="trajectory-type">
+<span id="trajtype"></span><h3>Trajectory Type<a class="headerlink" href="#trajectory-type" title="Permalink to this headline">¶</a></h3>
+<p>Selects with which MD analysis tool the trajectory will be handled. Currently, it is supported <a class="reference external" href="https://github.com/mdtraj/mdtraj">MDTraj</a> with the keywork <code class="docutils literal notranslate"><span class="pre">&quot;mdtraj&quot;</span></code>:</p>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;traj_type&quot;</span><span class="p">:</span> <span class="s2">&quot;mdtraj&quot;</span><span class="p">,</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="actions">
+<span id="id2"></span><h3>Actions<a class="headerlink" href="#actions" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;actions&quot;</span></code> dictionary inside the configuration file contains all the <em>actions</em> that will be
+performed SEQUENTIALLY by the Tauren-MD workflow <code class="docutils literal notranslate"><span class="pre">:-)</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">actions</span></code> dictionary <code class="docutils literal notranslate"><span class="pre">keys</span></code> are the name of the action to be
+performed, and each key’s <code class="docutils literal notranslate"><span class="pre">value</span></code> is a dictionary of <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for the
+function that is associated with that action. For example:</p>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;remove_solvent&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;exclude&quot;</span><span class="p">:</span><span class="n">null</span>
+        <span class="p">},</span>
+
+    <span class="s2">&quot;reduce_equidistant&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;step&quot;</span><span class="p">:</span><span class="mi">10</span>
+        <span class="p">},</span>
+
+    <span class="s2">&quot;frames2PDB&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;frames&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;suffix&quot;</span><span class="p">:</span> <span class="s2">&quot;_&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p>with this configuration, Tauren-MD will sequentially perform:</p>
+<ol class="arabic simple">
+<li>remove solvent molecules from trajectory</li>
+<li>reduce the trajectory in equidistant frames spaced by 10 frames</li>
+<li>export all frames from the reduced trajectory</li>
+</ol>
+<div class="section" id="reorder-actions">
+<h4>Reorder actions<a class="headerlink" href="#reorder-actions" title="Permalink to this headline">¶</a></h4>
+<p>Most importantly, you can reorder the actions by simple reordering the
+<code class="docutils literal notranslate"><span class="pre">actions</span></code> dictionary. For example:</p>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;reduce_equidistant&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;step&quot;</span><span class="p">:</span><span class="mi">10</span>
+        <span class="p">},</span>
+
+    <span class="s2">&quot;remove_solvent&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;exclude&quot;</span><span class="p">:</span><span class="n">null</span>
+        <span class="p">},</span>
+
+    <span class="s2">&quot;frames2PDB&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;frames&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;suffix&quot;</span><span class="p">:</span> <span class="s2">&quot;_&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p>with this configuration, Tauren-MD will sequentially perform:</p>
+<ol class="arabic simple">
+<li>reduce the trajectory in equidistant frames spaced by 10 frames</li>
+<li>remove solvent molecules from trajectory</li>
+<li>export all frames from the reduced trajectory</li>
+</ol>
+</div>
+<div class="section" id="add-and-remove-actions">
+<h4>Add and remove actions<a class="headerlink" href="#add-and-remove-actions" title="Permalink to this headline">¶</a></h4>
+<p>To <em>add</em> or <em>remove</em> actions from the Tauren-MD run, simply add or remove
+that action’s dictionary from the main <code class="docutils literal notranslate"><span class="pre">actions</span></code> dictionary, for
+example:</p>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;reduce_equidistant&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;step&quot;</span><span class="p">:</span><span class="mi">10</span>
+        <span class="p">},</span>
+
+    <span class="s2">&quot;remove_solvent&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;exclude&quot;</span><span class="p">:</span><span class="n">null</span>
+        <span class="p">},</span>
+
+    <span class="s2">&quot;frames2PDB&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;frames&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;suffix&quot;</span><span class="p">:</span> <span class="s2">&quot;_&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p>Now, if we don’t want to remove the solvent anymore, simply remove its dictionary from the configuration file:</p>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;reduce_equidistant&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;step&quot;</span><span class="p">:</span><span class="mi">10</span>
+        <span class="p">},</span>
+
+    <span class="s2">&quot;frames2PDB&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;frames&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;suffix&quot;</span><span class="p">:</span> <span class="s2">&quot;_&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="deactivate-actions">
+<h4>Deactivate actions<a class="headerlink" href="#deactivate-actions" title="Permalink to this headline">¶</a></h4>
+<p><em>added in version 0.4.1</em></p>
+<p>Alternatively to removing an action from the configuration file, you can <strong>deactivate</strong> an action by adding the <code class="docutils literal notranslate"><span class="pre">#</span></code> before that action’s name. This allow quick edition of the config file with easy revert. Taking the above example, to stop removing the solvent from the trajectory, simply:</p>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;reduce_equidistant&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;step&quot;</span><span class="p">:</span><span class="mi">10</span>
+        <span class="p">},</span>
+
+    <span class="s2">&quot;#remove_solvent&quot;</span><span class="p">:</span> <span class="p">{</span>  <span class="o">&lt;-</span> <span class="n">Note</span> <span class="n">the</span> <span class="s2">&quot;#&quot;</span>
+        <span class="s2">&quot;exclude&quot;</span><span class="p">:</span><span class="n">null</span>
+        <span class="p">},</span>
+
+    <span class="s2">&quot;frames2PDB&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;frames&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;suffix&quot;</span><span class="p">:</span> <span class="s2">&quot;_&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="repeating-actions">
+<h4>Repeating actions<a class="headerlink" href="#repeating-actions" title="Permalink to this headline">¶</a></h4>
+<p>It’s very easy to repeat an action. Simply, add tailling underscores
+<code class="docutils literal notranslate"><span class="pre">_</span></code> to the action name such as no action name is repeated. For
+example, if you want to export the trajectory in different formats:</p>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;reduce_equidistant&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;step&quot;</span><span class="p">:</span><span class="mi">10</span>
+        <span class="p">},</span>
+
+    <span class="s2">&quot;remove_solvent&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;exclude&quot;</span><span class="p">:</span><span class="n">null</span>
+        <span class="p">},</span>
+
+    <span class="s2">&quot;frames2PDB&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;frames&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;suffix&quot;</span><span class="p">:</span> <span class="s2">&quot;_&quot;</span>
+        <span class="p">},</span>
+
+    <span class="s2">&quot;save_traj&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;file_name&quot;</span><span class="p">:</span> <span class="s2">&quot;traj_OUTPUT.dcd&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;overwrite&quot;</span><span class="p">:</span><span class="n">true</span>
+        <span class="p">},</span>
+
+    <span class="s2">&quot;save_traj_&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;file_name&quot;</span><span class="p">:</span> <span class="s2">&quot;traj_OUTPUT.dcd&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;overwrite&quot;</span><span class="p">:</span><span class="n">true</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="other-notes">
+<h3>Other notes<a class="headerlink" href="#other-notes" title="Permalink to this headline">¶</a></h3>
+<p>Also, when adding actions, REMEMBER to add the trailing comma <code class="docutils literal notranslate"><span class="pre">,</span></code>
+after the action command, EXCEPT for the last action - see the examples
+above.</p>
+</div>
+</div>
+<div class="section" id="list-of-actions">
+<h2>List of Actions<a class="headerlink" href="#list-of-actions" title="Permalink to this headline">¶</a></h2>
+<p>Bellow the list of all user configurable actions in
+Tauren-MD.</p>
+<p>All actions are functions inside Tauren-MD modules, that are stored
+inside <code class="docutils literal notranslate"><span class="pre">tauren</span></code> directory; if you are a <strong>developer</strong> please go
+forward exploting it if you wish <code class="docutils literal notranslate"><span class="pre">;-)</span></code>.</p>
+<p>If you are an <strong>user</strong> and just want to use Tauren-MD, the templates
+bellow describe the actions available. Just copy the dicitionaries bellow
+to the configuration file <code class="docutils literal notranslate"><span class="pre">actions</span></code> main dictionary accordingly to your preferences (you may
+wish to read first the what was stated in the above sections).</p>
+<div class="section" id="how-to-copy-the-actions">
+<h3>How to copy the actions<a class="headerlink" href="#how-to-copy-the-actions" title="Permalink to this headline">¶</a></h3>
+<p>In the Tauren-MD configuration file copy each action dictionary to the main <code class="docutils literal notranslate"><span class="pre">action</span></code> dictionary:</p>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">{</span>
+
+    <span class="c1"># COPYT THE ACTION DICTIONARIES HERE</span>
+    <span class="c1"># MIND THE DICTIONARY FORMMATING RULES</span>
+    <span class="c1"># SEE THE default tauren_config.json file</span>
+    <span class="c1"># for an example</span>
+
+    <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="transform">
+<h3>Transform<a class="headerlink" href="#transform" title="Permalink to this headline">¶</a></h3>
+<p>Actions that transform the trajectory.</p>
+<div class="section" id="remove-solvent">
+<h4>remove solvent<a class="headerlink" href="#remove-solvent" title="Permalink to this headline">¶</a></h4>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;remove_solvent&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;exclude&quot;</span><span class="p">:</span><span class="n">null</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="image-molecules">
+<h4>image molecules<a class="headerlink" href="#image-molecules" title="Permalink to this headline">¶</a></h4>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;try_image_molecules&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;anchor_molecules&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;other_molecules&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;sorted_bonds&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;make_whole&quot;</span><span class="p">:</span> <span class="n">null</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="reduce-equidistant">
+<h4>reduce equidistant<a class="headerlink" href="#reduce-equidistant" title="Permalink to this headline">¶</a></h4>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;reduce_equidistant&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;step&quot;</span><span class="p">:</span><span class="mi">10</span>
+    <span class="p">},</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="slice">
+<h4>slice<a class="headerlink" href="#slice" title="Permalink to this headline">¶</a></h4>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;slice&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="s2">&quot;step&quot;</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="export">
+<h3>Export<a class="headerlink" href="#export" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="frames-to-pdb">
+<h4>Frames to PDB<a class="headerlink" href="#frames-to-pdb" title="Permalink to this headline">¶</a></h4>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;frames2PDB&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;frames&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;prefix&quot;</span><span class="p">:</span> <span class="s2">&quot;_&quot;</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="save-trajectory">
+<h4>save trajectory<a class="headerlink" href="#save-trajectory" title="Permalink to this headline">¶</a></h4>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;save_traj&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;file_name&quot;</span><span class="p">:</span> <span class="s2">&quot;traj_OUTPUT.dcd&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;overwrite&quot;</span><span class="p">:</span><span class="n">true</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="data-calculation-and-plotting">
+<h3>Data calculation and plotting<a class="headerlink" href="#data-calculation-and-plotting" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="rmsds-of-combined-chains">
+<h4>RMSDs of combined chains<a class="headerlink" href="#rmsds-of-combined-chains" title="Permalink to this headline">¶</a></h4>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;produce_rmsds_combined_chains&quot;</span><span class="p">:</span> <span class="p">{</span>
+
+    <span class="s2">&quot;calc_rmsds_combined_chains&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;chains&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ref_frame&quot;</span><span class="p">:</span> <span class="mi">0</span>
+        <span class="p">},</span>
+
+    <span class="s2">&quot;export_data&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;file_name&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;sep&quot;</span><span class="p">:</span> <span class="s2">&quot;,&quot;</span>
+        <span class="p">},</span>
+
+    <span class="s2">&quot;plot_rmsd_combined_chains&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;suptitle&quot;</span><span class="p">:</span> <span class="s2">&quot;Combined Chain RMSDs&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;x_label&quot;</span><span class="p">:</span> <span class="s2">&quot;Frame Number&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;y_label&quot;</span><span class="p">:</span> <span class="s2">&quot;RMSDs&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
+        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+        <span class="s2">&quot;grid_color&quot;</span><span class="p">:</span> <span class="s2">&quot;lightgrey&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;grid_ls&quot;</span><span class="p">:</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;grid_lw&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;grid_alpha&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="s2">&quot;legend&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+        <span class="s2">&quot;legend_fs&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+        <span class="s2">&quot;legend_loc&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="s2">&quot;fig_name&quot;</span><span class="p">:</span> <span class="n">null</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="rmsds-of-separated-chains">
+<h4>RMSDs of separated chains<a class="headerlink" href="#rmsds-of-separated-chains" title="Permalink to this headline">¶</a></h4>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;produce_rmsds_separated_chains&quot;</span><span class="p">:</span> <span class="p">{</span>
+
+    <span class="s2">&quot;calc_rmsds_separated_chains&quot;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;chains&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ref_frame&quot;</span><span class="p">:</span> <span class="mi">0</span>
+        <span class="p">},</span>
+
+    <span class="s2">&quot;export_data&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;file_name&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;sep&quot;</span><span class="p">:</span> <span class="s2">&quot;,&quot;</span>
+        <span class="p">},</span>
+
+    <span class="s2">&quot;plot_rmsd_chain_per_subplot&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;suptitle&quot;</span><span class="p">:</span> <span class="s2">&quot;RMSDs per chain&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;x_label&quot;</span><span class="p">:</span> <span class="s2">&quot;Frame Number&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;y_label&quot;</span><span class="p">:</span> <span class="s2">&quot;RMSDs&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;colors&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
+        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+        <span class="s2">&quot;grid_color&quot;</span><span class="p">:</span> <span class="s2">&quot;lightgrey&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;grid_ls&quot;</span><span class="p">:</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;grid_lw&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;grid_alpha&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="s2">&quot;legend&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+        <span class="s2">&quot;legend_fs&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+        <span class="s2">&quot;legend_loc&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="s2">&quot;fig_name&quot;</span><span class="p">:</span> <span class="n">null</span>
+        <span class="p">},</span>
+
+    <span class="s2">&quot;plot_rmsd_individual_chains_one_subplot&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;suptitle&quot;</span><span class="p">:</span> <span class="s2">&quot;Chains&#39; RMSDs&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;x_label&quot;</span><span class="p">:</span> <span class="s2">&quot;Frame Number&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;y_label&quot;</span><span class="p">:</span> <span class="s2">&quot;RMSDs&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;colors&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
+        <span class="s2">&quot;grid&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+        <span class="s2">&quot;grid_color&quot;</span><span class="p">:</span> <span class="s2">&quot;lightgrey&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;grid_ls&quot;</span><span class="p">:</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;grid_lw&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;grid_alpha&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="s2">&quot;legend&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+        <span class="s2">&quot;legend_fs&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+        <span class="s2">&quot;legend_loc&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+        <span class="s2">&quot;fig_name&quot;</span><span class="p">:</span> <span class="n">null</span>
+        <span class="p">}</span>
+
+     <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="modules.html" class="btn btn-neutral float-right" title="Tauren-MD Library Documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="run_taurenmd.html" class="btn btn-neutral" title="Run Tauren-MD" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, João M.C. Teixeira
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #f0b27a ;
+    }
+  </style>
+
+
+</body>
+</html>

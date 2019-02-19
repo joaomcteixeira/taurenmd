@@ -24,9 +24,9 @@ copyright = '2019, João M.C. Teixeira'
 author = 'João M.C. Teixeira'
 
 # The short X.Y version
-version = '0.4'
+version = '0.4.1'
 # The full version, including alpha/beta/rc tags
-release = '0.4.0-a08bbbf'
+release = '0.4.1-034795b'
 
 
 # -- General configuration ---------------------------------------------------
@@ -45,6 +45,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
+    'sphinx.ext.extlinks',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -103,6 +104,8 @@ html_theme_options = {
     'includehidden': True,
     'titles_only': False
 }
+
+html_sidebars = { '**': ['globaltoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html'] }
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -206,3 +209,22 @@ epub_exclude_files = ['search.html']
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
+
+#links
+
+extlinks = {
+    "pypi": ("https://pypi.org/project/pip/", ""),
+    "anaconda": ("https://www.anaconda.com/distribution/", ""),
+    "mdtraj": ("https://github.com/mdtraj/%s", "mdtraj"),
+    "taurenfiles": ("https://github.com/joaomcteixeira/Tauren-MD/blob/master/%s", "taurenfiles"),
+    "taurenzip": ("https://github.com/joaomcteixeira/Tauren-MD/archive/master.zip", ""),
+    "pandegroup": ("https://github.com/pandegroup/%s", "openmm"),
+    "prody": ("http://prody.csb.pitt.edu/index.html", ""),
+    "nglview": ("https://github.com/arose/nglview", ""),
+    "matplotlib": ("https://matplotlib.org/", ""),
+    "mdanalysis": ("https://www.mdanalysis.org/", ""),
+    "wiki": ("https://en.wikipedia.org/wiki/%s", "wiki"),
+    "taurengit": ("https://github.com/joaomcteixeira/Tauren-MD", ""),
+    "treeoflife": ("https://github.com/joaomcteixeira/Tree-of-Life", ""),
+    "treevision": ("https://github.com/joaomcteixeira/Tree-of-Life/blob/master/VISION.md", ""),
+    }

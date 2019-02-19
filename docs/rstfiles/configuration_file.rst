@@ -1,54 +1,41 @@
-Run Tauren-MD
-=============
-
-Tauren-MD is built such that all its functionalities can be used without
-requiring any programming skills from the user.
-
-The only necessary requirement is to configure the
-``tauren_config.json`` file according to your preferences and run the
-``taurenmd`` file in ``bin`` folder. See bellow how to do this.
-
-taurenmd executable
--------------------
-
-To get help on how to run the ``taurenmd`` file simply run:
-
-::
-
-   python taurenmd -h
-
-   optional arguments:
-     -h, --help            show this help message and exit
-     -c CONFIG, --config CONFIG
-                           Tauren-MD configuration JSON file. If not provided
-                           runs the default config: simply loads trajectory and
-                           shows information
-     -traj TRAJECTORY, --trajectory TRAJECTORY
-                           Trajectory file (('.xtc', '.nc', '.trr', '.h5',
-                           '.pdb', '.binpos', '.dcd'))
-     -top TOPOLOGY, --topology TOPOLOGY
-                           Topology file (('.pdb', '.cif'))
-     -tt {mdtraj}, --trajtype {mdtraj}
-                           Library to use as trajectory type, in lower case.
-                           Current libraries available: MDTraj
-                           (http://mdtraj.org/1.9.0/)
-
 Tauren-MD configuration file
-----------------------------
+============================
 
-The Tauren-MD configuration file, `tauren_config.json`_, is a JSON
-dictionary. It is composed of two main blocks (dictionaries):
+How to use the conf file
+------------------------
 
-1. "Input Data"
-2. "Actions"
+The :taurenfiles:`Tauren-MD configuration file <tauren_config.json>`, is a :wiki:`JSON <JSON>`
+dictionary composed of three main blocks, in the follwing form:
+
+.. code:: json
+
+    {
+        "input_data": {},
+        "traj_type": "",
+        "actions": {}
+        }
+
+The ``"input_data"``, ``"traj_type"`` and ``"actions"`` keyswords are *subdictionaries* that should be populated with the desired configuration values. Read bellow to understand how to populate those subdictionaries.
+
+#. :ref:`Input Data <input_data>`
+#. :ref:`Trajectory Type <trajtype>`
+#. :ref:`Actions <actions>`
+
+.. _input_data:
 
 Input Data
 ~~~~~~~~~~
 
 The ``"input_data"`` dictionary inside the ``tauren_config.json`` file,
 contains the ``PATHS`` to the necessary input data. In the current
-version, those are ``trajectory`` and ``topology`` file paths. These
-files should be as described by `tauren.load.load_traj()`_.
+version, those are ``trajectory`` and ``topology`` file paths.
+
+.. code:: json
+
+    "input_data": {
+            "trajectory": "",
+            "topology": ""
+        },
 
 If the input data is not provided in the JSON file, it should be
 provided via the OPTIONAL ARGUMENTS ``--trajectory`` and ``--topology``
@@ -56,14 +43,27 @@ of the ``taurenmd`` executable. If input data is provided in the JSON
 file but also in the OPTIONAL ARGUMENTS, the OPTIONAL ARGUMENTS will
 prevail.
 
+.. _trajtype:
+
+Trajectory Type
+~~~~~~~~~~~~~~~
+
+Selects with which MD analysis tool the trajectory will be handled. Currently, it is supported :mdtraj:`MDTraj <mdtraj>` with the keywork ``"mdtraj"``:
+
+.. code:: json
+    
+    "traj_type": "mdtraj",
+
+.. _actions:
+
 Actions
 ~~~~~~~
 
-The ``"actions"`` dictionary contains all the *actions* that will be
+The ``"actions"`` dictionary inside the configuration file contains all the *actions* that will be
 performed SEQUENTIALLY by the Tauren-MD workflow ``:-)``.
 
 The ``actions`` dictionary ``keys`` are the name of the action to be
-perform, and each key's ``value`` is a dictionary of ``kwargs`` for the
+performed, and each key's ``value`` is a dictionary of ``kwargs`` for the
 function that is associated with that action. For example:
 
 .. code:: json
@@ -90,7 +90,7 @@ with this configuration, Tauren-MD will sequentially perform:
 3. export all frames from the reduced trajectory
 
 Reorder actions
-~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^
 
 Most importantly, you can reorder the actions by simple reordering the
 ``actions`` dictionary. For example:
@@ -119,14 +119,70 @@ with this configuration, Tauren-MD will sequentially perform:
 3. export all frames from the reduced trajectory
 
 Add and remove actions
-~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^
 
-To activate (add) or inactivate (remove) an action simply add or remove
+To *add* or *remove* actions from the Tauren-MD run, simply add or remove
 that action's dictionary from the main ``actions`` dictionary, for
 example:
 
+.. code:: json
+
+   "actions": {
+       "reduce_equidistant": {
+           "step":10
+           },
+       
+       "remove_solvent": {
+           "exclude":null
+           },
+       
+       "frames2PDB": {
+           "frames": "all",
+           "suffix": "_"
+           }
+       }
+
+Now, if we don't want to remove the solvent anymore, simply remove its dictionary from the configuration file:
+
+.. code:: json
+
+   "actions": {
+       "reduce_equidistant": {
+           "step":10
+           },
+       
+       "frames2PDB": {
+           "frames": "all",
+           "suffix": "_"
+           }
+       }
+
+Deactivate actions
+^^^^^^^^^^^^^^^^^^
+
+*added in version 0.4.1*
+
+Alternatively to removing an action from the configuration file, you can **deactivate** an action by adding the ``#`` before that action's name. This allow quick edition of the config file with easy revert. Taking the above example, to stop removing the solvent from the trajectory, simply:
+
+.. code:: json
+
+   "actions": {
+       "reduce_equidistant": {
+           "step":10
+           },
+       
+       "#remove_solvent": {  <- Note the "#"
+           "exclude":null
+           },
+       
+       "frames2PDB": {
+           "frames": "all",
+           "suffix": "_"
+           }
+       }
+
 Repeating actions
-~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^
 
 It's very easy to repeat an action. Simply, add tailling underscores
 ``_`` to the action name such as no action name is repeated. For
@@ -167,7 +223,7 @@ after the action command, EXCEPT for the last action - see the examples
 above.
 
 List of Actions
-===============
+---------------
 
 Bellow the list of all user configurable actions in
 Tauren-MD.
@@ -177,17 +233,34 @@ inside ``tauren`` directory; if you are a **developer** please go
 forward exploting it if you wish ``;-)``.
 
 If you are an **user** and just want to use Tauren-MD, the templates
-bellow describe the actions available. Just copy the actions dicitionary
-to the configuration file file accordingly to your preferences. You may
-wish to read first the what was stated above.
+bellow describe the actions available. Just copy the dicitionaries bellow
+to the configuration file ``actions`` main dictionary accordingly to your preferences (you may
+wish to read first the what was stated in the above sections).
+
+How to copy the actions
+~~~~~~~~~~~~~~~~~~~~~~~
+
+In the Tauren-MD configuration file copy each action dictionary to the main ``action`` dictionary:
+
+.. code:: json
+
+    "actions": {
+        
+        # COPYT THE ACTION DICTIONARIES HERE
+        # MIND THE DICTIONARY FORMMATING RULES
+        # SEE THE default tauren_config.json file
+        # for an example
+        
+        }
+
 
 Transform
----------
+~~~~~~~~~
 
 Actions that transform the trajectory.
 
 remove solvent
-~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^
 
 .. code:: json
 
@@ -196,7 +269,7 @@ remove solvent
        }
 
 image molecules
-~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^
 
 .. code:: json
 
@@ -208,7 +281,7 @@ image molecules
        }
 
 reduce equidistant
-~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^
 
 .. code:: json
 
@@ -217,7 +290,7 @@ reduce equidistant
        },
 
 slice
-~~~~~
+^^^^^
 
 .. code:: json
 
@@ -228,10 +301,10 @@ slice
        }
 
 Export
-------
+~~~~~~
 
 Frames to PDB
-~~~~~~~~~~~~~
+^^^^^^^^^^^^^
 
 .. code:: json
 
@@ -241,7 +314,7 @@ Frames to PDB
        }
 
 save trajectory
-~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^
 
 .. code:: json
 
@@ -251,10 +324,10 @@ save trajectory
        }
 
 Data calculation and plotting
------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 RMSDs of combined chains
-~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: json
 
@@ -290,7 +363,7 @@ RMSDs of combined chains
        }
 
 RMSDs of separated chains
-~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: json
 
@@ -344,5 +417,3 @@ RMSDs of separated chains
 
         }
 
-.. _tauren_config.json: https://github.com/joaomcteixeira/Tauren-MD/blob/master/tauren_config.json
-.. _tauren.load.load_traj():

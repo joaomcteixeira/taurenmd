@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Complete Index &mdash; Tauren-MD 0.4.0-a08bbbf documentation</title>
+  <title>Complete Index &mdash; Tauren-MD 0.4.1-034795b documentation</title>
   
 
   
@@ -57,7 +57,7 @@
             
             
               <div class="version">
-                0.4
+                0.4.1
               </div>
             
           
@@ -81,13 +81,12 @@
               
             
             
-              <p class="caption"><span class="caption-text">General Contents:</span></p>
+              <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="vision.html">Vision</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="guided_user_interface.html">Guided User Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="command_line_interface.html">Run Tauren-MD</a></li>
-<li class="toctree-l1"><a class="reference internal" href="command_line_interface.html#list-of-actions">List of Actions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run_taurenmd.html">Run Tauren-MD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration_file.html">Tauren-MD configuration file</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Tauren-MD Library Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
 </ul>
@@ -175,40 +174,52 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#click-install-for-non-developers">Click-install for non-developers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#installing-tauren-md-python-library">Installing Tauren-MD Python Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#download">Download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#automated-installation">Automated Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#manual-installation">Manual installation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="guided_user_interface.html">Guided User Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="command_line_interface.html">Run Tauren-MD</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="command_line_interface.html#taurenmd-executable">taurenmd executable</a></li>
-<li class="toctree-l2"><a class="reference internal" href="command_line_interface.html#tauren-md-configuration-file">Tauren-MD configuration file</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="command_line_interface.html#input-data">Input Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="command_line_interface.html#actions">Actions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="command_line_interface.html#reorder-actions">Reorder actions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="command_line_interface.html#add-and-remove-actions">Add and remove actions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="command_line_interface.html#repeating-actions">Repeating actions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="command_line_interface.html#other-notes">Other notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run_taurenmd.html">Run Tauren-MD</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="run_taurenmd.html#command-line-interface">Command-line interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="run_taurenmd.html#examples">Examples</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="run_taurenmd.html#guided-user-interface-gui">Guided User Interface (GUI)</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="command_line_interface.html#list-of-actions">List of Actions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="command_line_interface.html#transform">Transform</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="command_line_interface.html#remove-solvent">remove solvent</a></li>
-<li class="toctree-l3"><a class="reference internal" href="command_line_interface.html#image-molecules">image molecules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="command_line_interface.html#reduce-equidistant">reduce equidistant</a></li>
-<li class="toctree-l3"><a class="reference internal" href="command_line_interface.html#slice">slice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration_file.html">Tauren-MD configuration file</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="configuration_file.html#how-to-use-the-conf-file">How to use the conf file</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="configuration_file.html#input-data">Input Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration_file.html#trajectory-type">Trajectory Type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration_file.html#actions">Actions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="configuration_file.html#reorder-actions">Reorder actions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="configuration_file.html#add-and-remove-actions">Add and remove actions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="configuration_file.html#deactivate-actions">Deactivate actions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="configuration_file.html#repeating-actions">Repeating actions</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="command_line_interface.html#export">Export</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="command_line_interface.html#frames-to-pdb">Frames to PDB</a></li>
-<li class="toctree-l3"><a class="reference internal" href="command_line_interface.html#save-trajectory">save trajectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration_file.html#other-notes">Other notes</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="command_line_interface.html#data-calculation-and-plotting">Data calculation and plotting</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="command_line_interface.html#rmsds-of-combined-chains">RMSDs of combined chains</a></li>
-<li class="toctree-l3"><a class="reference internal" href="command_line_interface.html#rmsds-of-separated-chains">RMSDs of separated chains</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_file.html#list-of-actions">List of Actions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="configuration_file.html#how-to-copy-the-actions">How to copy the actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration_file.html#transform">Transform</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="configuration_file.html#remove-solvent">remove solvent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="configuration_file.html#image-molecules">image molecules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="configuration_file.html#reduce-equidistant">reduce equidistant</a></li>
+<li class="toctree-l4"><a class="reference internal" href="configuration_file.html#slice">slice</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="configuration_file.html#export">Export</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="configuration_file.html#frames-to-pdb">Frames to PDB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="configuration_file.html#save-trajectory">save trajectory</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="configuration_file.html#data-calculation-and-plotting">Data calculation and plotting</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="configuration_file.html#rmsds-of-combined-chains">RMSDs of combined chains</a></li>
+<li class="toctree-l4"><a class="reference internal" href="configuration_file.html#rmsds-of-separated-chains">RMSDs of separated chains</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

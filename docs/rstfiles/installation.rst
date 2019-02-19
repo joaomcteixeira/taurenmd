@@ -1,28 +1,32 @@
 Installation
 ============
 
-Click-install for non-developers
---------------------------------
+Download
+--------
 
-Tauren-MD installation is supported by the `Tree-of-Life project`_, which was designed with the very specific `vision`_ of facilitate the installation process of scientific software to non-developer users. To install a stand-alone Taren-MD, simply:
+Download the latest version of Tauren-MD (:taurenzip:`ZIP file <>`) from the official :taurengit:`GitHub repository <>`. Unpack the ZIP and follow the installation instructions bellow.
+
+Automated Installation
+----------------------
+
+Tauren-MD installation is supported by the :treeoflife:`Tree-of-Life project <>`, which was designed with the very specific :treevision:`vision <>` of facilitating the installation process of scientific software to non-developer users, but it serves perfectly for proficient Pythonistas. To install a stand-alone Taren-MD, run:
 
 ::
 
    python install_tauren-md.py
 
-If you are a proficient Python developer/user and wish to manually
-setup the required Python environment for Tauren-MD simply use the
-`installation/taurenmd.yml` file as guide.
+and follow the very simple instructions. This process will install a dedicated Anaconda local distribution and environment with all the Python libraries required to run Tauren-MD.
 
-Installing Tauren-MD Python Library
------------------------------------
+Two additional files are created in the ``bin`` folder: the ``taurenmd`` and the ``update`` files.
 
-If you are a proficient Pythonista, either using `PyPI`_ or `Anaconda`_, and want to install Tauren-MD Python library within your Python distribution use the `install/taurenmd.yml` file to create the Tauren-MD environment and add the Tauren-MD folder to the ENV `site-packages` or to your system PATH.
+Read further on :ref:`how to run and update Tauren-MD <run_tauren>`.
+
+Manual installation
+-------------------
+
+If you are a proficient Pythonista, either using :pypi"`PyPI <>` or :anaconda:`Anaconda <>`, and want to install Tauren-MD Python library within your Python distribution without using the :treeoflife:`Tree-of-Life project <>`, use the ``install/taurenmd.yml`` file to create the Tauren-MD environment and add the Tauren-MD folder to the ENV `site-packages` or to your system PATH.
+
+However, in this way the ``bin`` executable files won't be created. These scripts are stored in the ``ìnstallation/executables.py`` file as raw strings, copy those to new files to generate your own executable files.
 
 .. todo::
     Add Tauren-MD package to PyPI and/or Conda repository.
-
-.. _Tree-of-Life project: https://github.com/joaomcteixeira/Tree-of-Life
-.. _vision: https://github.com/joaomcteixeira/Tree-of-Life/blob/master/VISION.md
-.. _`PyPI`: https://pypi.org/project/pip/
-.. _`Anaconda`: https://www.anaconda.com/distribution/
