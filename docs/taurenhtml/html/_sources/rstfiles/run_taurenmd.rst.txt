@@ -16,31 +16,32 @@ Command-line interface
 
 To run Tauren-MD command line you should use the ``bin/taurenmd`` script created after installation. Use the ``bin/taurenmd -h`` option to get updated help on the script usage:
 
-::
-   optional arguments:
-     -h, --help            show this help message and exit
-     -c CONFIG, --config CONFIG
-                           Tauren-MD configuration JSON file. If not provided
-                           runs the default config: simply loads trajectory and
-                           shows information
-     -traj TRAJECTORY, --trajectory TRAJECTORY
-                           Trajectory file (('.xtc', '.nc', '.trr', '.h5',
-                           '.pdb', '.binpos', '.dcd'))
-     -top TOPOLOGY, --topology TOPOLOGY
-                           Topology file (('.pdb', '.cif'))
-     -tt {mdtraj}, --trajtype {mdtraj}
-                           Library to use as trajectory type, in lower case.
-                           Current libraries available: MDTraj
-                           (http://mdtraj.org/1.9.0/)
 
-``taurenmd`` can be used to run a Tauren-MD configuration file, you can use it to repeat a previous execution or to run a new one from a configured conf file. Read ``here``_ how to configure a Tauren-MD configuration file.
+:-c CONFIG, --config CONFIG:
+    Tauren-MD configuration JSON file. If not provided
+    runs the default config: simply loads trajectory and
+    shows information
+
+:-traj TRAJECTORY, --trajectory TRAJECTORY:
+    Trajectory file (('.xtc', '.nc', '.trr', '.h5',
+    '.pdb', '.binpos', '.dcd'))
+    
+:-top TOPOLOGY, --topology TOPOLOGY:
+    Topology file (('.pdb', '.cif'))
+
+:-tt {mdtraj}, --trajtype {mdtraj}:
+    Library to use as trajectory type, in lower case.
+    Current libraries available: MDTraj
+    (http://mdtraj.org/1.9.0/)
+
+``taurenmd`` can be used to run a Tauren-MD configuration file, you can use it to repeat a previous execution or to run a new one from a configured conf file. Read :ref:`here <taurenconfig>` how to configure a Tauren-MD configuration file.
 
 ``-traj`` and ``-top`` arguments can be given in-line or a path to those files can be added to the configuration file as well.
 
 Examples
 ~~~~~~~~
 
-:: code: bash
+.. code:: bash
 
     bin/taurenmd -c <PATH TO CONFIG FILE> -traj <PATH TO TRAJECTORY FILE> -top <PATH TO TOPOLOGY FILE>
 

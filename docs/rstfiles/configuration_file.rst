@@ -1,3 +1,5 @@
+.. _taurenconfig:
+
 Tauren-MD configuration file
 ============================
 
