@@ -35,8 +35,8 @@ def rmsds_separated_chains(
             )
 
         plot.rmsd_chain_per_subplot(
-            taurentraj.frames_list,
-            taurentraj.observables[key],
+            taurentraj.observables[key][1][:, 0],
+            taurentraj.observables[key][1][:, 1:].T,
             **plot_rmsd_chain_per_subplot,
             )
     
@@ -49,8 +49,8 @@ def rmsds_separated_chains(
             )
         
         plot.rmsd_individual_chains_one_subplot(
-            taurentraj.frames_list,
-            taurentraj.observables[key],
+            taurentraj.observables[key][1][:, 0],
+            taurentraj.observables[key][1][:, 1:].T,
             **plot_rmsd_individual_chains_one_subplot
             )
         
@@ -87,8 +87,8 @@ def rmsds_combined_chains(
             )
         
         plot.rmsd_combined_chains(
-            taurentraj.frames_list,
-            taurentraj.observables[key],
+            taurentraj.observables[key][1][:, 0],
+            taurentraj.observables[key][1][:, 1],
             **plot_rmsd_combined_chains,
             )
         
@@ -120,7 +120,7 @@ def _update_single_plot_config(
     key_list = _get_key_list(key)
     
     if kwargs["label"] is None:
-        kwargs["label"] = key_list
+        kwargs["label"] = key
     
     if kwargs["fig_name"] is None:
         kwargs["fig_name"] = f"{name}_{'-'.join(key_list)}.pdf"

@@ -14,7 +14,7 @@ Tauren-MD was designed to facilitate the usage of scientific MD analysis librari
 
 Tauren-MD wraps around high performance MD analysis libraries, such as: :mdtraj:`MDTraj <mdtraj>`, :pandegroup:`OpenMM <openmm>` (and implementing :prody:`ProDy <>` and others); and it contains its own routines for data representation and export, such as curated plotting templates through :matplotlib:`matplotlib <>`.
 
-In this way, Tauren-MD attempts to be an *à la carte* menu where the user can easily chose from a predifined list of _actions_ what she/he wants from hers/his trajectories: a configuration file can be easily setup with the desired routines and executed via the `taurenmd` executable file (created after installation).
+In this way, Tauren-MD attempts to be an *à la carte* menu where the user can easily chose from a predifined list of *actions* what she/he wants from hers/his trajectories: a configuration file can be easily setup with the desired routines and executed via the `taurenmd` executable file (created after installation).
 
 .. toctree::
    :maxdepth: 1

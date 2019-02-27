@@ -1,0 +1,392 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tauren.load &mdash; Tauren-MD 0.4.1-034795b documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Tauren-MD
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../rstfiles/vision.html">Vision</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rstfiles/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rstfiles/run_taurenmd.html">Run Tauren-MD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rstfiles/configuration_file.html">Tauren-MD configuration file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rstfiles/modules.html">Tauren-MD Library Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../rstfiles/license.html">License</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Tauren-MD</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>tauren.load</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for tauren.load</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">MODULE PROVIDES FUNCTIONS TO OPEN TRAJECTORIES</span>
+
+<span class="sd">Copyright © 2018-2019 Tauren-MD Project</span>
+
+<span class="sd">Contributors to this file:</span>
+<span class="sd">- João M.C. Teixeira (https://github.com/joaomcteixeira)</span>
+
+<span class="sd">Tauren-MD is free software: you can redistribute it and/or modify</span>
+<span class="sd">it under the terms of the GNU General Public License as published by</span>
+<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
+<span class="sd">(at your option) any later version.</span>
+
+<span class="sd">Tauren-MD is distributed in the hope that it will be useful,</span>
+<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="sd">GNU General Public License for more details.</span>
+
+<span class="sd">You should have received a copy of the GNU General Public License</span>
+<span class="sd">along with Tauren-MD. If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+
+<span class="kn">import</span> <span class="nn">mdtraj</span> <span class="k">as</span> <span class="nn">md</span>
+<span class="kn">import</span> <span class="nn">simtk.openmm.app</span> <span class="k">as</span> <span class="nn">app</span>
+
+<span class="kn">from</span> <span class="nn">tauren</span> <span class="k">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">tauren</span> <span class="k">import</span> <span class="n">tauren</span>
+
+<span class="n">log</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">get_log</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_validate_file_paths</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validates paths. Paths should exists and be files.</span>
+<span class="sd">    Raises Erros otherwise.</span>
+<span class="sd">    </span>
+<span class="sd">    Used in functions where all positional arguments are paths.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        
+        <span class="k">for</span> <span class="n">file_</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+            
+            <span class="n">path_</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">path_</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&#39;</span><span class="si">{path_}</span><span class="s2">&#39; does NOT exist.&quot;</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">path_</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&#39;</span><span class="si">{path_}</span><span class="s2">&#39; is NOT a file.&quot;</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<div class="viewcode-block" id="load_json_config"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.load.load_json_config">[docs]</a><span class="nd">@_validate_file_paths</span>
+<span class="k">def</span> <span class="nf">load_json_config</span><span class="p">(</span><span class="n">config_path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads Tauren-MD configuration file (JSON).</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    config_path : str</span>
+<span class="sd">        Path to .json file.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    namedtuple</span>
+<span class="sd">        namedtuple with &#39;typename&#39; = &#39;config&#39; and &#39;field_names&#39;</span>
+<span class="sd">        the JSON config keys.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">config_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.json&#39;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;config file should have &#39;.json&#39; extension.&quot;</span><span class="p">)</span>
+    
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">conf</span><span class="p">:</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">conf</span><span class="p">)</span>
+    
+    <span class="c1"># python dictionaries are OrderedDicts from +3.6</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;config&quot;</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">config_tuple</span> <span class="o">=</span> <span class="n">a</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">)</span>
+    
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&lt;config_tuple&gt;: </span><span class="si">{config_tuple}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">config_tuple</span></div>
+
+
+<span class="k">def</span> <span class="nf">_load_topology</span><span class="p">(</span><span class="n">topo_file</span><span class="p">):</span>
+    
+    <span class="k">if</span> <span class="n">topo_file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.cif&quot;</span><span class="p">):</span>
+        
+        <span class="n">structure</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">PDBxFile</span><span class="p">(</span><span class="n">topo_file</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;loaded topology with openmm.app.PDBxFile&quot;</span><span class="p">)</span>
+        
+        <span class="n">topology</span> <span class="o">=</span> <span class="n">md</span><span class="o">.</span><span class="n">Topology</span><span class="o">.</span><span class="n">from_openmm</span><span class="p">(</span><span class="n">structure</span><span class="o">.</span><span class="n">topology</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;loaded topology with md.Topology.from_openmm&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">topology</span>
+    
+    <span class="k">elif</span> <span class="n">topo_file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.pdb&#39;</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="n">topo_file</span>
+    
+    <span class="k">else</span><span class="p">:</span>
+        
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unkown topology file type&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_load_mdtraj</span><span class="p">(</span><span class="n">traj_file</span><span class="p">,</span> <span class="n">topology</span><span class="p">):</span>
+    
+    <span class="k">return</span> <span class="n">tauren</span><span class="o">.</span><span class="n">TaurenMDTraj</span><span class="p">(</span><span class="n">traj_file</span><span class="p">,</span> <span class="n">topology</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_load_mdanalysis</span><span class="p">(</span><span class="n">traj_file</span><span class="p">,</span> <span class="n">topology</span><span class="p">):</span>
+    
+    <span class="k">return</span> <span class="n">tauren</span><span class="o">.</span><span class="n">TaurenMDAnalysis</span><span class="p">(</span><span class="n">traj_file</span><span class="p">,</span> <span class="n">topology</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="load_traj"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.load.load_traj">[docs]</a><span class="nd">@_validate_file_paths</span>
+<span class="k">def</span> <span class="nf">load_traj</span><span class="p">(</span>
+        <span class="n">traj_file</span><span class="p">,</span>
+        <span class="n">topo_file</span><span class="p">,</span>
+        <span class="n">traj_type</span><span class="o">=</span><span class="s2">&quot;mdtraj&quot;</span><span class="p">,</span>
+        <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads MD trajectory.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    traj_file : str</span>
+<span class="sd">        Trajectory file name (path)</span>
+<span class="sd">        Formats allowed: &quot;.xtc&quot;, &quot;.nc&quot;, &quot;.trr&quot;, &quot;.h5&quot;, &quot;.pdb&quot;,</span>
+<span class="sd">            &quot;.binpos&quot;, &quot;.dcd&quot;.</span>
+<span class="sd">        </span>
+<span class="sd">    topo_file : dstr</span>
+<span class="sd">        Topology file name (path).</span>
+<span class="sd">        Formats allowed: &quot;.pdb&quot; and &quot;.cif&quot;.</span>
+<span class="sd">    </span>
+<span class="sd">    traj_type : {&quot;mdtraj&quot;, &quot;mdanalysis&quot;}</span>
+<span class="sd">        The type of trajectory generated.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Tauren Trajectory</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;loading trajectory...&quot;</span><span class="p">)</span>
+    
+    <span class="n">topology</span> <span class="o">=</span> <span class="n">_load_topology</span><span class="p">(</span><span class="n">topo_file</span><span class="p">)</span>
+    
+    <span class="c1"># Exceptions are handled directly by md.load()</span>
+    
+    <span class="k">if</span> <span class="n">traj_type</span> <span class="o">==</span> <span class="s2">&quot;mdtraj&quot;</span><span class="p">:</span>
+        
+        <span class="n">traj</span> <span class="o">=</span> <span class="n">_load_mdtraj</span><span class="p">(</span><span class="n">traj_file</span><span class="p">,</span> <span class="n">topology</span><span class="p">)</span>
+    
+    <span class="k">elif</span> <span class="n">traj_type</span> <span class="o">==</span> <span class="s2">&quot;mdanalysis&quot;</span><span class="p">:</span>
+        
+        <span class="n">traj</span> <span class="o">=</span> <span class="n">_load_mdanalysis</span><span class="p">(</span><span class="n">traj_file</span><span class="p">,</span> <span class="n">topology</span><span class="p">)</span>
+    
+    <span class="n">info</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">*** Loaded ***</span>
+
+<span class="s2">trajectory: </span><span class="si">{traj_file}</span><span class="s2"></span>
+<span class="s2">topology: </span><span class="si">{topo_file}</span><span class="s2"></span>
+<span class="s2">&quot;&quot;&quot;</span>
+    
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+    
+    <span class="n">traj</span><span class="o">.</span><span class="n">report</span><span class="p">()</span>
+    
+    <span class="k">return</span> <span class="n">traj</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, João M.C. Teixeira
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #f0b27a ;
+    }
+  </style>
+
+
+</body>
+</html>

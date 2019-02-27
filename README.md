@@ -1,6 +1,7 @@
 # Tauren-MD
 
-_This is an experimental project under strong development, expect small to drastic changes and updates in its structure, architecture and interfaces._
+_This is an experimental project under strong development, expect small to drastic changes and updates in its structure, architecture and interfaces._  
+_version 0.5.0_
 
 **Tauren-MD is an interface that streamlines analisis routines for Molecular Dynamics.**
 

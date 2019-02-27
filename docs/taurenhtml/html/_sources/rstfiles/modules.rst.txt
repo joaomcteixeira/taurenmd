@@ -1,8 +1,26 @@
 Tauren-MD Library Documentation
 ===============================
 
-Plotting Library
-----------------
+Load
+----
+
+.. automodule:: tauren.load
+    :members:
+
+Tauren Trajectory
+-----------------
+
+.. automodule:: tauren.tauren
+    :members:
+
+Produce
+-------
+
+.. automodule:: tauren.produce
+    :members:
+
+Plotting Module
+---------------
 
 .. automodule:: tauren.plot
     :members:
