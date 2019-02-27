@@ -79,9 +79,10 @@ function that is associated with that action. For example:
            "step":10
            },
        
-       "frames2PDB": {
+       "frames2file": {
            "frames": "all",
-           "suffix": "_"
+           "prefix": "_",
+           "ext": "pdb"
            }
        }
 
@@ -108,9 +109,10 @@ Most importantly, you can reorder the actions by simple reordering the
            "exclude":null
            },
        
-       "frames2PDB": {
+       "frames2file": {
            "frames": "all",
-           "suffix": "_"
+           "prefix": "_",
+           "ext": "pdb"
            }
        }
 
@@ -138,9 +140,10 @@ example:
            "exclude":null
            },
        
-       "frames2PDB": {
+       "frames2file": {
            "frames": "all",
-           "suffix": "_"
+           "prefix": "_",
+           "ext": "pdb"
            }
        }
 
@@ -177,9 +180,10 @@ Alternatively to removing an action from the configuration file, you can **deact
            "exclude":null
            },
        
-       "frames2PDB": {
+       "frames2file": {
            "frames": "all",
-           "suffix": "_"
+           "prefix": "_",
+           "ext": "pdb"
            }
        }
 
@@ -201,9 +205,10 @@ example, if you want to export the trajectory in different formats:
            "exclude":null
            },
        
-       "frames2PDB": {
+       "frames2file": {
            "frames": "all",
-           "suffix": "_"
+           "prefix": "_",
+           "ext": "pdb"
            },
        
        "save_traj": {
@@ -282,15 +287,6 @@ image molecules
        "make_whole": null
        }
 
-reduce equidistant
-^^^^^^^^^^^^^^^^^^
-
-.. code:: json
-
-   "reduce_equidistant": {
-       "step":10
-       },
-
 slice
 ^^^^^
 
@@ -305,14 +301,15 @@ slice
 Export
 ~~~~~~
 
-Frames to PDB
-^^^^^^^^^^^^^
+Frames to file
+^^^^^^^^^^^^^^
 
 .. code:: json
 
-   "frames2PDB": {
+   "frames2file": {
        "frames": "all",
-       "prefix": "_"
+       "prefix": "_",
+       "ext": "pdb"
        }
 
 save trajectory
@@ -321,8 +318,7 @@ save trajectory
 .. code:: json
 
    "save_traj": {
-       "file_name": "traj_OUTPUT.dcd",
-       "overwrite":true
+       "file_name": "traj_OUTPUT.dcd"
        }
 
 Data calculation and plotting

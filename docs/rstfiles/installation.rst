@@ -6,18 +6,18 @@ Download
 
 Download the latest version of Tauren-MD (:taurenzip:`ZIP file <>`) from the official :taurengit:`GitHub repository <>`. Unpack the ZIP and follow the installation instructions bellow.
 
-Automated Installation
-----------------------
+Automated Installation (Recommended)
+------------------------------------
 
-Tauren-MD installation is supported by the :treeoflife:`Tree-of-Life project <>`, which was designed with the very specific :treevision:`vision <>` of facilitating the installation process of scientific software to non-developer users, but it serves perfectly for proficient Pythonistas. To install a stand-alone Taren-MD, run:
+Tauren-MD installation is supported by the :treeoflife:`Tree-of-Life project <>`, which was designed with the very specific :treevision:`vision <>` of facilitating the installation process of scientific software to non-developer users, but it serves perfectly for proficient Pythonistas as well. The installation process is compatible with **Linux**, **MacOS** and **Windows**. To install a stand-alone Taren-MD, run in your ``Terminal`` (command-line):
 
 ::
 
    python install_tauren-md.py
 
-and follow the very simple instructions. This process will install a dedicated Anaconda local distribution and environment with all the Python libraries required to run Tauren-MD.
+and follow the very simple instructions.
 
-Two additional files are created in the ``bin`` folder: the ``taurenmd`` and the ``update`` files.
+This process will install a local Anaconda distribution and environment with all the Python libraries required to run Tauren-MD. Additionally, two executable files are created in the ``bin`` folder: the ``taurenmd`` and the ``update`` files. If you are on Windows, these files will have the ``.py`` extension.
 
 Read further on :ref:`how to run and update Tauren-MD <run_tauren>`.
 

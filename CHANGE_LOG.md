@@ -1,3 +1,4 @@
+- [v0.5.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.5.0)
 - [v0.4.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.4.1)
 - [v0.4.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.4.0)
 - [v0.3.2](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.3.2)
@@ -6,6 +7,16 @@
 - [v0.2.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.2.0)
 - [v0.1.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.1.1)
 - [v0.0.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.0.0)
+
+
+# v0.5.0
+
+- Improve code architecture in `tauren.tauren`:
+  - `TaurenTraj` is not ABC class.
+- Implemented initial interface for MDAnalysis
+- changed method `frames2PDB` to `frames2file`.
+- `overwrite` in `.save_traj` is deprecated.
+- `reduce_equidistant` deprecated in favor of `slice`.
 
 # v0.4.1
 

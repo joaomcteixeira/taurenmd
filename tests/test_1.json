@@ -1,7 +1,7 @@
 {
     "input_data": {
-            "trajectory": "",
-            "topology": ""
+            "trajectory": "production_imaged_noSolvent.dcd",
+            "topology": "topology_imaged_noSolvent.pdb"
         },
     
     "traj_type": "mdtraj",
@@ -11,13 +11,7 @@
             "exclude":null
             },
         
-        "slice": {
-            "start": null,
-            "end": null,
-            "step":10
-            },
-        
-        "try_image_molecules": {
+        "#try_image_molecules": {
             "anchor_molecules": null,
             "other_molecules": null,
             "sorted_bonds": null,
@@ -25,13 +19,25 @@
             },
         
         "frames2file": {
-            "frames": "all",
+            "frames": "50:60",
             "prefix": "_",
             "ext": "pdb"
             },
         
+        "slice": {
+            "start": 100,
+            "end": null,
+            "step":10
+            },
+        
         "save_traj": {
             "file_name": "traj_OUTPUT.dcd"
+            },
+        
+        "slice": {
+            "start": null,
+            "end": null,
+            "step":10
             },
         
         "produce_rmsds_combined_chains": {
@@ -55,6 +61,37 @@
                 "alpha": 0.7,
                 "grid": true,
                 "grid_color": "lightgrey",
+                "grid_ls": "-",
+                "grid_lw": 1,
+                "grid_alpha": 0.5,
+                "legend": true,
+                "legend_fs": 6,
+                "legend_loc": 4,
+                "fig_name": null
+                }
+            },
+        
+        "produce_rmsds_combined_chains": {
+            
+            "calc_rmsds_combined_chains": {
+                "chains": "1,2,3",
+                "ref_frame": 0
+                },
+            
+            "export_data": {
+                "file_name": null,
+                "sep": ","
+                },
+            
+            "plot_rmsd_combined_chains": {
+                "label": null,
+                "suptitle": "Combined Chain RMSDs",
+                "x_label": "Frame Number",
+                "y_label": "RMSDs",
+                "color": "blue",
+                "alpha": 0.7,
+                "grid": true,
+                "grid_color": "green",
                 "grid_ls": "-",
                 "grid_lw": 1,
                 "grid_alpha": 0.5,

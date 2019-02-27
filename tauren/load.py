@@ -62,16 +62,18 @@ def _validate_file_paths(func):
 @_validate_file_paths
 def load_json_config(config_path):
     """
-    Loads configuration JSON file into a collections.namedtuple()
+    Loads Tauren-MD configuration file (JSON).
     
-    Parameters:
+    Parameters
+    ----------
+    config_path : str
+        Path to .json file.
     
-        - config_path (str): path to .json file
-    
-    Returns:
-    
-        - namedtuple() with 'typename' = 'config and 'field_names'
-            the JSON config keys.
+    Returns
+    -------
+    namedtuple
+        namedtuple with 'typename' = 'config' and 'field_names'
+        the JSON config keys.
     """
     
     if not config_path.endswith('.json'):
@@ -89,6 +91,37 @@ def load_json_config(config_path):
     return config_tuple
 
 
+def _load_topology(topo_file):
+    
+    if topo_file.endswith(".cif"):
+        
+        structure = app.PDBxFile(topo_file)
+        log.info("loaded topology with openmm.app.PDBxFile")
+        
+        topology = md.Topology.from_openmm(structure.topology)
+        log.info("loaded topology with md.Topology.from_openmm")
+        
+        return topology
+    
+    elif topo_file.endswith('.pdb'):
+        
+        return topo_file
+    
+    else:
+        
+        raise TypeError("Unkown topology file type")
+
+
+def _load_mdtraj(traj_file, topology):
+    
+    return tauren.TaurenMDTraj(traj_file, topology)
+
+
+def _load_mdanalysis(traj_file, topology):
+    
+    return tauren.TaurenMDAnalysis(traj_file, topology)
+
+
 @_validate_file_paths
 def load_traj(
         traj_file,
@@ -102,15 +135,14 @@ def load_traj(
     ----------
     traj_file : str
         Trajectory file name (path)
-            Formats allowed: ".xtc", ".nc", ".trr", ".h5", ".pdb",
-                ".binpos", ".dcd"
+        Formats allowed: ".xtc", ".nc", ".trr", ".h5", ".pdb",
+            ".binpos", ".dcd".
         
-    topo_file : str
-        Topology file name (path)
-            Formats allowed: ".pdb" and ".cif"
+    topo_file : dstr
+        Topology file name (path).
+        Formats allowed: ".pdb" and ".cif".
     
-    traj_type : str
-        Defaults to "mdtraj".
+    traj_type : {"mdtraj", "mdanalysis"}
         The type of trajectory generated.
     
     Returns
@@ -120,20 +152,17 @@ def load_traj(
     
     log.info("loading trajectory...")
     
-    if topo_file.endswith(".cif"):
-        structure = app.PDBxFile(topo_file)
-        log.info("loaded topology with openmm.app.PDBxFile")
-        topology = md.Topology.from_openmm(structure.topology)
-        log.info("loaded topology with md.Topology.from_openmm")
-    
-    elif topo_file.endswith('.pdb'):
-        topology = topo_file
+    topology = _load_topology(topo_file)
     
     # Exceptions are handled directly by md.load()
     
     if traj_type == "mdtraj":
         
-        traj = tauren.TaurenMDTraj(traj_file, topology)
+        traj = _load_mdtraj(traj_file, topology)
+    
+    elif traj_type == "mdanalysis":
+        
+        traj = _load_mdanalysis(traj_file, topology)
     
     info = f"""
 *** Loaded ***

@@ -24,10 +24,9 @@ from tauren import produce
 
 actions_dict = {
     "remove_solvent": lambda x, y: x.remove_solvent(**y),
-    "reduce_equidistant": lambda x, y: x.reduce_equidistant(**y),
     "slice": lambda x, y: x.slice(**y),
     "try_image_molecules": lambda x, y: x.image_molecules(**y),
-    "frames2PDB": lambda x, y: x.frames2PDB(**y),
+    "frames2file": lambda x, y: x.frames2file(**y),
     "save_traj": lambda x, y: x.save_traj(**y),
     "produce_rmsds_combined_chains":
         lambda x, y: produce.rmsds_combined_chains(x, **y),

@@ -1,0 +1,2 @@
+class YouShouldntBeHereError(Exception):
+    pass

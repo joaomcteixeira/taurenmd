@@ -89,6 +89,8 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Run Tauren-MD</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#command-line-interface">Command-line interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#in-linux-or-macos">In Linux or MacOS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#on-windows">On Windows</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
@@ -166,13 +168,26 @@
 <h1>Run Tauren-MD<a class="headerlink" href="#run-tauren-md" title="Permalink to this headline">¶</a></h1>
 <p>Tauren-MD is built such that all its functionalities can be used without
 requiring any programming skills from the user.</p>
-<p>There are two executable files that can be used to run Tauren-MD: <code class="docutils literal notranslate"><span class="pre">taurenmd</span></code> and <code class="docutils literal notranslate"><span class="pre">taurengui</span></code>. As the name suggests, the former runs command-line while the latter runs the Tauren-MD Guided User Interface.</p>
+<p>There are two executable files that can be used to run Tauren-MD: <code class="docutils literal notranslate"><span class="pre">taurenmd</span></code> and <code class="docutils literal notranslate"><span class="pre">taurengui</span></code>; on Windows, these files will have the <code class="docutils literal notranslate"><span class="pre">.py</span></code> extension. As the name suggests, the former runs command-line while the latter runs the Tauren-MD Guided User Interface.</p>
 <p>The only necessary requirement is to configure the
 <code class="docutils literal notranslate"><span class="pre">tauren_config.json</span></code> file according to your preferences and run the
-<code class="docutils literal notranslate"><span class="pre">taurenmd</span></code> file in <code class="docutils literal notranslate"><span class="pre">bin</span></code> folder. See bellow how to do this.</p>
+<code class="docutils literal notranslate"><span class="pre">taurenmd</span></code> file in <code class="docutils literal notranslate"><span class="pre">bin</span></code> folder, see bellow how to do this.</p>
 <div class="section" id="command-line-interface">
 <h2>Command-line interface<a class="headerlink" href="#command-line-interface" title="Permalink to this headline">¶</a></h2>
-<p>To run Tauren-MD command line you should use the <code class="docutils literal notranslate"><span class="pre">bin/taurenmd</span></code> script created after installation. Use the <code class="docutils literal notranslate"><span class="pre">bin/taurenmd</span> <span class="pre">-h</span></code> option to get updated help on the script usage:</p>
+<p>To run Tauren-MD command line you should use the <code class="docutils literal notranslate"><span class="pre">bin/taurenmd</span></code> script created after installation.</p>
+<div class="section" id="in-linux-or-macos">
+<h3>In Linux or MacOS<a class="headerlink" href="#in-linux-or-macos" title="Permalink to this headline">¶</a></h3>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>$ bin/taurenmd
+</pre></div>
+</div>
+</div>
+<div class="section" id="on-windows">
+<h3>On Windows<a class="headerlink" href="#on-windows" title="Permalink to this headline">¶</a></h3>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>$ bin/taurenmd.py
+</pre></div>
+</div>
+<p><strong>NOTE:</strong> do NOT run with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">bin/taurenmd.py</span></code>, because you will be using the main system’s Python interpreter which does not have the Tauren-MD dependencies installed.</p>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">bin/taurenmd</span> <span class="pre">-h</span></code> option to get updated help on the script usage:</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -198,9 +213,10 @@ Current libraries available: MDTraj
 </table>
 <p><code class="docutils literal notranslate"><span class="pre">taurenmd</span></code> can be used to run a Tauren-MD configuration file, you can use it to repeat a previous execution or to run a new one from a configured conf file. Read <a class="reference internal" href="configuration_file.html#taurenconfig"><span class="std std-ref">here</span></a> how to configure a Tauren-MD configuration file.</p>
 <p><code class="docutils literal notranslate"><span class="pre">-traj</span></code> and <code class="docutils literal notranslate"><span class="pre">-top</span></code> arguments can be given in-line or a path to those files can be added to the configuration file as well.</p>
+</div>
 <div class="section" id="examples">
 <h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
-<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">bin</span><span class="o">/</span><span class="n">taurenmd</span> <span class="o">-</span><span class="n">c</span> <span class="o">&lt;</span><span class="n">PATH</span> <span class="n">TO</span> <span class="n">CONFIG</span> <span class="n">FILE</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">traj</span> <span class="o">&lt;</span><span class="n">PATH</span> <span class="n">TO</span> <span class="n">TRAJECTORY</span> <span class="n">FILE</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">top</span> <span class="o">&lt;</span><span class="n">PATH</span> <span class="n">TO</span> <span class="n">TOPOLOGY</span> <span class="n">FILE</span><span class="o">&gt;</span>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>$ bin/taurenmd -c &lt;PATH TO CONFIG FILE&gt; -traj &lt;PATH TO TRAJECTORY FILE&gt; -top &lt;PATH TO TOPOLOGY FILE&gt;
 </pre></div>
 </div>
 </div>
