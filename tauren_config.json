@@ -11,7 +11,9 @@
             "exclude":null
             },
         
-        "reduce_equidistant": {
+        "slice": {
+            "start": null,
+            "end": null,
             "step":10
             },
         
@@ -22,14 +24,14 @@
             "make_whole": null
             },
         
-        "frames2PDB": {
+        "frames2file": {
             "frames": "all",
-            "prefix": "_"
+            "prefix": "_",
+            "ext": "pdb"
             },
         
         "save_traj": {
-            "file_name": "traj_OUTPUT.dcd",
-            "overwrite":true
+            "file_name": "traj_OUTPUT.dcd"
             },
         
         "produce_rmsds_combined_chains": {
