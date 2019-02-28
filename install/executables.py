@@ -124,7 +124,7 @@ ap.add_argument(
     "-tt",
     "--trajtype",
     default=None,
-    choices=["mdtraj"],
+    choices=["mdtraj", "mdanalysis"],
     help=(
         "Library to use as trajectory type, in lower case. "
         "Current libraries available: "
