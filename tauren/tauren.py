@@ -27,7 +27,9 @@ from abc import ABC, abstractmethod
 
 import mdtraj
 import MDAnalysis as mda
-from MDAnalysis.analysis.rms import RMSD as mdarmsd
+from MDAnalysis.analysis import align as mdaalign
+from MDAnalysis.analysis.rms import RMSD as mdaRMSD
+#from MDAnalysis.analysis.rms import rmsd as mdarmsd
 
 from tauren import logger
 
@@ -87,6 +89,41 @@ class TaurenTraj(ABC):
         return self.full_frames_list[self._fslicer]
     
     @property
+    def slice_tuple(self):
+        """
+        A 3 element tuple identifing the current slicing
+        (start, end, step).
+        """
+        return self._slice_tuple
+    
+    @slice_tuple.setter
+    def slice_tuple(self, tuple_):
+        """
+        Tuple (start, end, step)
+        """
+        start = tuple_[0]
+        end = tuple_[1]
+        step = tuple_[2]
+        
+        if step == 0:
+            raise ValueError("step can NOT be zero.")
+        
+        elif step > 0 and not(start < end) \
+                or step < 0 and not(start > end):
+            raise ValueError(
+                f"This tuple combination '{tuple_}'"
+                " will render an empty selection."
+                " Use start > end for step > 0 or"
+                " start < end for steps < 0."
+                )
+        
+        log.info(f"slice_tuple: {tuple_}")
+        
+        self._slice_tuple = tuple_
+        
+        return
+    
+    @property
     def n_frames(self):
         return len(self.full_frames_list[self._fslicer])
     
@@ -135,6 +172,8 @@ class TaurenTraj(ABC):
         self._check_correct_slice(end)
         
         self._fslicer = slice(start, end, step)
+        
+        self.slice_tuple = (start, end, step)
         
         log.debug(f"<_fslicer> updated: {self._fslicer}")
         
@@ -194,6 +233,42 @@ class TaurenTraj(ABC):
     @abstractmethod
     def _remove_solvent(self):
         pass
+    
+    def align_traj(
+            self,
+            *,
+            weights="mass",
+            file_name="aligned_traj.dcd",
+            inplace=True,
+            ):
+        """
+        Aligns trajectory to the topology structure (reference).
+        """
+        
+        log.info("* Aligning trajectory... ")
+        
+        if not(isinstance(weights, str)):
+            raise TypeError("weights is NOT str type.")
+        
+        if not(isinstance(file_name, str)):
+            raise TypeError("file_name is NOT str type.")
+        
+        if not(isinstance(inplace, bool)):
+            raise TypeError("inplace is NOT bool.")
+        
+        self._align_traj(
+            weights,
+            file_name,
+            inplace,
+            )
+        
+        log.info("    done")
+        
+        return
+    
+    @abstractmethod
+    def _align_traj(self):
+        return
     
     @abstractmethod
     def image_molecules(self):
@@ -534,6 +609,10 @@ class TaurenTraj(ABC):
             If trajectory can not be sliced according to chains.
         """
         
+        log.info("* Calculating RMSDs for combined chains...")
+        
+        storage_key = storage_key or "rmsds_combined_chains"
+        
         self._check_chains_argument(chains)
                 
         chain_list = self._gen_chain_list(chains)  # abstractmethod
@@ -697,6 +776,9 @@ class TaurenTraj(ABC):
         IndexError
             If trajectory can not be sliced according to chains.
         """
+        
+        log.info("* Calculating RMSDs for each chain separately")
+        
         self._check_chains_argument(chains)
         
         chain_list = self._gen_chain_list(chains)  # abstractmethod
@@ -825,7 +907,7 @@ class TaurenMDAnalysis(TaurenTraj):
     def __init__(self, trajectory, topology):
         
         self.universe = mda.Universe(topology, trajectory)
-        self.trajectory = self.universe.trajectory
+        #self.trajectory = self.universe.trajectory
         self.topology = mda.Universe(topology)
         
         super().__init__()
@@ -834,6 +916,10 @@ class TaurenMDAnalysis(TaurenTraj):
     
     def _set_full_frames_list(self):
         super()._set_full_frames_list(self.trajectory.n_frames)
+    
+    @property
+    def trajectory(self):
+        return self.universe.trajectory
     
     @TaurenTraj.totaltime.getter
     def totaltime(self):
@@ -867,6 +953,46 @@ class TaurenMDAnalysis(TaurenTraj):
     
     def image_molecules(self):
         log.info("image_molecules method not implemented for MDAnalaysis")
+        return
+    
+    def _align_traj(
+            self,
+            weights,
+            file_name,
+            inplace,
+            ):
+        
+        # https://www.mdanalysis.org/docs/documentation_pages/analysis/align.html#MDAnalysis.analysis.align.AlignTraj
+        alignment = mdaalign.AlignTraj(
+            self.universe,
+            self.topology,
+            filename=file_name,
+            in_memory=inplace,
+            verbose=True,
+            start=self.slice_tuple[0],
+            end=self.slice_tuple[1],
+            step=self.slice_tuple[2],
+            )
+        
+        alignment.run()
+        
+        # self.trajectory = self.universe.trajectory
+        
+        # mdaalign.alignto(
+            # self.universe,
+            # self.topology,
+            # weights="mass",
+            # )
+            
+        # self.trajectory = self.universe.trajectory
+        
+        # mobile0 = self.universe.atoms.positions - self.universe.atoms.center_of_mass()
+        # ref0 = self.topology.atoms.positions - self.topology.atoms.center_of_mass()
+        
+        # R, rmsd = mdaalign.rotation_matrix(mobile0, ref0)
+        
+        # print(rmsd)
+        
         return
     
     def _frames2file(
@@ -918,16 +1044,29 @@ class TaurenMDAnalysis(TaurenTraj):
             ref_frame,
             ):
         
-        chain_selector = self._gen_selector(chain_list)
+        absolute_selector = self._gen_selector(chain_list)
         
-        log.debug(f"chain_selector: {chain_selector}")
+        chain_selectors = absolute_selector.split(" or ")
+        
+        filtered_selectors = self._filter_existent_selectors(chain_selectors)
+        
+        log.debug(f"chain_selector: {filtered_selectors}")
+        
+        if len(filtered_selectors) == 0:
+            _err = (
+                "* ERROR *"
+                " The chain list does not match any selection:"
+                f" {chain_list}."
+                )
+            log.info(_err)
+            sys.exit(1)
         
         # https://www.mdanalysis.org/docs/documentation_pages/analysis/align.html#rms-fitting-tutorial
         # https://www.mdanalysis.org/docs/documentation_pages/analysis/rms.html#MDAnalysis.analysis.rms.RMSD
-        R = mdarmsd(
+        R = mdaRMSD(
             self.universe,
             self.topology,
-            select=chain_selector,
+            select=" or ".join(filtered_selectors),
             groupselection=None,
             ref_frame=ref_frame,
             )
@@ -955,7 +1094,7 @@ class TaurenMDAnalysis(TaurenTraj):
             atoms = self.universe.select_atoms(chain_selector)
             atoms_top = self.topology.select_atoms(chain_selector)
             
-            R = mdarmsd(
+            R = mdaRMSD(
                 atoms,
                 atoms_top,
                 groupselection=None,
@@ -1126,6 +1265,18 @@ class TaurenMDTraj(TaurenTraj):
         
         else:
             return new_traj
+    
+    def _align_traj(self, **kwargs):
+        
+        log.info(
+            "* IMPORTANT *"
+            "align_traj method is NOT implemented in Tauren-MD"
+            " for MDTraj library."
+            " You should use other library option."
+            " IGNORING..."
+            )
+        
+        return
     
     def _frames2file(
             self,
@@ -1321,13 +1472,16 @@ class TrajObservables(dict):
             raise TypeError(f"key should be tuple, '{type(key)}' given.")
         
         if key in self:
+            
+            key = (f"{key[0]}_", key[1])
+            
             log.warning(
-                f"The storage keyword {key} already exists in the "
-                "trajectory observables data base. "
-                "Ignoring..."
+                "* WARNING *"
+                f" The storage keyword {key} already exists in the"
+                " trajectory observables data base."
+                f" CHAING KEY TO... {key}"
                 )
-                
-        else:
-            self.setdefault(key, data)
+            
+        self.setdefault(key, data)
         
         return

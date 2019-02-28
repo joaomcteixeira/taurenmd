@@ -25,6 +25,7 @@ from tauren import produce
 actions_dict = {
     "remove_solvent": lambda x, y: x.remove_solvent(**y),
     "slice": lambda x, y: x.slice(**y),
+    "align_traj": lambda x, y: x.align_traj(**y),
     "try_image_molecules": lambda x, y: x.image_molecules(**y),
     "frames2file": lambda x, y: x.frames2file(**y),
     "save_traj": lambda x, y: x.save_traj(**y),
