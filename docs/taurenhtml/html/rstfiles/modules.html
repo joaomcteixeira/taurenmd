@@ -284,6 +284,9 @@ along with Tauren-MD. If not, see &lt;<a class="reference external" href="http:/
 <dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">observables</span></code></dt>
 <dd><p class="first last">A dictionary containing all data obtained from the system.</p>
 </dd>
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">slice_tuple</span></code></dt>
+<dd><p class="first last">A 3 element tuple identifing the current slicing (start, end, step).</p>
+</dd>
 <dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">sliced_frames_list</span></code></dt>
 <dd><p class="first last">The list of frames in the current frame slicing.</p>
 </dd>
@@ -293,6 +296,8 @@ along with Tauren-MD. If not, see &lt;<a class="reference external" href="http:/
 <dt><a class="reference internal" href="#tauren.tauren.TaurenMDAnalysis.totaltime" title="tauren.tauren.TaurenMDAnalysis.totaltime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">totaltime</span></code></a></dt>
 <dd><p class="first last">The total time in the current slicing.</p>
 </dd>
+<dt><strong>trajectory</strong></dt>
+<dd></dd>
 </dl>
 </td>
 </tr>
@@ -305,31 +310,34 @@ along with Tauren-MD. If not, see &lt;<a class="reference external" href="http:/
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_rmsds_combined_chains</span></code>(*[,&nbsp;chains,&nbsp;…])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">align_traj</span></code>(*[,&nbsp;weights,&nbsp;file_name,&nbsp;inplace])</td>
+<td>Aligns trajectory to the topology structure (reference).</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_rmsds_combined_chains</span></code>(*[,&nbsp;chains,&nbsp;…])</td>
 <td>Calculates combined RMSDs for a set of chains.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_rmsds_separated_chains</span></code>(*[,&nbsp;chains,&nbsp;…])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_rmsds_separated_chains</span></code>(*[,&nbsp;chains,&nbsp;…])</td>
 <td>Calculates RMSDs for each chain separately.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">export_data</span></code>(key[,&nbsp;file_name,&nbsp;sep,&nbsp;header])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">export_data</span></code>(key[,&nbsp;file_name,&nbsp;sep,&nbsp;header])</td>
 <td>Exports data arrays to file.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">frames2file</span></code>([frames,&nbsp;prefix,&nbsp;ext])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">frames2file</span></code>([frames,&nbsp;prefix,&nbsp;ext])</td>
 <td>Extracts trajectory frames to PDB files using prefix name.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tauren.tauren.TaurenMDAnalysis.image_molecules" title="tauren.tauren.TaurenMDAnalysis.image_molecules"><code class="xref py py-obj docutils literal notranslate"><span class="pre">image_molecules</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#tauren.tauren.TaurenMDAnalysis.image_molecules" title="tauren.tauren.TaurenMDAnalysis.image_molecules"><code class="xref py py-obj docutils literal notranslate"><span class="pre">image_molecules</span></code></a>()</td>
 <td>Images molecules.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_solvent</span></code>(**kwargs)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_solvent</span></code>(**kwargs)</td>
 <td>Removes solvent from trajectory.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code>()</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code>()</td>
 <td>Prints general information about trajectory.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_traj</span></code>([file_name])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_traj</span></code>([file_name])</td>
 <td>Saves trajectory to file.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">slice</span></code>([start,&nbsp;end,&nbsp;step])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">slice</span></code>([start,&nbsp;end,&nbsp;step])</td>
 <td>Slices trajectory for the subsequent operations.</td>
 </tr>
 </tbody>
@@ -388,6 +396,9 @@ along with Tauren-MD. If not, see &lt;<a class="reference external" href="http:/
 <dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">observables</span></code></dt>
 <dd><p class="first last">A dictionary containing all data obtained from the system.</p>
 </dd>
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">slice_tuple</span></code></dt>
+<dd><p class="first last">A 3 element tuple identifing the current slicing (start, end, step).</p>
+</dd>
 <dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">sliced_frames_list</span></code></dt>
 <dd><p class="first last">The list of frames in the current frame slicing.</p>
 </dd>
@@ -409,31 +420,34 @@ along with Tauren-MD. If not, see &lt;<a class="reference external" href="http:/
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_rmsds_combined_chains</span></code>(*[,&nbsp;chains,&nbsp;…])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">align_traj</span></code>(*[,&nbsp;weights,&nbsp;file_name,&nbsp;inplace])</td>
+<td>Aligns trajectory to the topology structure (reference).</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_rmsds_combined_chains</span></code>(*[,&nbsp;chains,&nbsp;…])</td>
 <td>Calculates combined RMSDs for a set of chains.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_rmsds_separated_chains</span></code>(*[,&nbsp;chains,&nbsp;…])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_rmsds_separated_chains</span></code>(*[,&nbsp;chains,&nbsp;…])</td>
 <td>Calculates RMSDs for each chain separately.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">export_data</span></code>(key[,&nbsp;file_name,&nbsp;sep,&nbsp;header])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">export_data</span></code>(key[,&nbsp;file_name,&nbsp;sep,&nbsp;header])</td>
 <td>Exports data arrays to file.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">frames2file</span></code>([frames,&nbsp;prefix,&nbsp;ext])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">frames2file</span></code>([frames,&nbsp;prefix,&nbsp;ext])</td>
 <td>Extracts trajectory frames to PDB files using prefix name.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tauren.tauren.TaurenMDTraj.image_molecules" title="tauren.tauren.TaurenMDTraj.image_molecules"><code class="xref py py-obj docutils literal notranslate"><span class="pre">image_molecules</span></code></a>(*[,&nbsp;anchor_molecules,&nbsp;…])</td>
+<tr class="row-even"><td><a class="reference internal" href="#tauren.tauren.TaurenMDTraj.image_molecules" title="tauren.tauren.TaurenMDTraj.image_molecules"><code class="xref py py-obj docutils literal notranslate"><span class="pre">image_molecules</span></code></a>(*[,&nbsp;anchor_molecules,&nbsp;…])</td>
 <td>Performs MDTraj.Trajectory.image_molecules, accepts same arguments.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_solvent</span></code>(**kwargs)</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_solvent</span></code>(**kwargs)</td>
 <td>Removes solvent from trajectory.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code>()</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code>()</td>
 <td>Prints general information about trajectory.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_traj</span></code>([file_name])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_traj</span></code>([file_name])</td>
 <td>Saves trajectory to file.</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">slice</span></code>([start,&nbsp;end,&nbsp;step])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">slice</span></code>([start,&nbsp;end,&nbsp;step])</td>
 <td>Slices trajectory for the subsequent operations.</td>
 </tr>
 </tbody>
@@ -509,6 +523,9 @@ Defaults to True</p>
 <dt><a class="reference internal" href="#tauren.tauren.TaurenTraj.observables" title="tauren.tauren.TaurenTraj.observables"><code class="xref py py-obj docutils literal notranslate"><span class="pre">observables</span></code></a></dt>
 <dd><p class="first last">A dictionary containing all data obtained from the system.</p>
 </dd>
+<dt><a class="reference internal" href="#tauren.tauren.TaurenTraj.slice_tuple" title="tauren.tauren.TaurenTraj.slice_tuple"><code class="xref py py-obj docutils literal notranslate"><span class="pre">slice_tuple</span></code></a></dt>
+<dd><p class="first last">A 3 element tuple identifing the current slicing (start, end, step).</p>
+</dd>
 <dt><a class="reference internal" href="#tauren.tauren.TaurenTraj.sliced_frames_list" title="tauren.tauren.TaurenTraj.sliced_frames_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sliced_frames_list</span></code></a></dt>
 <dd><p class="first last">The list of frames in the current frame slicing.</p>
 </dd>
@@ -530,35 +547,44 @@ Defaults to True</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.calc_rmsds_combined_chains" title="tauren.tauren.TaurenTraj.calc_rmsds_combined_chains"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_rmsds_combined_chains</span></code></a>(*[,&nbsp;chains,&nbsp;…])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.align_traj" title="tauren.tauren.TaurenTraj.align_traj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">align_traj</span></code></a>(*[,&nbsp;weights,&nbsp;file_name,&nbsp;inplace])</td>
+<td>Aligns trajectory to the topology structure (reference).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.calc_rmsds_combined_chains" title="tauren.tauren.TaurenTraj.calc_rmsds_combined_chains"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_rmsds_combined_chains</span></code></a>(*[,&nbsp;chains,&nbsp;…])</td>
 <td>Calculates combined RMSDs for a set of chains.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.calc_rmsds_separated_chains" title="tauren.tauren.TaurenTraj.calc_rmsds_separated_chains"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_rmsds_separated_chains</span></code></a>(*[,&nbsp;chains,&nbsp;…])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.calc_rmsds_separated_chains" title="tauren.tauren.TaurenTraj.calc_rmsds_separated_chains"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_rmsds_separated_chains</span></code></a>(*[,&nbsp;chains,&nbsp;…])</td>
 <td>Calculates RMSDs for each chain separately.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.export_data" title="tauren.tauren.TaurenTraj.export_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">export_data</span></code></a>(key[,&nbsp;file_name,&nbsp;sep,&nbsp;header])</td>
+<tr class="row-even"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.export_data" title="tauren.tauren.TaurenTraj.export_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">export_data</span></code></a>(key[,&nbsp;file_name,&nbsp;sep,&nbsp;header])</td>
 <td>Exports data arrays to file.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.frames2file" title="tauren.tauren.TaurenTraj.frames2file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frames2file</span></code></a>([frames,&nbsp;prefix,&nbsp;ext])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.frames2file" title="tauren.tauren.TaurenTraj.frames2file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frames2file</span></code></a>([frames,&nbsp;prefix,&nbsp;ext])</td>
 <td>Extracts trajectory frames to PDB files using prefix name.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.image_molecules" title="tauren.tauren.TaurenTraj.image_molecules"><code class="xref py py-obj docutils literal notranslate"><span class="pre">image_molecules</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.image_molecules" title="tauren.tauren.TaurenTraj.image_molecules"><code class="xref py py-obj docutils literal notranslate"><span class="pre">image_molecules</span></code></a>()</td>
 <td>Images molecules.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.remove_solvent" title="tauren.tauren.TaurenTraj.remove_solvent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_solvent</span></code></a>(**kwargs)</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.remove_solvent" title="tauren.tauren.TaurenTraj.remove_solvent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_solvent</span></code></a>(**kwargs)</td>
 <td>Removes solvent from trajectory.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.report" title="tauren.tauren.TaurenTraj.report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.report" title="tauren.tauren.TaurenTraj.report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code></a>()</td>
 <td>Prints general information about trajectory.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.save_traj" title="tauren.tauren.TaurenTraj.save_traj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_traj</span></code></a>([file_name])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.save_traj" title="tauren.tauren.TaurenTraj.save_traj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_traj</span></code></a>([file_name])</td>
 <td>Saves trajectory to file.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.slice" title="tauren.tauren.TaurenTraj.slice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">slice</span></code></a>([start,&nbsp;end,&nbsp;step])</td>
+<tr class="row-even"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.slice" title="tauren.tauren.TaurenTraj.slice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">slice</span></code></a>([start,&nbsp;end,&nbsp;step])</td>
 <td>Slices trajectory for the subsequent operations.</td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="tauren.tauren.TaurenTraj.align_traj">
+<code class="descname">align_traj</code><span class="sig-paren">(</span><em>*</em>, <em>weights='mass'</em>, <em>file_name='aligned_traj.dcd'</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tauren/tauren.html#TaurenTraj.align_traj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tauren.tauren.TaurenTraj.align_traj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aligns trajectory to the topology structure (reference).</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="tauren.tauren.TaurenTraj.calc_rmsds_combined_chains">
 <code class="descname">calc_rmsds_combined_chains</code><span class="sig-paren">(</span><em>*</em>, <em>chains='all'</em>, <em>ref_frame=0</em>, <em>storage_key='rmsds_combined_chains'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tauren/tauren.html#TaurenTraj.calc_rmsds_combined_chains"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tauren.tauren.TaurenTraj.calc_rmsds_combined_chains" title="Permalink to this definition">¶</a></dt>
@@ -820,6 +846,13 @@ Defaults to 1.</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tauren.tauren.TaurenTraj.slice_tuple">
+<code class="descname">slice_tuple</code><a class="headerlink" href="#tauren.tauren.TaurenTraj.slice_tuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>A 3 element tuple identifing the current slicing
+(start, end, step).</p>
 </dd></dl>
 
 <dl class="attribute">

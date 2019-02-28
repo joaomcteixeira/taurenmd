@@ -298,6 +298,19 @@ slice
        "step": 1
        }
 
+align trajectory
+^^^^^^^^^^^^^^^^
+
+`align_traj` is available only for `mdanalysis` routines.
+
+.. code:: json
+
+    "align_traj": {
+        "weights": "mass",
+        "inplace": true,
+        "file_name": "aligned_traj.dcd"
+        }
+
 Export
 ~~~~~~
 

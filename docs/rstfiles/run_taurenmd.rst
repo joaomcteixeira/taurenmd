@@ -33,6 +33,9 @@ On Windows
 
 **NOTE:** do NOT run with ``python bin/taurenmd.py``, because you will be using the main system's Python interpreter which does not have the Tauren-MD dependencies installed.
 
+Examples
+~~~~~~~~
+
 Use the ``bin/taurenmd -h`` option to get updated help on the script usage:
 
 :-c CONFIG, --config CONFIG:
@@ -55,9 +58,6 @@ Use the ``bin/taurenmd -h`` option to get updated help on the script usage:
 ``taurenmd`` can be used to run a Tauren-MD configuration file, you can use it to repeat a previous execution or to run a new one from a configured conf file. Read :ref:`here <taurenconfig>` how to configure a Tauren-MD configuration file.
 
 ``-traj`` and ``-top`` arguments can be given in-line or a path to those files can be added to the configuration file as well.
-
-Examples
-~~~~~~~~
 
 .. code:: bash
 

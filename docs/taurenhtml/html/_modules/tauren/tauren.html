@@ -181,7 +181,9 @@
 
 <span class="kn">import</span> <span class="nn">mdtraj</span>
 <span class="kn">import</span> <span class="nn">MDAnalysis</span> <span class="k">as</span> <span class="nn">mda</span>
-<span class="kn">from</span> <span class="nn">MDAnalysis.analysis.rms</span> <span class="k">import</span> <span class="n">RMSD</span> <span class="k">as</span> <span class="n">mdarmsd</span>
+<span class="kn">from</span> <span class="nn">MDAnalysis.analysis</span> <span class="k">import</span> <span class="n">align</span> <span class="k">as</span> <span class="n">mdaalign</span>
+<span class="kn">from</span> <span class="nn">MDAnalysis.analysis.rms</span> <span class="k">import</span> <span class="n">RMSD</span> <span class="k">as</span> <span class="n">mdaRMSD</span>
+<span class="c1">#from MDAnalysis.analysis.rms import rmsd as mdarmsd</span>
 
 <span class="kn">from</span> <span class="nn">tauren</span> <span class="k">import</span> <span class="n">logger</span>
 
@@ -241,6 +243,41 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">full_frames_list</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fslicer</span><span class="p">]</span>
     
     <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">slice_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A 3 element tuple identifing the current slicing</span>
+<span class="sd">        (start, end, step).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slice_tuple</span>
+    
+    <span class="nd">@slice_tuple</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">slice_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tuple_</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tuple (start, end, step)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">tuple_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">tuple_</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="n">tuple_</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;step can NOT be zero.&quot;</span><span class="p">)</span>
+        
+        <span class="k">elif</span> <span class="n">step</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span><span class="p">(</span><span class="n">start</span> <span class="o">&lt;</span> <span class="n">end</span><span class="p">)</span> \
+                <span class="ow">or</span> <span class="n">step</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span><span class="p">(</span><span class="n">start</span> <span class="o">&gt;</span> <span class="n">end</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;This tuple combination &#39;</span><span class="si">{tuple_}</span><span class="s2">&#39;&quot;</span>
+                <span class="s2">&quot; will render an empty selection.&quot;</span>
+                <span class="s2">&quot; Use start &gt; end for step &gt; 0 or&quot;</span>
+                <span class="s2">&quot; start &lt; end for steps &lt; 0.&quot;</span>
+                <span class="p">)</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;slice_tuple: </span><span class="si">{tuple_}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_slice_tuple</span> <span class="o">=</span> <span class="n">tuple_</span>
+        
+        <span class="k">return</span>
+    
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">n_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">full_frames_list</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fslicer</span><span class="p">])</span>
     
@@ -289,6 +326,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_correct_slice</span><span class="p">(</span><span class="n">end</span><span class="p">)</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">_fslicer</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">slice_tuple</span> <span class="o">=</span> <span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
         
         <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&lt;_fslicer&gt; updated: </span><span class="si">{self._fslicer}</span><span class="s2">&quot;</span><span class="p">)</span>
         
@@ -348,6 +387,42 @@
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">_remove_solvent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
+    
+<div class="viewcode-block" id="TaurenTraj.align_traj"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.tauren.TaurenTraj.align_traj">[docs]</a>    <span class="k">def</span> <span class="nf">align_traj</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="o">*</span><span class="p">,</span>
+            <span class="n">weights</span><span class="o">=</span><span class="s2">&quot;mass&quot;</span><span class="p">,</span>
+            <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;aligned_traj.dcd&quot;</span><span class="p">,</span>
+            <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Aligns trajectory to the topology structure (reference).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;* Aligning trajectory... &quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;weights is NOT str type.&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;file_name is NOT str type.&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">inplace</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;inplace is NOT bool.&quot;</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_align_traj</span><span class="p">(</span>
+            <span class="n">weights</span><span class="p">,</span>
+            <span class="n">file_name</span><span class="p">,</span>
+            <span class="n">inplace</span><span class="p">,</span>
+            <span class="p">)</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;    done&quot;</span><span class="p">)</span>
+        
+        <span class="k">return</span></div>
+    
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_align_traj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span>
     
 <div class="viewcode-block" id="TaurenTraj.image_molecules"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.tauren.TaurenTraj.image_molecules">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">image_molecules</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -688,6 +763,10 @@
 <span class="sd">            If trajectory can not be sliced according to chains.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;* Calculating RMSDs for combined chains...&quot;</span><span class="p">)</span>
+        
+        <span class="n">storage_key</span> <span class="o">=</span> <span class="n">storage_key</span> <span class="ow">or</span> <span class="s2">&quot;rmsds_combined_chains&quot;</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_chains_argument</span><span class="p">(</span><span class="n">chains</span><span class="p">)</span>
                 
         <span class="n">chain_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gen_chain_list</span><span class="p">(</span><span class="n">chains</span><span class="p">)</span>  <span class="c1"># abstractmethod</span>
@@ -851,6 +930,9 @@
 <span class="sd">        IndexError</span>
 <span class="sd">            If trajectory can not be sliced according to chains.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;* Calculating RMSDs for each chain separately&quot;</span><span class="p">)</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_chains_argument</span><span class="p">(</span><span class="n">chains</span><span class="p">)</span>
         
         <span class="n">chain_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gen_chain_list</span><span class="p">(</span><span class="n">chains</span><span class="p">)</span>  <span class="c1"># abstractmethod</span>
@@ -979,7 +1061,7 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span> <span class="n">topology</span><span class="p">):</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">universe</span> <span class="o">=</span> <span class="n">mda</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">topology</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">trajectory</span>
+        <span class="c1">#self.trajectory = self.universe.trajectory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">topology</span> <span class="o">=</span> <span class="n">mda</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">topology</span><span class="p">)</span>
         
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -988,6 +1070,10 @@
     
     <span class="k">def</span> <span class="nf">_set_full_frames_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_set_full_frames_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">n_frames</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">trajectory</span>
     
     <span class="nd">@TaurenTraj</span><span class="o">.</span><span class="n">totaltime</span><span class="o">.</span><span class="n">getter</span>
     <span class="k">def</span> <span class="nf">totaltime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1022,6 +1108,46 @@
 <div class="viewcode-block" id="TaurenMDAnalysis.image_molecules"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.tauren.TaurenMDAnalysis.image_molecules">[docs]</a>    <span class="k">def</span> <span class="nf">image_molecules</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;image_molecules method not implemented for MDAnalaysis&quot;</span><span class="p">)</span>
         <span class="k">return</span></div>
+    
+    <span class="k">def</span> <span class="nf">_align_traj</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">weights</span><span class="p">,</span>
+            <span class="n">file_name</span><span class="p">,</span>
+            <span class="n">inplace</span><span class="p">,</span>
+            <span class="p">):</span>
+        
+        <span class="c1"># https://www.mdanalysis.org/docs/documentation_pages/analysis/align.html#MDAnalysis.analysis.align.AlignTraj</span>
+        <span class="n">alignment</span> <span class="o">=</span> <span class="n">mdaalign</span><span class="o">.</span><span class="n">AlignTraj</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="p">,</span>
+            <span class="n">filename</span><span class="o">=</span><span class="n">file_name</span><span class="p">,</span>
+            <span class="n">in_memory</span><span class="o">=</span><span class="n">inplace</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">slice_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">end</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">slice_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">slice_tuple</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="p">)</span>
+        
+        <span class="n">alignment</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+        
+        <span class="c1"># self.trajectory = self.universe.trajectory</span>
+        
+        <span class="c1"># mdaalign.alignto(</span>
+            <span class="c1"># self.universe,</span>
+            <span class="c1"># self.topology,</span>
+            <span class="c1"># weights=&quot;mass&quot;,</span>
+            <span class="c1"># )</span>
+            
+        <span class="c1"># self.trajectory = self.universe.trajectory</span>
+        
+        <span class="c1"># mobile0 = self.universe.atoms.positions - self.universe.atoms.center_of_mass()</span>
+        <span class="c1"># ref0 = self.topology.atoms.positions - self.topology.atoms.center_of_mass()</span>
+        
+        <span class="c1"># R, rmsd = mdaalign.rotation_matrix(mobile0, ref0)</span>
+        
+        <span class="c1"># print(rmsd)</span>
+        
+        <span class="k">return</span>
     
     <span class="k">def</span> <span class="nf">_frames2file</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
@@ -1072,16 +1198,29 @@
             <span class="n">ref_frame</span><span class="p">,</span>
             <span class="p">):</span>
         
-        <span class="n">chain_selector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gen_selector</span><span class="p">(</span><span class="n">chain_list</span><span class="p">)</span>
+        <span class="n">absolute_selector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gen_selector</span><span class="p">(</span><span class="n">chain_list</span><span class="p">)</span>
         
-        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;chain_selector: </span><span class="si">{chain_selector}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">chain_selectors</span> <span class="o">=</span> <span class="n">absolute_selector</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; or &quot;</span><span class="p">)</span>
+        
+        <span class="n">filtered_selectors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filter_existent_selectors</span><span class="p">(</span><span class="n">chain_selectors</span><span class="p">)</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;chain_selector: </span><span class="si">{filtered_selectors}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered_selectors</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">_err</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;* ERROR *&quot;</span>
+                <span class="s2">&quot; The chain list does not match any selection:&quot;</span>
+                <span class="n">f</span><span class="s2">&quot; </span><span class="si">{chain_list}</span><span class="s2">.&quot;</span>
+                <span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_err</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         
         <span class="c1"># https://www.mdanalysis.org/docs/documentation_pages/analysis/align.html#rms-fitting-tutorial</span>
         <span class="c1"># https://www.mdanalysis.org/docs/documentation_pages/analysis/rms.html#MDAnalysis.analysis.rms.RMSD</span>
-        <span class="n">R</span> <span class="o">=</span> <span class="n">mdarmsd</span><span class="p">(</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">mdaRMSD</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="p">,</span>
-            <span class="n">select</span><span class="o">=</span><span class="n">chain_selector</span><span class="p">,</span>
+            <span class="n">select</span><span class="o">=</span><span class="s2">&quot; or &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">filtered_selectors</span><span class="p">),</span>
             <span class="n">groupselection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">ref_frame</span><span class="o">=</span><span class="n">ref_frame</span><span class="p">,</span>
             <span class="p">)</span>
@@ -1109,7 +1248,7 @@
             <span class="n">atoms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="n">chain_selector</span><span class="p">)</span>
             <span class="n">atoms_top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="n">chain_selector</span><span class="p">)</span>
             
-            <span class="n">R</span> <span class="o">=</span> <span class="n">mdarmsd</span><span class="p">(</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="n">mdaRMSD</span><span class="p">(</span>
                 <span class="n">atoms</span><span class="p">,</span>
                 <span class="n">atoms_top</span><span class="p">,</span>
                 <span class="n">groupselection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1280,6 +1419,18 @@
         
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">new_traj</span></div>
+    
+    <span class="k">def</span> <span class="nf">_align_traj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+            <span class="s2">&quot;* IMPORTANT *&quot;</span>
+            <span class="s2">&quot;align_traj method is NOT implemented in Tauren-MD&quot;</span>
+            <span class="s2">&quot; for MDTraj library.&quot;</span>
+            <span class="s2">&quot; You should use other library option.&quot;</span>
+            <span class="s2">&quot; IGNORING...&quot;</span>
+            <span class="p">)</span>
+        
+        <span class="k">return</span>
     
     <span class="k">def</span> <span class="nf">_frames2file</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
@@ -1475,14 +1626,17 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;key should be tuple, &#39;{type(key)}&#39; given.&quot;</span><span class="p">)</span>
         
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            
+            <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{key[0]}</span><span class="s2">_&quot;</span><span class="p">,</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            
             <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="n">f</span><span class="s2">&quot;The storage keyword </span><span class="si">{key}</span><span class="s2"> already exists in the &quot;</span>
-                <span class="s2">&quot;trajectory observables data base. &quot;</span>
-                <span class="s2">&quot;Ignoring...&quot;</span>
+                <span class="s2">&quot;* WARNING *&quot;</span>
+                <span class="n">f</span><span class="s2">&quot; The storage keyword </span><span class="si">{key}</span><span class="s2"> already exists in the&quot;</span>
+                <span class="s2">&quot; trajectory observables data base.&quot;</span>
+                <span class="n">f</span><span class="s2">&quot; CHAING KEY TO... </span><span class="si">{key}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
-                
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
         
         <span class="k">return</span></div></div>
 </pre></div>

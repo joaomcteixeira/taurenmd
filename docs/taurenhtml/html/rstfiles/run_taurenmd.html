@@ -187,6 +187,9 @@ requiring any programming skills from the user.</p>
 </pre></div>
 </div>
 <p><strong>NOTE:</strong> do NOT run with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">bin/taurenmd.py</span></code>, because you will be using the main system’s Python interpreter which does not have the Tauren-MD dependencies installed.</p>
+</div>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
 <p>Use the <code class="docutils literal notranslate"><span class="pre">bin/taurenmd</span> <span class="pre">-h</span></code> option to get updated help on the script usage:</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -213,9 +216,6 @@ Current libraries available: MDTraj
 </table>
 <p><code class="docutils literal notranslate"><span class="pre">taurenmd</span></code> can be used to run a Tauren-MD configuration file, you can use it to repeat a previous execution or to run a new one from a configured conf file. Read <a class="reference internal" href="configuration_file.html#taurenconfig"><span class="std std-ref">here</span></a> how to configure a Tauren-MD configuration file.</p>
 <p><code class="docutils literal notranslate"><span class="pre">-traj</span></code> and <code class="docutils literal notranslate"><span class="pre">-top</span></code> arguments can be given in-line or a path to those files can be added to the configuration file as well.</p>
-</div>
-<div class="section" id="examples">
-<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
 <div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>$ bin/taurenmd -c &lt;PATH TO CONFIG FILE&gt; -traj &lt;PATH TO TRAJECTORY FILE&gt; -top &lt;PATH TO TOPOLOGY FILE&gt;
 </pre></div>
 </div>

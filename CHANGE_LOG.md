@@ -1,3 +1,6 @@
+# Index
+
+- [v0.5.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.5.1)
 - [v0.5.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.5.0)
 - [v0.4.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.4.1)
 - [v0.4.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.4.0)
@@ -8,6 +11,12 @@
 - [v0.1.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.1.1)
 - [v0.0.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.0.0)
 
+
+# v0.5.1
+[Back to Index][1]
+
+- implemented `align_traj` method
+- improved `slicing` methods and distribution
 
 # v0.5.0
 
@@ -75,3 +84,6 @@ Improves and establishes general architecture and design [#5](https://github.com
 v0 is a simple yet production ready version, though open to refactor and redesign.
 
 **Hello World**
+
+
+![1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#Index)
