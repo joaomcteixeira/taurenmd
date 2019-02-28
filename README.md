@@ -1,6 +1,6 @@
 # Tauren-MD
 
-[![DOI](https://zenodo.org/badge/152575798.svg)](https://zenodo.org/badge/latestdoi/152575798)
+[![DOI](https://zenodo.org/badge/152575798.svg)](https://zenodo.org/record/2579633#.XHepM4Vw30o)
 
 _This is an experimental project under strong development, expect small to drastic changes and updates in its structure, architecture and interfaces._  
 _version 0.5.1_
