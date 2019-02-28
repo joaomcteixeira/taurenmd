@@ -10,8 +10,9 @@ Load
 Tauren Trajectory
 -----------------
 
-.. automodule:: tauren.tauren
+.. autoclass:: tauren.tauren.TaurenTraj
     :members:
+    
 
 Produce
 -------
