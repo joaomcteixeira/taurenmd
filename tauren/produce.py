@@ -13,6 +13,9 @@ def rmsds_separated_chains(
         plot_rmsd_individual_chains_one_subplot=False,
         **kwargs
         ):
+    """
+    Execute routines related to RMSDs of separated chains.
+    """
         
     key = taurentraj.calc_rmsds_separated_chains(**calc_rmsds_separated_chains)
     
@@ -65,6 +68,9 @@ def rmsds_combined_chains(
         plot_rmsd_combined_chains=False,
         **kwargs
         ):
+    """
+    Execute routines related to RMSDs of combined chains.
+    """
         
     key = taurentraj.calc_rmsds_combined_chains(**calc_rmsds_combined_chains)
     

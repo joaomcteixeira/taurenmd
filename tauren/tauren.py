@@ -29,7 +29,7 @@ import mdtraj
 import MDAnalysis as mda
 from MDAnalysis.analysis import align as mdaalign
 from MDAnalysis.analysis.rms import RMSD as mdaRMSD
-#from MDAnalysis.analysis.rms import rmsd as mdarmsd
+# from MDAnalysis.analysis.rms import rmsd as mdarmsd
 
 from tauren import logger
 
@@ -907,7 +907,6 @@ class TaurenMDAnalysis(TaurenTraj):
     def __init__(self, trajectory, topology):
         
         self.universe = mda.Universe(topology, trajectory)
-        #self.trajectory = self.universe.trajectory
         self.topology = mda.Universe(topology)
         
         super().__init__()
@@ -975,23 +974,6 @@ class TaurenMDAnalysis(TaurenTraj):
             )
         
         alignment.run()
-        
-        # self.trajectory = self.universe.trajectory
-        
-        # mdaalign.alignto(
-            # self.universe,
-            # self.topology,
-            # weights="mass",
-            # )
-            
-        # self.trajectory = self.universe.trajectory
-        
-        # mobile0 = self.universe.atoms.positions - self.universe.atoms.center_of_mass()
-        # ref0 = self.topology.atoms.positions - self.topology.atoms.center_of_mass()
-        
-        # R, rmsd = mdaalign.rotation_matrix(mobile0, ref0)
-        
-        # print(rmsd)
         
         return
     

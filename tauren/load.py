@@ -136,7 +136,7 @@ def load_traj(
     traj_file : str
         Trajectory file name (path)
         Formats allowed: ".xtc", ".nc", ".trr", ".h5", ".pdb",
-            ".binpos", ".dcd".
+        ".binpos", ".dcd".
         
     topo_file : dstr
         Topology file name (path).
