@@ -19,6 +19,7 @@
 - improved `slicing` methods and distribution
 
 # v0.5.0
+[Back to Index][1]
 
 - Improve code architecture in `tauren.tauren`:
   - `TaurenTraj` is not ABC class.
@@ -28,11 +29,13 @@
 - `reduce_equidistant` deprecated in favor of `slice`.
 
 # v0.4.1
+[Back to Index][1]
 
 - Actions in config JSON file can be commented with `#` for deactivation.
 - Updated `core` module with docstrings.
 
 # v0.4.0
+[Back to Index][1]
 
 - Refactored Tauren module's architecture:
   - prepared polymorphism-based interface,
@@ -42,17 +45,20 @@
   - the current version is considered beta version until publication, therefore it was restarted to 0 (zero) and does not follow the [_major_[_minor_[_bug_]] structure, instead, [_0_[_major_[_minor/bug_]].
 
 # v0.3.2
+[Back to Index][1]
 
 - Added data export function `communicate.export.save_data_array_to_file()`:
   - now each plotting routine exports used data in .csv files.
 
 # v0.3.1
+[Back to Index][1]
 
 - improved names of RMSD plotting functions:
 - Added RMSD plotting functions to configuration file.
 
 
 # v0.3.0
+[Back to Index][1]
 
 -Added three plotting routines to plot RMSDs:
     - combined RMSDs,
@@ -60,6 +66,7 @@
     - RMSDs per chain in single subplots.
 
 # v0.2.0
+[Back to Index][1]
 
 Improves and establishes general architecture and design [#5](https://github.com/joaomcteixeira/Tauren-MD/pull/5):
 
@@ -76,14 +83,16 @@ Improves and establishes general architecture and design [#5](https://github.com
 - adds CHANGE_LOG.
 
 # v0.1.1
+[Back to Index][1]
 
 - Updates installer [#2](https://github.com/joaomcteixeira/Tauren-MD/pull/2)
 
 # v0.0.0
+[Back to Index][1]
 
 v0 is a simple yet production ready version, though open to refactor and redesign.
 
 **Hello World**
 
 
-![1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#Index)
+[1]: https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#Index
