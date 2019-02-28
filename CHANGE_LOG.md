@@ -1,15 +1,15 @@
 # Index
 
-- [v0.5.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.5.1)
-- [v0.5.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.5.0)
-- [v0.4.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.4.1)
-- [v0.4.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.4.0)
-- [v0.3.2](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.3.2)
-- [v0.3.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.3.1)
-- [v0.3.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.3.0)
-- [v0.2.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.2.0)
-- [v0.1.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.1.1)
-- [v0.0.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v0.0.0)
+- [v0.5.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v051)
+- [v0.5.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v050)
+- [v0.4.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v041)
+- [v0.4.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v040)
+- [v0.3.2](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v032)
+- [v0.3.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v031)
+- [v0.3.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v030)
+- [v0.2.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v020)
+- [v0.1.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v011)
+- [v0.0.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v000)
 
 
 # v0.5.1
