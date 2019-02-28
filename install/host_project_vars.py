@@ -59,4 +59,10 @@ new_version_url = \
 new_version_zip = "master.zip"
 
 # folders to remove during the update
-folders_to_remove = ["install", "tauren", ".github"]
+folders_to_remove = [
+    "install",
+    "tauren",
+    ".github",
+    "docs",
+    "tests",
+    ]

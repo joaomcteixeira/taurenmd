@@ -1,5 +1,6 @@
 # Index
 
+- [v0.5.2](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v052)
 - [v0.5.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v051)
 - [v0.5.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v050)
 - [v0.4.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v041)
@@ -11,6 +12,12 @@
 - [v0.1.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v011)
 - [v0.0.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v000)
 
+
+# v0.5.2
+[Back to Index][1]
+
+- corrected bug in `bin/update` script
+  - now updates `docs` folder.
 
 # v0.5.1
 [Back to Index][1]
