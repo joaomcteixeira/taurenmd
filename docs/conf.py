@@ -24,9 +24,9 @@ copyright = '2019, João M.C. Teixeira'
 author = 'João M.C. Teixeira'
 
 # The short X.Y version
-version = '0.4.1'
+version = '0.5.1'
 # The full version, including alpha/beta/rc tags
-release = '0.4.1-034795b'
+release = '0.5.1-da41477'
 
 
 # -- General configuration ---------------------------------------------------
