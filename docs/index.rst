@@ -9,7 +9,7 @@ Welcome to Tauren-MD's documentation!
 =====================================
 
 .. image:: https://zenodo.org/badge/152575798.svg
-    :target: https://zenodo.org/record/2579633#.XHepM4Vw30o
+   :target: https://zenodo.org/badge/latestdoi/152575798
 
 Tauren-MD is an interface that streamlines analisis routines for Molecular Dynamics (MD).
 
