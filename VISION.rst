@@ -1,5 +1,5 @@
-Vision
-======
+Project Vision
+==============
 
 Problem definition
 ------------------
@@ -41,6 +41,11 @@ rate.
 
 Implementation
 --------------
+
+Versioning
+~~~~~~~~~~
+
+Tauren-MD follows `semantic version rules`_.
 
 User Requirements
 ~~~~~~~~~~~~~~~~~
@@ -166,3 +171,4 @@ General project organization:
 .. _nglview: https://github.com/arose/nglview
 .. _OpenMM: https://github.com/pandegroup/openmm
 .. _Tree-of-Life project: https://github.com/joaomcteixeira/Tree-of-Life
+.. _semantic version rules: https://semver.org/
