@@ -33,6 +33,29 @@ If you have cloned this repository or downloaded any of the previous `releases`_
 .. _`project's website`: https://joaomcteixeira.github.io/Tauren-MD/
 .. _releases: https://github.com/joaomcteixeira/Tauren-MD/releases
 
+Citing
+------
+
+Cite Tauren-MD project as:
+
+- João M.C. Teixeira. (2019, February 28). joaomcteixeira/Tauren-MD. Zenodo. http://doi.org/10.5281/zenodo.2579632.
+
+Or, if you want to site a specific version you have used, refer to the `DOI of that version`, for example:
+
+- João M.C. Teixeira. (2019, February 28). joaomcteixeira/Tauren-MD: v0.5.2 (Version v0.5.2). Zenodo. http://doi.org/10.5281/zenodo.2580076
+
+You **SHOULD** by all means cite the Molecular Dynamics (MD) analysis libraries upon which Tauren-MD wraps. For example, by selecting ``"mdtraj"`` as ``"traj_type"`` in the `configuration file`_, then you should also city MDTraj; the same applies for any other library Tauren-MD uses and which you have chosen to use. How to cite:
+
+- `MDTraj <mdtcite>`_
+- `MDAnalysis <mdacite>`_
+- `OpenMM <ommcite>`_
+
+.. _`DOI of that version`: https://zenodo.org/record/2580076#.XH_8jYVw30o
+.. _`mdtcite`: https://github.com/mdtraj/mdtraj#citation-
+.. _`mdacite`: https://www.mdanalysis.org/pages/citations/
+.. _`ommcite`: https://simtk.org/plugins/publications/index.php/?group_id=161
+.. _`configuration file`: https://joaomcteixeira.github.io/Tauren-MD/taurenhtml/html/rstfiles/configuration_file.html#trajectory-type
+
 License
 -------
 
