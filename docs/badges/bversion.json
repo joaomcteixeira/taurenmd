@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "label": "hello",
-  "message": "sweet world",
+  "label": "version",
+  "message": "0.5.2",
   "color": "orange"
 }
