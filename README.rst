@@ -28,6 +28,8 @@ Documentation
 
 The complete Tauren-MD documentation and project description is available on the `project's website`_.
 
+.. _project's website: https://joaomcteixeira.github.io/Tauren-MD/
+
 License
 -------
 
@@ -36,5 +38,4 @@ The entire Tauren-MD code comes with no liability and is licensed under the `GPL
 .. image:: https://raw.githubusercontent.com/joaomcteixeira/Tauren-MD/master/docs/img/gpl3_logo.png
     :target: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-.. _project's website: https://joaomcteixeira.github.io/Tauren-MD/
 .. _GPL-3.0: https://github.com/joaomcteixeira/Tauren-MD/blob/master/LICENSE
