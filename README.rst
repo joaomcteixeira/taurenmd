@@ -4,7 +4,7 @@ Tauren-MD
 .. image:: https://zenodo.org/badge/152575798.svg
    :target: https://zenodo.org/badge/latestdoi/152575798
 
-*`version`_: 0.5.2*
+`version`_: 0.5.2
 
 **Tauren-MD is an interface that streamlines analisis routines for Molecular Dynamics.**
 
@@ -25,16 +25,15 @@ The complete Tauren-MD documentation and project description is available on the
 License
 -------
 
-The entire Tauren-MD code comes with no liability and is licensed under the `GPL-3.0`.
+The entire Tauren-MD code comes with no liability and is licensed under the `GPL-3.0`_.
 
-.. image:: https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/GPLv3_Logo.svg/1200px-GPLv3_Logo.svg.png
-    :height: 37px
-    :widht: 75px
+.. image:: https://raw.githubusercontent.com/joaomcteixeira/Tauren-MD/master/docs/img/gpl3_logo.png
     :target: https://www.gnu.org/licenses/gpl-3.0.en.html
 
 .. _version: https://semver.org/#semantic-versioning-200
 .. _MDTraj: https://github.com/mdtraj/mdtraj
 .. _MDAnalysis: https://www.mdanalysis.org/
 .. _OpenMM: https://github.com/pandegroup/openmm
+.. _matplotlib: https://matplotlib.org/
 .. _project's website: https://joaomcteixeira.github.io/Tauren-MD/
 .. _GPL-3.0: https://github.com/joaomcteixeira/Tauren-MD/blob/master/LICENSE
