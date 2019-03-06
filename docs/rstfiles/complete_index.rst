@@ -7,8 +7,11 @@ Complete Index
    :maxdepth: 4
     
    vision
+   download
    installation
    run_taurenmd
    configuration_file
    modules
    license
+   citing
+   versioning

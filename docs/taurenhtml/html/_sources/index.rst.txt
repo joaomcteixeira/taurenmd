@@ -8,27 +8,23 @@
 Welcome to Tauren-MD's documentation!
 =====================================
 
-.. image:: https://zenodo.org/badge/152575798.svg
-   :target: https://zenodo.org/badge/latestdoi/152575798
-
-Tauren-MD is an interface that streamlines analisis routines for Molecular Dynamics (MD).
-
-Tauren-MD was designed to facilitate the usage of scientific MD analysis libraries to non-developer users, though it can be very useful also for the proficient Pythonistas out there. 
-
-Tauren-MD wraps around high performance MD analysis libraries, such as: :mdtraj:`MDTraj <mdtraj>`, :mdanalysis:`MDAnalysis <>`, :pandegroup:`OpenMM <openmm>` (and implementing :prody:`ProDy <>` and others); and it contains its own routines for data representation and export, such as curated plotting templates through :matplotlib:`matplotlib <>`.
-
-In this way, Tauren-MD attempts to be an *à la carte* menu where the user can easily chose from a predifined list of *actions* what she/he wants from hers/his trajectories: a configuration file can be easily setup with the desired routines and executed via the `taurenmd` executable file (created after installation).
+.. include:: ../README.rst
+    :start-after: =========
+    :end-before: Documentation
 
 .. toctree::
    :maxdepth: 1
    :caption: Contents:
     
    rstfiles/vision
+   rstfiles/download
    rstfiles/installation
    rstfiles/run_taurenmd
    rstfiles/configuration_file
    rstfiles/modules
    rstfiles/license
+   rstfiles/citing
+   rstfiles/versioning
 
 Special Contents
 ~~~~~~~~~~~~~~~~

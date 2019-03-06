@@ -16,6 +16,7 @@
 # import sys
 # sys.path.insert(0, os.path.abspath(os.path.join(os.pardir, "tauren")))
 
+from tauren import version as tversion
 
 # -- Project information -----------------------------------------------------
 
@@ -24,9 +25,9 @@ copyright = '2019, João M.C. Teixeira'
 author = 'João M.C. Teixeira'
 
 # The short X.Y version
-version = '0.5.2'
+version = tversion.__version__
 # The full version, including alpha/beta/rc tags
-release = '0.5.2'
+release = 'none'
 
 
 # -- General configuration ---------------------------------------------------

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Tauren-MD configuration file &mdash; Tauren-MD 0.5.2 documentation</title>
+  <title>Tauren-MD configuration file &mdash; Tauren-MD none documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.5.2
+                0.5.3
               </div>
             
           
@@ -85,7 +85,8 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="vision.html">Vision</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vision.html">Project Vision</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Download</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="run_taurenmd.html">Run Tauren-MD</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Tauren-MD configuration file</a><ul>
@@ -127,6 +128,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Tauren-MD Library Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing.html">Citing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Versioning</a></li>
 </ul>
 
             
@@ -196,7 +199,7 @@
 <div class="section" id="how-to-use-the-conf-file">
 <h2>How to use the conf file<a class="headerlink" href="#how-to-use-the-conf-file" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference external" href="https://github.com/joaomcteixeira/Tauren-MD/blob/master/tauren_config.json">Tauren-MD configuration file</a>, is a <a class="reference external" href="https://en.wikipedia.org/wiki/JSON">JSON</a>
-dictionary composed of three main blocks, in the follwing form:</p>
+dictionary composed of three main blocks, in the following form:</p>
 <div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;input_data&quot;</span><span class="p">:</span> <span class="p">{},</span>
     <span class="s2">&quot;traj_type&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -229,7 +232,12 @@ prevail.</p>
 </div>
 <div class="section" id="trajectory-type">
 <span id="trajtype"></span><h3>Trajectory Type<a class="headerlink" href="#trajectory-type" title="Permalink to this headline">¶</a></h3>
-<p>Selects with which MD analysis tool the trajectory will be handled. Currently, it is supported <a class="reference external" href="https://github.com/mdtraj/mdtraj">MDTraj</a> with the keywork <code class="docutils literal notranslate"><span class="pre">&quot;mdtraj&quot;</span></code>:</p>
+<p>Selects which MD analysis library will Tauren-MD handle. Currently available libraries are:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/mdtraj/mdtraj">MDTraj</a> with the keyword <code class="docutils literal notranslate"><span class="pre">&quot;mdtraj&quot;</span></code>.</li>
+<li><a class="reference external" href="https://www.mdanalysis.org/mdanalysis">MDAnalysis</a> with keyword <code class="docutils literal notranslate"><span class="pre">&quot;mdanalysis&quot;</span></code>.</li>
+</ul>
+<p>for example:</p>
 <div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;traj_type&quot;</span><span class="p">:</span> <span class="s2">&quot;mdtraj&quot;</span><span class="p">,</span>
 </pre></div>
 </div>
@@ -450,7 +458,7 @@ wish to read first the what was stated in the above sections).</p>
 </div>
 <div class="section" id="align-trajectory">
 <h4>align trajectory<a class="headerlink" href="#align-trajectory" title="Permalink to this headline">¶</a></h4>
-<p><cite>align_traj</cite> is available only for <cite>mdanalysis</cite> routines.</p>
+<p><code class="docutils literal notranslate"><span class="pre">align_traj</span></code> is available only when choosing <code class="docutils literal notranslate"><span class="pre">mdanalysis</span></code> as <code class="docutils literal notranslate"><span class="pre">traj_type</span></code>.</p>
 <div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;align_traj&quot;</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">&quot;weights&quot;</span><span class="p">:</span> <span class="s2">&quot;mass&quot;</span><span class="p">,</span>
     <span class="s2">&quot;inplace&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>

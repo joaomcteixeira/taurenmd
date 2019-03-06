@@ -7,7 +7,7 @@ How to use the conf file
 ------------------------
 
 The :taurenfiles:`Tauren-MD configuration file <tauren_config.json>`, is a :wiki:`JSON <JSON>`
-dictionary composed of three main blocks, in the follwing form:
+dictionary composed of three main blocks, in the following form:
 
 .. code:: json
 
@@ -50,7 +50,12 @@ prevail.
 Trajectory Type
 ~~~~~~~~~~~~~~~
 
-Selects with which MD analysis tool the trajectory will be handled. Currently, it is supported :mdtraj:`MDTraj <mdtraj>` with the keywork ``"mdtraj"``:
+Selects which MD analysis library will Tauren-MD handle. Currently available libraries are:
+
+- :mdtraj:`MDTraj <mdtraj>` with the keyword ``"mdtraj"``.
+- :mdanalysis:`MDAnalysis <mdanalysis>` with keyword ``"mdanalysis"``.
+
+for example:
 
 .. code:: json
     
@@ -301,7 +306,7 @@ slice
 align trajectory
 ^^^^^^^^^^^^^^^^
 
-`align_traj` is available only for `mdanalysis` routines.
+``align_traj`` is available only when choosing ``mdanalysis`` as ``traj_type``.
 
 .. code:: json
 
