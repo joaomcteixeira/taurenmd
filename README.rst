@@ -17,6 +17,12 @@ Tauren-MD wraps around high performance MD analysis libraries, such as: `MDTraj`
 
 In this way, Tauren-MD attempts to be an *à la carte* menu where the user can easily chose from a predifined list of *actions* what she/he wants from hers/his trajectories: a configuration file can be easily setup with the desired routines and executed via the ``taurenmd`` executable file (created after installation).
 
+.. _version: https://semver.org/#semantic-versioning-200
+.. _MDTraj: https://github.com/mdtraj/mdtraj
+.. _MDAnalysis: https://www.mdanalysis.org/
+.. _OpenMM: https://github.com/pandegroup/openmm
+.. _matplotlib: https://matplotlib.org/
+
 Documentation
 -------------
 
@@ -30,10 +36,5 @@ The entire Tauren-MD code comes with no liability and is licensed under the `GPL
 .. image:: https://raw.githubusercontent.com/joaomcteixeira/Tauren-MD/master/docs/img/gpl3_logo.png
     :target: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-.. _version: https://semver.org/#semantic-versioning-200
-.. _MDTraj: https://github.com/mdtraj/mdtraj
-.. _MDAnalysis: https://www.mdanalysis.org/
-.. _OpenMM: https://github.com/pandegroup/openmm
-.. _matplotlib: https://matplotlib.org/
 .. _project's website: https://joaomcteixeira.github.io/Tauren-MD/
 .. _GPL-3.0: https://github.com/joaomcteixeira/Tauren-MD/blob/master/LICENSE
