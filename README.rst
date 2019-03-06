@@ -36,15 +36,15 @@ If you have cloned this repository or downloaded any of the previous `releases`_
 Citing
 ------
 
-Cite Tauren-MD project as:
+Cite **Tauren-MD** project as:
 
-- João M.C. Teixeira. (2019, February 28). joaomcteixeira/Tauren-MD. Zenodo. http://doi.org/10.5281/zenodo.2579632.
+- João M.C. Teixeira. joaomcteixeira/Tauren-MD. Zenodo. http://doi.org/10.5281/zenodo.2579632.
 
-Or, if you want to site a specific version you have used, refer to the `DOI of that version`, for example:
+Or, if you want to cite a specific version you have used, refer to the `DOI of that version`, for example:
 
 - João M.C. Teixeira. (2019, February 28). joaomcteixeira/Tauren-MD: v0.5.2 (Version v0.5.2). Zenodo. http://doi.org/10.5281/zenodo.2580076
 
-You **SHOULD** by all means cite the Molecular Dynamics (MD) analysis libraries upon which Tauren-MD wraps. For example, by selecting ``"mdtraj"`` as ``"traj_type"`` in the `configuration file`_, then you should also city MDTraj; the same applies for any other library Tauren-MD uses and which you have chosen to use. How to cite:
+You **SHOULD** by all means cite the Molecular Dynamics (MD) analysis libraries upon which Tauren-MD wraps. For example, by selecting ``"mdtraj"`` as ``"traj_type"`` in the `configuration file`_, then you should also cite MDTraj; the same applies for any other library Tauren-MD uses and which you have chosen to use. Bellow a list of links on how to cite:
 
 - `MDTraj <mdtcite>`_
 - `MDAnalysis <mdacite>`_
