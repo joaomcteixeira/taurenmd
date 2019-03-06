@@ -26,10 +26,12 @@ In this way, Tauren-MD attempts to be an *à la carte* menu where the user can e
 Documentation
 -------------
 
-The complete and latest Tauren-MD project description and full documentation is available `online`_. If you have cloned this repository or downloaded any of the previous `releases_` you can access the corresponding version documentation offline, simply open the ``index.html`` file stored in ``docs`` folder with your favourite web-browser.
+The complete and latest Tauren-MD project description and full documentation is available *online* at the `project's website`_.
 
-.. _online: https://joaomcteixeira.github.io/Tauren-MD/
-.. _releases_: https://github.com/joaomcteixeira/Tauren-MD/releases
+If you have cloned this repository or downloaded any of the previous `releases`_ you can access the corresponding version documentation *offline*, simply open the ``index.html`` file stored in ``docs`` folder with your favourite web-browser.
+
+.. _`project's website`: https://joaomcteixeira.github.io/Tauren-MD/
+.. _releases: https://github.com/joaomcteixeira/Tauren-MD/releases
 
 License
 -------
