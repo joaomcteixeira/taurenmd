@@ -6,16 +6,16 @@ Tauren-MD
 
 `version`_: 0.5.2
 
-**Tauren-MD is an interface that streamlines analisis routines for Molecular Dynamics.**
+**Tauren-MD is an interface that streamlines analysis routines for Molecular Dynamics.**
 
 Description
 -----------
 
-Tauren-MD was designed to facilitate the usage of scientific MD analysis libraries to non-developer users, though it can be very useful also for the proficient Pythonistas out there. 
+Tauren-MD was designed to facilitate the usage of scientific MD analysis libraries to non-developer users, though it can be very useful also for the proficient Pythonistas out there.
 
 Tauren-MD wraps around high performance MD analysis libraries, such as: `MDTraj`_, `MDAnalysis`_, `OpenMM`_ (and implementing others...); and it contains its own routines for data representation and export, such as curated plotting templates through `matplotlib`_.
 
-In this way, Tauren-MD attempts to be an *à la carte* menu where the user can easily chose from a predifined list of *actions* what she/he wants from hers/his trajectories: a configuration file can be easily setup with the desired routines and executed via the ``taurenmd`` executable file (created after installation).
+In this way, Tauren-MD attempts to be an *à la carte* menu where the user can easily chose from a predefined list of *actions* what she/he wants from hers/his trajectories: a configuration file can be easily setup with the desired routines and executed via the ``taurenmd`` executable file (created after installation).
 
 .. _version: https://semver.org/#semantic-versioning-200
 .. _MDTraj: https://github.com/mdtraj/mdtraj
@@ -44,17 +44,14 @@ Or, if you want to cite a specific version you have used, refer to the `DOI of t
 
 - João M.C. Teixeira. (2019, February 28). joaomcteixeira/Tauren-MD: v0.5.2 (Version v0.5.2). Zenodo. http://doi.org/10.5281/zenodo.2580076
 
-You **SHOULD** by all means cite the Molecular Dynamics (MD) analysis libraries upon which Tauren-MD wraps. For example, by selecting ``"mdtraj"`` as ``"traj_type"`` in the `configuration file`_, then you should also cite MDTraj; the same applies for any other library Tauren-MD uses and which you have chosen to use. Bellow a list of links on how to cite:
-
-- `MDTraj <mdtcite>`_
-- `MDAnalysis <mdacite>`_
-- `OpenMM <ommcite>`_
+You **SHOULD** by all means cite the Molecular Dynamics (MD) analysis libraries upon which Tauren-MD wraps. For example, by selecting ``"mdtraj"`` as ``"traj_type"`` in the `configuration file`_, then you should also cite MDTraj; the same applies for any other library Tauren-MD uses and which you have chosen to use.
 
 .. _`DOI of that version`: https://zenodo.org/record/2580076#.XH_8jYVw30o
-.. _`mdtcite`: https://github.com/mdtraj/mdtraj#citation-
-.. _`mdacite`: https://www.mdanalysis.org/pages/citations/
-.. _`ommcite`: https://simtk.org/plugins/publications/index.php/?group_id=161
 .. _`configuration file`: https://joaomcteixeira.github.io/Tauren-MD/taurenhtml/html/rstfiles/configuration_file.html#trajectory-type
+
+`Please read further`_ on more details on how to cite Tauren-MD's dependencies.
+
+.. _`Please read further`: https://joaomcteixeira.github.io/Tauren-MD/taurenhtml/html/rstfiles/citing.html
 
 License
 -------
@@ -65,3 +62,4 @@ The entire Tauren-MD code comes with no liability and is licensed under the `GPL
     :target: https://www.gnu.org/licenses/gpl-3.0.en.html
 
 .. _GPL-3.0: https://github.com/joaomcteixeira/Tauren-MD/blob/master/LICENSE
+
