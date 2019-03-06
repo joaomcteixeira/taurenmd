@@ -1,10 +1,13 @@
 Tauren-MD
 =========
 
-.. image:: https://zenodo.org/badge/152575798.svg
+|doi| |version|
+
+.. |doi| image:: https://img.shields.io/badge/DOI-10.5281%2Fzenodo.2579632-informational.svg
    :target: https://zenodo.org/badge/latestdoi/152575798
 
-`version`_: 0.5.2
+.. |version| image:: https://img.shields.io/badge/version-0.5.2-orange.svg
+   :target: https://github.com/joaomcteixeira/Tauren-MD/releases
 
 **Tauren-MD is an interface that streamlines analysis routines for Molecular Dynamics.**
 
@@ -40,11 +43,11 @@ Cite **Tauren-MD** project as:
 
 - João M.C. Teixeira. joaomcteixeira/Tauren-MD. Zenodo. http://doi.org/10.5281/zenodo.2579632.
 
-Or, if you want to cite a specific version you have used, refer to the `DOI of that version`, for example:
+Or, if you want to cite a specific version you have used, refer to the `DOI of that version`_, for example:
 
 - João M.C. Teixeira. (2019, February 28). joaomcteixeira/Tauren-MD: v0.5.2 (Version v0.5.2). Zenodo. http://doi.org/10.5281/zenodo.2580076
 
-You **SHOULD** by all means cite the Molecular Dynamics (MD) analysis libraries upon which Tauren-MD wraps. For example, by selecting ``"mdtraj"`` as ``"traj_type"`` in the `configuration file`_, then you should also cite MDTraj; the same applies for any other library Tauren-MD uses and which you have chosen to use.
+You **SHOULD** by all means cite the Molecular Dynamics (MD) analysis libraries upon which Tauren-MD wraps. For example, by selecting ``"mdtraj"`` as ``"traj_type"`` in the `configuration file`_ you are making use of it, therefore you should also cite MDTraj along with Tauren-MD; the same applies for any other library Tauren-MD uses and which you have chosen to use.
 
 .. _`DOI of that version`: https://zenodo.org/record/2580076#.XH_8jYVw30o
 .. _`configuration file`: https://joaomcteixeira.github.io/Tauren-MD/taurenhtml/html/rstfiles/configuration_file.html#trajectory-type
