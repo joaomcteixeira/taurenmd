@@ -57,7 +57,7 @@
             
             
               <div class="version">
-                0.5.3
+                0.6.0
               </div>
             
           
@@ -157,26 +157,27 @@
   <h1>Source code for tauren.plot</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Tauren-MD Plotting Functions.</span>
-
-<span class="sd">Copyright © 2018-2019 Tauren-MD Project</span>
-
-<span class="sd">Contributors to this file:</span>
-<span class="sd">- João M.C. Teixeira (https://github.com/joaomcteixeira)</span>
-
-<span class="sd">Tauren-MD is free software: you can redistribute it and/or modify</span>
-<span class="sd">it under the terms of the GNU General Public License as published by</span>
-<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
-<span class="sd">(at your option) any later version.</span>
-
-<span class="sd">Tauren-MD is distributed in the hope that it will be useful,</span>
-<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
-<span class="sd">GNU General Public License for more details.</span>
-
-<span class="sd">You should have received a copy of the GNU General Public License</span>
-<span class="sd">along with Tauren-MD. If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># Copyright © 2018-2019 Tauren-MD Project</span>
+<span class="c1">#</span>
+<span class="c1"># Tauren-MD is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># Tauren-MD is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with Tauren-MD. If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1"># Contributors to this file:</span>
+<span class="c1"># - João M.C. Teixeira (https://github.com/joaomcteixeira)</span>
 <span class="kn">import</span> <span class="nn">itertools</span> <span class="k">as</span> <span class="nn">it</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">wraps</span>
 
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">colors</span> <span class="k">as</span> <span class="n">mcolors</span>
@@ -187,6 +188,35 @@
 
 <span class="n">_msg_fig_saved</span> <span class="o">=</span> <span class="s2">&quot;* Saved figure: </span><span class="si">{}</span><span class="s2">&quot;</span>
 
+
+<span class="k">def</span> <span class="nf">_check_data</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        
+        <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span> \
+                <span class="ow">or</span> <span class="ow">not</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;* Data Type Error * &quot;</span>
+                <span class="n">f</span><span class="s2">&quot;</span><span class="si">{func.__name__}</span><span class="s2"> receives np.ndarrays as&quot;</span>
+                <span class="s2">&quot; second data parameter.&quot;</span>
+                <span class="n">f</span><span class="s2">&quot; {type(args[1])} given.&quot;</span>
+                <span class="p">)</span>
+            <span class="k">return</span>
+        
+        <span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;* Data Error *&quot;</span>
+                <span class="n">f</span><span class="s2">&quot; No data given in </span><span class="si">{func.__name__}</span><span class="s2"> function.&quot;</span>
+                <span class="p">)</span>
+            <span class="k">return</span>
+        
+        <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">result</span>
+    
+    <span class="k">return</span> <span class="n">wrapper</span>
+        
 
 <span class="k">def</span> <span class="nf">_calc_fig_size</span><span class="p">(</span>
         <span class="n">nsubplots</span><span class="p">,</span>
@@ -232,7 +262,8 @@
     <span class="k">return</span> <span class="n">fs</span>
 
 
-<div class="viewcode-block" id="rmsd_chain_per_subplot"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.plot.rmsd_chain_per_subplot">[docs]</a><span class="k">def</span> <span class="nf">rmsd_chain_per_subplot</span><span class="p">(</span>
+<div class="viewcode-block" id="rmsd_chain_per_subplot"><a class="viewcode-back" href="../../rstfiles/module_plotting.html#tauren.plot.rmsd_chain_per_subplot">[docs]</a><span class="nd">@_check_data</span>
+<span class="k">def</span> <span class="nf">rmsd_chain_per_subplot</span><span class="p">(</span>
         <span class="n">x_data</span><span class="p">,</span>
         <span class="n">y_data</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -310,15 +341,17 @@
         <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
         <span class="p">)</span>
     
-    <span class="n">axs</span> <span class="o">=</span> <span class="n">axs</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">axs</span> <span class="o">=</span> <span class="n">axs</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">axs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">axs</span><span class="p">])</span>
+        <span class="c1"># pass</span>
     
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.995</span><span class="p">,</span> <span class="mf">0.985</span><span class="p">])</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     
     <span class="n">colors_it</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
-    
-    <span class="c1"># avoids iterator recycling as in it.cycle</span>
-    <span class="n">labels_it</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
     
     <span class="n">max_rmsd</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">chain_rmsds</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">y_data</span><span class="p">):</span>
@@ -326,7 +359,7 @@
         <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
             <span class="n">x_data</span><span class="p">,</span>
             <span class="n">chain_rmsds</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="nb">next</span><span class="p">(</span><span class="n">labels_it</span><span class="p">),</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span>
             <span class="n">color</span><span class="o">=</span><span class="nb">next</span><span class="p">(</span><span class="n">colors_it</span><span class="p">),</span>
             <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
             <span class="p">)</span>
@@ -374,7 +407,8 @@
     <span class="k">return</span></div>
 
 
-<div class="viewcode-block" id="rmsd_combined_chains"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.plot.rmsd_combined_chains">[docs]</a><span class="k">def</span> <span class="nf">rmsd_combined_chains</span><span class="p">(</span>
+<div class="viewcode-block" id="rmsd_combined_chains"><a class="viewcode-back" href="../../rstfiles/module_plotting.html#tauren.plot.rmsd_combined_chains">[docs]</a><span class="nd">@_check_data</span>
+<span class="k">def</span> <span class="nf">rmsd_combined_chains</span><span class="p">(</span>
         <span class="n">x_data</span><span class="p">,</span>
         <span class="n">y_data</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -429,7 +463,7 @@
 <span class="sd">        the file name.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;* Plotting combined Chain RMSDs...&quot;</span><span class="p">)</span>
-        
+    
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.995</span><span class="p">,</span> <span class="mf">0.985</span><span class="p">])</span>
@@ -478,7 +512,8 @@
     <span class="k">return</span></div>
 
 
-<div class="viewcode-block" id="rmsd_individual_chains_one_subplot"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.plot.rmsd_individual_chains_one_subplot">[docs]</a><span class="k">def</span> <span class="nf">rmsd_individual_chains_one_subplot</span><span class="p">(</span>
+<div class="viewcode-block" id="rmsd_individual_chains_one_subplot"><a class="viewcode-back" href="../../rstfiles/module_plotting.html#tauren.plot.rmsd_individual_chains_one_subplot">[docs]</a><span class="nd">@_check_data</span>
+<span class="k">def</span> <span class="nf">rmsd_individual_chains_one_subplot</span><span class="p">(</span>
         <span class="n">x_data</span><span class="p">,</span>
         <span class="n">y_data</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -548,18 +583,14 @@
         <span class="p">)</span>
     
     <span class="n">colors_it</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
-    
-    <span class="c1"># avoids iterator recycling as in it.cycle</span>
-    <span class="n">labels_it</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
-    
     <span class="n">max_rmsds</span> <span class="o">=</span> <span class="mi">0</span>
     
-    <span class="k">for</span> <span class="n">chain_rmsd_data</span> <span class="ow">in</span> <span class="n">y_data</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">chain_rmsd_data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">y_data</span><span class="p">):</span>
         
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
             <span class="n">x_data</span><span class="p">,</span>
             <span class="n">chain_rmsd_data</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="nb">next</span><span class="p">(</span><span class="n">labels_it</span><span class="p">),</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span>
             <span class="n">color</span><span class="o">=</span><span class="nb">next</span><span class="p">(</span><span class="n">colors_it</span><span class="p">),</span>
             <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
             <span class="p">)</span>

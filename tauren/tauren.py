@@ -1,39 +1,55 @@
 """
-TAUREN OBJECTS
-
-Copyright © 2018-2019 Tauren-MD Project
-
-Contributors to this file:
-- João M.C. Teixeira (https://github.com/joaomcteixeira)
-
-Tauren-MD is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Tauren-MD is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
+Tauren-MD trajectory objects.
 """
+# Copyright © 2018-2019 Tauren-MD Project
+#
+# Tauren-MD is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Tauren-MD is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
+#
+# Contributors to this file:
+# - João M.C. Teixeira (https://github.com/joaomcteixeira)
 import sys
 import string
-
+from collections import namedtuple
 import numpy as np
+
 from abc import ABC, abstractmethod
 
 import mdtraj
 import MDAnalysis as mda
 from MDAnalysis.analysis import align as mdaalign
 from MDAnalysis.analysis.rms import RMSD as mdaRMSD
-# from MDAnalysis.analysis.rms import rmsd as mdarmsd
 
 from tauren import logger
 
 log = logger.get_log(__name__)
+
+StorageKey = namedtuple(
+    "StorageKey",
+    [
+        "datatype",
+        "identifier",
+        "filenaming",
+        ],
+    )
+
+StorageData = namedtuple(
+    "StorageData",
+    [
+        "columns",
+        "data",
+        ],
+    )
 
 
 class TaurenTraj(ABC):
@@ -57,6 +73,24 @@ class TaurenTraj(ABC):
         self._rmsds_counter = 0
         
         return
+    
+    # @property
+    # @abstractmethod
+    # def trajectory(self):
+        # """
+        # Returns the trajectory object.
+        # """
+        # pass
+    
+    @property
+    @abstractmethod
+    def trajectory(self):
+        pass
+    
+    @trajectory.setter
+    def trajectory(self):
+        log.info("* CANT manually set a sliced traj. Ignoring...")
+        return None
     
     @property
     def observables(self):
@@ -125,6 +159,10 @@ class TaurenTraj(ABC):
     
     @property
     def n_frames(self):
+        """
+        The number of frames in the trajectory considering the
+        current slicing as defined by the :attr:`slice_tuple`.
+        """
         return len(self.full_frames_list[self._fslicer])
     
     @property
@@ -142,6 +180,26 @@ class TaurenTraj(ABC):
         The time step in the current slicing.
         """
         pass
+    
+    @property
+    def atom_selection(self):
+        try:
+            return self._atom_selection
+        
+        except AttributeError:
+            return "all"
+    
+    @atom_selection.setter
+    def atom_selection(self, selector):
+        """
+        String that defines the current atom selection.
+        
+        Parameters
+        ----------
+        selector : str
+            The string the defines the selector.
+        """
+        self._atom_selection = selector
     
     @property
     @abstractmethod
@@ -280,14 +338,14 @@ class TaurenTraj(ABC):
         # from library used.
         pass
     
-    def slice(
+    def frame_slice(
             self,
             start=1,
             end=None,
             step=1,
             ):
         """
-        Slices trajectory for the subsequent operations.
+        Slices trajectory in frames for the subsequent operations.
         
         Parameters
         ----------
@@ -347,6 +405,40 @@ class TaurenTraj(ABC):
         self._update_traj_slicer(start - 1, end, step)
         
         log.info("    done.")
+        
+        return
+    
+    def set_atom_selection(self, selection, **kwargs):
+        """
+        Sets the current atom selection.
+        
+        Atom selection will be used in subsequent operations.
+        
+        Parameters
+        ----------
+        selection : str
+            The selection string. This may deppend on the
+            Trajectory library type chosen for the calculation.
+        
+        Raises
+        ------
+        TypeError
+            If selection is not string.
+        """
+        
+        log.debug(f"<selection>: {selection}")
+        
+        if isinstance(selection, str):
+            self.atom_selection = selection
+        
+        elif selection is None:
+            self.atom_selection = "all"
+        
+        else:
+            raise TypeError(
+                "<selection> parameter must be STRING or None types."
+                f"'{type(selection)}' given."
+                )
         
         return
     
@@ -572,6 +664,9 @@ class TaurenTraj(ABC):
         ----------
         chains : str or list of identifiers, optional
             Defaults to "all", all chains are used.
+            BUT, previous selection is considered, therefore, chains
+            will subselect over a previous
+            :meth:`~TaurenTraj.set_atom_selection`.
             
             With str, use: "1" or comma separated identifers, "1,2,4".
             
@@ -583,7 +678,7 @@ class TaurenTraj(ABC):
             # when using **MDTraj**, identifiers are digits that
             represent chain order.
         
-        ref_frame : int
+        ref_frame : int, optional
             The reference frame for the RMSD calculation.
         
         storage_key : str, optional
@@ -636,11 +731,27 @@ class TaurenTraj(ABC):
         
         data = np.vstack((frames_array, combined_rmsds)).T
         
-        key = (storage_key, chains)
-        columns = f"frames,combined_{chains}"
-        self.observables.store(key, (columns, data))
+        chain_name_export = chains.replace(',', '-')
+        key = StorageKey(
+            datatype=storage_key,
+            identifier=(
+                f"{self.atom_selection} "
+                f"for '{chain_name_export}' chains"
+                ),
+            filenaming=(
+                f"{storage_key}"
+                f"_{self.atom_selection.replace(' ', '-')}"
+                f"_{chain_name_export.replace(' ', '-')}"
+                ),
+            )
         
-        assert isinstance(key, tuple), "key should be tuple!"
+        datatuple = StorageData(
+            columns=["frames", key.identifier],
+            data=data,
+            )
+        
+        self.observables.store(key, datatuple)
+        
         return key
     
     @staticmethod
@@ -751,7 +862,7 @@ class TaurenTraj(ABC):
             # when using **MDTraj**, identifiers are digits that
             represent chain order.
         
-        ref_frame : int
+        ref_frame : int, optional
             The reference frame for the RMSD calculation.
         
         storage_key : str, optional
@@ -803,11 +914,26 @@ class TaurenTraj(ABC):
             axis=1,
             )
         
-        key = (storage_key, ",".join(chains_headers))
-        columns = "frames," + ",".join(chains_headers)
-        self.observables.store(key, (columns, data))
+        chains_columns = list(map(
+            lambda x: f"{self.atom_selection}_{x}",
+            chains_headers
+            ))
         
-        assert isinstance(key, tuple), "key should be tuple!"
+        key = StorageKey(
+            datatype=storage_key,
+            identifier=",".join(chains_columns),
+            filenaming=(
+                f"{self.atom_selection.replace(' ','-')}"
+                f"_{'-'.join(chains_headers)}"
+                ),
+            )
+        
+        datatuple = StorageData(
+            columns=["frames", *chains_columns],
+            data=data,
+            )
+        
+        self.observables.store(key, datatuple)
         return key
     
     @abstractmethod
@@ -886,13 +1012,13 @@ class TaurenTraj(ABC):
             Defaults to nothing.
         """
         
-        log.info(f"* Exporting {key} data")
+        log.info(f"* Exporting {file_name} data")
         
-        header = f"{key}\n{header}\n{self.observables[key][0]}"
+        header = f"{key}\n{header}\n{','.join(self.observables[key].columns)}"
         
         np.savetxt(
             file_name,
-            self.observables[key][1],
+            self.observables[key].data,
             delimiter=sep,
             header=header,
             )
@@ -908,27 +1034,36 @@ class TaurenMDAnalysis(TaurenTraj):
         
         self.universe = mda.Universe(topology, trajectory)
         self.topology = mda.Universe(topology)
+        self.original_traj = self.universe.trajectory
         
         super().__init__()
         
         return
     
     def _set_full_frames_list(self):
-        super()._set_full_frames_list(self.trajectory.n_frames)
+        super()._set_full_frames_list(self.original_traj.n_frames)
     
     @property
+    def original_traj(self):
+        return self._original_traj
+    
+    @original_traj.setter
+    def original_traj(self, traj):
+        self._original_traj = traj
+    
+    @TaurenTraj.trajectory.getter
     def trajectory(self):
-        return self.universe.trajectory
+        return self.universe.select_atoms(self.atom_selection)
     
     @TaurenTraj.totaltime.getter
     def totaltime(self):
-        return self.trajectory[self._fslicer][-1].time
+        return self.original_traj[self._fslicer][-1].time
     
     @TaurenTraj.timestep.getter
     def timestep(self):
         return (
-            self.trajectory[self._fslicer][1].time
-            - self.trajectory[self._fslicer][0].time
+            self.original_traj[self._fslicer][1].time
+            - self.original_traj[self._fslicer][0].time
             )
     
     @TaurenTraj.n_residues.getter
@@ -991,7 +1126,7 @@ class TaurenMDAnalysis(TaurenTraj):
         for frame in frames_to_extract:
             
             try:
-                self.universe.atoms.write(
+                self.trajectory.write(
                     filename=pdb_name_fmt.format(frame),
                     frames=[frame],
                     file_format="PDB",
@@ -1013,9 +1148,10 @@ class TaurenMDAnalysis(TaurenTraj):
             ):
         
         # https://www.mdanalysis.org/MDAnalysisTutorial/writing.html#trajectories
-        with mda.Writer(file_name, self.universe.atoms.n_atoms) as W:
-            for ts in self.trajectory[self._fslicer]:
-                W.write(self.universe.atoms)
+        selection = self.universe.select_atoms(self.atom_selection)
+        with mda.Writer(file_name, selection.n_atoms) as W:
+            for ts in self.original_traj[self._fslicer]:
+                W.write(selection)
                 log.info(f"    exported {ts}")
         
         return
@@ -1043,12 +1179,29 @@ class TaurenMDAnalysis(TaurenTraj):
             log.info(_err)
             sys.exit(1)
         
+        final_selection = (
+            f"{self.atom_selection}"
+            f" and ({' or '.join(filtered_selectors)})"
+            )
+        
+        log.debug(f"<final_selection>: {final_selection}")
+        
+        # checks for empty selection
+        if not(self._filter_existent_selectors([final_selection])):
+            log.info(
+                "   * EMPTY SELECTION ERROR *"
+                f" The atom selection provided '{final_selection}'"
+                " gives an empty selection.\n"
+                "* Aborting calculation..."
+                )
+            sys.exit(1)
+        
         # https://www.mdanalysis.org/docs/documentation_pages/analysis/align.html#rms-fitting-tutorial
         # https://www.mdanalysis.org/docs/documentation_pages/analysis/rms.html#MDAnalysis.analysis.rms.RMSD
         R = mdaRMSD(
             self.universe,
             self.topology,
-            select=" or ".join(filtered_selectors),
+            select=final_selection,
             groupselection=None,
             ref_frame=ref_frame,
             )
@@ -1071,10 +1224,23 @@ class TaurenMDAnalysis(TaurenTraj):
         
         rmsds = np.empty((self.n_frames, len(filtered_selectors)))
         
+        subplot_has_data = []
+        
         for ii, chain_selector in enumerate(filtered_selectors):
             
-            atoms = self.universe.select_atoms(chain_selector)
-            atoms_top = self.topology.select_atoms(chain_selector)
+            final_selection = (
+                f"{self.atom_selection}"
+                f" and ({chain_selector})"
+                )
+            
+            atoms = self.universe.select_atoms(final_selection)
+            
+            if len(atoms) == 0:
+                log.debug("len of atoms is 0. Continuing...")
+                subplot_has_data.append(False)
+                continue
+            
+            atoms_top = self.topology.select_atoms(final_selection)
             
             R = mdaRMSD(
                 atoms,
@@ -1087,6 +1253,8 @@ class TaurenMDAnalysis(TaurenTraj):
             R.run(verbose=False)
             
             rmsds[:, ii] = R.rmsd[:, 2][self._fslicer]
+            
+            subplot_has_data.append(True)
         
         column_headers = list(map(
             lambda x: x.replace("segid ", ""),
@@ -1095,7 +1263,10 @@ class TaurenMDAnalysis(TaurenTraj):
         
         assert isinstance(column_headers, list), "c_selectors NOT list!"
         
-        return rmsds, column_headers
+        return (
+            rmsds[:, subplot_has_data],
+            np.array(column_headers)[subplot_has_data],
+            )
     
     def _gen_chain_list(
             self,
@@ -1143,15 +1314,43 @@ class TaurenMDTraj(TaurenTraj):
     
     def __init__(self, trajectory, topology):
         
-        self.trajectory = mdtraj.load(trajectory, top=topology)
-        self.topology = self.trajectory.topology
+        traj_ = mdtraj.load(trajectory, top=topology)
+        self.original_traj = traj_
+        self.topology = traj_.topology
         
         super().__init__()
         
         return
     
     def _set_full_frames_list(self):
-        super()._set_full_frames_list(self.trajectory.n_frames)
+        super()._set_full_frames_list(self.original_traj.n_frames)
+    
+    @property
+    def original_traj(self):
+        return self._trajectory
+    
+    @original_traj.setter
+    def original_traj(self, traj):
+        self._trajectory = traj
+    
+    @TaurenTraj.trajectory.getter
+    def trajectory(self):
+        
+        slicer = self.original_traj.topology.select(self.atom_selection)
+        
+        try:
+            sliced_traj = self.original_traj.atom_slice(slicer, inplace=False)
+        
+        except IndexError:
+            log.exception("Could not slice traj")
+            sys.exit(1)
+        
+        log.debug(
+            f"returning sliced traj for atoms '{self.atom_selection}'"
+            f" in frames '{self._fslicer}'"
+            )
+
+        return sliced_traj[self._fslicer]
     
     @TaurenTraj.totaltime.getter
     def totaltime(self):
@@ -1183,15 +1382,21 @@ class TaurenMDTraj(TaurenTraj):
         
         Parameters
         ----------
-        exclude : list
+        exclude : :obj:`list`
             List of solvent residue names to retain in the new
             trajectory.
             Defaults to None.
         
-        inplace : bool
+        inplace : :obj:`bool`
             Whether trajectory is modified in place or a copy
             is created (returned).
-            Defaults to True
+            If ``True``, the :att:`~original_traj` is replaced.
+            Defaults to True.
+        
+        Return
+        ------
+        Trajectory.
+            **If** ``inplace`` is ``True``. Otherwise, returns ``None``.
         """
         log.info("* Removing solvent...")
         log.info(f"    received trajectory: {self.trajectory}")
@@ -1204,7 +1409,7 @@ class TaurenMDTraj(TaurenTraj):
         log.info(f"    solventless trajectory: {self.trajectory}")
         
         if inplace:
-            self.trajectory = new_traj
+            self.original_traj = new_traj
             return None
         
         else:
@@ -1291,7 +1496,7 @@ class TaurenMDTraj(TaurenTraj):
             file_name,
             ):
         
-        self.trajectory[self._fslicer].save(file_name, force_overwrite=True)
+        self.trajectory.save(file_name, force_overwrite=True)
         
         return
     
@@ -1300,9 +1505,16 @@ class TaurenMDTraj(TaurenTraj):
             chains,
             ):
         
+        log.debug(chains)
+        
         if chains == "all":
             
             chain_list = list(range(self.trajectory.n_chains))
+        
+        elif isinstance(chains, str) \
+                and chains.isalpha() or chains.isdigit():
+            
+            chain_list = [chains]
         
         elif isinstance(chains, str) and chains.count(",") > 0:
             
@@ -1319,7 +1531,16 @@ class TaurenMDTraj(TaurenTraj):
                 log.info(_)
                 raise TypeError(_)
         
+        try:
+            log.debug(chain_list)
+        
+        except UnboundLocalError as e:
+            log.debug(e)
+            log.info("* ERROR * <chain_list> not defined")
+            sys.exit("* Aborting *")
+        
         assert isinstance(chain_list, list), "Should be list type!"
+        
         return chain_list
     
     def _calc_rmsds_combined_chains(
@@ -1343,13 +1564,18 @@ class TaurenMDTraj(TaurenTraj):
         
         sliced_traj = self._atom_slice_traj(chain_selector)
         
+        log.debug(f"len sliced_traj: {len(sliced_traj)}")
+        
         combined_rmsds = self._calc_rmsds(
-            sliced_traj[self._fslicer],
+            sliced_traj,
             ref_frame=ref_frame,
             )
         
+        log.debug(f"combined_rmsds: {combined_rmsds.shape}")
+        
         assert combined_rmsds.size == self.n_frames, (
-            "combined_rmsds array size NOT valid"
+            f"combined_rmsds size '{combined_rmsds.size}' NOT matching"
+            f" n_frames '{self.n_frames}'."
             )
         return combined_rmsds
     
@@ -1359,13 +1585,19 @@ class TaurenMDTraj(TaurenTraj):
         Returns a sliced_traj.
         """
         
-        slicer = self.trajectory.topology.select(selector)
+        slicer = self.original_traj.topology.select(selector)
         
         try:
             sliced_traj = self.trajectory.atom_slice(slicer, inplace=False)
         
-        except IndexError:
-            log.exception("Could not slice traj")
+        except IndexError as e:
+            log.debug(e)
+            log.info(
+                f"* ERROR * Could not slice traj using slicer '{selector}'."
+                f" Most likely the slicer does NOT share selection"
+                f" with the general atom selection '{self.atom_selection}'.\n"
+                "* Aborting calculation *"
+                )
             sys.exit(1)
         
         return sliced_traj
@@ -1424,7 +1656,7 @@ class TaurenMDTraj(TaurenTraj):
                 self._atom_slice_traj(f"chainid {chain}")
             
             rmsds[:, index] = self._calc_rmsds(
-                sliced_traj_single_chain[self._fslicer],
+                sliced_traj_single_chain,
                 ref_frame=ref_frame,
                 )
         
@@ -1450,18 +1682,24 @@ class TrajObservables(dict):
         Warns user and ignores execution if key exists.
         """
         
-        if not(isinstance(key, tuple)):
-            raise TypeError(f"key should be tuple, '{type(key)}' given.")
+        if not(isinstance(key, StorageKey)):
+            raise TypeError(f"key should be namedtuple, '{type(key)}' given.")
+        
+        if not(isinstance(data, StorageData)):
+            raise TypeError(f"data sould be SorageData, '{type(data)}' given.")
         
         if key in self:
-            
-            key = (f"{key[0]}_", key[1])
             
             log.warning(
                 "* WARNING *"
                 f" The storage keyword {key} already exists in the"
                 " trajectory observables data base."
-                f" CHAING KEY TO... {key}"
+                )
+            
+            key.datatype = f"{key.datatype}_"
+            
+            log.warning(
+                f" CHANGING KEY TO... {key}"
                 )
             
         self.setdefault(key, data)

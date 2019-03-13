@@ -11,10 +11,14 @@
             "exclude":null
             },
         
-        "slice": {
+        "frame_slice": {
             "start": null,
             "end": null,
             "step":10
+            },
+        
+        "atom_slice" {
+            "selector": "chainid 1"
             },
         
         "try_image_molecules": {

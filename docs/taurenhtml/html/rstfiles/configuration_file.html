@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.5.3
+                0.6.0
               </div>
             
           
@@ -108,7 +108,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#transform">Transform</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#remove-solvent">remove solvent</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#image-molecules">image molecules</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#slice">slice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#frame-slice">frame slice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#atom-select">atom select</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#align-trajectory">align trajectory</a></li>
 </ul>
 </li>
@@ -198,8 +199,9 @@
 <span id="taurenconfig"></span><h1>Tauren-MD configuration file<a class="headerlink" href="#tauren-md-configuration-file" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="how-to-use-the-conf-file">
 <h2>How to use the conf file<a class="headerlink" href="#how-to-use-the-conf-file" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference external" href="https://github.com/joaomcteixeira/Tauren-MD/blob/master/tauren_config.json">Tauren-MD configuration file</a>, is a <a class="reference external" href="https://en.wikipedia.org/wiki/JSON">JSON</a>
-dictionary composed of three main blocks, in the following form:</p>
+<p>The <strong>Tauren-MD configuration file</strong> is a <a class="reference external" href="https://en.wikipedia.org/wiki/JSON">JSON</a>
+dictionary; in <em>non-developer</em> words: is a simple text files that follows a certain syntax (indented blocks of text within <code class="docutils literal notranslate"><span class="pre">{}</span></code> curly brackets), you can use the main <a class="reference external" href="https://github.com/joaomcteixeira/Tauren-MD/blob/master/tauren_config.json">configuration template file</a> to examine its syntax and as template for yours.</p>
+<p>The configuration file is composed of three main blocks, <strong>input data</strong>, <strong>trajectory type</strong> and <strong>actions</strong>, in the following form:</p>
 <div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;input_data&quot;</span><span class="p">:</span> <span class="p">{},</span>
     <span class="s2">&quot;traj_type&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -244,8 +246,8 @@ prevail.</p>
 </div>
 <div class="section" id="actions">
 <span id="id2"></span><h3>Actions<a class="headerlink" href="#actions" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">&quot;actions&quot;</span></code> dictionary inside the configuration file contains all the <em>actions</em> that will be
-performed SEQUENTIALLY by the Tauren-MD workflow <code class="docutils literal notranslate"><span class="pre">:-)</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;actions&quot;</span></code> dictionary inside the configuration file contains all the <strong>actions</strong> that will be
+performed <strong>sequentially</strong> by the Tauren-MD workflow <code class="docutils literal notranslate"><span class="pre">:-)</span></code>.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">actions</span></code> dictionary <code class="docutils literal notranslate"><span class="pre">keys</span></code> are the name of the action to be
 performed, and each key’s <code class="docutils literal notranslate"><span class="pre">value</span></code> is a dictionary of <code class="docutils literal notranslate"><span class="pre">kwargs</span></code> for the
 function that is associated with that action. For example:</p>
@@ -254,7 +256,9 @@ function that is associated with that action. For example:</p>
         <span class="s2">&quot;exclude&quot;</span><span class="p">:</span><span class="n">null</span>
         <span class="p">},</span>
 
-    <span class="s2">&quot;reduce_equidistant&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;frame_slice&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
         <span class="s2">&quot;step&quot;</span><span class="p">:</span><span class="mi">10</span>
         <span class="p">},</span>
 
@@ -269,7 +273,7 @@ function that is associated with that action. For example:</p>
 <p>with this configuration, Tauren-MD will sequentially perform:</p>
 <ol class="arabic simple">
 <li>remove solvent molecules from trajectory</li>
-<li>reduce the trajectory in equidistant frames spaced by 10 frames</li>
+<li>reduce the trajectory in equidistant steps spaced by 10 frames</li>
 <li>export all frames from the reduced trajectory</li>
 </ol>
 <div class="section" id="reorder-actions">
@@ -277,7 +281,9 @@ function that is associated with that action. For example:</p>
 <p>Most importantly, you can reorder the actions by simple reordering the
 <code class="docutils literal notranslate"><span class="pre">actions</span></code> dictionary. For example:</p>
 <div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">&quot;reduce_equidistant&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;frame_slice&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
         <span class="s2">&quot;step&quot;</span><span class="p">:</span><span class="mi">10</span>
         <span class="p">},</span>
 
@@ -295,23 +301,20 @@ function that is associated with that action. For example:</p>
 </div>
 <p>with this configuration, Tauren-MD will sequentially perform:</p>
 <ol class="arabic simple">
-<li>reduce the trajectory in equidistant frames spaced by 10 frames</li>
+<li>reduce the trajectory in equidistant steps spaced by 10 frames</li>
 <li>remove solvent molecules from trajectory</li>
 <li>export all frames from the reduced trajectory</li>
 </ol>
 </div>
 <div class="section" id="add-and-remove-actions">
 <h4>Add and remove actions<a class="headerlink" href="#add-and-remove-actions" title="Permalink to this headline">¶</a></h4>
-<p>To <em>add</em> or <em>remove</em> actions from the Tauren-MD run, simply add or remove
-that action’s dictionary from the main <code class="docutils literal notranslate"><span class="pre">actions</span></code> dictionary, for
-example:</p>
+<p>To <strong>add</strong> or <strong>remove</strong> <em>actions</em> from the Tauren-MD run, simply add or remove
+that action’s dictionary from the main <code class="docutils literal notranslate"><span class="pre">actions</span></code> dictionary, taking the above example, if we don’t want to <em>remove the solvent</em> anymore, we would have the following configuration:</p>
 <div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">&quot;reduce_equidistant&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;frame_slice&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
         <span class="s2">&quot;step&quot;</span><span class="p">:</span><span class="mi">10</span>
-        <span class="p">},</span>
-
-    <span class="s2">&quot;remove_solvent&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;exclude&quot;</span><span class="p">:</span><span class="n">null</span>
         <span class="p">},</span>
 
     <span class="s2">&quot;frames2file&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -322,30 +325,21 @@ example:</p>
     <span class="p">}</span>
 </pre></div>
 </div>
-<p>Now, if we don’t want to remove the solvent anymore, simply remove its dictionary from the configuration file:</p>
-<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">&quot;reduce_equidistant&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;step&quot;</span><span class="p">:</span><span class="mi">10</span>
-        <span class="p">},</span>
-
-    <span class="s2">&quot;frames2PDB&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;frames&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;suffix&quot;</span><span class="p">:</span> <span class="s2">&quot;_&quot;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-</pre></div>
-</div>
 </div>
 <div class="section" id="deactivate-actions">
 <h4>Deactivate actions<a class="headerlink" href="#deactivate-actions" title="Permalink to this headline">¶</a></h4>
-<p><em>added in version 0.4.1</em></p>
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.4.1.</span></p>
+</div>
 <p>Alternatively to removing an action from the configuration file, you can <strong>deactivate</strong> an action by adding the <code class="docutils literal notranslate"><span class="pre">#</span></code> before that action’s name. This allow quick edition of the config file with easy revert. Taking the above example, to stop removing the solvent from the trajectory, simply:</p>
 <div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">&quot;reduce_equidistant&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;frame_slice&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
         <span class="s2">&quot;step&quot;</span><span class="p">:</span><span class="mi">10</span>
         <span class="p">},</span>
 
-    <span class="s2">&quot;#remove_solvent&quot;</span><span class="p">:</span> <span class="p">{</span>  <span class="o">&lt;-</span> <span class="n">Note</span> <span class="n">the</span> <span class="s2">&quot;#&quot;</span>
+    <span class="s2">&quot;#remove_solvent&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;exclude&quot;</span><span class="p">:</span><span class="n">null</span>
         <span class="p">},</span>
 
@@ -364,7 +358,9 @@ example:</p>
 <code class="docutils literal notranslate"><span class="pre">_</span></code> to the action name such as no action name is repeated. For
 example, if you want to export the trajectory in different formats:</p>
 <div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">&quot;reduce_equidistant&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;frame_slice&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
         <span class="s2">&quot;step&quot;</span><span class="p">:</span><span class="mi">10</span>
         <span class="p">},</span>
 
@@ -372,18 +368,12 @@ example, if you want to export the trajectory in different formats:</p>
         <span class="s2">&quot;exclude&quot;</span><span class="p">:</span><span class="n">null</span>
         <span class="p">},</span>
 
-    <span class="s2">&quot;frames2file&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;frames&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;prefix&quot;</span><span class="p">:</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;ext&quot;</span><span class="p">:</span> <span class="s2">&quot;pdb&quot;</span>
-        <span class="p">},</span>
-
     <span class="s2">&quot;save_traj&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;file_name&quot;</span><span class="p">:</span> <span class="s2">&quot;traj_OUTPUT.dcd&quot;</span><span class="p">,</span>
         <span class="s2">&quot;overwrite&quot;</span><span class="p">:</span><span class="n">true</span>
         <span class="p">},</span>
 
-    <span class="s2">&quot;save_traj_&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;save_traj_&quot;</span><span class="p">:</span> <span class="p">{</span>   <span class="c1"># &lt;- note here the trailing underscore &quot;_&quot;</span>
         <span class="s2">&quot;file_name&quot;</span><span class="p">:</span> <span class="s2">&quot;traj_OUTPUT.dcd&quot;</span><span class="p">,</span>
         <span class="s2">&quot;overwrite&quot;</span><span class="p">:</span><span class="n">true</span>
         <span class="p">}</span>
@@ -397,6 +387,20 @@ example, if you want to export the trajectory in different formats:</p>
 <p>Also, when adding actions, REMEMBER to add the trailing comma <code class="docutils literal notranslate"><span class="pre">,</span></code>
 after the action command, EXCEPT for the last action - see the examples
 above.</p>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;frame_slice&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;end&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+        <span class="s2">&quot;step&quot;</span><span class="p">:</span><span class="mi">10</span>
+        <span class="p">},</span> <span class="c1"># &lt;- trailing comma</span>
+
+    <span class="s2">&quot;save_traj&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;file_name&quot;</span><span class="p">:</span> <span class="s2">&quot;traj_OUTPUT.dcd&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;overwrite&quot;</span><span class="p">:</span><span class="n">true</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="list-of-actions">
@@ -404,8 +408,8 @@ above.</p>
 <p>Bellow the list of all user configurable actions in
 Tauren-MD.</p>
 <p>All actions are functions inside Tauren-MD modules, that are stored
-inside <code class="docutils literal notranslate"><span class="pre">tauren</span></code> directory; if you are a <strong>developer</strong> please go
-forward exploting it if you wish <code class="docutils literal notranslate"><span class="pre">;-)</span></code>.</p>
+inside <code class="docutils literal notranslate"><span class="pre">tauren</span></code> directory; if you are a <strong>developer</strong> or a <strong>Pythonista</strong>, please go
+forward exploting it if you wish <code class="docutils literal notranslate"><span class="pre">;-)</span></code> - <a class="reference internal" href="modules.html#taurenmodules"><span class="std std-ref">Tauren-MD library Documentation</span></a>.</p>
 <p>If you are an <strong>user</strong> and just want to use Tauren-MD, the templates
 bellow describe the actions available. Just copy the dicitionaries bellow
 to the configuration file <code class="docutils literal notranslate"><span class="pre">actions</span></code> main dictionary accordingly to your preferences (you may
@@ -429,6 +433,7 @@ wish to read first the what was stated in the above sections).</p>
 <p>Actions that transform the trajectory.</p>
 <div class="section" id="remove-solvent">
 <h4>remove solvent<a class="headerlink" href="#remove-solvent" title="Permalink to this headline">¶</a></h4>
+<p>Removes solvent from the trajectory.</p>
 <div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;remove_solvent&quot;</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">&quot;exclude&quot;</span><span class="p">:</span><span class="n">null</span>
     <span class="p">}</span>
@@ -446,12 +451,49 @@ wish to read first the what was stated in the above sections).</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="slice">
-<h4>slice<a class="headerlink" href="#slice" title="Permalink to this headline">¶</a></h4>
-<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;slice&quot;</span><span class="p">:</span> <span class="p">{</span>
+<div class="section" id="frame-slice">
+<h4>frame slice<a class="headerlink" href="#frame-slice" title="Permalink to this headline">¶</a></h4>
+<p>Slices the trajectory in frames. The subsequent operations will consider only the applied selection. You can unselect the slice by providing <code class="docutils literal notranslate"><span class="pre">null</span></code> arguments to the <code class="docutils literal notranslate"><span class="pre">frame_slice</span></code> parameters.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">frame_slice</span></code> considers always slicing from the original trajectory, so you can simply re-slice from the original trajectory by simply setting up another <code class="docutils literal notranslate"><span class="pre">frame_slice</span></code> operation.</p>
+<ul class="simple">
+<li><strong>How to slice:</strong></li>
+</ul>
+<p>from frame 1 to frame 100 (included) in steps of 1.</p>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;frame_slice&quot;</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
     <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
     <span class="s2">&quot;step&quot;</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><strong>reslicing:</strong></li>
+</ul>
+<p>from frame 100 to the end.</p>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;frame_slice&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;step&quot;</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><strong>undo slicing for subsequent operations:</strong></li>
+</ul>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;frame_slice&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;stop&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;step&quot;</span><span class="p">:</span> <span class="n">null</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="atom-select">
+<h4>atom select<a class="headerlink" href="#atom-select" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">atom_select</span></code> selects a group of atoms from the topology in use. Once an atom group has been selected, the following operations will consider only that selection. For example, if <code class="docutils literal notranslate"><span class="pre">chainid</span> <span class="pre">1</span></code> or <code class="docutils literal notranslate"><span class="pre">resid</span> <span class="pre">1:100</span></code> are selected, a subsequent <a class="reference internal" href="#save-traj"><span class="std std-ref">save trajectory</span></a> will only save the atoms on that selection.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">selector</span></code> code is a string (some text inside double quotes <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>) that must match the specifications of the MD analysis library you chose to use, you sould refer to that library documentation for details: <a class="reference external" href="https://www.mdanalysis.org/docs/documentation_pages/selections.html">MDAnalysis selections</a>, <a class="reference external" href="http://mdtraj.org/latest/atom_selection.html">MDTraj selections</a>.</p>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;atom_select&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;selector&quot;</span><span class="p">:</span> <span class="s2">&quot;chainid 1&quot;</span>
     <span class="p">}</span>
 </pre></div>
 </div>
@@ -470,8 +512,10 @@ wish to read first the what was stated in the above sections).</p>
 </div>
 <div class="section" id="export">
 <h3>Export<a class="headerlink" href="#export" title="Permalink to this headline">¶</a></h3>
+<p>Actions that export information from the trajectory.</p>
 <div class="section" id="frames-to-file">
 <h4>Frames to file<a class="headerlink" href="#frames-to-file" title="Permalink to this headline">¶</a></h4>
+<p>Export trajectory frames to files.</p>
 <div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;frames2file&quot;</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">&quot;frames&quot;</span><span class="p">:</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span>
     <span class="s2">&quot;prefix&quot;</span><span class="p">:</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span>
@@ -481,7 +525,8 @@ wish to read first the what was stated in the above sections).</p>
 </div>
 </div>
 <div class="section" id="save-trajectory">
-<h4>save trajectory<a class="headerlink" href="#save-trajectory" title="Permalink to this headline">¶</a></h4>
+<span id="save-traj"></span><h4>save trajectory<a class="headerlink" href="#save-trajectory" title="Permalink to this headline">¶</a></h4>
+<p>Saves trajectory to a file.</p>
 <div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;save_traj&quot;</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">&quot;file_name&quot;</span><span class="p">:</span> <span class="s2">&quot;traj_OUTPUT.dcd&quot;</span>
     <span class="p">}</span>
@@ -493,6 +538,7 @@ wish to read first the what was stated in the above sections).</p>
 <h3>Data calculation and plotting<a class="headerlink" href="#data-calculation-and-plotting" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="rmsds-of-combined-chains">
 <h4>RMSDs of combined chains<a class="headerlink" href="#rmsds-of-combined-chains" title="Permalink to this headline">¶</a></h4>
+<p>Calculates, exports and plots combined RMSDs for a set of chains.</p>
 <div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;produce_rmsds_combined_chains&quot;</span><span class="p">:</span> <span class="p">{</span>
 
     <span class="s2">&quot;calc_rmsds_combined_chains&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -528,6 +574,7 @@ wish to read first the what was stated in the above sections).</p>
 </div>
 <div class="section" id="rmsds-of-separated-chains">
 <h4>RMSDs of separated chains<a class="headerlink" href="#rmsds-of-separated-chains" title="Permalink to this headline">¶</a></h4>
+<p>Calculates, exports and plots RMSDs calculated for single chains.</p>
 <div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;produce_rmsds_separated_chains&quot;</span><span class="p">:</span> <span class="p">{</span>
 
     <span class="s2">&quot;calc_rmsds_separated_chains&quot;</span> <span class="p">:</span> <span class="p">{</span>

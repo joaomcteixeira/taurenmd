@@ -57,7 +57,7 @@
             
             
               <div class="version">
-                0.5.3
+                0.6.0
               </div>
             
           
@@ -156,44 +156,60 @@
             
   <h1>Source code for tauren.tauren</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">TAUREN OBJECTS</span>
-
-<span class="sd">Copyright © 2018-2019 Tauren-MD Project</span>
-
-<span class="sd">Contributors to this file:</span>
-<span class="sd">- João M.C. Teixeira (https://github.com/joaomcteixeira)</span>
-
-<span class="sd">Tauren-MD is free software: you can redistribute it and/or modify</span>
-<span class="sd">it under the terms of the GNU General Public License as published by</span>
-<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
-<span class="sd">(at your option) any later version.</span>
-
-<span class="sd">Tauren-MD is distributed in the hope that it will be useful,</span>
-<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
-<span class="sd">GNU General Public License for more details.</span>
-
-<span class="sd">You should have received a copy of the GNU General Public License</span>
-<span class="sd">along with Tauren-MD. If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">Tauren-MD trajectory objects.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># Copyright © 2018-2019 Tauren-MD Project</span>
+<span class="c1">#</span>
+<span class="c1"># Tauren-MD is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># Tauren-MD is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with Tauren-MD. If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1"># Contributors to this file:</span>
+<span class="c1"># - João M.C. Teixeira (https://github.com/joaomcteixeira)</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">string</span>
-
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
 <span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
 
 <span class="kn">import</span> <span class="nn">mdtraj</span>
 <span class="kn">import</span> <span class="nn">MDAnalysis</span> <span class="k">as</span> <span class="nn">mda</span>
 <span class="kn">from</span> <span class="nn">MDAnalysis.analysis</span> <span class="k">import</span> <span class="n">align</span> <span class="k">as</span> <span class="n">mdaalign</span>
 <span class="kn">from</span> <span class="nn">MDAnalysis.analysis.rms</span> <span class="k">import</span> <span class="n">RMSD</span> <span class="k">as</span> <span class="n">mdaRMSD</span>
-<span class="c1"># from MDAnalysis.analysis.rms import rmsd as mdarmsd</span>
 
 <span class="kn">from</span> <span class="nn">tauren</span> <span class="k">import</span> <span class="n">logger</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">get_log</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
+<span class="n">StorageKey</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span>
+    <span class="s2">&quot;StorageKey&quot;</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;datatype&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;identifier&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;filenaming&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+    <span class="p">)</span>
 
-<div class="viewcode-block" id="TaurenTraj"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.tauren.TaurenTraj">[docs]</a><span class="k">class</span> <span class="nc">TaurenTraj</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="n">StorageData</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span>
+    <span class="s2">&quot;StorageData&quot;</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;columns&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;data&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+    <span class="p">)</span>
+
+
+<div class="viewcode-block" id="TaurenTraj"><a class="viewcode-back" href="../../rstfiles/module_taurentraj.html#tauren.tauren.TaurenTraj">[docs]</a><span class="k">class</span> <span class="nc">TaurenTraj</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for Tauren-MD sub Traj classes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -214,6 +230,24 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_rmsds_counter</span> <span class="o">=</span> <span class="mi">0</span>
         
         <span class="k">return</span>
+    
+    <span class="c1"># @property</span>
+    <span class="c1"># @abstractmethod</span>
+    <span class="c1"># def trajectory(self):</span>
+        <span class="c1"># &quot;&quot;&quot;</span>
+        <span class="c1"># Returns the trajectory object.</span>
+        <span class="c1"># &quot;&quot;&quot;</span>
+        <span class="c1"># pass</span>
+    
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+    
+    <span class="nd">@trajectory</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;* CANT manually set a sliced traj. Ignoring...&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
     
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">observables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -282,6 +316,10 @@
     
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">n_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The number of frames in the trajectory considering the</span>
+<span class="sd">        current slicing as defined by the :attr:`slice_tuple`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">full_frames_list</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fslicer</span><span class="p">])</span>
     
     <span class="nd">@property</span>
@@ -299,6 +337,26 @@
 <span class="sd">        The time step in the current slicing.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">atom_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_atom_selection</span>
+        
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;all&quot;</span>
+    
+    <span class="nd">@atom_selection</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">atom_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        String that defines the current atom selection.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        selector : str</span>
+<span class="sd">            The string the defines the selector.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_atom_selection</span> <span class="o">=</span> <span class="n">selector</span>
     
     <span class="nd">@property</span>
     <span class="nd">@abstractmethod</span>
@@ -359,7 +417,7 @@
         
         <span class="k">return</span>
     
-<div class="viewcode-block" id="TaurenTraj.report"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.tauren.TaurenTraj.report">[docs]</a>    <span class="k">def</span> <span class="nf">report</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TaurenTraj.report"><a class="viewcode-back" href="../../rstfiles/module_taurentraj.html#tauren.tauren.TaurenTraj.report">[docs]</a>    <span class="k">def</span> <span class="nf">report</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Prints general information about trajectory.&quot;&quot;&quot;</span>
         
         <span class="n">info</span> <span class="o">=</span> <span class="p">(</span>
@@ -380,7 +438,7 @@
         
         <span class="k">return</span></div>
     
-<div class="viewcode-block" id="TaurenTraj.remove_solvent"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.tauren.TaurenTraj.remove_solvent">[docs]</a>    <span class="k">def</span> <span class="nf">remove_solvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="TaurenTraj.remove_solvent"><a class="viewcode-back" href="../../rstfiles/module_taurentraj.html#tauren.tauren.TaurenTraj.remove_solvent">[docs]</a>    <span class="k">def</span> <span class="nf">remove_solvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Removes solvent from trajectory.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -391,7 +449,7 @@
     <span class="k">def</span> <span class="nf">_remove_solvent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span>
     
-<div class="viewcode-block" id="TaurenTraj.align_traj"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.tauren.TaurenTraj.align_traj">[docs]</a>    <span class="k">def</span> <span class="nf">align_traj</span><span class="p">(</span>
+<div class="viewcode-block" id="TaurenTraj.align_traj"><a class="viewcode-back" href="../../rstfiles/module_taurentraj.html#tauren.tauren.TaurenTraj.align_traj">[docs]</a>    <span class="k">def</span> <span class="nf">align_traj</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="o">*</span><span class="p">,</span>
             <span class="n">weights</span><span class="o">=</span><span class="s2">&quot;mass&quot;</span><span class="p">,</span>
@@ -427,7 +485,7 @@
     <span class="k">def</span> <span class="nf">_align_traj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span>
     
-<div class="viewcode-block" id="TaurenTraj.image_molecules"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.tauren.TaurenTraj.image_molecules">[docs]</a>    <span class="nd">@abstractmethod</span>
+<div class="viewcode-block" id="TaurenTraj.image_molecules"><a class="viewcode-back" href="../../rstfiles/module_taurentraj.html#tauren.tauren.TaurenTraj.image_molecules">[docs]</a>    <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">image_molecules</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Images molecules.</span>
@@ -437,14 +495,14 @@
         <span class="c1"># from library used.</span>
         <span class="k">pass</span></div>
     
-<div class="viewcode-block" id="TaurenTraj.slice"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.tauren.TaurenTraj.slice">[docs]</a>    <span class="k">def</span> <span class="nf">slice</span><span class="p">(</span>
+<div class="viewcode-block" id="TaurenTraj.frame_slice"><a class="viewcode-back" href="../../rstfiles/module_taurentraj.html#tauren.tauren.TaurenTraj.frame_slice">[docs]</a>    <span class="k">def</span> <span class="nf">frame_slice</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Slices trajectory for the subsequent operations.</span>
+<span class="sd">        Slices trajectory in frames for the subsequent operations.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -507,7 +565,41 @@
         
         <span class="k">return</span></div>
     
-<div class="viewcode-block" id="TaurenTraj.frames2file"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.tauren.TaurenTraj.frames2file">[docs]</a>    <span class="k">def</span> <span class="nf">frames2file</span><span class="p">(</span>
+<div class="viewcode-block" id="TaurenTraj.set_atom_selection"><a class="viewcode-back" href="../../rstfiles/module_taurentraj.html#tauren.tauren.TaurenTraj.set_atom_selection">[docs]</a>    <span class="k">def</span> <span class="nf">set_atom_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the current atom selection.</span>
+<span class="sd">        </span>
+<span class="sd">        Atom selection will be used in subsequent operations.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        selection : str</span>
+<span class="sd">            The selection string. This may deppend on the</span>
+<span class="sd">            Trajectory library type chosen for the calculation.</span>
+<span class="sd">        </span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If selection is not string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&lt;selection&gt;: </span><span class="si">{selection}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">selection</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">atom_selection</span> <span class="o">=</span> <span class="n">selection</span>
+        
+        <span class="k">elif</span> <span class="n">selection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">atom_selection</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;selection&gt; parameter must be STRING or None types.&quot;</span>
+                <span class="n">f</span><span class="s2">&quot;&#39;{type(selection)}&#39; given.&quot;</span>
+                <span class="p">)</span>
+        
+        <span class="k">return</span></div>
+    
+<div class="viewcode-block" id="TaurenTraj.frames2file"><a class="viewcode-back" href="../../rstfiles/module_taurentraj.html#tauren.tauren.TaurenTraj.frames2file">[docs]</a>    <span class="k">def</span> <span class="nf">frames2file</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">frames</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
             <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;_&quot;</span><span class="p">,</span>
@@ -681,7 +773,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span>
     
-<div class="viewcode-block" id="TaurenTraj.save_traj"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.tauren.TaurenTraj.save_traj">[docs]</a>    <span class="k">def</span> <span class="nf">save_traj</span><span class="p">(</span>
+<div class="viewcode-block" id="TaurenTraj.save_traj"><a class="viewcode-back" href="../../rstfiles/module_taurentraj.html#tauren.tauren.TaurenTraj.save_traj">[docs]</a>    <span class="k">def</span> <span class="nf">save_traj</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;traj_output.dcd&quot;</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span>
@@ -710,7 +802,7 @@
         <span class="sd">&quot;&quot;&quot;The subclass algorithm to save a trajectory.&quot;&quot;&quot;</span>
         <span class="k">pass</span>
     
-<div class="viewcode-block" id="TaurenTraj.calc_rmsds_combined_chains"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.tauren.TaurenTraj.calc_rmsds_combined_chains">[docs]</a>    <span class="k">def</span> <span class="nf">calc_rmsds_combined_chains</span><span class="p">(</span>
+<div class="viewcode-block" id="TaurenTraj.calc_rmsds_combined_chains"><a class="viewcode-back" href="../../rstfiles/module_taurentraj.html#tauren.tauren.TaurenTraj.calc_rmsds_combined_chains">[docs]</a>    <span class="k">def</span> <span class="nf">calc_rmsds_combined_chains</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="o">*</span><span class="p">,</span>
             <span class="n">chains</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
@@ -729,6 +821,9 @@
 <span class="sd">        ----------</span>
 <span class="sd">        chains : str or list of identifiers, optional</span>
 <span class="sd">            Defaults to &quot;all&quot;, all chains are used.</span>
+<span class="sd">            BUT, previous selection is considered, therefore, chains</span>
+<span class="sd">            will subselect over a previous</span>
+<span class="sd">            :meth:`~TaurenTraj.set_atom_selection`.</span>
 <span class="sd">            </span>
 <span class="sd">            With str, use: &quot;1&quot; or comma separated identifers, &quot;1,2,4&quot;.</span>
 <span class="sd">            </span>
@@ -740,7 +835,7 @@
 <span class="sd">            # when using **MDTraj**, identifiers are digits that</span>
 <span class="sd">            represent chain order.</span>
 <span class="sd">        </span>
-<span class="sd">        ref_frame : int</span>
+<span class="sd">        ref_frame : int, optional</span>
 <span class="sd">            The reference frame for the RMSD calculation.</span>
 <span class="sd">        </span>
 <span class="sd">        storage_key : str, optional</span>
@@ -793,11 +888,27 @@
         
         <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">frames_array</span><span class="p">,</span> <span class="n">combined_rmsds</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
         
-        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">storage_key</span><span class="p">,</span> <span class="n">chains</span><span class="p">)</span>
-        <span class="n">columns</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;frames,combined_</span><span class="si">{chains}</span><span class="s2">&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">observables</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+        <span class="n">chain_name_export</span> <span class="o">=</span> <span class="n">chains</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">StorageKey</span><span class="p">(</span>
+            <span class="n">datatype</span><span class="o">=</span><span class="n">storage_key</span><span class="p">,</span>
+            <span class="n">identifier</span><span class="o">=</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;</span><span class="si">{self.atom_selection}</span><span class="s2"> &quot;</span>
+                <span class="n">f</span><span class="s2">&quot;for &#39;</span><span class="si">{chain_name_export}</span><span class="s2">&#39; chains&quot;</span>
+                <span class="p">),</span>
+            <span class="n">filenaming</span><span class="o">=</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;</span><span class="si">{storage_key}</span><span class="s2">&quot;</span>
+                <span class="n">f</span><span class="s2">&quot;_{self.atom_selection.replace(&#39; &#39;, &#39;-&#39;)}&quot;</span>
+                <span class="n">f</span><span class="s2">&quot;_{chain_name_export.replace(&#39; &#39;, &#39;-&#39;)}&quot;</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
         
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">),</span> <span class="s2">&quot;key should be tuple!&quot;</span>
+        <span class="n">datatuple</span> <span class="o">=</span> <span class="n">StorageData</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;frames&quot;</span><span class="p">,</span> <span class="n">key</span><span class="o">.</span><span class="n">identifier</span><span class="p">],</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+            <span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">observables</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">datatuple</span><span class="p">)</span>
+        
         <span class="k">return</span> <span class="n">key</span></div>
     
     <span class="nd">@staticmethod</span>
@@ -876,7 +987,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
     
-<div class="viewcode-block" id="TaurenTraj.calc_rmsds_separated_chains"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.tauren.TaurenTraj.calc_rmsds_separated_chains">[docs]</a>    <span class="k">def</span> <span class="nf">calc_rmsds_separated_chains</span><span class="p">(</span>
+<div class="viewcode-block" id="TaurenTraj.calc_rmsds_separated_chains"><a class="viewcode-back" href="../../rstfiles/module_taurentraj.html#tauren.tauren.TaurenTraj.calc_rmsds_separated_chains">[docs]</a>    <span class="k">def</span> <span class="nf">calc_rmsds_separated_chains</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="o">*</span><span class="p">,</span>
             <span class="n">chains</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
@@ -908,7 +1019,7 @@
 <span class="sd">            # when using **MDTraj**, identifiers are digits that</span>
 <span class="sd">            represent chain order.</span>
 <span class="sd">        </span>
-<span class="sd">        ref_frame : int</span>
+<span class="sd">        ref_frame : int, optional</span>
 <span class="sd">            The reference frame for the RMSD calculation.</span>
 <span class="sd">        </span>
 <span class="sd">        storage_key : str, optional</span>
@@ -960,11 +1071,26 @@
             <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="p">)</span>
         
-        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">storage_key</span><span class="p">,</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">chains_headers</span><span class="p">))</span>
-        <span class="n">columns</span> <span class="o">=</span> <span class="s2">&quot;frames,&quot;</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">chains_headers</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">observables</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+        <span class="n">chains_columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{self.atom_selection}</span><span class="s2">_</span><span class="si">{x}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">chains_headers</span>
+            <span class="p">))</span>
         
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">),</span> <span class="s2">&quot;key should be tuple!&quot;</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">StorageKey</span><span class="p">(</span>
+            <span class="n">datatype</span><span class="o">=</span><span class="n">storage_key</span><span class="p">,</span>
+            <span class="n">identifier</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">chains_columns</span><span class="p">),</span>
+            <span class="n">filenaming</span><span class="o">=</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;{self.atom_selection.replace(&#39; &#39;,&#39;-&#39;)}&quot;</span>
+                <span class="n">f</span><span class="s2">&quot;_{&#39;-&#39;.join(chains_headers)}&quot;</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
+        
+        <span class="n">datatuple</span> <span class="o">=</span> <span class="n">StorageData</span><span class="p">(</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;frames&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">chains_columns</span><span class="p">],</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+            <span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">observables</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">datatuple</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">key</span></div>
     
     <span class="nd">@abstractmethod</span>
@@ -1013,7 +1139,7 @@
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">selector</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="s2">&quot;selector should be string&quot;</span>
         <span class="k">return</span> <span class="n">selector</span>
     
-<div class="viewcode-block" id="TaurenTraj.export_data"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.tauren.TaurenTraj.export_data">[docs]</a>    <span class="k">def</span> <span class="nf">export_data</span><span class="p">(</span>
+<div class="viewcode-block" id="TaurenTraj.export_data"><a class="viewcode-back" href="../../rstfiles/module_taurentraj.html#tauren.tauren.TaurenTraj.export_data">[docs]</a>    <span class="k">def</span> <span class="nf">export_data</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">key</span><span class="p">,</span>
             <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;table.csv&quot;</span><span class="p">,</span>
@@ -1043,13 +1169,13 @@
 <span class="sd">            Defaults to nothing.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;* Exporting </span><span class="si">{key}</span><span class="s2"> data&quot;</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;* Exporting </span><span class="si">{file_name}</span><span class="s2"> data&quot;</span><span class="p">)</span>
         
-        <span class="n">header</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="se">\n</span><span class="si">{header}</span><span class="se">\n</span><span class="si">{self.observables[key][0]}</span><span class="s2">&quot;</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{key}</span><span class="se">\n</span><span class="si">{header}</span><span class="se">\n</span><span class="s2">{&#39;,&#39;.join(self.observables[key].columns)}&quot;</span>
         
         <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span>
             <span class="n">file_name</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">observables</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">observables</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
             <span class="n">delimiter</span><span class="o">=</span><span class="n">sep</span><span class="p">,</span>
             <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span>
             <span class="p">)</span>
@@ -1065,27 +1191,36 @@
         
         <span class="bp">self</span><span class="o">.</span><span class="n">universe</span> <span class="o">=</span> <span class="n">mda</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">topology</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">topology</span> <span class="o">=</span> <span class="n">mda</span><span class="o">.</span><span class="n">Universe</span><span class="p">(</span><span class="n">topology</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">original_traj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">trajectory</span>
         
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         
         <span class="k">return</span>
     
     <span class="k">def</span> <span class="nf">_set_full_frames_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_set_full_frames_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">n_frames</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_set_full_frames_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">original_traj</span><span class="o">.</span><span class="n">n_frames</span><span class="p">)</span>
     
     <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">original_traj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_original_traj</span>
+    
+    <span class="nd">@original_traj</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">original_traj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">traj</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_original_traj</span> <span class="o">=</span> <span class="n">traj</span>
+    
+    <span class="nd">@TaurenTraj</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">getter</span>
     <span class="k">def</span> <span class="nf">trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">trajectory</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atom_selection</span><span class="p">)</span>
     
     <span class="nd">@TaurenTraj</span><span class="o">.</span><span class="n">totaltime</span><span class="o">.</span><span class="n">getter</span>
     <span class="k">def</span> <span class="nf">totaltime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fslicer</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">time</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">original_traj</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fslicer</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">time</span>
     
     <span class="nd">@TaurenTraj</span><span class="o">.</span><span class="n">timestep</span><span class="o">.</span><span class="n">getter</span>
     <span class="k">def</span> <span class="nf">timestep</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fslicer</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">time</span>
-            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fslicer</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">time</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">original_traj</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fslicer</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">time</span>
+            <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">original_traj</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fslicer</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">time</span>
             <span class="p">)</span>
     
     <span class="nd">@TaurenTraj</span><span class="o">.</span><span class="n">n_residues</span><span class="o">.</span><span class="n">getter</span>
@@ -1148,7 +1283,7 @@
         <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frames_to_extract</span><span class="p">:</span>
             
             <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
                     <span class="n">filename</span><span class="o">=</span><span class="n">pdb_name_fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">frame</span><span class="p">),</span>
                     <span class="n">frames</span><span class="o">=</span><span class="p">[</span><span class="n">frame</span><span class="p">],</span>
                     <span class="n">file_format</span><span class="o">=</span><span class="s2">&quot;PDB&quot;</span><span class="p">,</span>
@@ -1170,9 +1305,10 @@
             <span class="p">):</span>
         
         <span class="c1"># https://www.mdanalysis.org/MDAnalysisTutorial/writing.html#trajectories</span>
-        <span class="k">with</span> <span class="n">mda</span><span class="o">.</span><span class="n">Writer</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">n_atoms</span><span class="p">)</span> <span class="k">as</span> <span class="n">W</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fslicer</span><span class="p">]:</span>
-                <span class="n">W</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">atoms</span><span class="p">)</span>
+        <span class="n">selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atom_selection</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">mda</span><span class="o">.</span><span class="n">Writer</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">selection</span><span class="o">.</span><span class="n">n_atoms</span><span class="p">)</span> <span class="k">as</span> <span class="n">W</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">original_traj</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fslicer</span><span class="p">]:</span>
+                <span class="n">W</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
                 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;    exported </span><span class="si">{ts}</span><span class="s2">&quot;</span><span class="p">)</span>
         
         <span class="k">return</span>
@@ -1200,12 +1336,29 @@
             <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_err</span><span class="p">)</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         
+        <span class="n">final_selection</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">f</span><span class="s2">&quot;</span><span class="si">{self.atom_selection}</span><span class="s2">&quot;</span>
+            <span class="n">f</span><span class="s2">&quot; and ({&#39; or &#39;.join(filtered_selectors)})&quot;</span>
+            <span class="p">)</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;&lt;final_selection&gt;: </span><span class="si">{final_selection}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># checks for empty selection</span>
+        <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_filter_existent_selectors</span><span class="p">([</span><span class="n">final_selection</span><span class="p">])):</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s2">&quot;   * EMPTY SELECTION ERROR *&quot;</span>
+                <span class="n">f</span><span class="s2">&quot; The atom selection provided &#39;</span><span class="si">{final_selection}</span><span class="s2">&#39;&quot;</span>
+                <span class="s2">&quot; gives an empty selection.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;* Aborting calculation...&quot;</span>
+                <span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        
         <span class="c1"># https://www.mdanalysis.org/docs/documentation_pages/analysis/align.html#rms-fitting-tutorial</span>
         <span class="c1"># https://www.mdanalysis.org/docs/documentation_pages/analysis/rms.html#MDAnalysis.analysis.rms.RMSD</span>
         <span class="n">R</span> <span class="o">=</span> <span class="n">mdaRMSD</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="p">,</span>
-            <span class="n">select</span><span class="o">=</span><span class="s2">&quot; or &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">filtered_selectors</span><span class="p">),</span>
+            <span class="n">select</span><span class="o">=</span><span class="n">final_selection</span><span class="p">,</span>
             <span class="n">groupselection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">ref_frame</span><span class="o">=</span><span class="n">ref_frame</span><span class="p">,</span>
             <span class="p">)</span>
@@ -1228,10 +1381,23 @@
         
         <span class="n">rmsds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered_selectors</span><span class="p">)))</span>
         
+        <span class="n">subplot_has_data</span> <span class="o">=</span> <span class="p">[]</span>
+        
         <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">chain_selector</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">filtered_selectors</span><span class="p">):</span>
             
-            <span class="n">atoms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="n">chain_selector</span><span class="p">)</span>
-            <span class="n">atoms_top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="n">chain_selector</span><span class="p">)</span>
+            <span class="n">final_selection</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;</span><span class="si">{self.atom_selection}</span><span class="s2">&quot;</span>
+                <span class="n">f</span><span class="s2">&quot; and (</span><span class="si">{chain_selector}</span><span class="s2">)&quot;</span>
+                <span class="p">)</span>
+            
+            <span class="n">atoms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">universe</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="n">final_selection</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;len of atoms is 0. Continuing...&quot;</span><span class="p">)</span>
+                <span class="n">subplot_has_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">continue</span>
+            
+            <span class="n">atoms_top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">select_atoms</span><span class="p">(</span><span class="n">final_selection</span><span class="p">)</span>
             
             <span class="n">R</span> <span class="o">=</span> <span class="n">mdaRMSD</span><span class="p">(</span>
                 <span class="n">atoms</span><span class="p">,</span>
@@ -1244,6 +1410,8 @@
             <span class="n">R</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             
             <span class="n">rmsds</span><span class="p">[:,</span> <span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">rmsd</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">_fslicer</span><span class="p">]</span>
+            
+            <span class="n">subplot_has_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         
         <span class="n">column_headers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span>
             <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;segid &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
@@ -1252,7 +1420,10 @@
         
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">column_headers</span><span class="p">,</span> <span class="nb">list</span><span class="p">),</span> <span class="s2">&quot;c_selectors NOT list!&quot;</span>
         
-        <span class="k">return</span> <span class="n">rmsds</span><span class="p">,</span> <span class="n">column_headers</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">rmsds</span><span class="p">[:,</span> <span class="n">subplot_has_data</span><span class="p">],</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">column_headers</span><span class="p">)[</span><span class="n">subplot_has_data</span><span class="p">],</span>
+            <span class="p">)</span>
     
     <span class="k">def</span> <span class="nf">_gen_chain_list</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
@@ -1300,15 +1471,43 @@
     
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trajectory</span><span class="p">,</span> <span class="n">topology</span><span class="p">):</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span> <span class="o">=</span> <span class="n">mdtraj</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">trajectory</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="n">topology</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">topology</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">topology</span>
+        <span class="n">traj_</span> <span class="o">=</span> <span class="n">mdtraj</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">trajectory</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="n">topology</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">original_traj</span> <span class="o">=</span> <span class="n">traj_</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topology</span> <span class="o">=</span> <span class="n">traj_</span><span class="o">.</span><span class="n">topology</span>
         
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         
         <span class="k">return</span>
     
     <span class="k">def</span> <span class="nf">_set_full_frames_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_set_full_frames_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">n_frames</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_set_full_frames_list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">original_traj</span><span class="o">.</span><span class="n">n_frames</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">original_traj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trajectory</span>
+    
+    <span class="nd">@original_traj</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">original_traj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">traj</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_trajectory</span> <span class="o">=</span> <span class="n">traj</span>
+    
+    <span class="nd">@TaurenTraj</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">getter</span>
+    <span class="k">def</span> <span class="nf">trajectory</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="n">slicer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">original_traj</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atom_selection</span><span class="p">)</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sliced_traj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">original_traj</span><span class="o">.</span><span class="n">atom_slice</span><span class="p">(</span><span class="n">slicer</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Could not slice traj&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="n">f</span><span class="s2">&quot;returning sliced traj for atoms &#39;</span><span class="si">{self.atom_selection}</span><span class="s2">&#39;&quot;</span>
+            <span class="n">f</span><span class="s2">&quot; in frames &#39;</span><span class="si">{self._fslicer}</span><span class="s2">&#39;&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">sliced_traj</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fslicer</span><span class="p">]</span>
     
     <span class="nd">@TaurenTraj</span><span class="o">.</span><span class="n">totaltime</span><span class="o">.</span><span class="n">getter</span>
     <span class="k">def</span> <span class="nf">totaltime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1340,15 +1539,21 @@
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        exclude : list</span>
+<span class="sd">        exclude : :obj:`list`</span>
 <span class="sd">            List of solvent residue names to retain in the new</span>
 <span class="sd">            trajectory.</span>
 <span class="sd">            Defaults to None.</span>
 <span class="sd">        </span>
-<span class="sd">        inplace : bool</span>
+<span class="sd">        inplace : :obj:`bool`</span>
 <span class="sd">            Whether trajectory is modified in place or a copy</span>
 <span class="sd">            is created (returned).</span>
-<span class="sd">            Defaults to True</span>
+<span class="sd">            If ``True``, the :att:`~original_traj` is replaced.</span>
+<span class="sd">            Defaults to True.</span>
+<span class="sd">        </span>
+<span class="sd">        Return</span>
+<span class="sd">        ------</span>
+<span class="sd">        Trajectory.</span>
+<span class="sd">            **If** ``inplace`` is ``True``. Otherwise, returns ``None``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;* Removing solvent...&quot;</span><span class="p">)</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;    received trajectory: </span><span class="si">{self.trajectory}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -1361,7 +1566,7 @@
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;    solventless trajectory: </span><span class="si">{self.trajectory}</span><span class="s2">&quot;</span><span class="p">)</span>
         
         <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span> <span class="o">=</span> <span class="n">new_traj</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">original_traj</span> <span class="o">=</span> <span class="n">new_traj</span>
             <span class="k">return</span> <span class="kc">None</span>
         
         <span class="k">else</span><span class="p">:</span>
@@ -1448,7 +1653,7 @@
             <span class="n">file_name</span><span class="p">,</span>
             <span class="p">):</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fslicer</span><span class="p">]</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">force_overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">force_overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         
         <span class="k">return</span>
     
@@ -1457,9 +1662,16 @@
             <span class="n">chains</span><span class="p">,</span>
             <span class="p">):</span>
         
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">chains</span><span class="p">)</span>
+        
         <span class="k">if</span> <span class="n">chains</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
             
             <span class="n">chain_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">n_chains</span><span class="p">))</span>
+        
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">chains</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> \
+                <span class="ow">and</span> <span class="n">chains</span><span class="o">.</span><span class="n">isalpha</span><span class="p">()</span> <span class="ow">or</span> <span class="n">chains</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+            
+            <span class="n">chain_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">chains</span><span class="p">]</span>
         
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">chains</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">chains</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             
@@ -1476,7 +1688,16 @@
                 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">_</span><span class="p">)</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">_</span><span class="p">)</span>
         
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">chain_list</span><span class="p">)</span>
+        
+        <span class="k">except</span> <span class="ne">UnboundLocalError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;* ERROR * &lt;chain_list&gt; not defined&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s2">&quot;* Aborting *&quot;</span><span class="p">)</span>
+        
         <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">chain_list</span><span class="p">,</span> <span class="nb">list</span><span class="p">),</span> <span class="s2">&quot;Should be list type!&quot;</span>
+        
         <span class="k">return</span> <span class="n">chain_list</span>
     
     <span class="k">def</span> <span class="nf">_calc_rmsds_combined_chains</span><span class="p">(</span>
@@ -1500,13 +1721,18 @@
         
         <span class="n">sliced_traj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_atom_slice_traj</span><span class="p">(</span><span class="n">chain_selector</span><span class="p">)</span>
         
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;len sliced_traj: {len(sliced_traj)}&quot;</span><span class="p">)</span>
+        
         <span class="n">combined_rmsds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_rmsds</span><span class="p">(</span>
-            <span class="n">sliced_traj</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fslicer</span><span class="p">],</span>
+            <span class="n">sliced_traj</span><span class="p">,</span>
             <span class="n">ref_frame</span><span class="o">=</span><span class="n">ref_frame</span><span class="p">,</span>
             <span class="p">)</span>
         
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;combined_rmsds: </span><span class="si">{combined_rmsds.shape}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
         <span class="k">assert</span> <span class="n">combined_rmsds</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_frames</span><span class="p">,</span> <span class="p">(</span>
-            <span class="s2">&quot;combined_rmsds array size NOT valid&quot;</span>
+            <span class="n">f</span><span class="s2">&quot;combined_rmsds size &#39;</span><span class="si">{combined_rmsds.size}</span><span class="s2">&#39; NOT matching&quot;</span>
+            <span class="n">f</span><span class="s2">&quot; n_frames &#39;</span><span class="si">{self.n_frames}</span><span class="s2">&#39;.&quot;</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">combined_rmsds</span>
     
@@ -1516,13 +1742,19 @@
 <span class="sd">        Returns a sliced_traj.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
-        <span class="n">slicer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
+        <span class="n">slicer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">original_traj</span><span class="o">.</span><span class="n">topology</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
         
         <span class="k">try</span><span class="p">:</span>
             <span class="n">sliced_traj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trajectory</span><span class="o">.</span><span class="n">atom_slice</span><span class="p">(</span><span class="n">slicer</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         
-        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Could not slice traj&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">IndexError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot;* ERROR * Could not slice traj using slicer &#39;</span><span class="si">{selector}</span><span class="s2">&#39;.&quot;</span>
+                <span class="n">f</span><span class="s2">&quot; Most likely the slicer does NOT share selection&quot;</span>
+                <span class="n">f</span><span class="s2">&quot; with the general atom selection &#39;</span><span class="si">{self.atom_selection}</span><span class="s2">&#39;.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;* Aborting calculation *&quot;</span>
+                <span class="p">)</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         
         <span class="k">return</span> <span class="n">sliced_traj</span>
@@ -1581,7 +1813,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_atom_slice_traj</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;chainid </span><span class="si">{chain}</span><span class="s2">&quot;</span><span class="p">)</span>
             
             <span class="n">rmsds</span><span class="p">[:,</span> <span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_rmsds</span><span class="p">(</span>
-                <span class="n">sliced_traj_single_chain</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_fslicer</span><span class="p">],</span>
+                <span class="n">sliced_traj_single_chain</span><span class="p">,</span>
                 <span class="n">ref_frame</span><span class="o">=</span><span class="n">ref_frame</span><span class="p">,</span>
                 <span class="p">)</span>
         
@@ -1607,18 +1839,24 @@
 <span class="sd">        Warns user and ignores execution if key exists.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         
-        <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;key should be tuple, &#39;{type(key)}&#39; given.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">StorageKey</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;key should be namedtuple, &#39;{type(key)}&#39; given.&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">StorageData</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;data sould be SorageData, &#39;{type(data)}&#39; given.&quot;</span><span class="p">)</span>
         
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            
-            <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{key[0]}</span><span class="s2">_&quot;</span><span class="p">,</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
             
             <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
                 <span class="s2">&quot;* WARNING *&quot;</span>
                 <span class="n">f</span><span class="s2">&quot; The storage keyword </span><span class="si">{key}</span><span class="s2"> already exists in the&quot;</span>
                 <span class="s2">&quot; trajectory observables data base.&quot;</span>
-                <span class="n">f</span><span class="s2">&quot; CHAING KEY TO... </span><span class="si">{key}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+            
+            <span class="n">key</span><span class="o">.</span><span class="n">datatype</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{key.datatype}</span><span class="s2">_&quot;</span>
+            
+            <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="n">f</span><span class="s2">&quot; CHANGING KEY TO... </span><span class="si">{key}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
             
         <span class="bp">self</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>

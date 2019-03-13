@@ -1,0 +1,662 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Tauren Trajectory &mdash; Tauren-MD none documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="load" href="module_load.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Tauren-MD
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.6.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="vision.html">Project Vision</a></li>
+<li class="toctree-l1"><a class="reference internal" href="download.html">Download</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run_taurenmd.html">Run Tauren-MD</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration_file.html">Tauren-MD configuration file</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Tauren-MD Library Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="module_load.html">load</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tauren Trajectory</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="module_produce.html">produce</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_plotting.html">plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_core.html">core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="module_logger.html">logger</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing.html">Citing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="versioning.html">Versioning</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Tauren-MD</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">Tauren-MD Library Documentation</a> &raquo;</li>
+        
+      <li>Tauren Trajectory</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/rstfiles/module_taurentraj.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tauren-trajectory">
+<h1>Tauren Trajectory<a class="headerlink" href="#tauren-trajectory" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="tauren.tauren.TaurenTraj">
+<em class="property">class </em><code class="descclassname">tauren.tauren.</code><code class="descname">TaurenTraj</code><a class="reference internal" href="../_modules/tauren/tauren.html#TaurenTraj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tauren.tauren.TaurenTraj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for Tauren-MD sub Traj classes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>atom_selection</strong></dt>
+<dd></dd>
+<dt><a class="reference internal" href="#tauren.tauren.TaurenTraj.full_frames_list" title="tauren.tauren.TaurenTraj.full_frames_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">full_frames_list</span></code></a></dt>
+<dd><p class="first last">The list of frames in the input trajectory.</p>
+</dd>
+<dt><a class="reference internal" href="#tauren.tauren.TaurenTraj.n_atoms" title="tauren.tauren.TaurenTraj.n_atoms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_atoms</span></code></a></dt>
+<dd><p class="first last">The number of atoms in the current slicing.</p>
+</dd>
+<dt><a class="reference internal" href="#tauren.tauren.TaurenTraj.n_frames" title="tauren.tauren.TaurenTraj.n_frames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_frames</span></code></a></dt>
+<dd><p class="first last">The number of frames in the trajectory considering the current slicing as defined by the <a class="reference internal" href="#tauren.tauren.TaurenTraj.slice_tuple" title="tauren.tauren.TaurenTraj.slice_tuple"><code class="xref py py-attr docutils literal notranslate"><span class="pre">slice_tuple</span></code></a>.</p>
+</dd>
+<dt><a class="reference internal" href="#tauren.tauren.TaurenTraj.n_residues" title="tauren.tauren.TaurenTraj.n_residues"><code class="xref py py-obj docutils literal notranslate"><span class="pre">n_residues</span></code></a></dt>
+<dd><p class="first last">The number of residues in the current slicing.</p>
+</dd>
+<dt><a class="reference internal" href="#tauren.tauren.TaurenTraj.observables" title="tauren.tauren.TaurenTraj.observables"><code class="xref py py-obj docutils literal notranslate"><span class="pre">observables</span></code></a></dt>
+<dd><p class="first last">A dictionary containing all data obtained from the system.</p>
+</dd>
+<dt><a class="reference internal" href="#tauren.tauren.TaurenTraj.slice_tuple" title="tauren.tauren.TaurenTraj.slice_tuple"><code class="xref py py-obj docutils literal notranslate"><span class="pre">slice_tuple</span></code></a></dt>
+<dd><p class="first last">A 3 element tuple identifing the current slicing (start, end, step).</p>
+</dd>
+<dt><a class="reference internal" href="#tauren.tauren.TaurenTraj.sliced_frames_list" title="tauren.tauren.TaurenTraj.sliced_frames_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sliced_frames_list</span></code></a></dt>
+<dd><p class="first last">The list of frames in the current frame slicing.</p>
+</dd>
+<dt><a class="reference internal" href="#tauren.tauren.TaurenTraj.timestep" title="tauren.tauren.TaurenTraj.timestep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">timestep</span></code></a></dt>
+<dd><p class="first last">The time step in the current slicing.</p>
+</dd>
+<dt><a class="reference internal" href="#tauren.tauren.TaurenTraj.totaltime" title="tauren.tauren.TaurenTraj.totaltime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">totaltime</span></code></a></dt>
+<dd><p class="first last">The total time in the current slicing.</p>
+</dd>
+<dt><strong>trajectory</strong></dt>
+<dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.align_traj" title="tauren.tauren.TaurenTraj.align_traj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">align_traj</span></code></a>(*[,&nbsp;weights,&nbsp;file_name,&nbsp;inplace])</td>
+<td>Aligns trajectory to the topology structure (reference).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.calc_rmsds_combined_chains" title="tauren.tauren.TaurenTraj.calc_rmsds_combined_chains"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_rmsds_combined_chains</span></code></a>(*[,&nbsp;chains,&nbsp;…])</td>
+<td>Calculates combined RMSDs for a set of chains.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.calc_rmsds_separated_chains" title="tauren.tauren.TaurenTraj.calc_rmsds_separated_chains"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_rmsds_separated_chains</span></code></a>(*[,&nbsp;chains,&nbsp;…])</td>
+<td>Calculates RMSDs for each chain separately.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.export_data" title="tauren.tauren.TaurenTraj.export_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">export_data</span></code></a>(key[,&nbsp;file_name,&nbsp;sep,&nbsp;header])</td>
+<td>Exports data arrays to file.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.frame_slice" title="tauren.tauren.TaurenTraj.frame_slice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frame_slice</span></code></a>([start,&nbsp;end,&nbsp;step])</td>
+<td>Slices trajectory in frames for the subsequent operations.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.frames2file" title="tauren.tauren.TaurenTraj.frames2file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">frames2file</span></code></a>([frames,&nbsp;prefix,&nbsp;ext])</td>
+<td>Extracts trajectory frames to PDB files using prefix name.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.image_molecules" title="tauren.tauren.TaurenTraj.image_molecules"><code class="xref py py-obj docutils literal notranslate"><span class="pre">image_molecules</span></code></a>()</td>
+<td>Images molecules.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.remove_solvent" title="tauren.tauren.TaurenTraj.remove_solvent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_solvent</span></code></a>(**kwargs)</td>
+<td>Removes solvent from trajectory.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.report" title="tauren.tauren.TaurenTraj.report"><code class="xref py py-obj docutils literal notranslate"><span class="pre">report</span></code></a>()</td>
+<td>Prints general information about trajectory.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.save_traj" title="tauren.tauren.TaurenTraj.save_traj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_traj</span></code></a>([file_name])</td>
+<td>Saves trajectory to file.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#tauren.tauren.TaurenTraj.set_atom_selection" title="tauren.tauren.TaurenTraj.set_atom_selection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_atom_selection</span></code></a>(selection,&nbsp;**kwargs)</td>
+<td>Sets the current atom selection.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="tauren.tauren.TaurenTraj.align_traj">
+<code class="descname">align_traj</code><span class="sig-paren">(</span><em>*</em>, <em>weights='mass'</em>, <em>file_name='aligned_traj.dcd'</em>, <em>inplace=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tauren/tauren.html#TaurenTraj.align_traj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tauren.tauren.TaurenTraj.align_traj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aligns trajectory to the topology structure (reference).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tauren.tauren.TaurenTraj.calc_rmsds_combined_chains">
+<code class="descname">calc_rmsds_combined_chains</code><span class="sig-paren">(</span><em>*</em>, <em>chains='all'</em>, <em>ref_frame=0</em>, <em>storage_key='rmsds_combined_chains'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tauren/tauren.html#TaurenTraj.calc_rmsds_combined_chains"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tauren.tauren.TaurenTraj.calc_rmsds_combined_chains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates combined RMSDs for a set of chains.</p>
+<p>Calculated RMSDs are stored in the form of np.ndarray
+in trajectory’s observables attribute.
+Storage key is the tuple of strings: (storage_key, chains).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>chains</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or list of identifiers, optional</span></dt>
+<dd><p class="first">Defaults to “all”, all chains are used.
+BUT, previous selection is considered, therefore, chains
+will subselect over a previous
+<a class="reference internal" href="#tauren.tauren.TaurenTraj.set_atom_selection" title="tauren.tauren.TaurenTraj.set_atom_selection"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_atom_selection()</span></code></a>.</p>
+<p>With str, use: “1” or comma separated identifers, “1,2,4”.</p>
+<p>With list, use a list of identifiers: [1,2,4] or [“A”, “D”].</p>
+<p class="last">Remember that:
+# when using <strong>MDAnalysis</strong>, identifiers are the segid
+characters.
+# when using <strong>MDTraj</strong>, identifiers are digits that
+represent chain order.</p>
+</dd>
+<dt><strong>ref_frame</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
+<dd><p class="first last">The reference frame for the RMSD calculation.</p>
+</dd>
+<dt><strong>storage_key</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd><p class="first last">The first element of the key tuple with which the
+calculated RMSD data will be stored in the trajectory’s
+observables’ dictionary. Defaults to “rmsds_combined_chains”.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>key</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd></dd>
+<dt><strong>The key with which data was stored in observables</strong></dt>
+<dd></dd>
+<dt><strong>attribute dictionary.</strong></dt>
+<dd></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tauren.tauren.TaurenTraj.calc_rmsds_separated_chains">
+<code class="descname">calc_rmsds_separated_chains</code><span class="sig-paren">(</span><em>*</em>, <em>chains='all'</em>, <em>ref_frame=0</em>, <em>storage_key='rmsds_separated_chains'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tauren/tauren.html#TaurenTraj.calc_rmsds_separated_chains"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tauren.tauren.TaurenTraj.calc_rmsds_separated_chains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates RMSDs for each chain separately.</p>
+<p>Calculated RMSDs are stored in the form of np.ndarray
+in trajectory’s observables attribute.
+Storage key is the tuple of strings:
+(storage_key, chains_headers), where chains_headers is a “-”
+separated list of the chainids parsed (A-B-C).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>chains</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str or list of idetifiers, optional</span></dt>
+<dd><p class="first">Defaults to “all”, all chains are used.</p>
+<p>With str, use: “1” or comma separated identifers, “1,2,4”.</p>
+<p>With list, use a list of identifiers: [1,2,4] or [“A”, “D”].</p>
+<p class="last">Remember that:
+# when using <strong>MDAnalysis</strong>, identifiers are the segid
+characters.
+# when using <strong>MDTraj</strong>, identifiers are digits that
+represent chain order.</p>
+</dd>
+<dt><strong>ref_frame</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
+<dd><p class="first last">The reference frame for the RMSD calculation.</p>
+</dd>
+<dt><strong>storage_key</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd><p class="first last">The first element of the key tuple with which the
+calculated RMSD data will be stored in the trajectory’s
+observables’ dictionary. Defaults to “rmsds_combined_chains”.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>key</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">The key with which data was stored in observables
+attribute dictionary.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tauren.tauren.TaurenTraj.export_data">
+<code class="descname">export_data</code><span class="sig-paren">(</span><em>key</em>, <em>file_name='table.csv'</em>, <em>sep='</em>, <em>'</em>, <em>header=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tauren/tauren.html#TaurenTraj.export_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tauren.tauren.TaurenTraj.export_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exports data arrays to file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>key</strong> <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd><p class="first last">The key with which the data is stored in the
+observables attribute dictionary.</p>
+</dd>
+<dt><strong>file_name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">The name of the file.
+Defaults to “table.csv”.</p>
+</dd>
+<dt><strong>sep</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">The column separator.
+Defaults to comma “,”.</p>
+</dd>
+<dt><strong>header</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">Any text you wish to add as comment as file header.
+Headers are identified by “#”.
+Defaults to nothing.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tauren.tauren.TaurenTraj.frame_slice">
+<code class="descname">frame_slice</code><span class="sig-paren">(</span><em>start=1</em>, <em>end=None</em>, <em>step=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tauren/tauren.html#TaurenTraj.frame_slice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tauren.tauren.TaurenTraj.frame_slice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Slices trajectory in frames for the subsequent operations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>start</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The starting frame.
+Frame index starts at 1.
+Defaults to None, slices from the start of trajectory.</p>
+</dd>
+<dt><strong>end</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">The end frame for the new slicing (INCLUSIVE).
+END should be lower or equal than the traj length.
+Defaults to None, slices until the end of the trajectory.</p>
+</dd>
+<dt><strong>step</strong> <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Integer value which determines the increment between
+each index for slicing.
+Defaults to 1.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tauren.tauren.TaurenTraj.frames2file">
+<code class="descname">frames2file</code><span class="sig-paren">(</span><em>frames='all'</em>, <em>prefix='_'</em>, <em>ext='pdb'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tauren/tauren.html#TaurenTraj.frames2file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tauren.tauren.TaurenTraj.frames2file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts trajectory frames to PDB files using prefix name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>frames</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd><p class="first">Frame or range of frames to extract.
+Defaults to “all”: extract all frames from current slicing.</p>
+<p>A frame range can be defined as follows:
+End values are INCLUSIVE.</p>
+<blockquote class="last">
+<div><ul class="simple">
+<li>“1”           -&gt; the first frame</li>
+<li>“1,5,100”     -&gt; frames 1, 5 and 100</li>
+<li>“10:”         -&gt; from frame 10 to the end</li>
+<li>“:500”        -&gt; from first frame to frame 500 (inclusive)</li>
+<li>“10:50”       -&gt; from frame 10 to 50 (inclusive)</li>
+<li>“10:100:2”    -&gt; from frame 10 to 100 in steps of 2</li>
+</ul>
+</div></blockquote>
+</dd>
+<dt><strong>prefix</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd><p class="first last">The prefix name for extracted PDBs.
+Defaults to “_”.</p>
+</dd>
+<dt><strong>ext</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str, optional [“pdb”]</span></dt>
+<dd><p class="first last">The file extention to which the frames are saved.
+Deppending on the trajectory type used the allowed
+file types may differ. Reffer to the documentation of
+the MD analysis library you are using.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tauren.tauren.TaurenTraj.full_frames_list">
+<code class="descname">full_frames_list</code><a class="headerlink" href="#tauren.tauren.TaurenTraj.full_frames_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of frames in the input trajectory.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tauren.tauren.TaurenTraj.image_molecules">
+<code class="descname">image_molecules</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tauren/tauren.html#TaurenTraj.image_molecules"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tauren.tauren.TaurenTraj.image_molecules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Images molecules.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tauren.tauren.TaurenTraj.n_atoms">
+<code class="descname">n_atoms</code><a class="headerlink" href="#tauren.tauren.TaurenTraj.n_atoms" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of atoms in the current slicing.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tauren.tauren.TaurenTraj.n_frames">
+<code class="descname">n_frames</code><a class="headerlink" href="#tauren.tauren.TaurenTraj.n_frames" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of frames in the trajectory considering the
+current slicing as defined by the <a class="reference internal" href="#tauren.tauren.TaurenTraj.slice_tuple" title="tauren.tauren.TaurenTraj.slice_tuple"><code class="xref py py-attr docutils literal notranslate"><span class="pre">slice_tuple</span></code></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tauren.tauren.TaurenTraj.n_residues">
+<code class="descname">n_residues</code><a class="headerlink" href="#tauren.tauren.TaurenTraj.n_residues" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of residues in the current slicing.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tauren.tauren.TaurenTraj.observables">
+<code class="descname">observables</code><a class="headerlink" href="#tauren.tauren.TaurenTraj.observables" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dictionary containing all data obtained from the system.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tauren.tauren.TaurenTraj.remove_solvent">
+<code class="descname">remove_solvent</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tauren/tauren.html#TaurenTraj.remove_solvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tauren.tauren.TaurenTraj.remove_solvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes solvent from trajectory.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tauren.tauren.TaurenTraj.report">
+<code class="descname">report</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tauren/tauren.html#TaurenTraj.report"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tauren.tauren.TaurenTraj.report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints general information about trajectory.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tauren.tauren.TaurenTraj.save_traj">
+<code class="descname">save_traj</code><span class="sig-paren">(</span><em>file_name='traj_output.dcd'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tauren/tauren.html#TaurenTraj.save_traj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tauren.tauren.TaurenTraj.save_traj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves trajectory to file.</p>
+<p>Overwrites existing files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>file_name</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">Name of the output trajectory file.
+File extention is taken from file_name.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tauren.tauren.TaurenTraj.set_atom_selection">
+<code class="descname">set_atom_selection</code><span class="sig-paren">(</span><em>selection</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/tauren/tauren.html#TaurenTraj.set_atom_selection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tauren.tauren.TaurenTraj.set_atom_selection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the current atom selection.</p>
+<p>Atom selection will be used in subsequent operations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dt><strong>selection</strong> <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
+<dd><p class="first last">The selection string. This may deppend on the
+Trajectory library type chosen for the calculation.</p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
+<dt><strong>TypeError</strong></dt>
+<dd><p class="first last">If selection is not string.</p>
+</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tauren.tauren.TaurenTraj.slice_tuple">
+<code class="descname">slice_tuple</code><a class="headerlink" href="#tauren.tauren.TaurenTraj.slice_tuple" title="Permalink to this definition">¶</a></dt>
+<dd><p>A 3 element tuple identifing the current slicing
+(start, end, step).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tauren.tauren.TaurenTraj.sliced_frames_list">
+<code class="descname">sliced_frames_list</code><a class="headerlink" href="#tauren.tauren.TaurenTraj.sliced_frames_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>The list of frames in the current frame slicing.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tauren.tauren.TaurenTraj.timestep">
+<code class="descname">timestep</code><a class="headerlink" href="#tauren.tauren.TaurenTraj.timestep" title="Permalink to this definition">¶</a></dt>
+<dd><p>The time step in the current slicing.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="tauren.tauren.TaurenTraj.totaltime">
+<code class="descname">totaltime</code><a class="headerlink" href="#tauren.tauren.TaurenTraj.totaltime" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total time in the current slicing.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="module_load.html" class="btn btn-neutral" title="load" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, João M.C. Teixeira
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>  
+
+  <style>
+    /* Sidebar header (and topbar for mobile) */
+    .wy-side-nav-search, .wy-nav-top {
+      background: #f0b27a ;
+    }
+  </style>
+
+
+</body>
+</html>

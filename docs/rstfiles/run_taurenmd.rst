@@ -37,24 +37,25 @@ On Windows
 Examples
 ~~~~~~~~
 
-Use the ``bin/taurenmd -h`` option to get updated help on the script usage:
+Use the ``bin/taurenmd -h`` option to get updated help on the script usage::
 
-:-c CONFIG, --config CONFIG:
-    Tauren-MD configuration JSON file. If not provided
-    runs the default config: simply loads trajectory and
-    shows information
-
-:-traj TRAJECTORY, --trajectory TRAJECTORY:
-    Trajectory file (('.xtc', '.nc', '.trr', '.h5',
-    '.pdb', '.binpos', '.dcd'))
+    -c CONFIG, --config CONFIG
+                        Tauren-MD configuration JSON file. If not provided
+                        runs the default config: simply loads trajectory and
+                        shows information
     
-:-top TOPOLOGY, --topology TOPOLOGY:
-    Topology file (('.pdb', '.cif'))
+    -traj TRAJECTORY, --trajectory TRAJECTORY
+                        Trajectory file (('.xtc', '.nc', '.trr', '.h5',
+                        '.pdb', '.binpos', '.dcd'))
+    
+    -top TOPOLOGY, --topology TOPOLOGY
+                        Topology file (('.pdb', '.cif'))
+    
+    -tt {mdtraj,mdanalysis}, --trajtype {mdtraj,mdanalysis}
+                        Library to use as trajectory type, in lower case.
+                        Current libraries available: MDTraj
+                        (http://mdtraj.org/1.9.0/)
 
-:-tt {mdtraj}, --trajtype {mdtraj}:
-    Library to use as trajectory type, in lower case.
-    Current libraries available: MDTraj
-    (http://mdtraj.org/1.9.0/)
 
 ``taurenmd`` can be used to run a Tauren-MD configuration file, you can use it to repeat a previous execution or to run a new one from a configured conf file. Read :ref:`here <taurenconfig>` how to configure a Tauren-MD configuration file.
 

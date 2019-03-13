@@ -57,7 +57,7 @@
             
             
               <div class="version">
-                0.5.3
+                0.6.0
               </div>
             
           
@@ -156,27 +156,25 @@
             
   <h1>Source code for tauren.logger</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">MODULE PROVIDES LOGGER TO TAUREN-MD</span>
-
-<span class="sd">Copyright © 2018-2019 Tauren-MD Project</span>
-
-<span class="sd">Contributors to this file:</span>
-<span class="sd">- João M.C. Teixeira (https://github.com/joaomcteixeira)</span>
-
-<span class="sd">Tauren-MD is free software: you can redistribute it and/or modify</span>
-<span class="sd">it under the terms of the GNU General Public License as published by</span>
-<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
-<span class="sd">(at your option) any later version.</span>
-
-<span class="sd">Tauren-MD is distributed in the hope that it will be useful,</span>
-<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
-<span class="sd">GNU General Public License for more details.</span>
-
-<span class="sd">You should have received a copy of the GNU General Public License</span>
-<span class="sd">along with Tauren-MD. If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">Provides a logger for Tauren-MD. Uses Python logging system.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-
+<span class="c1"># Copyright © 2018-2019 Tauren-MD Project</span>
+<span class="c1">#</span>
+<span class="c1"># Tauren-MD is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># Tauren-MD is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with Tauren-MD. If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1"># Contributors to this file:</span>
+<span class="c1"># - João M.C. Teixeira (https://github.com/joaomcteixeira)</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">logging.config</span>
 
@@ -222,11 +220,14 @@
         <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;console&quot;</span><span class="p">,</span> <span class="s2">&quot;debug_file_handler&quot;</span><span class="p">]</span>
         <span class="p">}</span>
     <span class="p">}</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The Tauren-MD logger configuration.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="get_log"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.logger.get_log">[docs]</a><span class="k">def</span> <span class="nf">get_log</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="get_log"><a class="viewcode-back" href="../../rstfiles/module_logger.html#tauren.logger.get_log">[docs]</a><span class="k">def</span> <span class="nf">get_log</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Configures logger for Tauren MD.</span>
+<span class="sd">    Returns a configured logger according to :const:`~tauren_log_config`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
     <span class="n">logging</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">dictConfig</span><span class="p">(</span><span class="n">tauren_log_config</span><span class="p">)</span>
