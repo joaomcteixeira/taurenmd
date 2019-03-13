@@ -431,7 +431,7 @@ class TaurenTraj(ABC):
         if isinstance(selector, str):
             self.atom_selection = selector
         
-        elif selection is None:
+        elif selector is None:
             self.atom_selection = "all"
         
         else:
