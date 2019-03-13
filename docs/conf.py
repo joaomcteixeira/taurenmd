@@ -230,4 +230,5 @@ extlinks = {
     "taurengit": ("https://github.com/joaomcteixeira/Tauren-MD", ""),
     "treeoflife": ("https://github.com/joaomcteixeira/Tree-of-Life", ""),
     "treevision": ("https://github.com/joaomcteixeira/Tree-of-Life/blob/master/VISION.md", ""),
+    "zenodo": ("https://zenodo.org/badge/latestdoi/152575798" , ""),
     }
