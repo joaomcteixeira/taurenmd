@@ -4,15 +4,22 @@
             "topology": "topology_imaged_noSolvent.pdb"
         },
     
-    "traj_type": "mdtraj",
+    "traj_type": "mdanalysis",
     
     "actions": {
         "remove_solvent": {
             "exclude":null
             },
         
+        "#try_image_molecules": {
+            "anchor_molecules": null,
+            "other_molecules": null,
+            "sorted_bonds": null,
+            "make_whole": null
+            },
+        
         "frames2file": {
-            "frames": "50:55",
+            "frames": "50:60",
             "prefix": "_",
             "ext": "pdb"
             },
@@ -67,7 +74,7 @@
         "produce_rmsds_combined_chains": {
             
             "calc_rmsds_combined_chains": {
-                "chains": "0,1,2",
+                "chains": "A,B,C",
                 "ref_frame": 0
                 },
             

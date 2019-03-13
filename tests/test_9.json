@@ -4,39 +4,14 @@
             "topology": "topology_imaged_noSolvent.pdb"
         },
     
-    "traj_type": "mdtraj",
+    "traj_type": "mdanalysis",
     
     "actions": {
-        "remove_solvent": {
-            "exclude":null
-            },
-        
-        "frames2file": {
-            "frames": "50:55",
-            "prefix": "_",
-            "ext": "pdb"
-            },
-        
-        "frame_slice": {
-            "start": 100,
-            "end": null,
-            "step":10
-            },
-        
-        "save_traj": {
-            "file_name": "traj_OUTPUT.dcd"
-            },
-        
-        "frame_slice_": {
-            "start": null,
-            "end": null,
-            "step":10
-            },
         
         "produce_rmsds_combined_chains": {
             
             "calc_rmsds_combined_chains": {
-                "chains": "all",
+                "chains": "A",
                 "ref_frame": 0
                 },
             
@@ -64,10 +39,14 @@
                 }
             },
         
-        "produce_rmsds_combined_chains": {
+        "atom_selection": {
+            "selection": "segid A or segid C"
+            },
+        
+        "produce_rmsds_combined_chains_": {
             
             "calc_rmsds_combined_chains": {
-                "chains": "0,1,2",
+                "chains": "all",
                 "ref_frame": 0
                 },
             
@@ -84,7 +63,7 @@
                 "color": "blue",
                 "alpha": 0.7,
                 "grid": true,
-                "grid_color": "green",
+                "grid_color": "lightgrey",
                 "grid_ls": "-",
                 "grid_lw": 1,
                 "grid_alpha": 0.5,

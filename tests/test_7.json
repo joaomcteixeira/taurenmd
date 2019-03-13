@@ -7,33 +7,43 @@
     "traj_type": "mdtraj",
     
     "actions": {
-        "remove_solvent": {
-            "exclude":null
-            },
-        
-        "frames2file": {
-            "frames": "50:55",
-            "prefix": "_",
-            "ext": "pdb"
-            },
-        
-        "frame_slice": {
-            "start": 100,
-            "end": null,
-            "step":10
-            },
-        
-        "save_traj": {
-            "file_name": "traj_OUTPUT.dcd"
-            },
-        
-        "frame_slice_": {
-            "start": null,
-            "end": null,
-            "step":10
-            },
         
         "produce_rmsds_combined_chains": {
+            
+            "calc_rmsds_combined_chains": {
+                "chains": "0",
+                "ref_frame": 0
+                },
+            
+            "export_data": {
+                "file_name": null,
+                "sep": ","
+                },
+            
+            "plot_rmsd_combined_chains": {
+                "label": null,
+                "suptitle": "Combined Chain RMSDs",
+                "x_label": "Frame Number",
+                "y_label": "RMSDs",
+                "color": "blue",
+                "alpha": 0.7,
+                "grid": true,
+                "grid_color": "lightgrey",
+                "grid_ls": "-",
+                "grid_lw": 1,
+                "grid_alpha": 0.5,
+                "legend": true,
+                "legend_fs": 6,
+                "legend_loc": 4,
+                "fig_name": null
+                }
+            },
+        
+        "atom_selection": {
+            "selection": "chainid 0"
+            },
+        
+        "produce_rmsds_combined_chains_": {
             
             "calc_rmsds_combined_chains": {
                 "chains": "all",
@@ -64,41 +74,10 @@
                 }
             },
         
-        "produce_rmsds_combined_chains": {
-            
-            "calc_rmsds_combined_chains": {
-                "chains": "0,1,2",
-                "ref_frame": 0
-                },
-            
-            "export_data": {
-                "file_name": null,
-                "sep": ","
-                },
-            
-            "plot_rmsd_combined_chains": {
-                "label": null,
-                "suptitle": "Combined Chain RMSDs",
-                "x_label": "Frame Number",
-                "y_label": "RMSDs",
-                "color": "blue",
-                "alpha": 0.7,
-                "grid": true,
-                "grid_color": "green",
-                "grid_ls": "-",
-                "grid_lw": 1,
-                "grid_alpha": 0.5,
-                "legend": true,
-                "legend_fs": 6,
-                "legend_loc": 4,
-                "fig_name": null
-                }
-            },
-        
         "produce_rmsds_separated_chains": {
             
             "calc_rmsds_separated_chains" : {
-                "chains": "all",
+                "chains": "0",
                 "ref_frame": 0
                 },
             

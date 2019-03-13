@@ -1,0 +1,31 @@
+{
+    "input_data": {
+            "trajectory": "production_imaged_noSolvent.dcd",
+            "topology": "topology_imaged_noSolvent.pdb"
+        },
+    
+    "traj_type": "mdanalysis",
+    
+    "actions": {
+        
+        "atom_selection": {
+            "selection": "segid A"
+            },
+        
+        "frames2file": {
+            "frames": "50:51",
+            "prefix": "_",
+            "ext": "pdb"
+            },
+        
+        "atom_selection_": {
+            "selection": null
+            },
+        
+        "frames2file_": {
+            "frames": "52",
+            "prefix": "_",
+            "ext": "pdb"
+            }
+        }
+    }

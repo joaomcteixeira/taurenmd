@@ -1,0 +1,25 @@
+{
+    "input_data": {
+            "trajectory": "production_imaged_noSolvent.dcd",
+            "topology": "topology_imaged_noSolvent.pdb"
+        },
+    
+    "traj_type": "mdtraj",
+    
+    "actions": {
+        
+        "atom_selection": {
+            "selection": "chainid 1"
+            },
+        
+        "frame_slice": {
+            "start": 1,
+            "end": 10,
+            "step": null
+            },
+        
+        "save_traj": {
+            "file_name": "traj_OUTPUT_chainid1.dcd"
+            }
+        }
+    }
