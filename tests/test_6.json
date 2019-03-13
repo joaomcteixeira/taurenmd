@@ -9,7 +9,7 @@
     "actions": {
         
         "atom_selection": {
-            "selection": "segid A"
+            "selector": "segid A"
             },
         
         "frame_slice": {

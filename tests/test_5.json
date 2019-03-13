@@ -9,7 +9,7 @@
     "actions": {
         
         "atom_selection": {
-            "selection": "chainid 1"
+            "selector": "chainid 1"
             },
         
         "frame_slice": {

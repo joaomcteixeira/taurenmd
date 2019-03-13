@@ -9,7 +9,7 @@
     "actions": {
         
         "atom_selection": {
-            "selection": "segid A"
+            "selector": "segid A"
             },
         
         "produce_rmsds_combined_chains_": {

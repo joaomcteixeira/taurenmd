@@ -40,7 +40,7 @@
             },
         
         "atom_selection": {
-            "selection": "segid A or segid C"
+            "selector": "segid A or segid C"
             },
         
         "produce_rmsds_combined_chains_": {

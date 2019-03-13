@@ -40,7 +40,7 @@
             },
         
         "atom_selection": {
-            "selection": "chainid 0"
+            "selector": "chainid 0"
             },
         
         "produce_rmsds_combined_chains_": {

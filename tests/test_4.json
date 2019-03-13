@@ -9,7 +9,7 @@
     "actions": {
         
         "atom_selection": {
-            "selection": "segid A"
+            "selector": "segid A"
             },
         
         "frames2file": {
@@ -19,7 +19,7 @@
             },
         
         "atom_selection_": {
-            "selection": null
+            "selector": null
             },
         
         "frames2file_": {

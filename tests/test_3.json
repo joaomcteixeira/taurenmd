@@ -9,7 +9,7 @@
     "actions": {
         
         "atom_selection": {
-            "selection": "chainid 1"
+            "selector": "chainid 1"
             },
         
         "frames2file": {
@@ -19,7 +19,7 @@
             },
         
         "atom_selection_": {
-            "selection": null
+            "selector": null
             },
         
         "frames2file_": {

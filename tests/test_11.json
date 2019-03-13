@@ -40,7 +40,7 @@
             },
         
         "atom_selection": {
-            "selection": "resid 1:10"
+            "selector": "resid 1:10"
             },
         
         "#produce_rmsds_combined_chains_": {
