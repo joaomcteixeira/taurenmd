@@ -337,8 +337,8 @@ from frame 100 to the end.
        "step": null
        }
 
-atom select
-^^^^^^^^^^^
+atom selection
+^^^^^^^^^^^^^^
 
 ``atom_select`` selects a group of atoms from the topology in use. Once an atom group has been selected, the following operations will consider only that selection. For example, if ``chainid 1`` or ``resid 1:100`` are selected, a subsequent :ref:`save_traj` will only save the atoms on that selection.
 
@@ -346,7 +346,7 @@ The ``selector`` code is a string (some text inside double quotes ``""``) that m
 
 .. code:: json
 
-    "atom_select": {
+    "atom_selection": {
         "selector": "chainid 1"
         }
 

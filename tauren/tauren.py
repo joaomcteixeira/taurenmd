@@ -408,7 +408,7 @@ class TaurenTraj(ABC):
         
         return
     
-    def set_atom_selection(self, selection, **kwargs):
+    def set_atom_selection(self, selector, **kwargs):
         """
         Sets the current atom selection.
         
@@ -416,7 +416,7 @@ class TaurenTraj(ABC):
         
         Parameters
         ----------
-        selection : str
+        selector : str
             The selection string. This may deppend on the
             Trajectory library type chosen for the calculation.
         
@@ -426,10 +426,10 @@ class TaurenTraj(ABC):
             If selection is not string.
         """
         
-        log.debug(f"<selection>: {selection}")
+        log.debug(f"<selection>: {selector}")
         
-        if isinstance(selection, str):
-            self.atom_selection = selection
+        if isinstance(selector, str):
+            self.atom_selection = selector
         
         elif selection is None:
             self.atom_selection = "all"
@@ -437,7 +437,7 @@ class TaurenTraj(ABC):
         else:
             raise TypeError(
                 "<selection> parameter must be STRING or None types."
-                f"'{type(selection)}' given."
+                f"'{type(selector)}' given."
                 )
         
         return

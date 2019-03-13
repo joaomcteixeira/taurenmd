@@ -1,5 +1,6 @@
 # Index
 
+- [v0.6.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v061)
 - [v0.6.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v060)
 - [v0.5.3](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v053)
 - [v0.5.2](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v052)
@@ -13,6 +14,13 @@
 - [v0.2.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v020)
 - [v0.1.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v011)
 - [v0.0.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v000)
+
+# v0.6.1
+[Back to Index][1]
+
+- Bug correction:
+  - corrected action name `atom_selection`.
+  - correct param name in TaurenTraj.set_atom_selection to `selector`.
 
 # v0.6.0
 [Back to Index][1]

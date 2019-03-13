@@ -17,7 +17,7 @@
             "step":10
             },
         
-        "atom_slice" {
+        "atom_selection" {
             "selector": "chainid 1"
             },
         

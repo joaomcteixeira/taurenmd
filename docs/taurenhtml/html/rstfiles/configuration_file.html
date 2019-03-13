@@ -109,7 +109,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#remove-solvent">remove solvent</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#image-molecules">image molecules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#frame-slice">frame slice</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#atom-select">atom select</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#atom-selection">atom selection</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#align-trajectory">align trajectory</a></li>
 </ul>
 </li>
@@ -488,11 +488,11 @@ wish to read first the what was stated in the above sections).</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="atom-select">
-<h4>atom select<a class="headerlink" href="#atom-select" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="atom-selection">
+<h4>atom selection<a class="headerlink" href="#atom-selection" title="Permalink to this headline">¶</a></h4>
 <p><code class="docutils literal notranslate"><span class="pre">atom_select</span></code> selects a group of atoms from the topology in use. Once an atom group has been selected, the following operations will consider only that selection. For example, if <code class="docutils literal notranslate"><span class="pre">chainid</span> <span class="pre">1</span></code> or <code class="docutils literal notranslate"><span class="pre">resid</span> <span class="pre">1:100</span></code> are selected, a subsequent <a class="reference internal" href="#save-traj"><span class="std std-ref">save trajectory</span></a> will only save the atoms on that selection.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">selector</span></code> code is a string (some text inside double quotes <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>) that must match the specifications of the MD analysis library you chose to use, you sould refer to that library documentation for details: <a class="reference external" href="https://www.mdanalysis.org/docs/documentation_pages/selections.html">MDAnalysis selections</a>, <a class="reference external" href="http://mdtraj.org/latest/atom_selection.html">MDTraj selections</a>.</p>
-<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;atom_select&quot;</span><span class="p">:</span> <span class="p">{</span>
+<div class="code json highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;atom_selection&quot;</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">&quot;selector&quot;</span><span class="p">:</span> <span class="s2">&quot;chainid 1&quot;</span>
     <span class="p">}</span>
 </pre></div>
