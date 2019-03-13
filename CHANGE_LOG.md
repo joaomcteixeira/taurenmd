@@ -1,5 +1,6 @@
 # Index
 
+- [v0.6.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v060)
 - [v0.5.3](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v053)
 - [v0.5.2](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v052)
 - [v0.5.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v051)
@@ -12,6 +13,16 @@
 - [v0.2.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v020)
 - [v0.1.1](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v011)
 - [v0.0.0](https://github.com/joaomcteixeira/Tauren-MD/blob/master/CHANGE_LOG.md#v000)
+
+# v0.6.0
+[Back to Index][1]
+
+- changed `slice` action to `frame_slice`
+- implemented atom selection via `atom_selection` action.
+  - now trajectory analysis can be further selected and this selection combined with the other selections provided by other `actions`.
+  - improved trajectory properties.
+- updated `TrajectoryObservables` keys to `namedtuples` to facilite data handling, export, file naming, etc.
+- improved documentation.
 
 # v0.5.3
 [Back to Index][1]

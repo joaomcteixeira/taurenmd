@@ -57,7 +57,7 @@
             
             
               <div class="version">
-                0.5.3
+                0.6.0
               </div>
             
           
@@ -156,26 +156,23 @@
             
   <h1>Source code for tauren.load</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">MODULE PROVIDES FUNCTIONS TO OPEN TRAJECTORIES</span>
-
-<span class="sd">Copyright © 2018-2019 Tauren-MD Project</span>
-
-<span class="sd">Contributors to this file:</span>
-<span class="sd">- João M.C. Teixeira (https://github.com/joaomcteixeira)</span>
-
-<span class="sd">Tauren-MD is free software: you can redistribute it and/or modify</span>
-<span class="sd">it under the terms of the GNU General Public License as published by</span>
-<span class="sd">the Free Software Foundation, either version 3 of the License, or</span>
-<span class="sd">(at your option) any later version.</span>
-
-<span class="sd">Tauren-MD is distributed in the hope that it will be useful,</span>
-<span class="sd">but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span class="sd">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
-<span class="sd">GNU General Public License for more details.</span>
-
-<span class="sd">You should have received a copy of the GNU General Public License</span>
-<span class="sd">along with Tauren-MD. If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="sd">Provides functions to load general files, trajectoties</span>
+<span class="sd">and configuration json files.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># Copyright © 2018-2019 Tauren-MD Project</span>
+<span class="c1">#</span>
+<span class="c1"># Tauren-MD is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># Tauren-MD is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABhave received a copy of the GNU General Public License</span>
+<span class="c1"># along with Tauren-MD. If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1"># Contributors to this file:</span>
+<span class="c1"># - João M.C. Teixeira (https://github.com/joaomcteixeira)</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
@@ -216,7 +213,7 @@
     <span class="k">return</span> <span class="n">wrapper</span>
 
 
-<div class="viewcode-block" id="load_json_config"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.load.load_json_config">[docs]</a><span class="nd">@_validate_file_paths</span>
+<div class="viewcode-block" id="load_json_config"><a class="viewcode-back" href="../../rstfiles/module_load.html#tauren.load.load_json_config">[docs]</a><span class="nd">@_validate_file_paths</span>
 <span class="k">def</span> <span class="nf">load_json_config</span><span class="p">(</span><span class="n">config_path</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Loads Tauren-MD configuration file (JSON).</span>
@@ -279,7 +276,7 @@
     <span class="k">return</span> <span class="n">tauren</span><span class="o">.</span><span class="n">TaurenMDAnalysis</span><span class="p">(</span><span class="n">traj_file</span><span class="p">,</span> <span class="n">topology</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="load_traj"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.load.load_traj">[docs]</a><span class="nd">@_validate_file_paths</span>
+<div class="viewcode-block" id="load_traj"><a class="viewcode-back" href="../../index.html#tauren.load.load_traj">[docs]</a><span class="nd">@_validate_file_paths</span>
 <span class="k">def</span> <span class="nf">load_traj</span><span class="p">(</span>
         <span class="n">traj_file</span><span class="p">,</span>
         <span class="n">topo_file</span><span class="p">,</span>

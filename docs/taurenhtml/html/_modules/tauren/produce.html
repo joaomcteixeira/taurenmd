@@ -57,7 +57,7 @@
             
             
               <div class="version">
-                0.5.3
+                0.6.0
               </div>
             
           
@@ -155,13 +155,33 @@
            <div itemprop="articleBody">
             
   <h1>Source code for tauren.produce</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">tauren</span> <span class="k">import</span> <span class="n">logger</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Functions that perform combined operations that are related.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># Copyright © 2018-2019 Tauren-MD Project</span>
+<span class="c1">#</span>
+<span class="c1"># Tauren-MD is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU General Public License as published by</span>
+<span class="c1"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1"># (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># Tauren-MD is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU General Public License</span>
+<span class="c1"># along with Tauren-MD. If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1"># Contributors to this file:</span>
+<span class="c1"># - João M.C. Teixeira (https://github.com/joaomcteixeira)</span>
+<span class="kn">from</span> <span class="nn">tauren</span> <span class="k">import</span> <span class="n">logger</span>
 <span class="kn">from</span> <span class="nn">tauren</span> <span class="k">import</span> <span class="n">plot</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">get_log</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="rmsds_separated_chains"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.produce.rmsds_separated_chains">[docs]</a><span class="k">def</span> <span class="nf">rmsds_separated_chains</span><span class="p">(</span>
+<div class="viewcode-block" id="rmsds_separated_chains"><a class="viewcode-back" href="../../rstfiles/module_produce.html#tauren.produce.rmsds_separated_chains">[docs]</a><span class="k">def</span> <span class="nf">rmsds_separated_chains</span><span class="p">(</span>
         <span class="n">taurentraj</span><span class="p">,</span>
         <span class="n">calc_rmsds_separated_chains</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -180,8 +200,7 @@
         
         <span class="n">_update_export_data</span><span class="p">(</span>
             <span class="n">export_data</span><span class="p">,</span>
-            <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-            <span class="s2">&quot;calc_rmsd_separated_chains&quot;</span><span class="p">,</span>
+            <span class="n">key</span><span class="p">,</span>
             <span class="p">)</span>
         
         <span class="n">taurentraj</span><span class="o">.</span><span class="n">export_data</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="o">**</span><span class="n">export_data</span><span class="p">)</span>
@@ -190,8 +209,9 @@
         
         <span class="n">_update_multiple_plot_config</span><span class="p">(</span>
             <span class="n">plot_rmsd_chain_per_subplot</span><span class="p">,</span>
-            <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">key</span><span class="p">,</span>
             <span class="s2">&quot;plot_rmsd_chain_per_subplot&quot;</span><span class="p">,</span>
+            <span class="n">taurentraj</span><span class="o">.</span><span class="n">observables</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
             <span class="p">)</span>
 
         <span class="n">plot</span><span class="o">.</span><span class="n">rmsd_chain_per_subplot</span><span class="p">(</span>
@@ -204,8 +224,9 @@
         
         <span class="n">_update_multiple_plot_config</span><span class="p">(</span>
             <span class="n">plot_rmsd_individual_chains_one_subplot</span><span class="p">,</span>
-            <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">key</span><span class="p">,</span>
             <span class="s2">&quot;plot_rmsd_individual_chains_one_subplot&quot;</span><span class="p">,</span>
+            <span class="n">taurentraj</span><span class="o">.</span><span class="n">observables</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
             <span class="p">)</span>
         
         <span class="n">plot</span><span class="o">.</span><span class="n">rmsd_individual_chains_one_subplot</span><span class="p">(</span>
@@ -217,7 +238,7 @@
     <span class="k">return</span></div>
 
 
-<div class="viewcode-block" id="rmsds_combined_chains"><a class="viewcode-back" href="../../rstfiles/modules.html#tauren.produce.rmsds_combined_chains">[docs]</a><span class="k">def</span> <span class="nf">rmsds_combined_chains</span><span class="p">(</span>
+<div class="viewcode-block" id="rmsds_combined_chains"><a class="viewcode-back" href="../../rstfiles/module_produce.html#tauren.produce.rmsds_combined_chains">[docs]</a><span class="k">def</span> <span class="nf">rmsds_combined_chains</span><span class="p">(</span>
         <span class="n">taurentraj</span><span class="p">,</span>
         <span class="n">calc_rmsds_combined_chains</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
@@ -235,8 +256,7 @@
         
         <span class="n">_update_export_data</span><span class="p">(</span>
             <span class="n">export_data</span><span class="p">,</span>
-            <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-            <span class="s2">&quot;calc_rmsd_combined_chains&quot;</span><span class="p">,</span>
+            <span class="n">key</span><span class="p">,</span>
             <span class="p">)</span>
         
         <span class="n">taurentraj</span><span class="o">.</span><span class="n">export_data</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="o">**</span><span class="n">export_data</span><span class="p">)</span>
@@ -245,8 +265,9 @@
         
         <span class="n">_update_single_plot_config</span><span class="p">(</span>
             <span class="n">plot_rmsd_combined_chains</span><span class="p">,</span>
-            <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-            <span class="s2">&quot;plot_rmsd_combined_chains&quot;</span><span class="p">,</span>
+            <span class="n">key</span><span class="p">,</span>
+            <span class="s2">&quot;plot&quot;</span><span class="p">,</span>
+            <span class="n">taurentraj</span><span class="o">.</span><span class="n">observables</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
             <span class="p">)</span>
         
         <span class="n">plot</span><span class="o">.</span><span class="n">rmsd_combined_chains</span><span class="p">(</span>
@@ -259,49 +280,49 @@
 
 
 <span class="k">def</span> <span class="nf">_get_key_list</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    .. deprecated:: 0.6.0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">kl</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">kl</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">kl</span>
 
 
 <span class="k">def</span> <span class="nf">_update_export_data</span><span class="p">(</span>
         <span class="n">kwargs</span><span class="p">,</span>
-        <span class="n">key</span><span class="p">,</span>
-        <span class="n">name</span><span class="p">,</span>
+        <span class="n">key</span>
         <span class="p">):</span>
-    
-    <span class="n">key_list</span> <span class="o">=</span> <span class="n">_get_key_list</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-    
+        
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;file_name&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;file_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">_{&#39;-&#39;.join(key_list)}.csv&quot;</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;file_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{key.datatype}</span><span class="s2">_</span><span class="si">{key.filenaming}</span><span class="s2">.csv&quot;</span>
 
 
 <span class="k">def</span> <span class="nf">_update_single_plot_config</span><span class="p">(</span>
         <span class="n">kwargs</span><span class="p">,</span>
         <span class="n">key</span><span class="p">,</span>
         <span class="n">name</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">,</span>
         <span class="p">):</span>
-    
-    <span class="n">key_list</span> <span class="o">=</span> <span class="n">_get_key_list</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-    
+        
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;fig_name&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;fig_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">_{&#39;-&#39;.join(key_list)}.pdf&quot;</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;fig_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">_</span><span class="si">{key.filenaming}</span><span class="s2">.pdf&quot;</span>
 
 
 <span class="k">def</span> <span class="nf">_update_multiple_plot_config</span><span class="p">(</span>
         <span class="n">kwargs</span><span class="p">,</span>
         <span class="n">key</span><span class="p">,</span>
         <span class="n">name</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">,</span>
         <span class="p">):</span>
     
-    <span class="n">key_list</span> <span class="o">=</span> <span class="n">_get_key_list</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-    
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">key_list</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>  <span class="c1"># key_list</span>
     
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;fig_name&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;fig_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">_{&#39;-&#39;.join(key_list)}.pdf&quot;</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;fig_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">_</span><span class="si">{key.filenaming}</span><span class="s2">.pdf&quot;</span>
     
     <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;colors&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;colors&quot;</span><span class="p">)</span>

@@ -1,0 +1,25 @@
+{
+    "input_data": {
+            "trajectory": "production_imaged_noSolvent.dcd",
+            "topology": "topology_imaged_noSolvent.pdb"
+        },
+    
+    "traj_type": "mdanalysis",
+    
+    "actions": {
+        
+        "atom_selection": {
+            "selection": "segid A"
+            },
+        
+        "frame_slice": {
+            "start": 1,
+            "end": 10,
+            "step": null
+            },
+        
+        "save_traj": {
+            "file_name": "traj_OUTPUT_segidA.dcd"
+            }
+        }
+    }

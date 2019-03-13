@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.5.3
+                0.6.0
               </div>
             
           
@@ -194,29 +194,24 @@ requiring any programming skills from the user.</p>
 <div class="section" id="examples">
 <h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
 <p>Use the <code class="docutils literal notranslate"><span class="pre">bin/taurenmd</span> <span class="pre">-h</span></code> option to get updated help on the script usage:</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name" colspan="2">-c CONFIG, –config CONFIG:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Tauren-MD configuration JSON file. If not provided
-runs the default config: simply loads trajectory and
-shows information</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">-traj TRAJECTORY, –trajectory TRAJECTORY:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Trajectory file ((‘.xtc’, ‘.nc’, ‘.trr’, ‘.h5’,
-‘.pdb’, ‘.binpos’, ‘.dcd’))</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">-top TOPOLOGY, –topology TOPOLOGY:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body">Topology file ((‘.pdb’, ‘.cif’))</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">-tt {mdtraj}, –trajtype {mdtraj}:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body">Library to use as trajectory type, in lower case.
-Current libraries available: MDTraj
-(<a class="reference external" href="http://mdtraj.org/1.9.0/">http://mdtraj.org/1.9.0/</a>)</td>
-</tr>
-</tbody>
-</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">c</span> <span class="n">CONFIG</span><span class="p">,</span> <span class="o">--</span><span class="n">config</span> <span class="n">CONFIG</span>
+                    <span class="n">Tauren</span><span class="o">-</span><span class="n">MD</span> <span class="n">configuration</span> <span class="n">JSON</span> <span class="n">file</span><span class="o">.</span> <span class="n">If</span> <span class="ow">not</span> <span class="n">provided</span>
+                    <span class="n">runs</span> <span class="n">the</span> <span class="n">default</span> <span class="n">config</span><span class="p">:</span> <span class="n">simply</span> <span class="n">loads</span> <span class="n">trajectory</span> <span class="ow">and</span>
+                    <span class="n">shows</span> <span class="n">information</span>
+
+<span class="o">-</span><span class="n">traj</span> <span class="n">TRAJECTORY</span><span class="p">,</span> <span class="o">--</span><span class="n">trajectory</span> <span class="n">TRAJECTORY</span>
+                    <span class="n">Trajectory</span> <span class="n">file</span> <span class="p">((</span><span class="s1">&#39;.xtc&#39;</span><span class="p">,</span> <span class="s1">&#39;.nc&#39;</span><span class="p">,</span> <span class="s1">&#39;.trr&#39;</span><span class="p">,</span> <span class="s1">&#39;.h5&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;.pdb&#39;</span><span class="p">,</span> <span class="s1">&#39;.binpos&#39;</span><span class="p">,</span> <span class="s1">&#39;.dcd&#39;</span><span class="p">))</span>
+
+<span class="o">-</span><span class="n">top</span> <span class="n">TOPOLOGY</span><span class="p">,</span> <span class="o">--</span><span class="n">topology</span> <span class="n">TOPOLOGY</span>
+                    <span class="n">Topology</span> <span class="n">file</span> <span class="p">((</span><span class="s1">&#39;.pdb&#39;</span><span class="p">,</span> <span class="s1">&#39;.cif&#39;</span><span class="p">))</span>
+
+<span class="o">-</span><span class="n">tt</span> <span class="p">{</span><span class="n">mdtraj</span><span class="p">,</span><span class="n">mdanalysis</span><span class="p">},</span> <span class="o">--</span><span class="n">trajtype</span> <span class="p">{</span><span class="n">mdtraj</span><span class="p">,</span><span class="n">mdanalysis</span><span class="p">}</span>
+                    <span class="n">Library</span> <span class="n">to</span> <span class="n">use</span> <span class="k">as</span> <span class="n">trajectory</span> <span class="nb">type</span><span class="p">,</span> <span class="ow">in</span> <span class="n">lower</span> <span class="n">case</span><span class="o">.</span>
+                    <span class="n">Current</span> <span class="n">libraries</span> <span class="n">available</span><span class="p">:</span> <span class="n">MDTraj</span>
+                    <span class="p">(</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">mdtraj</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="mf">1.9</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="p">)</span>
+</pre></div>
+</div>
 <p><code class="docutils literal notranslate"><span class="pre">taurenmd</span></code> can be used to run a Tauren-MD configuration file, you can use it to repeat a previous execution or to run a new one from a configured conf file. Read <a class="reference internal" href="configuration_file.html#taurenconfig"><span class="std std-ref">here</span></a> how to configure a Tauren-MD configuration file.</p>
 <p><code class="docutils literal notranslate"><span class="pre">-traj</span></code> and <code class="docutils literal notranslate"><span class="pre">-top</span></code> arguments can be given in-line or a path to those files can be added to the configuration file as well.</p>
 <div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>$ bin/taurenmd -c &lt;PATH TO CONFIG FILE&gt; -traj &lt;PATH TO TRAJECTORY FILE&gt; -top &lt;PATH TO TOPOLOGY FILE&gt;

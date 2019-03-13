@@ -25,5 +25,8 @@ If you are a proficient Pythonista, either using :pypi"`PyPI <>` or :anaconda:`A
 
 However, in this way the ``bin`` executable files won't be created. These scripts are stored in the ``ìnstallation/executables.py`` file as raw strings, copy those to new files to generate your own executable files.
 
+Package distribution
+--------------------
+
 .. todo::
     Add Tauren-MD package to PyPI and/or Conda repository.

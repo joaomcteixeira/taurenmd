@@ -11,20 +11,13 @@
             "exclude":null
             },
         
-        "#try_image_molecules": {
-            "anchor_molecules": null,
-            "other_molecules": null,
-            "sorted_bonds": null,
-            "make_whole": null
-            },
-        
         "frames2file": {
-            "frames": "50:60",
+            "frames": "50:55",
             "prefix": "_",
             "ext": "pdb"
             },
         
-        "slice": {
+        "frame_slice": {
             "start": 100,
             "end": null,
             "step":10
@@ -34,7 +27,7 @@
             "file_name": "traj_OUTPUT.dcd"
             },
         
-        "slice": {
+        "frame_slice_": {
             "start": null,
             "end": null,
             "step":10
@@ -74,7 +67,7 @@
         "produce_rmsds_combined_chains": {
             
             "calc_rmsds_combined_chains": {
-                "chains": "1,2,3",
+                "chains": "0,1,2",
                 "ref_frame": 0
                 },
             

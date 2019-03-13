@@ -1,3 +1,3 @@
 """
-Tauren-MD package.
+Tauren-MD library.
 """

@@ -1,25 +1,26 @@
 """
 Tauren-MD Plotting Functions.
-
-Copyright © 2018-2019 Tauren-MD Project
-
-Contributors to this file:
-- João M.C. Teixeira (https://github.com/joaomcteixeira)
-
-Tauren-MD is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Tauren-MD is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
 """
+# Copyright © 2018-2019 Tauren-MD Project
+#
+# Tauren-MD is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Tauren-MD is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Tauren-MD. If not, see <http://www.gnu.org/licenses/>.
+#
+# Contributors to this file:
+# - João M.C. Teixeira (https://github.com/joaomcteixeira)
 import itertools as it
+import numpy as np
+from functools import wraps
 
 from matplotlib import pyplot as plt
 from matplotlib import colors as mcolors
@@ -30,6 +31,35 @@ log = logger.get_log(__name__)
 
 _msg_fig_saved = "* Saved figure: {}"
 
+
+def _check_data(func):
+    
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        
+        if not(isinstance(args[1], np.ndarray)) \
+                or not(isinstance(args[0], np.ndarray)):
+            log.info(
+                "* Data Type Error * "
+                f"{func.__name__} receives np.ndarrays as"
+                " second data parameter."
+                f" {type(args[1])} given."
+                )
+            return
+        
+        if args[0].size == 0 or args[1].size == 0:
+            log.info(
+                "* Data Error *"
+                f" No data given in {func.__name__} function."
+                )
+            return
+        
+        result = func(*args, **kwargs)
+        
+        return result
+    
+    return wrapper
+        
 
 def _calc_fig_size(
         nsubplots,
@@ -75,6 +105,7 @@ def _calc_fig_size(
     return fs
 
 
+@_check_data
 def rmsd_chain_per_subplot(
         x_data,
         y_data,
@@ -153,15 +184,17 @@ def rmsd_chain_per_subplot(
         ha="center",
         )
     
-    axs = axs.ravel()
+    try:
+        axs = axs.ravel()
+    
+    except AttributeError:
+        axs = np.array([axs])
+        # pass
     
     plt.tight_layout(rect=[0.05, 0.02, 0.995, 0.985])
     fig.subplots_adjust(hspace=0)
     
     colors_it = it.cycle(colors)
-    
-    # avoids iterator recycling as in it.cycle
-    labels_it = it.chain.from_iterable(labels)
     
     max_rmsd = 0
     for ii, chain_rmsds in enumerate(y_data):
@@ -169,7 +202,7 @@ def rmsd_chain_per_subplot(
         axs[ii].plot(
             x_data,
             chain_rmsds,
-            label=next(labels_it),
+            label=labels[ii],
             color=next(colors_it),
             alpha=alpha,
             )
@@ -217,6 +250,7 @@ def rmsd_chain_per_subplot(
     return
 
 
+@_check_data
 def rmsd_combined_chains(
         x_data,
         y_data,
@@ -272,7 +306,7 @@ def rmsd_combined_chains(
         the file name.
     """
     log.info("* Plotting combined Chain RMSDs...")
-        
+    
     fig, ax = plt.subplots(nrows=1, ncols=1)
     
     plt.tight_layout(rect=[0.05, 0.02, 0.995, 0.985])
@@ -321,6 +355,7 @@ def rmsd_combined_chains(
     return
 
 
+@_check_data
 def rmsd_individual_chains_one_subplot(
         x_data,
         y_data,
@@ -391,18 +426,14 @@ def rmsd_individual_chains_one_subplot(
         )
     
     colors_it = it.cycle(colors)
-    
-    # avoids iterator recycling as in it.cycle
-    labels_it = it.chain.from_iterable(labels)
-    
     max_rmsds = 0
     
-    for chain_rmsd_data in y_data:
+    for ii, chain_rmsd_data in enumerate(y_data):
         
         ax.plot(
             x_data,
             chain_rmsd_data,
-            label=next(labels_it),
+            label=labels[ii],
             color=next(colors_it),
             alpha=alpha,
             )
