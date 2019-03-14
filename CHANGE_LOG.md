@@ -21,6 +21,7 @@
 - Bug correction:
   - corrected action name `atom_selection`.
   - correct param name in TaurenTraj.set_atom_selection to `selector`.
+  - updated documentation - Download section.
 
 # v0.6.0
 [Back to Index][1]
