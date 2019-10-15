@@ -46,7 +46,7 @@ install:
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION
   - conda env update -n test-environment --file requirements.yml
   - conda env update -n test-environment --file requirements-dev.yml
-  - conda env activate test-environment
+  - conda activate test-environment
   - tox --version
 script:
   - tox -v
