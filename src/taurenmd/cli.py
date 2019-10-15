@@ -15,13 +15,36 @@ Why does this file exist, and why not put this in __main__?
   Also see (1) from http://click.pocoo.org/5/setuptools/#setuptools-integration
 """
 import argparse
+import sys
 
+from taurenmd.cli_traj2pdb import (
+    ap as ap_traj2pdb,
+    main_script as ms_traj2pdb,
+    )
 
-parser = argparse.ArgumentParser(description='Command description.')
-parser.add_argument('names', metavar='NAME', nargs=argparse.ZERO_OR_MORE,
-                    help="A name of something.")
+def load_args():
+    
+    ap = argparse.ArgumentParser(description=__doc__)
+
+    subparsers = ap.add_subparsers(title='TAURENMD SUBROUTINES')
+
+    ap_t2p = subparsers.add_parser(
+        'traj2pdb',
+        help='Converts traj to PDB.',
+        parents=[ap_traj2pdb],
+        add_help=False,
+        )
+    ap_t2p.set_defaults(func=ms_traj2pdb)
+
+    if len(sys.argv) < 3:
+        ap.print_help()
+        ap.exit()
+
+    cmd = ap.parse_args()
+
+    return cmd
 
 
 def main(args=None):
-    args = parser.parse_args(args=args)
-    print(args.names)
+    args = load_args()
+    args.func(**vars(args))
