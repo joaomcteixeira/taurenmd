@@ -102,6 +102,6 @@ Thanks to `JoaoRodrigues`_ for all the mentoring on MD! CI in this repository pr
 .. _Anaconda: https://www.anaconda.com/distribution/
 .. _MDTraj: https://github.com/mdtraj/mdtraj
 .. _MDAnalysis: https://www.mdanalysis.org/
-.. _OpenMM: https://github.com/pandegroup/openmm
+.. _OpenMM: https://github.com/openmm/openmm
 .. _matplotlib: https://matplotlib.org/
 .. _cookiecutter-pylibrary: https://github.com/ionelmc/cookiecutter-pylibrary
