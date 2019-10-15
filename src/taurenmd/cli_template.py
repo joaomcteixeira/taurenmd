@@ -3,16 +3,17 @@ Does something.
 """
 import argparse
 
+from taurenmd import log
+
+
 # import simtk.openmm as mm
 # import simtk.openmm.app as app
 # import mdtraj
-import MDAnalysis as mda
-
-from mdtools import log
+# import MDAnalysis as mda
 
 
 def load_args():
-    """Load user arguments."""    
+    """Load user arguments."""
     ap = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -40,8 +41,9 @@ def main():
 
 
 def main_script(trajectory):
-    
+    log.info('Starting...')
     return
+
 
 if __name__ == '__main__':
     main()

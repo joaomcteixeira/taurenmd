@@ -1,6 +1,6 @@
 
-from taurenmd.cli import main
+from taurenmd.cli_template import main_script
 
 
 def test_main():
-    main([])
+    main_script(None)

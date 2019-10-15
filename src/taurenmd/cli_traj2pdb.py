@@ -49,7 +49,7 @@ ap.add_argument(
 ap.add_argument(
     '-l',
     '--selection',
-    help='Atom selection. Read: https://www.mdanalysis.org/docs/documentation_pages/selections.html',
+    help='Atom selection. Read: https://www.mdanalysis.org/docs/documentation_pages/selections.html',  # noqa: E501
     default='all',
     type=str,
     )
@@ -76,7 +76,7 @@ def main():
 
 def main_script(
         trajectory,
-        topology, 
+        topology,
         start=None,
         stop=None,
         step=None,

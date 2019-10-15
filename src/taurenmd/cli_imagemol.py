@@ -2,7 +2,11 @@
 Attempt image molecule with mdtraj.
 """
 import argparse
+
 import mdtraj
+
+from taurenmd import log
+
 
 def load_args():
     
@@ -33,18 +37,19 @@ def main():
     cmd = load_args()
     main_script(**vars(cmd))
 
+
 def main_script(trajectory, topology, output='production_imaged.dcd'):
-    
+    log.info('Starting...')
     trj = mdtraj.load(trajectory, top=topology)
     
     protein = trj.topology.guess_anchor_molecules()
     newtraj = trj.image_molecules(anchor_molecules=protein)
     
-    #trj.image_molecules()
+    # trj.image_molecules()
     newtraj.save(output)
     
-
     return
+
 
 if __name__ == '__main__':
     main()

@@ -99,7 +99,6 @@ Thanks to `JoaoRodrigues`_ for all the mentoring on MD! CI in this repository pr
 
 .. _pdb-tools: https://github.com/haddocking/pdb-tools
 .. _JoaoRodrigues: https://github.com/JoaoRodrigues
-.. _Anaconda: https://www.anaconda.com/distribution/
 .. _MDTraj: https://github.com/mdtraj/mdtraj
 .. _MDAnalysis: https://www.mdanalysis.org/
 .. _OpenMM: https://github.com/openmm/openmm

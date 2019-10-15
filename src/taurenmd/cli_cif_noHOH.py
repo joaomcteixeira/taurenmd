@@ -2,8 +2,9 @@
 q
 """
 import argparse
-import simtk.openmm.app as app
+
 import mdtraj
+import simtk.openmm.app as app
 
 
 def load_args():
@@ -43,6 +44,7 @@ def main():
     cmd = load_args()
     main_script(**vars(cmd))
 
+
 def main_script(
         cif_path,
         traj,
@@ -57,5 +59,6 @@ def main_script(
     trj[0].save_pdb(output_pdb)
     trj.save(traj_output)
 
+
 if __name__ == '__main__':
-   main() 
+    main()

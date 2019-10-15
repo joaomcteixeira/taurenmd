@@ -24,3 +24,5 @@ To keep your installation up to date, just updated the cloned folder::
 
     git pull
 
+
+.. _Anaconda: https://www.anaconda.com/distribution/

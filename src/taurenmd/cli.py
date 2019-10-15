@@ -17,10 +17,9 @@ Why does this file exist, and why not put this in __main__?
 import argparse
 import sys
 
-from taurenmd.cli_traj2pdb import (
-    ap as ap_traj2pdb,
-    main_script as ms_traj2pdb,
-    )
+from taurenmd.cli_traj2pdb import ap as ap_traj2pdb
+from taurenmd.cli_traj2pdb import main_script as ms_traj2pdb
+
 
 def load_args():
     
