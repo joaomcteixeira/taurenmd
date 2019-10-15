@@ -1,0 +1,10 @@
+name: taurenmd
+channels:
+    - conda-forge
+    - omnia
+    - defaults
+dependencies:
+    - python=3.7
+    - mdanalysis
+    - mdtraj
+    - openmm
