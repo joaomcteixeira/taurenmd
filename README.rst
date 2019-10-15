@@ -47,6 +47,6 @@ The concept of this project is largely inspired in the `pdb-tools`_ *one script 
 Thanks to `JoaoRodrigues`_ for all the mentoring on MD!
 
 .. _pdb-tools: https://github.com/haddocking/pdb-tools
-.. _JoaoRodriges: https://github.com/JoaoRodrigues
+.. _JoaoRodrigues: https://github.com/JoaoRodrigues
 .. _Anaconda: https://www.anaconda.com/distribution/
 
