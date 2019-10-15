@@ -71,6 +71,7 @@ setup(
         ],
     python_requires='>=3, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
     install_requires=[
+        'bioplottemplates',
         # eg: 'aspectlib==1.1.1', 'six>=1.7',
         ],
     extras_require={
