@@ -95,7 +95,7 @@ Acknowledges
 ============
 
 The concept of this project is largely inspired in the `pdb-tools`_ *one script one action* idea.
-Thanks to `JoaoRodrigues`_ for all the mentoring on MD!
+Thanks to `JoaoRodrigues`_ for all the mentoring on MD! CI in this repository provided by `cookiecutter-pylibrary`_ with final setup by me.
 
 .. _pdb-tools: https://github.com/haddocking/pdb-tools
 .. _JoaoRodrigues: https://github.com/JoaoRodrigues
@@ -104,3 +104,4 @@ Thanks to `JoaoRodrigues`_ for all the mentoring on MD!
 .. _MDAnalysis: https://www.mdanalysis.org/
 .. _OpenMM: https://github.com/pandegroup/openmm
 .. _matplotlib: https://matplotlib.org/
+.. _cookiecutter-pylibrary: https://github.com/ionelmc/cookiecutter-pylibrary
