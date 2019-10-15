@@ -19,7 +19,7 @@ taurenmd
     :target: https://readthedocs.org/projects/taurenmd
     :alt: Documentation Status
 
-.. |travis| image:: hhttps://travis-ci.org/joaomcteixeira/taurenmd.svg?branch=master
+.. |travis| image:: https://travis-ci.org/joaomcteixeira/taurenmd.svg?branch=master
     :alt: Travis-CI Build Status
     :target: https://travis-ci.org/joaomcteixeira/taurenmd
 
