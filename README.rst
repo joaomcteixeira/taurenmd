@@ -64,7 +64,6 @@ taurenmd
     :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.0.0...master
 
 
-
 .. end-badges
 
 *This is an experimental project.*
@@ -112,7 +111,7 @@ The following interfaces are available, access them through the command-line:
 Citing
 ======
 
-When using and citing :code:`taurenmd`, you **SHOULD** by all means cite the Molecular Dynamics (MD) analysis libraries upon which :code:`taurenmd` wraps. Please read through each project's documentation to understand how to cite them; these projects are linked in the :ref:`Dependencies` header.
+When using and citing :code:`taurenmd`, you **SHOULD** by all means cite the Molecular Dynamics (MD) analysis libraries upon which :code:`taurenmd` wraps. Please read through each project's documentation to understand how to cite them; these projects are linked in the `Dependencies` header.
 
 Acknowledges
 ============
