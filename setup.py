@@ -81,10 +81,10 @@ setup(
         },
     entry_points={
         'console_scripts': [
-            'taurenmd = taurenmd.cli:main',
-            'taurenmd_cif_noHOH = tauremd.cli_cif_noHOH:main',
-            'taurenmd_imagemol = taurenmd.cli_imagemol:main',
-            'taurenmd_traj2pdb = taurenmd.cli_traj2pdb:main',
+            'taurenmd = taurenmd.cli:maincli',
+            'taurenmd_noSol = tauremd.cli_noSol:maincli',
+            'taurenmd_imagemol = taurenmd.cli_imagemol:maincli',
+            'taurenmd_traj2pdb = taurenmd.cli_traj2pdb:maincli',
             ]
         },
     )

@@ -17,25 +17,43 @@ Why does this file exist, and why not put this in __main__?
 import argparse
 import sys
 
-from taurenmd.cli_traj2pdb import ap as ap_traj2pdb
-from taurenmd.cli_traj2pdb import main_script as ms_traj2pdb
+from taurenmd.libs import libcli
+import taurenmd.cli_traj2pdb as cli_traj2pdb
+import taurenmd.cli_noSol as cli_noSol
+import taurenmd.cli_imagemol as cli_imagemol
 
 
 def load_args():
     
-    ap = argparse.ArgumentParser(description=__doc__)
+    ap = libcli.CustomParser(description=__doc__)
 
     subparsers = ap.add_subparsers(title='TAURENMD SUBROUTINES')
 
     ap_t2p = subparsers.add_parser(
         'traj2pdb',
         help='Converts traj to PDB.',
-        parents=[ap_traj2pdb],
+        parents=[cli_traj2pdb.ap],
         add_help=False,
         )
-    ap_t2p.set_defaults(func=ms_traj2pdb)
-
-    if len(sys.argv) < 3:
+    ap_t2p.set_defaults(func=cli_traj2pdb.main)
+    
+    ap_noSol = subparsers.add_parser(
+        'noSol',
+        help='Removes solvent and extracts fist frame',
+        parents=[cli_noSol.ap],
+        add_help=False,
+        )
+    ap_noSol.set_defaults(func=cli_noSol.main)
+    
+    ap_imagemol = subparsers.add_parser(
+        'imagemol',
+        help='Attempts to image molecules.',
+        parents=[cli_imagemol.ap],
+        add_help=False,
+        )
+    ap_noSol.set_defaults(func=cli_imagemol.main)
+    
+    if len(sys.argv) < 2:
         ap.print_help()
         ap.exit()
 
@@ -44,6 +62,10 @@ def load_args():
     return cmd
 
 
-def main(args=None):
+def maincli():
     args = load_args()
     args.func(**vars(args))
+
+
+if __name__ == '__main__':
+    maincli()

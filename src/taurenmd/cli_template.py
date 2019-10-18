@@ -4,7 +4,7 @@ Does something.
 import argparse
 
 from taurenmd import log
-
+from taurenmd.libs import libcli
 
 # import simtk.openmm as mm
 # import simtk.openmm.app as app
@@ -14,7 +14,7 @@ from taurenmd import log
 
 def load_args():
     """Load user arguments."""
-    ap = argparse.ArgumentParser(
+    ap = libcli.CustomParser(
         description=__doc__,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         )
