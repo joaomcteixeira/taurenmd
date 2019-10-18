@@ -68,13 +68,13 @@ def load_args():
     return cmd
 
 
-def main():
+def maincli():
     cmd = load_args()
     main_script(**vars(cmd))
     return
 
 
-def main_script(
+def main(
         trajectory,
         topology,
         start=None,
@@ -97,4 +97,4 @@ def main_script(
 
 
 if __name__ == '__main__':
-    main()
+    maincli()
