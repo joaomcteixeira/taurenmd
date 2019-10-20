@@ -34,7 +34,7 @@ def load_args():
     return cmd
 
 
-def main_cli():
+def maincli():
     cmd = load_args()
     main_script(**vars(cmd))
 
@@ -43,6 +43,7 @@ def main(
         trajectory,
         topology,
         output='production_imaged.dcd',
+        **kwargs,
         ):
 
     log.info('Starting...')
@@ -64,4 +65,4 @@ def main(
 
 
 if __name__ == '__main__':
-    main_cli()
+    maincli()

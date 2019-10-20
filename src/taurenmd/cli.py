@@ -18,9 +18,11 @@ import argparse
 import sys
 
 from taurenmd.libs import libcli
-import taurenmd.cli_traj2pdb as cli_traj2pdb
-import taurenmd.cli_noSol as cli_noSol
+
 import taurenmd.cli_imagemol as cli_imagemol
+import taurenmd.cli_noSol as cli_noSol
+import taurenmd.cli_rmsd as cli_rmsd
+import taurenmd.cli_traj2pdb as cli_traj2pdb
 
 
 def load_args():
@@ -29,13 +31,13 @@ def load_args():
 
     subparsers = ap.add_subparsers(title='TAURENMD SUBROUTINES')
 
-    ap_t2p = subparsers.add_parser(
-        'traj2pdb',
-        help='Converts traj to PDB.',
-        parents=[cli_traj2pdb.ap],
+    ap_imagemol = subparsers.add_parser(
+        'imagemol',
+        help='Attempts to image molecules.',
+        parents=[cli_imagemol.ap],
         add_help=False,
         )
-    ap_t2p.set_defaults(func=cli_traj2pdb.main)
+    ap_imagemol.set_defaults(func=cli_imagemol.main)
     
     ap_noSol = subparsers.add_parser(
         'noSol',
@@ -45,14 +47,22 @@ def load_args():
         )
     ap_noSol.set_defaults(func=cli_noSol.main)
     
-    ap_imagemol = subparsers.add_parser(
-        'imagemol',
-        help='Attempts to image molecules.',
-        parents=[cli_imagemol.ap],
+    ap_t2p = subparsers.add_parser(
+        'traj2pdb',
+        help='Converts traj to PDB.',
+        parents=[cli_traj2pdb.ap],
         add_help=False,
         )
-    ap_noSol.set_defaults(func=cli_imagemol.main)
-    
+    ap_t2p.set_defaults(func=cli_traj2pdb.main)
+
+    ap_rmsd = subparsers.add_parser(
+        'rmsd',
+        help='Calculates and plot RMSDs',
+        parents=[cli_rmsd.ap],
+        add_help=False,
+        )
+    ap_rmsd.set_defaults(func=cli_rmsd.main)
+
     if len(sys.argv) < 2:
         ap.print_help()
         ap.exit()

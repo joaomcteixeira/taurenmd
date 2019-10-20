@@ -12,38 +12,39 @@ from taurenmd.libs import libcli
 # import MDAnalysis as mda
 
 
+ap = libcli.CustomParser(
+    description=__doc__,
+    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+
+ap.add_argument(
+    'trajectory',
+    help='The trajectory file',
+    )
+
+ap.add_argument(
+    'topology',
+    help='Topology file.',
+    type=str,
+    )
+
+
 def load_args():
     """Load user arguments."""
-    ap = libcli.CustomParser(
-        description=__doc__,
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-        )
-    
-    ap.add_argument(
-        'trajectory',
-        help='The trajectory file',
-        )
-    
-    ap.add_argument(
-        'topology',
-        help='Topology file.',
-        type=str,
-        )
-
     cmd = ap.parse_args()
     return cmd
 
 
-def main():
+def maincli():
     cmd = load_args()
     main_script(**vars(cmd))
     return
 
 
-def main_script(trajectory):
+def main(topology, trajectory, **kwargs):
     log.info('Starting...')
     return
 
 
 if __name__ == '__main__':
-    main()
+    maincli()

@@ -82,6 +82,7 @@ def main(
         step=None,
         selection='all',
         output='traj_output.pdb',
+        **kwargs,
         ):
     
     print(start, stop, step, selection)

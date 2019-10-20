@@ -51,6 +51,7 @@ def main(
         traj,
         output_pdb='production_noHOH.pdb',
         traj_output='production_noHOH.dcd',
+        **kwargs,
         ):
 
     mol = app.PDBxFile(cif_path)
