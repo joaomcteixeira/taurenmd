@@ -3,13 +3,14 @@ Does something.
 """
 import argparse
 
-from taurenmd import log
-from taurenmd.libs import libcli
 
 # import simtk.openmm as mm
 # import simtk.openmm.app as app
 # import mdtraj
 import MDAnalysis as mda
+
+from taurenmd import log
+from taurenmd.libs import libcli, libio, libcalc
 
 
 _SELECTION = 'all'
@@ -80,7 +81,7 @@ def main(
         ):
     log.info('Starting...')
     
-    u = libio.load_mda_universe(topology, trajectory)
+    u = libio.mda_load_universe(topology, trajectory)
 
     rmsds_combined = libcalc.mda_rmsd_combined_chains(
         u,

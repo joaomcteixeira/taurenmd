@@ -6,11 +6,11 @@ log.setLevel(logging.DEBUG)
 
 _db = logging.StreamHandler()
 _db.setLevel(logging.DEBUG)
-_db.setFormatter('* DEBUG [%(lineno)d]*: %(message)s')
+_db.setFormatter(logging.Formatter('* DEBUG [%(lineno)d]*: %(message)s'))
 
 _ch = logging.StreamHandler()
 _ch.setLevel(logging.INFO)
-_ch.setFormatter('%(message)s')
+_ch.setFormatter(logging.Formatter('%(message)s'))
 
 log.addHandler(_db)
 log.addHandler(_ch)

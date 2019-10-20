@@ -55,9 +55,9 @@ def mda_rmsd_combined_chains(
     log.info(S('for {} frames'.format(frames)))
     
     R = mdaRMSD(
-        self.universe,
-        self.universe,
-        select=self.selection,
+        universe,
+        universe,
+        select=selection,
         groupselection=None,
         ref_frame=ref_frame,
         verbose=False,
