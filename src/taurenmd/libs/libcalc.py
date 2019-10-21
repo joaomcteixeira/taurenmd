@@ -7,11 +7,12 @@ from MDAnalysis.analysis.rms import RMSD as mdaRMSD
 
 from taurenmd import log
 from taurenmd.logger import T, S
+from taurenmd.libs import libutil
 
 
 def mda_rmsd_combined_chains(
         universe,
-        frames='all',
+        frame_slice=None,
         selection='all',
         ref_frame=0,
         ):
@@ -46,13 +47,11 @@ def mda_rmsd_combined_chains(
     """
     log.info(T('Calculating RMSDs'))
     
-    if frames == 'all':
-        frames = slice(None, None, None)
-    else:
-        frames = slice(*frames)
+    if frame_slice is None:
+        frame_slice = slice(None, None, None)
     
     log.info(S('for selection: {}'.format(selection)))
-    log.info(S('for {} frames'.format(frames)))
+    log.info(S('for {} frames'.format(frame_slice)))
     
     R = mdaRMSD(
         universe,
@@ -69,4 +68,4 @@ def mda_rmsd_combined_chains(
     
     # rmsds[:, ii] = R.rmsd[:, 2][self._fslicer]
     
-    return R.rmsd[frames, 2]
+    return R.rmsd[frame_slice, 2]

@@ -8,14 +8,15 @@ import argparse
 # import simtk.openmm.app as app
 # import mdtraj
 import MDAnalysis as mda
+from bioplottemplates.plots import param
 
-from taurenmd import log
-from taurenmd.libs import libcli, libio, libcalc
+from taurenmd import log, Path
+from taurenmd.libs import libcli, libio, libcalc, libutil
 
 
 _SELECTION = 'all'
 _REF_FRAME = 0
-_FRAMES = 'all'
+_FRAMES = None
 
 
 ap = libcli.CustomParser(
@@ -58,16 +59,26 @@ ap.add_argument(
     default=_REF_FRAME,
     )
 
+ap.add_argument(
+    '-v',
+    '--plotvars',
+    help='Plot variables.',
+    nargs='*',
+    action=libcli.ParamsToDict,
+    #type=list,
+    )
+
 
 def load_args():
     """Load user arguments."""
     cmd = ap.parse_args()
+    input(cmd)
     return cmd
 
 
 def maincli():
     cmd = load_args()
-    main_script(**vars(cmd))
+    main(**vars(cmd))
     return
 
 
@@ -77,19 +88,30 @@ def main(
         frames=_FRAMES,
         ref_frame=_REF_FRAME,
         selection=_SELECTION,
-        **kargs,
+        plotvars=None,
+        **kwargs,
         ):
+    
     log.info('Starting...')
     
     u = libio.mda_load_universe(topology, trajectory)
+    
+    frame_slice = libutil.frame_slice(frames)
 
     rmsds_combined = libcalc.mda_rmsd_combined_chains(
         u,
-        frames=frames,
+        frame_slice=frame_slice,
         selection=selection,
         ref_frame=ref_frame,
         )
+    if plotvars is None:
+        plotvars = dict()
 
+    param.plot(
+        list(range(len(u.trajectory)))[frame_slice],
+        rmsds_combined,
+        **plotvars,
+        )
 
     return
 

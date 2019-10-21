@@ -11,3 +11,21 @@ class CustomParser(argparse.ArgumentParser):
         sys.stderr.write('error: %s\n' % message)
         self.print_help()
         sys.exit(2)
+
+class ParamsToDict(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(values)
+        param_dict = {}
+        for kv in values:
+            print(param_dict, kv)
+            try:
+                k,v = kv.split('=')
+            except ValueError:
+                param_dict[kv] = True
+            else:
+                if ',' in v:
+                    v = v.split(',')
+                    
+                param_dict[k] = v
+        
+        setattr(namespace, self.dest, param_dict)
