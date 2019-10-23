@@ -5,7 +5,7 @@ from pathlib import Path as _Path
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
-_db = logging.FileHandler('taurenmd.debug', mode='w')
+_db = logging.FileHandler('.taurenmd.debug', mode='w')
 _db.setLevel(logging.DEBUG)
 _db.setFormatter(
     logging.Formatter(
