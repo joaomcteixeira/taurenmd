@@ -53,7 +53,7 @@ def load_args():
         parents=[cli_trajedit.ap],
         add_help=False,
         )
-    ap_t2p.set_defaults(func=cli_trajedit.main)
+    ap_tedit.set_defaults(func=cli_trajedit.main)
 
     ap_rmsd = subparsers.add_parser(
         'rmsd',

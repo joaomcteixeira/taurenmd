@@ -25,9 +25,10 @@ def mda_load_universe(top, traj):
     ------
     MDAnalysis Universe
     """
-    log.info(S(f'loading traj: {traj}')
-    log.info(S(f'loading top: {top}')
+    log.info(S(f'loading traj: {traj}'))
+    log.info(S(f'loading top: {top}'))
     universe = mda.Universe(top, traj)
+    log.info(S(S(f'number of atoms: {len(universe.atoms)}')))
     return universe
 
 

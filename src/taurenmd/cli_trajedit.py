@@ -10,7 +10,8 @@ import argparse
 import MDAnalysis as mda
 
 from taurenmd import log, Path
-from tauremd.logger import T, S
+from taurenmd.logger import T, S
+from taurenmd.libs import libio
 
 
 ap = argparse.ArgumentParser(
@@ -65,7 +66,7 @@ ap.add_argument(
     '-d',
     '--traj-output',
     help='Output trajectory.',
-    default='traj_output.pdb',
+    default='traj_output.xtc',
     type=Path,
     )
 
@@ -95,7 +96,7 @@ def main(
         stop=None,
         step=None,
         selection='all',
-        output='traj_edited.dcd',
+        traj_output='traj_output.xtc',
         **kwargs,
         ):
    
@@ -103,16 +104,30 @@ def main(
 
     u = libio.mda_load_universe(topology, trajectory)
     
-    log.info(S(f'slicing: {start}::{stop}::{end}'))
+    log.info(S(f'slicing: {start}::{stop}::{step}'))
    
     log.info(S(f'selecting: {selection}'))
     selection = u.select_atoms(selection)
-    log.info(S(S(f'with {selection.n_atoms)')))
-
-    with mda.Writer(output, selection.n_atoms) as W:
+    log.info(S(S(f'with {selection.n_atoms}')))
+    
+    traj_output = Path(traj_output)
+    log.info(S(f'saving to: {traj_output.resolve().str()}'))
+    with mda.Writer(traj_output.str(), selection.n_atoms) as W:
         for ts in u.trajectory[slice(start, stop, step)]:
             W.write(selection)
     
+    topout = Path(
+        traj_output.resolve().parents[0],
+        traj_output.stem,
+        )
+    topout = topout.with_suffix('.pdb')
+
+    log.info(S(f'saving first frame to: {topout}'))
+    with mda.Writer(topout, selection.n_atoms) as W:
+        for ts in u.trajectory[0:1]:
+            W.write(selection)
+   
+    log.info(S('Done'))
     return
 
 
