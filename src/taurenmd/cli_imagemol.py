@@ -5,20 +5,20 @@ import argparse
 
 import mdtraj
 
-from taurenmd import log
+from taurenmd import log, Path
 from taurenmd.libs import libcli
 
 
 ap = libcli.CustomParser()
 
 ap.add_argument(
-    'trajectory',
-    help='The trajectory file.',
+    'topology',
+    help='The topology file',
     )
 
 ap.add_argument(
-    'topology',
-    help='The topology file',
+    'trajectory',
+    help='The trajectory file.',
     )
 
 ap.add_argument(
@@ -60,7 +60,7 @@ def main(
     
     # trj.image_molecules()
     reimaged.save(output)
-    
+    reimaged[0].save(Path(output).with_suffix('.pdb').str())
     return
 
 
