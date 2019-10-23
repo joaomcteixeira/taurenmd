@@ -28,6 +28,20 @@ def mda_load_universe(top, traj):
     return universe
 
 
+def mdtraj_load_traj(topology, traj):
+    
+    topp = Path(topology)
+    if topp.suffix == '.cif':
+        mol = app.PDBxFile(topp.str())
+        top = mdtraj.Topology.from_openmm(mol.topology)
+    else:
+        top = topp.name
+
+    mdtrajectory = mdtraj.load(traj, top=top)
+
+    return mdtrajectory
+
+
 def get_stem(filename, ext=None):
     """
     Returns the stem name of a file name.

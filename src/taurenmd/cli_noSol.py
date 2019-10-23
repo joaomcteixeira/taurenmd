@@ -11,12 +11,12 @@ from taurenmd.libs import libcli
 ap = libcli.CustomParser()
 
 ap.add_argument(
-    'cif_path',
+    'topology',
     help='The .cif structure',
     )
 
 ap.add_argument(
-    'traj',
+    'trajectory',
     help='The trajectory',
     )
 
@@ -47,16 +47,14 @@ def maincli():
 
 
 def main(
-        cif_path,
-        traj,
-        output_pdb='production_noHOH.pdb',
-        traj_output='production_noHOH.dcd',
+        topology,
+        trajectory,
+        output_pdb='production_noSol.pdb',
+        traj_output='production_noSol.dcd',
         **kwargs,
         ):
 
-    mol = app.PDBxFile(cif_path)
-    top = mdtraj.Topology.from_openmm(mol.topology)
-    trj = mdtraj.load(traj, top=top)
+    trj = mlibio.mdtraj_load_traj(topology, trajectory)
     trj.remove_solvent(inplace=True)
     trj[0].save_pdb(output_pdb)
     trj.save(traj_output)
