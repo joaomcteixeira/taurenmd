@@ -5,6 +5,7 @@ __pycache__
 *.so
 
 tags
+*.debug
 
 # Packages
 *.egg

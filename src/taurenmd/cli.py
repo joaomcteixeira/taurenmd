@@ -22,7 +22,7 @@ from taurenmd.libs import libcli
 import taurenmd.cli_imagemol as cli_imagemol
 import taurenmd.cli_noSol as cli_noSol
 import taurenmd.cli_rmsd as cli_rmsd
-import taurenmd.cli_traj2pdb as cli_traj2pdb
+import taurenmd.cli_trajedit as cli_trajedit
 
 
 def load_args():
@@ -47,13 +47,13 @@ def load_args():
         )
     ap_noSol.set_defaults(func=cli_noSol.main)
     
-    ap_t2p = subparsers.add_parser(
-        'traj2pdb',
+    ap_tedit = subparsers.add_parser(
+        'trajedit',
         help='Converts traj to PDB.',
-        parents=[cli_traj2pdb.ap],
+        parents=[cli_trajedit.ap],
         add_help=False,
         )
-    ap_t2p.set_defaults(func=cli_traj2pdb.main)
+    ap_t2p.set_defaults(func=cli_trajedit.main)
 
     ap_rmsd = subparsers.add_parser(
         'rmsd',

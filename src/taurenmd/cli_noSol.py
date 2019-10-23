@@ -6,13 +6,13 @@ import argparse
 import mdtraj
 import simtk.openmm.app as app
 
-from taurenmd.libs import libcli
+from taurenmd.libs import libcli, libio
 
 ap = libcli.CustomParser()
 
 ap.add_argument(
     'topology',
-    help='The .cif structure',
+    help='The topology structure.',
     )
 
 ap.add_argument(
@@ -54,7 +54,7 @@ def main(
         **kwargs,
         ):
 
-    trj = mlibio.mdtraj_load_traj(topology, trajectory)
+    trj = libio.mdtraj_load_traj(topology, trajectory)
     trj.remove_solvent(inplace=True)
     trj[0].save_pdb(output_pdb)
     trj.save(traj_output)

@@ -2,6 +2,7 @@
 Handles input and output.
 """
 
+import mdtraj
 import MDAnalysis as mda
 
 from taurenmd import log, Path
@@ -24,6 +25,8 @@ def mda_load_universe(top, traj):
     ------
     MDAnalysis Universe
     """
+    log.info(S(f'loading traj: {traj}')
+    log.info(S(f'loading top: {top}')
     universe = mda.Universe(top, traj)
     return universe
 
@@ -35,7 +38,7 @@ def mdtraj_load_traj(topology, traj):
         mol = app.PDBxFile(topp.str())
         top = mdtraj.Topology.from_openmm(mol.topology)
     else:
-        top = topp.name
+        top = topp.str()
 
     mdtrajectory = mdtraj.load(traj, top=top)
 
