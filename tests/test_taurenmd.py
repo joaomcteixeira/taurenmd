@@ -1,6 +1,6 @@
 
-from taurenmd.cli_template import main_script
+from taurenmd.cli_template import main
 
 
 def test_main():
-    main_script(None)
+    main('dummy_topo', 'dummy_traj')

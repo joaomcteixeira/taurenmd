@@ -66,9 +66,11 @@ taurenmd
 
 .. end-badges
 
+**Command-line and library interface for analysis routines in Molecular Dynamics.**
 *This is an experimental project.*
 
-Command-line and library interface for analysis routines in Molecular Dynamics.
+Documentation
+=============
 
 Read the documentation: https://taurenmd.readthedocs.io
 
@@ -77,14 +79,6 @@ Dependencies
 
 :code:`taurenmd` wraps around high performance Molecular Dynamics analysis libraries, such as: `MDTraj`_, `MDAnalysis`_, `OpenMM`_ (and implementing others...); and it contains its own routines for data representation and export, such as curated plotting templates through `matplotlib`_.
 
-
-Available interfaces
-====================
-
-The following interfaces are available, access them through the command-line:
-
-* taurenmd_cif2noHOH
-* taurenmd_traj2pdb
 
 Citing
 ======
