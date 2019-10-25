@@ -104,6 +104,7 @@ def main(
         selection=selection,
         ref_frame=ref_frame,
         )
+    
     if plotvars is None:
         plotvars = dict()
 
