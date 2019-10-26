@@ -49,7 +49,7 @@ environment:
 install:
     - mkdir C:\Users\appveyor\.conda
     - call %MINICONDA%\Scripts\activate.bat
-    - conda config --set always_yes --set changeps1 no --set auto_update_conda no --set safety_checks disabled
+    - conda config --set always_yes yes --set changeps1 no --set auto_update_conda no --set safety_checks disabled
     - conda update -q conda
     - conda info -a
     - conda create -q -n test-environment python=%PYTHON_VERSION%
