@@ -53,13 +53,13 @@ install:
     - conda update -q conda
     - conda info -a
     - conda create -q -n test-environment python=%PYTHON_VERSION%
-    - activate test-environment
-    - conda install tox tox-conda -c conda-forge
-    - tox --version 
+    #- activate test-environment
+    - %CONDA_PREFIX%\Scripts\conda.exe install tox tox-conda -c conda-forge
+    - %CONDA_PREFIX%\Scripts\tox.exe --version 
 test_script:
   #- cmd /E:ON /V:ON /C .\ci\appveyor-with-compiler.cmd %PYTHON_HOME%\Scripts\tox
   #- '%PYTHON_HOME%\Scripts\tox'
-  - tox -e %TOXENV%
+  - %CONDA_PREFIX%\Scripts\tox.exe -e %TOXENV%
 on_failure:
   - ps: dir "env:"
   - ps: get-content .tox\*\log\*
