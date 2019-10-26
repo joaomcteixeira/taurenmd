@@ -14,7 +14,6 @@ Why does this file exist, and why not put this in __main__?
 
   Also see (1) from http://click.pocoo.org/5/setuptools/#setuptools-integration
 """
-import argparse
 import sys
 
 from taurenmd.libs import libcli

@@ -10,7 +10,7 @@ import argparse
 import MDAnalysis as mda
 
 from taurenmd import log, Path
-from taurenmd.logger import T, S
+from taurenmd.logger import S, T
 from taurenmd.libs import libio
 
 
@@ -85,7 +85,7 @@ def load_args():
 
 def maincli():
     cmd = load_args()
-    main_script(**vars(cmd))
+    main(**vars(cmd))
     return
 
 

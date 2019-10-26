@@ -21,5 +21,5 @@ include requirements-dev.yml
 include tox.ini .travis.yml .appveyor.yml
 
 global-exclude *.py[cod] __pycache__/* *.so *.dylib
-exclude tags
-exclude *.swp
+global-exclude tags
+global-exclude *.swp

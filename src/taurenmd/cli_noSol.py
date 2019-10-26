@@ -1,12 +1,9 @@
 """
 Copies the trajectory without solvent and extracts the first frame.
 """
-import argparse
-
-import mdtraj
-import simtk.openmm.app as app
 
 from taurenmd.libs import libcli, libio
+
 
 ap = libcli.CustomParser()
 
@@ -43,7 +40,7 @@ def load_args():
 def maincli():
     
     cmd = load_args()
-    main_script(**vars(cmd))
+    main(**vars(cmd))
 
 
 def main(

@@ -37,7 +37,7 @@ def load_args():
 
 def maincli():
     cmd = load_args()
-    main_script(**vars(cmd))
+    main(**vars(cmd))
     return
 
 

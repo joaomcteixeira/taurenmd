@@ -2,12 +2,10 @@
 Calculate parameters.
 """
 
-import MDAnalysis as mda
 from MDAnalysis.analysis.rms import RMSD as mdaRMSD
 
 from taurenmd import log
-from taurenmd.logger import T, S
-from taurenmd.libs import libutil
+from taurenmd.logger import S, T
 
 
 def mda_rmsd_combined_chains(
@@ -60,8 +58,6 @@ def mda_rmsd_combined_chains(
         groupselection=None,
         ref_frame=ref_frame,
         verbose=False,
-        #superposition=False,
-        #center=False,
         )
     
     R.run(verbose=False)

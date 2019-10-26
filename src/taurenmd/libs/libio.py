@@ -5,8 +5,10 @@ Handles input and output.
 import mdtraj
 import MDAnalysis as mda
 
+from simtk.openmm import app as app
+
 from taurenmd import log, Path
-from taurenmd.logger import T, S
+from taurenmd.logger import T, S  # noqa: F401
 
 
 def mda_load_universe(top, traj):

@@ -3,15 +3,10 @@ Does something.
 """
 import argparse
 
-
-# import simtk.openmm as mm
-# import simtk.openmm.app as app
-# import mdtraj
-import MDAnalysis as mda
 from bioplottemplates.plots import param
 
-from taurenmd import log, Path
-from taurenmd.libs import libcli, libio, libcalc, libutil
+from taurenmd import log, Path  # noqa: F401
+from taurenmd.libs import libcalc, libcli, libio, libutil
 
 
 _SELECTION = 'all'
@@ -65,7 +60,6 @@ ap.add_argument(
     help='Plot variables.',
     nargs='*',
     action=libcli.ParamsToDict,
-    #type=list,
     )
 
 

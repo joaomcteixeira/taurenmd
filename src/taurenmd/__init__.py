@@ -31,4 +31,5 @@ class Path(type(_Path())):
         """Return string version of Path."""
         return os.fspath(self)
 
+
 __version__ = '0.0.0'

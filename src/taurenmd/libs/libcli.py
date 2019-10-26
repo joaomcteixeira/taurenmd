@@ -2,6 +2,7 @@
 import argparse
 import sys
 
+
 # https://stackoverflow.com/questions/4042452
 class CustomParser(argparse.ArgumentParser):
     """Custom Parser class."""
@@ -12,14 +13,17 @@ class CustomParser(argparse.ArgumentParser):
         self.print_help()
         sys.exit(2)
 
+
 class ParamsToDict(argparse.Action):
+    """Convert command-line parameters to dict."""
+    
     def __call__(self, parser, namespace, values, option_string=None):
-        print(values)
+        """Executes."""
         param_dict = {}
         for kv in values:
-            print(param_dict, kv)
+            # print(param_dict, kv)
             try:
-                k,v = kv.split('=')
+                k, v = kv.split('=')
             except ValueError:
                 param_dict[kv] = True
             else:

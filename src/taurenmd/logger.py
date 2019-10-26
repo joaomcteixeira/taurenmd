@@ -1,5 +1,4 @@
 """Manages operations with logging."""
-import logging
 
 
 class TitleLog:
