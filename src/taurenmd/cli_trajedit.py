@@ -9,9 +9,9 @@ import argparse
 
 import MDAnalysis as mda
 
-from taurenmd import log, Path
-from taurenmd.logger import S, T
+from taurenmd import Path, log
 from taurenmd.libs import libio
+from taurenmd.logger import S, T
 
 
 ap = argparse.ArgumentParser(

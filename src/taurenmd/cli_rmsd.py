@@ -5,7 +5,7 @@ import argparse
 
 from bioplottemplates.plots import param
 
-from taurenmd import log, Path  # noqa: F401
+from taurenmd import Path, log  # noqa: F401
 from taurenmd.libs import libcalc, libcli, libio, libutil
 
 

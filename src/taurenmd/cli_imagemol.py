@@ -4,7 +4,7 @@ Attempt image molecule with mdtraj.
 
 import mdtraj
 
-from taurenmd import log, Path
+from taurenmd import Path, log
 from taurenmd.libs import libcli
 
 

@@ -16,12 +16,11 @@ Why does this file exist, and why not put this in __main__?
 """
 import sys
 
-from taurenmd.libs import libcli
-
 import taurenmd.cli_imagemol as cli_imagemol
 import taurenmd.cli_noSol as cli_noSol
 import taurenmd.cli_rmsd as cli_rmsd
 import taurenmd.cli_trajedit as cli_trajedit
+from taurenmd.libs import libcli
 
 
 def load_args():
