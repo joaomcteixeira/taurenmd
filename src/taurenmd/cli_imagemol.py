@@ -47,7 +47,7 @@ def main(
 
     log.info('Starting...')
     
-    trj = mdtraj.load(trajectory, top=topology)
+    trj = libio.mdtraj_load_traj(trajectory, topology)
    
     # use largest part as anchor
     mols = trj.top.find_molecules()
@@ -57,7 +57,6 @@ def main(
         other_molecules=mols[1:],
         )
     
-    # trj.image_molecules()
     reimaged.save(output)
     reimaged[0].save(Path(output).with_suffix('.pdb').str())
     return
