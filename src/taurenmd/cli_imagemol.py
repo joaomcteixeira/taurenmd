@@ -39,8 +39,8 @@ def maincli():
 
 
 def main(
-        trajectory,
         topology,
+        trajectory,
         output='production_imaged.dcd',
         **kwargs,
         ):
