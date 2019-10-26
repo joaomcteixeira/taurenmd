@@ -59,9 +59,9 @@ taurenmd
     :alt: Supported implementations
     :target: https://pypi.org/project/taurenmd
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.0.0.svg
+.. |commits-since| image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.1.0.svg
     :alt: Commits since latest release
-    :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.0.0...master
+    :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.1.0...master
 
 
 .. end-badges
