@@ -47,7 +47,7 @@ def main(
 
     log.info('Starting...')
     
-    trj = libio.mdtraj_load_traj(trajectory, topology)
+    trj = libio.mdtraj_load_traj(topology, trajectory)
    
     # use largest part as anchor
     mols = trj.top.find_molecules()
