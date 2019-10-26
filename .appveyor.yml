@@ -49,7 +49,7 @@ install:
   - '%PYTHON_HOME%\Scripts\tox --version'
 test_script:
   #- cmd /E:ON /V:ON /C .\ci\appveyor-with-compiler.cmd %PYTHON_HOME%\Scripts\tox
-  - tox
+  - '%PYTHON_HOME%\Scripts\tox'
 on_failure:
   - ps: dir "env:"
   - ps: get-content .tox\*\log\*
