@@ -28,8 +28,8 @@ ap.add_argument(
 ap.add_argument(
     'trajectory',
     help=(
-        'Trajectory files. Multiple trajectories will be contactenated'
-        ' by order.'
+        'Trajectory files. If given, multiple trajectories will be'
+        'contactenated by order.'
         ),
     nargs='+',
     )
