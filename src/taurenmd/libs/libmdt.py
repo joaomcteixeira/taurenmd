@@ -5,7 +5,7 @@ import mdtraj
 import simtk.openmm.app as app
 
 from taurenmd import Path
-from tauremd.libs import libio
+from taurenmd.libs import libio
 
 
 def mdtraj_load_traj(topology, trajectory):
