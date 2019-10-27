@@ -4,7 +4,7 @@ Report on trajectory characteristics.
 import argparse
 
 from taurenmd import log
-from taurenmd.libs import libcli, libio
+from taurenmd.libs import libcli, libmda
 
 
 ap = libcli.CustomParser(
@@ -40,7 +40,7 @@ def maincli():
 def main(topology, trajectory, **kwargs):
     log.info('Starting...')
     
-    libio.mda_load_universe(topology, *list(trajectory))
+    libmda.mda_load_universe(topology, *list(trajectory))
     return
 
 
