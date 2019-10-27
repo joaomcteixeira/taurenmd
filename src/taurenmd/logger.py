@@ -3,11 +3,13 @@
 
 class TitleLog:
     """Format string to title."""
-    def __init__(self, msg):
+    def __init__(self, msg, *args):
         self.msg = msg.title()
+        self.args = args
     
     def __str__(self):
-        return '\n* {} ...'.format(self.msg)
+        output = self.msg.format(*args)
+        return '\n* {} ...'.format(output)
 
 
 class SubLog:
@@ -17,11 +19,13 @@ class SubLog:
     This format performs nicely under the `TitleLog` formatting.
     """
     
-    def __init__(self, msg):
+    def __init__(self, msg, *args):
         self.msg = msg
+        self.args = args
     
     def __str__(self):
-        return '    {}'.format(self.msg)
+        output = self.msg.format(*args)
+        return '    {}'.format(output)
 
 
 T = TitleLog

@@ -26,8 +26,8 @@ def mda_load_universe(top, *traj):
     ------
     MDAnalysis Universe
     """
-    log.info(S(f'loading traj: {traj}'))
-    log.info(S(f'loading top: {top}'))
+    log.info(S('loading traj: {}', traj))
+    log.info(S('loading top: {}', top))
     
     universe = mda.Universe(top, traj)
 
@@ -37,9 +37,9 @@ def mda_load_universe(top, *traj):
 
 def mda_report(universe):
     """Report information about the Universe."""
-    log.info(T('Reporting...'))
-    log.info(S(f'number of frames: {len(universe.trajectory)}'))
-    log.info(S(f'number of atoms: {len(universe.atoms)}'))
+    log.info(T('Reporting'))
+    log.info(S('number of frames: {}', len(universe.trajectory)))
+    log.info(S('number of atoms: {}', len(universe.atoms)))
 
 
 def mdtraj_load_traj(topology, traj):
@@ -73,6 +73,6 @@ def get_stem(filename, ext=None):
     output = Path(filename).stem
 
     if ext:
-        output = Path(output).with_suffix(f'.{ext.lstrip(".")}')
+        output = Path(output).with_suffix('.' + ext.lstrip("."))
 
     return output
