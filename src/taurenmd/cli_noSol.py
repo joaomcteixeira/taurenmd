@@ -15,7 +15,6 @@ ap.add_argument(
 ap.add_argument(
     'trajectory',
     help='The trajectory',
-    nargs='+',
     )
 
 ap.add_argument(

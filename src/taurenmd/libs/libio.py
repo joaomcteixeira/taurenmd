@@ -7,7 +7,7 @@ import mdtraj
 import simtk.openmm.app as app
 
 from taurenmd import Path, log
-from taurenmd.logger import S, T  # noqa: F401
+from taurenmd.logger import S, T
 
 
 def mda_load_universe(top, *traj):
@@ -28,9 +28,18 @@ def mda_load_universe(top, *traj):
     """
     log.info(S(f'loading traj: {traj}'))
     log.info(S(f'loading top: {top}'))
+    
     universe = mda.Universe(top, traj)
-    log.info(S(S(f'number of atoms: {len(universe.atoms)}')))
+
+    mda_report(universe)
     return universe
+
+
+def mda_report(universe):
+    """Report information about the Universe."""
+    log.info(T('Reporting...'))
+    log.info(S(f'number of frames: {len(universe.trajectory)}'))
+    log.info(S(f'number of atoms: {len(universe.atoms)}'))
 
 
 def mdtraj_load_traj(topology, traj):

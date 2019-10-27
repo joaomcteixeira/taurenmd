@@ -2,6 +2,13 @@
 Changelog
 =========
 
+0.1.1 (2019-10-26)
+------------------
+
+- corrected libio
+- trajectory loads based on MDAnalysis now read and concatenate multiple trajectories.
+- added :code:`cli_report`
+
 0.1.0 (2019-10-26)
 ------------------
 
