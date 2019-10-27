@@ -2,58 +2,14 @@
 Handles input and output.
 """
 
-import MDAnalysis as mda
-import mdtraj
-import simtk.openmm.app as app
-
 from taurenmd import Path, log
-from taurenmd.logger import S, T
+from taurenmd.logger import S, T  # noqa: F401
 
 
-def mda_load_universe(top, *traj):
-    """
-    Load MDAnalysis universe.
-
-    Parameters
-    ----------
-    top
-        Topology file.
-
-    traj
-        Trajectory file.
-    
-    Return
-    ------
-    MDAnalysis Universe
-    """
-    log.info(S('loading traj: {}', traj))
-    log.info(S('loading top: {}', top))
-    
-    universe = mda.Universe(top, traj)
-
-    mda_report(universe)
-    return universe
-
-
-def mda_report(universe):
-    """Report information about the Universe."""
-    log.info(T('Reporting'))
-    log.info(S('number of frames: {}', len(universe.trajectory)))
-    log.info(S('number of atoms: {}', len(universe.atoms)))
-
-
-def mdtraj_load_traj(topology, traj):
-    
-    topp = Path(topology)
-    if topp.suffix == '.cif':
-        mol = app.PDBxFile(topp.str())
-        top = mdtraj.Topology.from_openmm(mol.topology)
-    else:
-        top = topp.str()
-
-    mdtrajectory = mdtraj.load(traj, top=top)
-
-    return mdtrajectory
+def report_input(topology, trajectory):
+    log.info(S('loading trajectory: {}', trajectory))
+    log.info(S('with topology: {}', topology))
+    return
 
 
 def get_stem(filename, ext=None):

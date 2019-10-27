@@ -3,7 +3,7 @@ Attempt image molecule with mdtraj.
 """
 
 from taurenmd import Path, log
-from taurenmd.libs import libcli, libio
+from taurenmd.libs import libcli, libmdt
 from taurenmd.logger import S, T
 
 
@@ -54,7 +54,7 @@ def main(
 
     log.info('Attempting image molecules...')
     
-    trj = libio.mdtraj_load_traj(topology, trajectory)
+    trj = libmdt.mdtraj_load_traj(topology, trajectory)
    
     # use largest part as anchor
     log.info(T('finding molecules...'))

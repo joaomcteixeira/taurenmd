@@ -5,6 +5,8 @@ Changelog
 0.2.0 (2019-10-26)
 ------------------
 
+- separated lib MDAnalysis from MDTraj
+- :code:`libio` concerns only general functions
 - improved :code:`imagemol` I/O
 
 0.2.0 (2019-10-26)
