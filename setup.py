@@ -85,6 +85,7 @@ setup(
             'taurenmd_noSol = tauremd.cli_noSol:maincli',
             'taurenmd_imagemol = taurenmd.cli_imagemol:maincli',
             'taurenmd_trajedit = taurenmd.cli_trajedit:maincli',
+            'tauremd_report = taurenmd.cli_report:maincli',
             'taurenmd_rmsd = taurenmd.cli_rmsd:maincli',
             ]
         },

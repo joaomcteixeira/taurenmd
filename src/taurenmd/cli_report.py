@@ -1,20 +1,15 @@
 """
 Report on trajectory characteristics.
 """
+import argparse
 
 from taurenmd import log
-from taurenmd.libs import libcli
-
-
-# import simtk.openmm as mm
-# import simtk.openmm.app as app
-# import mdtraj
-import MDAnalysis as mda
+from taurenmd.libs import libcli, libio
 
 
 ap = libcli.CustomParser(
     description=__doc__,
-    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
 ap.add_argument(
@@ -45,7 +40,7 @@ def maincli():
 def main(topology, trajectory, **kwargs):
     log.info('Starting...')
     
-    trj = libio.mda_load_universe(topology, *list(trajectory))
+    libio.mda_load_universe(topology, *list(trajectory))
     return
 
 

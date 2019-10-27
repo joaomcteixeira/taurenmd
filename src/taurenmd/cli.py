@@ -18,6 +18,7 @@ import sys
 
 import taurenmd.cli_imagemol as cli_imagemol
 import taurenmd.cli_noSol as cli_noSol
+import taurenmd.cli_report as cli_report
 import taurenmd.cli_rmsd as cli_rmsd
 import taurenmd.cli_trajedit as cli_trajedit
 from taurenmd.libs import libcli
@@ -52,6 +53,14 @@ def load_args():
         add_help=False,
         )
     ap_tedit.set_defaults(func=cli_trajedit.main)
+
+    ap_report = subparsers.add_parser(
+        'report',
+        help='Reports on traj details.',
+        parents=[cli_report.ap],
+        add_help=False,
+        )
+    ap_report.set_defaults(func=cli_report.main)
 
     ap_rmsd = subparsers.add_parser(
         'rmsd',
