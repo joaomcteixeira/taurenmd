@@ -10,7 +10,7 @@ from taurenmd import Path, log
 from taurenmd.logger import S, T  # noqa: F401
 
 
-def mda_load_universe(top, traj):
+def mda_load_universe(top, *traj):
     """
     Load MDAnalysis universe.
 

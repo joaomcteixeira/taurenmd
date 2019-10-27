@@ -27,7 +27,11 @@ ap.add_argument(
 
 ap.add_argument(
     'trajectory',
-    help='The trajectory file',
+    help=(
+        'Trajectory files. Multiple trajectories will be contactenated'
+        ' by order.'
+        ),
+    nargs='+',
     )
 
 ap.add_argument(
@@ -65,7 +69,7 @@ ap.add_argument(
 ap.add_argument(
     '-d',
     '--traj-output',
-    help='Output trajectory.',
+    help='Edited trajectory.',
     default='traj_output.xtc',
     type=Path,
     )
@@ -73,8 +77,9 @@ ap.add_argument(
 ap.add_argument(
     '-o',
     '--top-output',
-    help="Output edited trajectory.",
+    help="Topology output first frame.",
     type=Path,
+    default='top_output.pdb',
     )
 
 
@@ -97,12 +102,13 @@ def main(
         step=None,
         selection='all',
         traj_output='traj_output.xtc',
+        top_output='top_output.pdb',
         **kwargs,
         ):
    
     log.info(T('editing trajectory'))
 
-    u = libio.mda_load_universe(topology, trajectory)
+    u = libio.mda_load_universe(topology, *list(trajectory))
     
     log.info(S(f'slicing: {start}::{stop}::{step}'))
    
@@ -116,14 +122,8 @@ def main(
         for ts in u.trajectory[slice(start, stop, step)]:
             W.write(selection)
     
-    topout = Path(
-        traj_output.resolve().parents[0],
-        traj_output.stem,
-        )
-    topout = topout.with_suffix('.pdb')
-
-    log.info(S(f'saving first frame to: {topout}'))
-    with mda.Writer(topout, selection.n_atoms) as W:
+    log.info(S(f'saving first frame to: {top_output}'))
+    with mda.Writer(Path(top_output).str(), selection.n_atoms) as W:
         for ts in u.trajectory[0:1]:
             W.write(selection)
    

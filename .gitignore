@@ -6,6 +6,7 @@ __pycache__
 
 tags
 *.debug
+*.bk
 
 # Packages
 *.egg
