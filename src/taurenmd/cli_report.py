@@ -21,7 +21,7 @@ ap.add_argument(
 ap.add_argument(
     'trajectory',
     help='The trajectory file',
-    nargs='?',
+    nargs='+',
     )
 
 
