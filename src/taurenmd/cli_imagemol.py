@@ -19,10 +19,17 @@ ap.add_argument(
     )
 
 ap.add_argument(
-    '-o',
-    '--output',
+    '-d',
+    '--traj-output',
     help='Output trajectory.',
     default='production_imaged.dcd',
+    )
+
+ap.add_argument(
+    '-o',
+    '--top-output',
+    help='First frame of the imaged trajectory.',
+    default='production_imaged_frame0.pdb',
     )
 
 
@@ -39,22 +46,29 @@ def maincli():
 def main(
         topology,
         trajectory,
-        output='production_imaged.dcd',
+        traj_output='production_imaged.dcd',
+        top_output='production_imaged_frame0.pdb',
         **kwargs,
         ):
 
-    log.info('Starting...')
+    log.info('Attempting image molecules...')
     
     trj = libio.mdtraj_load_traj(topology, trajectory)
    
     # use largest part as anchor
+    log.info(T('finding molecules...'))
     mols = trj.top.find_molecules()
+    log.info(S('done'))
+
+    log.info(T('imaging...'))
     reimaged = trj.image_molecules(
         inplace=False,
         anchor_molecules=mols[:1],
         other_molecules=mols[1:],
         )
-    
+    log.info(S('done'))
+
+    log.info(T('saving the output...'))
     reimaged.save(output)
     reimaged[0].save(Path(output).with_suffix('.pdb').str())
     return
