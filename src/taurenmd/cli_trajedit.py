@@ -10,7 +10,7 @@ import argparse
 import MDAnalysis as mda
 
 from taurenmd import Path, log
-from taurenmd.libs import libio
+from taurenmd.libs import libmda
 from taurenmd.logger import S, T
 
 
@@ -108,21 +108,21 @@ def main(
    
     log.info(T('editing trajectory'))
 
-    u = libio.mda_load_universe(topology, *list(trajectory))
+    u = libmda.mda_load_universe(topology, *list(trajectory))
     
-    log.info(S(f'slicing: {start}::{stop}::{step}'))
+    log.info(S('slicing: {}::{}::{}', start, stop, step))
    
-    log.info(S(f'selecting: {selection}'))
+    log.info(S('selecting: {}', selection))
     selection = u.select_atoms(selection)
-    log.info(S(S(f'with {selection.n_atoms}')))
-    
+    log.info(S(S('with {}', selection.n_atoms)))
+   
     traj_output = Path(traj_output)
-    log.info(S(f'saving to: {traj_output.resolve().str()}'))
+    log.info(S('saving to: {}', traj_output.resolve().str()))
     with mda.Writer(traj_output.str(), selection.n_atoms) as W:
         for ts in u.trajectory[slice(start, stop, step)]:
             W.write(selection)
     
-    log.info(S(f'saving first frame to: {top_output}'))
+    log.info(S('saving first frame to: {}', top_output))
     with mda.Writer(Path(top_output).str(), selection.n_atoms) as W:
         for ts in u.trajectory[0:1]:
             W.write(selection)
