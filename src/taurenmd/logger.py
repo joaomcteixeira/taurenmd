@@ -19,13 +19,14 @@ class SubLog:
     This format performs nicely under the `TitleLog` formatting.
     """
     
-    def __init__(self, msg, *args):
+    def __init__(self, msg, *args, indent=1):
         self.msg = msg
         self.args = args
+        self.indent = ' ' * 4 * indent
     
     def __str__(self):
         output = self.msg.format(*self.args)
-        return '    {}'.format(output)
+        return '{}{}'.format(self.indent, output)
 
 
 T = TitleLog

@@ -114,7 +114,7 @@ def main(
    
     log.info(S('selecting: {}', selection))
     selection = u.select_atoms(selection)
-    log.info(S(S('with {}', selection.n_atoms)))
+    log.info(S('with {}', selection.n_atoms, indent=2))
    
     traj_output = Path(traj_output)
     log.info(S('saving to: {}', traj_output.resolve().str()))
