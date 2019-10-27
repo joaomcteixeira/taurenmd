@@ -70,8 +70,8 @@ def main(
     log.info(S('done'))
 
     log.info(T('saving the output...'))
-    reimaged.save(output)
-    reimaged[0].save(Path(output).with_suffix('.pdb').str())
+    reimaged.save(traj_output)
+    reimaged[0].save(Path(top_output).with_suffix('.pdb').str())
     return
 
 

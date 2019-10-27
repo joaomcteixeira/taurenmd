@@ -8,7 +8,7 @@ class TitleLog:
         self.args = args
     
     def __str__(self):
-        output = self.msg.format(*args)
+        output = self.msg.format(*self.args)
         return '\n* {} ...'.format(output)
 
 
@@ -24,7 +24,7 @@ class SubLog:
         self.args = args
     
     def __str__(self):
-        output = self.msg.format(*args)
+        output = self.msg.format(*self.args)
         return '    {}'.format(output)
 
 
