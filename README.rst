@@ -9,7 +9,7 @@ taurenmd
     * - docs
       - |docs|
     * - tests
-      - | |travis| |appveyor|
+      - | |travis| |appveyor| (appveyor currently unmaintained)
         | |coveralls| |codecov|
         | |codacy| |codeclimate|
     * - package
