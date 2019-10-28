@@ -3,16 +3,22 @@
 environment:
   matrix:
   - TOXENV: py35
+    PYTHON_HOME: C:\Python35
+    PYTHON_VERSION: '3.5'
   - TOXENV: py36
+    PYTHON_HOME: C:\Python36
+    PYTHON_VERSION: '3.6'
   - TOXENV: py37
+    PYTHON_HOME: C:\Python37
+    PYTHON_VERSION: '3.7'
 
 build: off
 
 install:
-- python -m pip install --upgrade pip
-- pip install tox
-- pip install git+git://github.com/tox-dev/tox-conda#egg=tox-conda
+- '%PYTHON_HOME%\python -m pip install --upgrade pip'
+- '%PYTHON_HOME%\Scripts\pip install tox'
+- '%PYTHON_HOME%\Scripts\pip install git+git://github.com/tox-dev/tox-conda#egg=tox-conda'
 
 test_script:
-- tox
+- '%PYTHON_HOME%\Scripts\tox'
 
