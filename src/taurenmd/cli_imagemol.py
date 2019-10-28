@@ -49,19 +49,19 @@ def main(
         trajectory,
         traj_output='production_imaged.dcd',
         top_output='production_imaged_frame0.pdb',
-        **kwargs,
+        **kwargs
         ):
 
-    log.info('Attempting image molecules...')
+    log.info('Attempting image molecules')
     
     trj = libmdt.mdtraj_load_traj(topology, trajectory)
    
     # use largest part as anchor
-    log.info(T('finding molecules...'))
+    log.info(T('finding molecules'))
     mols = trj.top.find_molecules()
     log.info(S('done'))
 
-    log.info(T('imaging...'))
+    log.info(T('imaging'))
     reimaged = trj.image_molecules(
         inplace=False,
         anchor_molecules=mols[:1],
@@ -69,7 +69,7 @@ def main(
         )
     log.info(S('done'))
 
-    log.info(T('saving the output...'))
+    log.info(T('saving the output'))
     reimaged.save(traj_output)
     reimaged[0].save(Path(top_output).with_suffix('.pdb').str())
     return

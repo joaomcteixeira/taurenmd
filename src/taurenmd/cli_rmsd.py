@@ -83,7 +83,7 @@ def main(
         ref_frame=_REF_FRAME,
         selection=_SELECTION,
         plotvars=None,
-        **kwargs,
+        **kwargs
         ):
     
     log.info('Starting...')

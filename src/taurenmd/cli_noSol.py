@@ -48,7 +48,7 @@ def main(
         trajectory,
         output_pdb='production_noSol.pdb',
         traj_output='production_noSol.dcd',
-        **kwargs,
+        **kwargs
         ):
 
     trj = libio.mdtraj_load_traj(topology, trajectory)

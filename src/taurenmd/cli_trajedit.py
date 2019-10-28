@@ -103,7 +103,7 @@ def main(
         selection='all',
         traj_output='traj_output.xtc',
         top_output='top_output.pdb',
-        **kwargs,
+        **kwargs
         ):
    
     log.info(T('editing trajectory'))
