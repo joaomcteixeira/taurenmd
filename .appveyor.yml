@@ -1,74 +1,16 @@
-version: '{branch}-{build}'
-build: off
+# appveyor.yml
+---
 environment:
-  PYTHONBUFFERED: 1
-  MINICONDA: C:\\Miniconda3-x64
   matrix:
-    - PYTHON_VERSION: 3.6
-      TOXENV: py36
-    - PYTHON_VERSION: 3.7
-      TOXENV: py37
-    #- TOXENV: check
-    #  TOXPYTHON: C:\Python37\python.exe
-    #  PYTHON_HOME: C:\Python37
-    #  PYTHON_VERSION: '3.7'
-    #  PYTHON_ARCH: '32'
-    #- TOXENV: py35
-    #  TOXPYTHON: C:\Python35\python.exe
-    #  PYTHON_HOME: C:\Python35
-    #  PYTHON_VERSION: '3.5'
-    #  PYTHON_ARCH: '32'
-    #- TOXENV: py35
-    #  TOXPYTHON: C:\Python35-x64\python.exe
-    #  PYTHON_HOME: C:\Python35-x64
-    #  PYTHON_VERSION: '3.5'
-    #  PYTHON_ARCH: '64'
-    #- TOXENV: py36
-    #  TOXPYTHON: C:\Python36\python.exe
-    #  PYTHON_HOME: C:\Python36
-    #  PYTHON_VERSION: '3.6'
-    #  PYTHON_ARCH: '32'
-    #- TOXENV: py36
-    #  TOXPYTHON: C:\Python36-x64\python.exe
-    #  PYTHON_HOME: C:\Python36-x64
-    #  PYTHON_VERSION: '3.6'
-    #  PYTHON_ARCH: '64'
-    #- TOXENV: py37
-    #  TOXPYTHON: C:\Python37\python.exe
-    #  PYTHON_HOME: C:\Python37
-    #  PYTHON_VERSION: '3.7'
-    #  PYTHON_ARCH: '32'
-    #- TOXENV: py37
-    #  TOXPYTHON: C:\Python37-x64\python.exe
-    #  PYTHON_HOME: C:\Python37-x64
-    #  PYTHON_VERSION: '3.7'
-    #  PYTHON_ARCH: '64'
-#init:
-#  - ps: echo $env:TOXENV
-#  - ps: ls C:\Python*
-install:
-    - mkdir C:\Users\appveyor\.conda
-    - call %MINICONDA%\Scripts\activate.bat
-    - conda config --set always_yes yes --set changeps1 no --set auto_update_conda no --set safety_checks disabled
-    - conda update -q conda
-    - conda info -a
-    - conda create -q -n testenv python=%PYTHON_VERSION%
-    - call %MINICONDA%\envs\testenv\Scripts\activate.bat
-    - conda install tox tox-conda -c conda-forge
-    #- activate test-environment
-    #- '%CONDA_PREFIX%\Scripts\conda.exe install tox tox-conda -c conda-forge'
-    #- '%CONDA_PREFIX%\Scripts\tox.exe --version' 
-test_script:
-  #- cmd /E:ON /V:ON /C .\ci\appveyor-with-compiler.cmd %PYTHON_HOME%\Scripts\tox
-  #- '%PYTHON_HOME%\Scripts\tox'
-  #- '%CONDA_PREFIX%\envs\testenv\Scripts\tox.exe -e %TOXENV%'
-    - call %MINICONDA%\envs\testenv\Scripts\activate.bat
-    - tox -e %TOXENV%
-  #- '%CONDA_PREFIX%\Scripts\tox.exe -e %TOXENV%'
-on_failure:
-  - ps: dir "env:"
-  - ps: get-content .tox\*\log\*
+  - TOXENV: py35
+  - TOXENV: py36
+  - TOXENV: py37
 
-### To enable remote debugging uncomment this (also, see: http://www.appveyor.com/docs/how-to/rdp-to-build-worker):
-# on_finish:
-#   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+build: off
+
+install:
+- pip install tox tox-conda
+
+test_script:
+- tox
+
