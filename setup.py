@@ -69,7 +69,7 @@ setup(
     keywords=[
         # eg: 'keyword1', 'keyword2', 'keyword3',
         ],
-    python_requires='>=3, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
+    python_requires='>=3, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*',
     install_requires=[
         'bioplottemplates',
         # eg: 'aspectlib==1.1.1', 'six>=1.7',
