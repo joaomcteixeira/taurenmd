@@ -20,6 +20,7 @@ install:
 - '%PYTHON_HOME%\python -m pip install --upgrade pip'
 - '%PYTHON_HOME%\Scripts\pip install tox'
 - '%PYTHON_HOME%\Scripts\pip install git+git://github.com/tox-dev/tox-conda#egg=tox-conda'
+- "SET PATH=%PYTHON%;%PYTHON%\Scripts;%PYTHON%\Library\bin;%PATH%"
 
 test_script:
 - ps: dir 'env:'
