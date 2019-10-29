@@ -2,6 +2,8 @@
 # reported on https://github.com/tox-dev/tox-conda/issues/30
 ---
 environment:
+  PYTHONBUFFERED: 1
+  MINICONDA: C:\\Miniconda3-x64
   matrix:
   - TOXENV: py36
     PYTHON_HOME: C:\Python36
