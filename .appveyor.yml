@@ -18,6 +18,6 @@ install:
 - '%PYTHON_HOME%\Scripts\pip install git+git://github.com/tox-dev/tox-conda#egg=tox-conda'
 
 test_script:
-- dir "env:"
+- ps: dir 'env:'
 - '%PYTHON_HOME%\Scripts\tox'
 
