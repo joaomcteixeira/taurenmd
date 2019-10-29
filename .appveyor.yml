@@ -8,11 +8,11 @@ environment:
   - TOXENV: py36
     PYTHON_HOME: C:\Python36
     PYTHON_VERSION: '3.6'
-    _CONDA_EXE: "C:\Miniconda3-x64\Library\bin\..\..\Scripts\conda.exe"
+    _CONDA_EXE: C:\Miniconda3-x64\Library\bin\..\..\Scripts\conda.exe
   - TOXENV: py37
     PYTHON_HOME: C:\Python37
     PYTHON_VERSION: '3.7'
-    _CONDA_EXE: "C:\Miniconda3-x64\Library\bin\..\..\Scripts\conda.exe"
+    _CONDA_EXE: C:\Miniconda3-x64\Library\bin\..\..\Scripts\conda.exe
 
 build: off
 
