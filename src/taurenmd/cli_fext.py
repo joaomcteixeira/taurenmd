@@ -4,8 +4,8 @@ Extracts frames to PDB files.
 import argparse
 
 from taurenmd import Path, log
-from taurenmd.libs import libcli, libio, libmda # noqa: F401
-from taurenmd.logger import S, T
+from taurenmd.libs import libcli, libmda
+from taurenmd.logger import S
 
 
 ap = libcli.CustomParser(
