@@ -2,6 +2,12 @@
 Changelog
 =========
 
+
+0.3.0-dev
+---------
+
+- Added option to disable export of frame0 topology in trajedit
+
 0.2.1 (2019-10-26)
 ------------------
 

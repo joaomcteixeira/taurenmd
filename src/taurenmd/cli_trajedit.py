@@ -82,6 +82,13 @@ ap.add_argument(
     default='top_output.pdb',
     )
 
+ap.add_argument(
+    '-t',
+    '--no-top',
+    help='If given, does not create topology for the first frame.',
+    action='store_true',
+    )
+
 
 def load_args():
     cmd = ap.parse_args()
@@ -103,6 +110,7 @@ def main(
         selection='all',
         traj_output='traj_output.xtc',
         top_output='top_output.pdb',
+        no_top=False,
         **kwargs
         ):
    
@@ -121,11 +129,14 @@ def main(
     with mda.Writer(traj_output.str(), selection.n_atoms) as W:
         for ts in u.trajectory[slice(start, stop, step)]:
             W.write(selection)
-    
-    log.info(S('saving first frame to: {}', top_output))
-    with mda.Writer(Path(top_output).str(), selection.n_atoms) as W:
-        for ts in u.trajectory[0:1]:
-            W.write(selection)
+   
+    if not no_top:
+        log.info(S('saving first frame to: {}', top_output))
+        with mda.Writer(Path(top_output).str(), selection.n_atoms) as W:
+            for ts in u.trajectory[0:1]:
+                W.write(selection)
+    else:
+        log.info(S('topology not written'))
    
     log.info(S('Done'))
     return
