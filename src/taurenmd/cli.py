@@ -16,8 +16,8 @@ Why does this file exist, and why not put this in __main__?
 """
 import sys
 
-import taurenmd.cli_imagemol as cli_imagemol
 import taurenmd.cli_fext as cli_fext
+import taurenmd.cli_imagemol as cli_imagemol
 import taurenmd.cli_noSol as cli_noSol
 import taurenmd.cli_report as cli_report
 import taurenmd.cli_rmsd as cli_rmsd
