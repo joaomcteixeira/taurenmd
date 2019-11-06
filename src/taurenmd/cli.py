@@ -17,6 +17,7 @@ Why does this file exist, and why not put this in __main__?
 import sys
 
 import taurenmd.cli_imagemol as cli_imagemol
+import taurenmd.cli_fext as cli_fext
 import taurenmd.cli_noSol as cli_noSol
 import taurenmd.cli_report as cli_report
 import taurenmd.cli_rmsd as cli_rmsd
@@ -37,6 +38,14 @@ def load_args():
         add_help=False,
         )
     ap_imagemol.set_defaults(func=cli_imagemol.main)
+    
+    ap_fext = subparsers.add_parser(
+        'fext',
+        help='Extracts single frames from trajectory.',
+        parents=[cli_fext.ap],
+        add_help=False,
+        )
+    ap_fext.set_defaults(func=cli_fext.main)
     
     ap_noSol = subparsers.add_parser(
         'noSol',
