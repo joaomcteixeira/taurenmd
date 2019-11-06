@@ -94,7 +94,7 @@ Development Branch
     :target: https://taurenmd.readthedocs.io/en/latest/index.html
     :alt: Read the Docs (latest)
 
-.. image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.2.0.svg
+.. image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.2.0/develop
     :alt: Commits since latest release
     :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.2.0...develop
 
