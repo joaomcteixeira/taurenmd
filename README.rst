@@ -7,7 +7,7 @@ taurenmd
 .. start-badges
 
 Stable version
-==============
+--------------
 
 .. image:: https://img.shields.io/travis/joaomcteixeira/taurenmd/master?label=TravisCI
     :target: https://travis-ci.org/joaomcteixeira/taurenmd
@@ -51,8 +51,14 @@ Stable version
 
 The stable version is hosted at the `master branch`_.
 
+Notes
+~~~~~
+
+- AppVeyor builds only for py36; see `#1`_
+- Travis is not yet configured for OSX; see `#2`_ 
+
 Development Branch
-==================
+------------------
 
 *where new features are tested and code maybe broken :)*
 
@@ -84,8 +90,8 @@ Development Branch
     :target: https://codeclimate.com/github/joaomcteixeira/taurenmd
     :alt: Code Climate technical debt
 
-.. image:: https://img.shields.io/readthedocs/taurenmd/develop?label=Read%20the%20Docs
-    :target: https://taurenmd.readthedocs.io/en/develop/index.html
+.. image:: https://img.shields.io/readthedocs/taurenmd/latest?label=Read%20the%20Docs
+    :target: https://taurenmd.readthedocs.io/en/latest/index.html
     :alt: Read the Docs (latest)
 
 .. |commits-since| image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.2.0.svg
@@ -131,3 +137,5 @@ Thanks to `JoaoRodrigues`_ for all the mentoring on MD! CI in this repository pr
 .. _cookiecutter-pylibrary: https://github.com/ionelmc/cookiecutter-pylibrary
 .. _master branch: https://github.com/joaomcteixeira/taurenmd/tree/master
 .. _develop branch: https://github.com/joaomcteixeira/taurenmd/tree/develop
+.. _#1: https://github.com/joaomcteixeira/taurenmd/issues/1
+.. _#2: https://github.com/joaomcteixeira/taurenmd/issues/2
