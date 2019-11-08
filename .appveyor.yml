@@ -27,5 +27,5 @@ install:
 
 test_script:
 - ps: dir 'env:'
-- '%PYTHON_HOME%\Scripts\tox'
+- '%PYTHON_HOME%\Scripts\tox -e %TOXENV%'
 

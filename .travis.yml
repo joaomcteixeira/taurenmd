@@ -14,10 +14,10 @@ matrix:
       env:
         - TOXENV=docs
     - env:
-        - TOXENV=py36,codecov,coveralls
+        - TOXENV=clean,py36,codecov,coveralls,report
       python: '3.6'
     - env:
-        - TOXENV=py37,codecov,coveralls
+        - TOXENV=clean,py37,codecov,coveralls,report
       python: '3.7'
 #    - env:
 #        - TOXENV=pypy3,codecov,coveralls
