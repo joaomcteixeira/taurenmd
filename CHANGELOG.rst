@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3.1
+-----
+
+- added .myparents() to Path in __init__
+
 0.3.0 (2019-11-06)
 ------------------
 
