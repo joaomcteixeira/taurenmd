@@ -122,12 +122,17 @@ def main(
     log.info(S('selecting: {}', selection))
     selection = u.select_atoms(selection)
     log.info(S('with {}', selection.n_atoms, indent=2))
-   
+    print(selection.fragments) 
+    all_frag_atoms = sum(selection.fragments)
+    print(all_frag_atoms.fragments)
     traj_output = Path(traj_output)
     log.info(S('saving to: {}', traj_output.resolve().str()))
-    with mda.Writer(traj_output.str(), selection.n_atoms) as W:
-        for ts in u.trajectory[slice(start, stop, step)]:
-            W.write(selection)
+    with mda.Writer(traj_output.str(), all_frag_atoms.n_atoms) as W:
+        for i, ts in enumerate(u.trajectory[slice(start, stop, step)]):
+            print(f'wrapping frame: {i}')
+            all_frag_atoms.unwrap(reference='com')
+
+            W.write(all_frag_atoms)
    
     if not no_top:
         
