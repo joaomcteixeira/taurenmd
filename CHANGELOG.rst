@@ -4,6 +4,7 @@ Changelog
 0.3.1
 -----
 
+- topology output now defaults to traj name + `frame0.pdb`
 - added .myparents() to Path in __init__
 
 0.3.0 (2019-11-06)

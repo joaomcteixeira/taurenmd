@@ -10,7 +10,7 @@ import argparse
 import MDAnalysis as mda
 
 from taurenmd import Path, log
-from taurenmd.libs import libmda
+from taurenmd.libs import libio, libmda
 from taurenmd.logger import S, T
 
 
@@ -69,7 +69,7 @@ ap.add_argument(
 ap.add_argument(
     '-d',
     '--traj-output',
-    help='Edited trajectory.',
+    help='Edited trajectory. Defaults to traj_output.xtc.',
     default='traj_output.xtc',
     type=Path,
     )
@@ -78,8 +78,7 @@ ap.add_argument(
     '-o',
     '--top-output',
     help="Topology output first frame.",
-    type=Path,
-    default='top_output.pdb',
+    default=None,
     )
 
 ap.add_argument(
@@ -109,7 +108,7 @@ def main(
         step=None,
         selection='all',
         traj_output='traj_output.xtc',
-        top_output='top_output.pdb',
+        top_output=None,
         no_top=False,
         **kwargs
         ):
@@ -131,7 +130,12 @@ def main(
             W.write(selection)
    
     if not no_top:
-        log.info(S('saving first frame to: {}', top_output))
+        
+        if top_output is None:
+            top_output = libio.mk_frame_path(traj_output)
+        else:
+            top_output = Path(top_output)
+        log.info(S('saving first frame to: {}', top_output.resolve()))
         with mda.Writer(Path(top_output).str(), selection.n_atoms) as W:
             for ts in u.trajectory[0:1]:
                 W.write(selection)
