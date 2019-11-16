@@ -77,15 +77,52 @@ ap.add_argument(
 ap.add_argument(
     '-o',
     '--top-output',
-    help="Topology output first frame.",
+    help=(
+        'Topology output first frame.'
+        'Defaults to --traj-output file name + _frame0.'
+        ),
     default=None,
     )
 
 ap.add_argument(
-    '-t',
-    '--no-top',
-    help='If given, does not create topology for the first frame.',
+    '-F',
+    '--save-frame0-topology',
+    help=(
+        'Do NOT save frame0 as topology. '
+        'Defaults to False, that is, saves topology. '
+        ),
+    action='store_false',
+    )
+
+ap.add_argument(
+    '-w',
+    '--unwrap',
+    help=(
+        'Unwraps selection according to: '
+        'https://www.mdanalysis.org/docs/documentation_pages/core/groups.html#MDAnalysis.core.groups.AtomGroup.unwrap'  # noqa: E501
+        ),
     action='store_true',
+    )
+
+ap.add_argument(
+    '--unwrap-reference',
+    help=(
+        'The unwrap method reference parameter. '
+        'Has effect only if \'-w\' is given. '
+        'Defaults to `None`.'
+        ),
+    default=None,
+    )
+
+ap.add_argument(
+    '--unwrap-compound',
+    help=(
+        'The unwrap method compound parameter. '
+        'Has effect only if \'-w\' is given. '
+        'Defaults to `fragments`.'
+        ),
+    default='fragments',
+    type=str,
     )
 
 
@@ -109,7 +146,10 @@ def main(
         selection='all',
         traj_output='traj_output.xtc',
         top_output=None,
-        no_top=False,
+        save_frame0_topology=True,
+        unwrap=False,
+        unwrap_reference=None,
+        unwrap_compound='fragments',
         **kwargs
         ):
    
@@ -118,30 +158,55 @@ def main(
     u = libmda.mda_load_universe(topology, *list(trajectory))
     
     log.info(S('slicing: {}::{}::{}', start, stop, step))
-   
+    sliceObj = slice(start, stop, step)
+
     log.info(S('selecting: {}', selection))
     selection = u.select_atoms(selection)
-    log.info(S('with {}', selection.n_atoms, indent=2))
-   
+    log.info(S('with {} atoms', selection.n_atoms, indent=2))
+
+    if unwrap:
+        log.info(T('unwrapping'))
+        log.info(S('set to: {}', unwrap))
+        log.info(S('reference: {}', unwrap_reference))
+        log.info(S('compound: {}', unwrap_compound))
+    
+    log.info(T('saving trajectory'))
     traj_output = Path(traj_output)
-    log.info(S('saving to: {}', traj_output.resolve().str()))
+    log.info(S('destination: {}', traj_output.resolve().str()))
+
     with mda.Writer(traj_output.str(), selection.n_atoms) as W:
-        for ts in u.trajectory[slice(start, stop, step)]:
+        for i, ts in zip(
+                range(len(u.trajectory))[sliceObj],
+                u.trajectory[sliceObj],
+                ):
+            
+            log.info(S('working on frame: {}', i))
+            
+            if unwrap:
+                log.debug(S('unwrapping', indent=2))
+                selection.unwrap(
+                    reference=unwrap_reference,
+                    compound=unwrap_compound,
+                    )
+
             W.write(selection)
-   
-    if not no_top:
+    
+    log.info(S('trajectory saved'))
+
+    if save_frame0_topology:
         
+        log.info(T('saving topology'))
+
         if top_output is None:
             top_output = libio.mk_frame_path(traj_output)
         else:
             top_output = Path(top_output)
-        log.info(S('saving first frame to: {}', top_output.resolve()))
+        
+        log.info(S('saving frame 0 to: {}', top_output.resolve()))
         with mda.Writer(Path(top_output).str(), selection.n_atoms) as W:
             for ts in u.trajectory[0:1]:
                 W.write(selection)
-    else:
-        log.info(S('topology not written'))
-   
+    
     log.info(S('Done'))
     return
 
