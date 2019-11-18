@@ -4,6 +4,7 @@ Changelog
 0.3.1
 -----
 
+* corrected fext cli entry point
 * added align option to trajedit
 * topology model writen from first frame of time slicing
 * added unwrap() molecule method from MDAnalysis in :code:`trajedit` with respective options
