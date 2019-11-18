@@ -4,6 +4,7 @@ Changelog
 0.3.1
 -----
 
+* added align option to trajedit
 * topology model writen from first frame of time slicing
 * added unwrap() molecule method from MDAnalysis in :code:`trajedit` with respective options
 * topology output now defaults to traj name + :code:`frame0.pdb`
