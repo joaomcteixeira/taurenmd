@@ -33,6 +33,14 @@ ap.add_argument(
     default='production_imaged_frame0.pdb',
     )
 
+ap.add_argument(
+    '-p',
+    '--protocol',
+    help='The protocol with which reimage.',
+    default=1,
+    type=int,
+    )
+
 
 def load_args():
     cmd = ap.parse_args()
@@ -44,34 +52,75 @@ def maincli():
     main(**vars(cmd))
 
 
-def main(
-        topology,
-        trajectory,
-        traj_output='production_imaged.dcd',
-        top_output='production_imaged_frame0.pdb',
-        **kwargs
-        ):
-
-    log.info('Attempting image molecules')
-    
-    trj = libmdt.mdtraj_load_traj(topology, trajectory)
-   
-    # use largest part as anchor
+def protocol1(traj):
+    """
+    Attempts to image molecules acting on the whole traj.
+    """
     log.info(T('finding molecules'))
-    mols = trj.top.find_molecules()
+    mols = traj.top.find_molecules()
     log.info(S('done'))
-
-    log.info(T('imaging'))
-    reimaged = trj.image_molecules(
+    
+    log.info(T('reimaging'))
+    reimaged = traj.image_molecules(
         inplace=False,
         anchor_molecules=mols[:1],
         other_molecules=mols[1:],
         )
     log.info(S('done'))
+    return reimaged
+
+
+def protocol2(traj):
+    """
+    Attempts to image molecules frame by frame.
+    """
+    reimaged = []
+    for frame in range(len(traj)):
+        log.info(S('reimaging frame: {}', frame))
+        
+        mols = traj.top.find_molecules()
+    
+        reimaged.append(
+            traj[frame].image_molecules(
+                inplace=False,
+                anchor_molecules=mols[:1],
+                other_molecules=mols[1:],
+                )
+            )
+
+    log.info(S('concatenating traj frames'))
+    # http://mdtraj.org/1.9.3/api/generated/mdtraj.join.html#mdtraj.join 
+    reimaged_traj = reimaged[0].join(reimaged[1:])
+
+    return reimaged_traj
+
+
+def main(
+        topology,
+        trajectory,
+        traj_output='production_imaged.dcd',
+        top_output='production_imaged_frame0.pdb',
+        protocol=1,
+        **kwargs
+        ):
+
+    log.info('Attempting image molecules')
+    
+    traj = libmdt.mdtraj_load_traj(topology, trajectory)
+    
+    protocols = {
+        1: protocol1,
+        2: protocol2,
+        }
+
+    reimaged = protocols[protocol](traj)
 
     log.info(T('saving the output'))
     reimaged.save(traj_output)
-    reimaged[0].save(Path(top_output).with_suffix('.pdb').str())
+    log.info(S('saved trajectory: {}', traj_output))
+    top_file = Path(top_output).with_suffix('.pdb').str()
+    reimaged[0].save(top_file)
+    log.info(S('saved topology for first frame: {}', top_file))
     return
 
 
