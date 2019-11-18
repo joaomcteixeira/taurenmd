@@ -81,7 +81,7 @@ def protocol2(traj):
     for frame in range(len(traj)):
         log.info(S('reimaging frame: {}', frame))
         
-        mols = traj.top.find_molecules()
+        mols = traj[frame].top.find_molecules()
     
         reimaged.append(
             traj[frame].image_molecules(
@@ -101,11 +101,9 @@ def protocol2(traj):
 def main(
         topology,
         trajectory,
-        traj_output='production_imaged.dcd',
-        top_output='production_imaged_frame0.pdb',
-        protocol=1,
         traj_output='production_imaged.xtc',
         top_output=None,
+        protocol=1,
         **kwargs
         ):
 
@@ -123,14 +121,12 @@ def main(
     log.info(T('saving the output'))
     reimaged.save(traj_output)
     log.info(S('saved trajectory: {}', traj_output))
-    top_file = Path(top_output).with_suffix('.pdb').str()
-    reimaged[0].save(top_file)
-    log.info(S('saved topology for first frame: {}', top_file))
 
     if top_output is None:
         top_output = libio.mk_frame_path(traj_output)
     
     reimaged[0].save(Path(top_output).with_suffix('.pdb').str())
+    log.info(S('saving frame 0 to: {}', top_output.resolve()))
     return
 
 
