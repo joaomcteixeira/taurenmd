@@ -92,7 +92,7 @@ def protocol2(traj):
             )
 
     log.info(S('concatenating traj frames'))
-    # http://mdtraj.org/1.9.3/api/generated/mdtraj.join.html#mdtraj.join 
+    # http://mdtraj.org/1.9.3/api/generated/mdtraj.join.html#mdtraj.join
     reimaged_traj = reimaged[0].join(reimaged[1:])
 
     return reimaged_traj

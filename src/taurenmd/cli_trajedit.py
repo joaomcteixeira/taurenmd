@@ -8,6 +8,7 @@ Uses MDAnalsysis.
 import argparse
 
 import MDAnalysis as mda
+from MDAnalysis.analysis import align as mdaalign
 
 from taurenmd import Path, log
 from taurenmd.libs import libio, libmda
@@ -61,7 +62,10 @@ ap.add_argument(
 ap.add_argument(
     '-l',
     '--selection',
-    help='Atom selection. Read: https://www.mdanalysis.org/docs/documentation_pages/selections.html',  # noqa: E501
+    help=(
+        'Atom selection for the output trajectory. '
+        'Read: https://www.mdanalysis.org/docs/documentation_pages/selections.html'  # noqa: E501
+        ),
     default='all',
     type=str,
     )
@@ -92,6 +96,23 @@ ap.add_argument(
         'Defaults to False, that is, saves topology. '
         ),
     action='store_false',
+    )
+
+ap.add_argument(
+    '-a',
+    '--align',
+    help='Align selection (l) to a atom subselection',
+    action='store_true',
+    )
+
+ap.add_argument(
+    '--align-selection',
+    help=(
+        'The reference atom group to which align the trajectory to. '
+        'Must be subselection of --selection.'
+        ),
+    type=str,
+    default='all',
     )
 
 ap.add_argument(
@@ -150,6 +171,8 @@ def main(
         unwrap=False,
         unwrap_reference=None,
         unwrap_compound='fragments',
+        align=False,
+        align_selection='all',
         **kwargs,
         ):
    
@@ -157,18 +180,25 @@ def main(
 
     u = libmda.mda_load_universe(topology, *list(trajectory))
     
+    if unwrap:
+        log.info(T('unwrapping'))
+        log.info(S('set to: {}', unwrap))
+        log.info(S('reference: {}', unwrap_reference))
+        log.info(S('compound: {}', unwrap_compound))
+
+    if align:
+        u_top = mda.Universe(topology).select_atoms(selection)
+        log.info(T('Alignment'))
+        log.info(S('trajectory selection will be aligned to subselection:'))
+        log.info(S('- {}', align_selection, indent=2))
+    
+    log.info(T('transformation'))
     log.info(S('slicing: {}::{}::{}', start, stop, step))
     sliceObj = slice(start, stop, step)
 
     log.info(S('selecting: {}', selection))
     selection = u.select_atoms(selection)
     log.info(S('with {} atoms', selection.n_atoms, indent=2))
-
-    if unwrap:
-        log.info(T('unwrapping'))
-        log.info(S('set to: {}', unwrap))
-        log.info(S('reference: {}', unwrap_reference))
-        log.info(S('compound: {}', unwrap_compound))
 
     log.info(T('saving trajectory'))
     traj_output = Path(traj_output)
@@ -187,6 +217,13 @@ def main(
                 selection.unwrap(
                     reference=unwrap_reference,
                     compound=unwrap_compound,
+                    )
+
+            if align:
+                mdaalign.alignto(
+                    selection,
+                    u_top,
+                    select=align_selection,
                     )
 
             W.write(selection)
