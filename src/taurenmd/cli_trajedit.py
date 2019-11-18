@@ -150,7 +150,7 @@ def main(
         unwrap=False,
         unwrap_reference=None,
         unwrap_compound='fragments',
-        **kwargs
+        **kwargs,
         ):
    
     log.info(T('editing trajectory'))
@@ -169,7 +169,7 @@ def main(
         log.info(S('set to: {}', unwrap))
         log.info(S('reference: {}', unwrap_reference))
         log.info(S('compound: {}', unwrap_compound))
-    
+
     log.info(T('saving trajectory'))
     traj_output = Path(traj_output)
     log.info(S('destination: {}', traj_output.resolve().str()))
@@ -204,7 +204,7 @@ def main(
         
         log.info(S('saving frame 0 to: {}', top_output.resolve()))
         with mda.Writer(Path(top_output).str(), selection.n_atoms) as W:
-            for ts in u.trajectory[0:1]:
+            for ts in u.trajectory[sliceObj][0:1]:
                 W.write(selection)
     
     log.info(S('Done'))

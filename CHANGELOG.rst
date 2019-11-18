@@ -4,6 +4,7 @@ Changelog
 0.3.1
 -----
 
+* topology model writen from first frame of time slicing
 * added unwrap() molecule method from MDAnalysis in :code:`trajedit` with respective options
 * topology output now defaults to traj name + :code:`frame0.pdb`
 * added .myparents() to Path in :code:`__init__`
