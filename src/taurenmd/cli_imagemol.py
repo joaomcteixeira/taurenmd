@@ -3,7 +3,7 @@ Attempt image molecule with mdtraj.
 """
 
 from taurenmd import Path, log
-from taurenmd.libs import libcli, libmdt
+from taurenmd.libs import libcli, libio, libmdt
 from taurenmd.logger import S, T
 
 
@@ -22,15 +22,18 @@ ap.add_argument(
 ap.add_argument(
     '-d',
     '--traj-output',
-    help='Output trajectory.',
-    default='production_imaged.dcd',
+    help='Output trajectory. Defaults to production_imaged.xtc.',
+    default='production_imaged.xtc',
     )
 
 ap.add_argument(
     '-o',
     '--top-output',
-    help='First frame of the imaged trajectory.',
-    default='production_imaged_frame0.pdb',
+    help=(
+        'File name to save the first frame of the imaged trajectory.'
+        ' Defaults to the --traj-output path + \'_frame0.pdb.'
+        ),
+    default=None,
     )
 
 ap.add_argument(
@@ -101,6 +104,8 @@ def main(
         traj_output='production_imaged.dcd',
         top_output='production_imaged_frame0.pdb',
         protocol=1,
+        traj_output='production_imaged.xtc',
+        top_output=None,
         **kwargs
         ):
 
@@ -121,6 +126,11 @@ def main(
     top_file = Path(top_output).with_suffix('.pdb').str()
     reimaged[0].save(top_file)
     log.info(S('saved topology for first frame: {}', top_file))
+
+    if top_output is None:
+        top_output = libio.mk_frame_path(traj_output)
+    
+    reimaged[0].save(Path(top_output).with_suffix('.pdb').str())
     return
 
 
