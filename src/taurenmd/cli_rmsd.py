@@ -6,12 +6,11 @@ import argparse
 from bioplottemplates.plots import param
 
 from taurenmd import Path, log  # noqa: F401
-from taurenmd.libs import libcalc, libcli, libio, libutil
+from taurenmd.libs import libcalc, libcli, libio, libmda, libutil
 
 
 _SELECTION = 'all'
 _REF_FRAME = 0
-_FRAMES = None
 
 
 ap = libcli.CustomParser(
@@ -27,19 +26,39 @@ ap.add_argument(
 
 ap.add_argument(
     'trajectory',
-    help='The trajectory file',
-    )
-
-ap.add_argument(
-    '-f',
-    '--frames',
-    help='The frames to consider.',
+    help=(
+        'Trajectory files. If given, multiple trajectories will be'
+        'contactenated by order.'
+        ),
     nargs='+',
-    default=_FRAMES,
     )
 
 ap.add_argument(
     '-s',
+    '--start',
+    help='Start frame for slicing.',
+    default=None,
+    type=int,
+    )
+
+ap.add_argument(
+    '-e',
+    '--stop',
+    help='Stop frame for slicing: exclusive',
+    default=None,
+    type=int,
+    )
+
+ap.add_argument(
+    '-p',
+    '--step',
+    help='Step value for slicing',
+    default=None,
+    type=int,
+    )
+
+ap.add_argument(
+    '-l',
     '--selection',
     help='The atom selection',
     type=str,
@@ -79,7 +98,9 @@ def maincli():
 def main(
         topology,
         trajectory,
-        frames=_FRAMES,
+        start=None,
+        stop=None,
+        step=None,
         ref_frame=_REF_FRAME,
         selection=_SELECTION,
         plotvars=None,
@@ -88,9 +109,14 @@ def main(
     
     log.info('Starting...')
     
-    u = libio.mda_load_universe(topology, trajectory)
+    u = libmda.mda_load_universe(topology, *list(trajectory))
     
-    frame_slice = libutil.frame_slice(frames)
+    frame_slice = libutil.frame_slice(
+        len(u.trajectory),
+        start=start,
+        stop=stop,
+        step=step,
+        )
 
     rmsds_combined = libcalc.mda_rmsd_combined_chains(
         u,
@@ -103,7 +129,7 @@ def main(
         plotvars = dict()
 
     param.plot(
-        list(range(len(u.trajectory)))[frame_slice],
+        list(range(len(u.trajectory))[frame_slice]),
         rmsds_combined,
         **plotvars,
         )
