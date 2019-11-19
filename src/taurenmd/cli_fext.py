@@ -54,9 +54,9 @@ ap.add_argument(
     )
 
 ap.add_argument(
-    '-l',
+    '-t',
     '--flist',
-    help='List of frames to extract.',
+    help='List of frames (time steps) to extract.',
     default=False,
     nargs='+',
     )
@@ -73,6 +73,17 @@ ap.add_argument(
     '--ext',
     help='Extension of frame files. Defaulst to .pdb',
     default='.pdb',
+    )
+
+ap.add_argument(
+    '-l',
+    '--selection',
+    help=(
+        'Atom selection for the output trajectory. '
+        'Read: https://www.mdanalysis.org/docs/documentation_pages/selections.html'  # noqa: E501
+        ),
+    default='all',
+    type=str,
     )
 
 
@@ -97,6 +108,7 @@ def main(
         flist=None,
         prefix='frame_',
         ext='pdb',
+        selection='all',
         **kwargs):
     log.info('Starting...')
     
@@ -118,7 +130,7 @@ def main(
     zeros = len(str(lent))
     ext = ext.lstrip('.').strip()
     
-    selection = u.select_atoms('all')
+    atom_group = u.select_atoms(selection)
 
     for frame in frames_to_extract:
         file_name = '{}{}.{}'.format(
@@ -127,7 +139,7 @@ def main(
             ext,
             )
 
-        selection.write(
+        atom_group.write(
             filename=Path(file_name),
             frames=[frame],
             )
