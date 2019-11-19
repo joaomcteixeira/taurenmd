@@ -107,7 +107,7 @@ def main(
         **kwargs
         ):
     
-    log.info('Starting...')
+    log.info(T('starting'))
     
     u = libmda.mda_load_universe(topology, *list(trajectory))
     
