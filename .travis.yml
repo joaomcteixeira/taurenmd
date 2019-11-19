@@ -1,6 +1,13 @@
 language: python
 dist: xenial
 cache: false
+
+# safelist
+branches:
+  only:
+  - master
+  - release-candidate
+
 env:
   global:
     - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
@@ -44,8 +51,7 @@ install:
   #- conda env update -n test-environment --file requirements.yml
   #- conda env update -n test-environment --file requirements-dev.yml
   - conda activate test-environment
-  - conda install tox -c conda-forge
-  - pip install tox-conda
+  - conda install tox tox-conda -c conda-forge
   - tox --version
 script:
   - tox -v
