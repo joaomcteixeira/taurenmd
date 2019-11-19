@@ -3,12 +3,10 @@ from taurenmd.libs import libutil
 
 class TestFrameSlice:
 
-    def test_frame_slice_all(self):
-        """Test 'all'."""
-        result = libutil.frame_slice('all')
+    def test_frame_(self):
+        """Test None."""
+        result = libutil.frame_slice()
         assert result == slice(None, None, None)
 
-    def test_frame_slice_none(self):
-        """Test None."""
-        result = libutil.frame_slice(None)
-        assert result == slice(None, None, None)
+    def test_tuple1(self):
+        result = libutil.frame_slice()
