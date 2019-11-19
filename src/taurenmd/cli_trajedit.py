@@ -89,9 +89,10 @@ ap.add_argument(
     )
 
 ap.add_argument(
-    '-F',
+    '-O',
     '--save-frame0-topology',
     help=(
+        'Oposite of -o. '
         'Do NOT save frame0 as topology. '
         'Defaults to False, that is, saves topology. '
         ),
