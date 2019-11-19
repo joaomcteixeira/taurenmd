@@ -114,16 +114,24 @@ def main(
     
     u = libmda.mda_load_universe(topology, *list(trajectory))
     
-    lent = len(u.trajectory)
+    frames_to_extract = libutil.frames_list(
+        len(u.trajectory),
+        start=start,
+        stop=stop,
+        step=step,
+        flist=flist,
+        )
 
-    if any((start, stop, step)):
-        frames_to_extract = range(start, stop, step)
+    #lent = len(u.trajectory)
 
-    elif flist:
-        frames_to_extract = [int(i) for i in flist]
-    
-    else:
-        frames_to_extract = range(lent)
+    #if any((start, stop, step)):
+    #    frames_to_extract = range(start, stop, step)
+
+    #elif flist:
+    #    frames_to_extract = [int(i) for i in flist]
+    #
+    #else:
+    #    frames_to_extract = range(lent)
     
     log.info(S('extracting {} frames', len(frames_to_extract)))
     
