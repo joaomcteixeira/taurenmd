@@ -6,7 +6,7 @@ cache: false
 branches:
   only:
   - master
-  - release-candidate
+  - develop
 
 env:
   global:
