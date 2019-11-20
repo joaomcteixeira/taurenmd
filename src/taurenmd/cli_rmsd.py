@@ -2,14 +2,13 @@
 Does something.
 """
 import argparse
-import numpy as np
-
 from datetime import datetime
 
+import numpy as np
 from bioplottemplates.plots import param
 
 from taurenmd import Path, log  # noqa: F401
-from taurenmd.libs import libcalc, libcli, libio, libmda, libutil
+from taurenmd.libs import libcalc, libcli, libmda, libutil
 from taurenmd.logger import S, T
 
 

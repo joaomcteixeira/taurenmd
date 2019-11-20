@@ -4,7 +4,7 @@ Extracts frames to PDB files.
 import argparse
 
 from taurenmd import Path, log
-from taurenmd.libs import libcli, libmda
+from taurenmd.libs import libcli, libmda, libutil
 from taurenmd.logger import S
 
 
@@ -122,20 +122,9 @@ def main(
         flist=flist,
         )
 
-    #lent = len(u.trajectory)
-
-    #if any((start, stop, step)):
-    #    frames_to_extract = range(start, stop, step)
-
-    #elif flist:
-    #    frames_to_extract = [int(i) for i in flist]
-    #
-    #else:
-    #    frames_to_extract = range(lent)
-    
     log.info(S('extracting {} frames', len(frames_to_extract)))
     
-    zeros = len(str(lent))
+    zeros = len(str(len(u.trajectory)))
     ext = ext.lstrip('.').strip()
     
     atom_group = u.select_atoms(selection)

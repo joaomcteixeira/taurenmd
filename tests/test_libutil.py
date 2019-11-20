@@ -7,6 +7,3 @@ class TestFrameSlice:
         """Test None."""
         result = libutil.frame_slice()
         assert result == slice(None, None, None)
-
-    def test_tuple1(self):
-        result = libutil.frame_slice()
