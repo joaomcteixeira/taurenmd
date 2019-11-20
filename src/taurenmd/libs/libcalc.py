@@ -47,9 +47,13 @@ def mda_rmsd_combined_chains(
     
     if frame_slice is None:
         frame_slice = slice(None, None, None)
+    elif isinstance(frame_slice, slice):
+        pass
+    else:
+        raise ValueError('frame_slice should be None or slice type')
     
-    log.info(S('for selection: {}'.format(selection)))
-    log.info(S('for {} frames'.format(frame_slice)))
+    log.info(S('for selection: {}', selection))
+    log.info(S('for trajectory slice: {}', frame_slice))
     
     R = mdaRMSD(
         universe,

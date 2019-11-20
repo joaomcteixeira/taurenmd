@@ -4,6 +4,8 @@ Changelog
 0.3.1
 -----
 
+* RMSD Cli now calculates for several selections
+* Parse plot vars now registers floats
 * corrected fext cli entry point
 * added align option to trajedit
 * topology model writen from first frame of time slicing

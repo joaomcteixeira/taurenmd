@@ -2,16 +2,17 @@
 Does something.
 """
 import argparse
+from datetime import datetime
 
+import numpy as np
 from bioplottemplates.plots import param
 
 from taurenmd import Path, log  # noqa: F401
-from taurenmd.libs import libcalc, libcli, libio, libutil
+from taurenmd.libs import libcalc, libcli, libmda, libutil
+from taurenmd.logger import S, T
 
 
-_SELECTION = 'all'
 _REF_FRAME = 0
-_FRAMES = None
 
 
 ap = libcli.CustomParser(
@@ -27,29 +28,67 @@ ap.add_argument(
 
 ap.add_argument(
     'trajectory',
-    help='The trajectory file',
-    )
-
-ap.add_argument(
-    '-f',
-    '--frames',
-    help='The frames to consider.',
+    help=(
+        'Trajectory files. If given, multiple trajectories will be'
+        'contactenated by order.'
+        ),
     nargs='+',
-    default=_FRAMES,
     )
 
 ap.add_argument(
     '-s',
-    '--selection',
-    help='The atom selection',
+    '--start',
+    help='Start frame for slicing.',
+    default=None,
+    type=int,
+    )
+
+ap.add_argument(
+    '-e',
+    '--stop',
+    help='Stop frame for slicing: exclusive',
+    default=None,
+    type=int,
+    )
+
+ap.add_argument(
+    '-p',
+    '--step',
+    help='Step value for slicing',
+    default=None,
+    type=int,
+    )
+
+ap.add_argument(
+    '-x',
+    '--export',
+    help=(
+        'Export calculated RMSDs to CSV file. '
+        'If given defaults to rmsd.csv, alternatively, '
+        'you can give a specific file name.'
+        ),
+    default=False,
+    const='rmsd.csv',
+    nargs='?',
+    )
+
+ap.add_argument(
+    '-l',
+    '--selections',
+    help=(
+        'The atom selection upon which calculate the RMSDs. '
+        'You can give multiple selections to calculate multiple RMSDs sets. '
+        'Defauts to \'all\'.'
+        ),
     type=str,
-    default=_SELECTION,
+    default=None,
+    nargs='+',
     )
 
 ap.add_argument(
     '-r',
     '--ref-frame',
-    help='The refernece frame.',
+    help='The reference frame.',
     type=int,
     default=_REF_FRAME,
     )
@@ -57,7 +96,10 @@ ap.add_argument(
 ap.add_argument(
     '-v',
     '--plotvars',
-    help='Plot variables.',
+    help=(
+        'Plot variables. '
+        'Example: -v xlabel=frames ylabel=RMSD color=red.'
+        ),
     nargs='*',
     action=libcli.ParamsToDict,
     )
@@ -79,32 +121,76 @@ def maincli():
 def main(
         topology,
         trajectory,
-        frames=_FRAMES,
+        start=None,
+        stop=None,
+        step=None,
         ref_frame=_REF_FRAME,
-        selection=_SELECTION,
+        selections=None,
         plotvars=None,
+        export=False,
         **kwargs
         ):
     
-    log.info('Starting...')
+    log.info(T('starting'))
     
-    u = libio.mda_load_universe(topology, trajectory)
+    u = libmda.mda_load_universe(topology, *list(trajectory))
     
-    frame_slice = libutil.frame_slice(frames)
-
-    rmsds_combined = libcalc.mda_rmsd_combined_chains(
-        u,
-        frame_slice=frame_slice,
-        selection=selection,
-        ref_frame=ref_frame,
+    frame_slice = libutil.frame_slice(
+        start=start,
+        stop=stop,
+        step=step,
         )
     
+    if selections is None:
+        selections = ['all']
+    rmsds = []
+    for selection in selections:
+        rmsds.append(
+            libcalc.mda_rmsd_combined_chains(
+                u,
+                frame_slice=frame_slice,
+                selection=selection,
+                ref_frame=ref_frame,
+                )
+            )
+    if export:
+        np.savetxt(
+            export,
+            np.array([range(len(u.trajectory))[frame_slice]] + rmsds).T,
+            fmt=['%d'] + ['%.5e'] * len(rmsds),
+            delimiter=',',
+            newline='\n',
+            header=(
+                "Date: {}\n'"
+                "Topology: {}\n"
+                "Trajectory : {}\n"
+                "ref frame: {}\n"
+                "frame number, {}\n"
+                ).format(
+                    datetime.now(),
+                    Path(topology).resolve(),
+                    [Path(f).resolve().str() for f in trajectory],
+                    ','.join(selections),
+                    ref_frame,
+                    ),
+            footer='',
+            comments='#',
+            encoding=None,
+            )
+
     if plotvars is None:
         plotvars = dict()
+    
+    if 'labels' not in plotvars:
+        plotvars['labels'] = selections
 
+    log.info(T('plot params:'))
+    for k, v in plotvars.items():
+        log.info(S('{} = {!r}', k, v))
+    
     param.plot(
-        list(range(len(u.trajectory)))[frame_slice],
-        rmsds_combined,
+        list(range(len(u.trajectory))[frame_slice]),
+        rmsds,
         **plotvars,
         )
 
