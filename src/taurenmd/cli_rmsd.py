@@ -13,7 +13,6 @@ from taurenmd.libs import libcalc, libcli, libio, libmda, libutil
 from taurenmd.logger import S, T
 
 
-_SELECTION = 'all'
 _REF_FRAME = 0
 
 
@@ -76,13 +75,15 @@ ap.add_argument(
 
 ap.add_argument(
     '-l',
-    '--selection',
+    '--selections',
     help=(
         'The atom selection upon which calculate the RMSDs. '
+        'You can give multiple selections to calculate multiple RMSDs sets. '
         'Defauts to \'all\'.'
         ),
     type=str,
-    default=_SELECTION,
+    default=None,
+    nargs='+',
     )
 
 ap.add_argument(
@@ -98,8 +99,7 @@ ap.add_argument(
     '--plotvars',
     help=(
         'Plot variables. '
-        'Example: -v xlabel=frames ylabel=RMSD color=red. '
-        'This should be the last parameter given.'
+        'Example: -v xlabel=frames ylabel=RMSD color=red.'
         ),
     nargs='*',
     action=libcli.ParamsToDict,
@@ -126,7 +126,7 @@ def main(
         stop=None,
         step=None,
         ref_frame=_REF_FRAME,
-        selection=_SELECTION,
+        selections=None,
         plotvars=None,
         export=False,
         **kwargs
@@ -141,33 +141,37 @@ def main(
         stop=stop,
         step=step,
         )
-
-    rmsds_combined = libcalc.mda_rmsd_combined_chains(
-        u,
-        frame_slice=frame_slice,
-        selection=selection,
-        ref_frame=ref_frame,
-        )
     
+    if selections is None:
+        selections = ['all']
+    rmsds = []
+    for selection in selections:
+        rmsds.append(
+            libcalc.mda_rmsd_combined_chains(
+                u,
+                frame_slice=frame_slice,
+                selection=selection,
+                ref_frame=ref_frame,
+                )
+            )
     if export:
         np.savetxt(
             export,
-            np.array([range(len(u.trajectory))[frame_slice], rmsds_combined]).T,
-            fmt=['%d', '%.5e'],
+            np.array([range(len(u.trajectory))[frame_slice]] + rmsds).T,
+            fmt=['%d'] + ['%.5e'] * len(rmsds),
             delimiter=',',
             newline='\n',
             header=(
                 "Date: {}\n'"
                 "Topology: {}\n"
                 "Trajectory : {}\n"
-                "Selection: {}\n"
                 "ref frame: {}\n"
-                "frame number, RMSD(A)\n"
+                "frame number, {}\n"
                 ).format(
                     datetime.now(),
                     Path(topology).resolve(),
                     [Path(f).resolve().str() for f in trajectory],
-                    selection,
+                    ','.join(selections),
                     ref_frame,
                     ),
             footer='',
@@ -178,14 +182,16 @@ def main(
     if plotvars is None:
         plotvars = dict()
     
+    if 'labels' not in plotvars:
+        plotvars['labels'] = selections
+
     log.info(T('plot params:'))
     for k, v in plotvars.items():
         log.info(S('{} = {!r}', k, v))
     
     param.plot(
         list(range(len(u.trajectory))[frame_slice]),
-        rmsds_combined,
-        label=selection,
+        rmsds,
         **plotvars,
         )
 
