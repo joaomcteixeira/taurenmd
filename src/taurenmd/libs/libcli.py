@@ -30,6 +30,10 @@ class ParamsToDict(argparse.Action):
                 if ',' in v:
                     v = v.split(',')
                     
-                param_dict[k] = v
+                try:
+                    param_dict[k] = float(v)
+                except (ValueError, TypeError):  # is string or list
+                    param_dict[k] = v
+
         
         setattr(namespace, self.dest, param_dict)
