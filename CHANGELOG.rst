@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.5.0
+-----
+
+* added distance calc and plot interface :code:`cli_distances`
+* :code:`trajedit` now saves topology unwrapped
+
 0.4.1 (2019-11-21)
 ------------------
 
