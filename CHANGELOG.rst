@@ -1,9 +1,10 @@
 Changelog
 =========
 
-0.3.1 (2019-11-21)
+0.4.1 (2019-11-21)
 ------------------
 
+* renumbered version to 0.4.1. from 0.3.1
 * RMSD Cli now calculates for several selections
 * Parse plot vars now registers floats
 * corrected fext cli entry point
