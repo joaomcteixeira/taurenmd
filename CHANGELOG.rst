@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.3.1
------
+0.3.1 (2019-11-21)
+------------------
 
 * RMSD Cli now calculates for several selections
 * Parse plot vars now registers floats

@@ -1,8 +1,6 @@
 """
 Handles input and output.
 """
-import numpy as np
-
 from taurenmd import Path, log
 from taurenmd.logger import S, T  # noqa: F401
 
@@ -53,5 +51,3 @@ def mk_frame_path(input_path, frame=0, ext='.pdb'):
         ).with_suffix('.{}'.format(ext.lstrip('.')))
 
     return top_output
-
-
