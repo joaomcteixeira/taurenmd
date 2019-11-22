@@ -30,6 +30,9 @@ class Path(type(_Path())):
     def str(self):
         """Return string version of Path."""
         return os.fspath(self)
+    
+    def myparents(self):
+        return self.resolve().parents[0]
 
 
-__version__ = '0.3.0'
+__version__ = '0.4.1'

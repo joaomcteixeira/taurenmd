@@ -1,9 +1,42 @@
-def frame_slice(frame_id):
-    if frame_id in ('all', None):
-        return slice(None, None, None)
+def frame_list(len_traj, start=None, stop=None, step=None, flist=None,):
+    """
+    Createa frame list based on the length of trajectory.
 
-    elif isinstance(frame_id, list):
-        return slice(*[int(i) for i in frame_id])
+    Parameters
+    ----------
+    start : int or None, optional
+        The start index for the slice object.
+    
+    stop : int or None, optional
+        The end index for the slice object.
 
+    step: int or None, optional
+        the step index for the slice object.
+
+    flist : list-like, or comma-separated string, optional
+        The list of specific frames.
+        Defaults to None.
+    """
+    if any((start, stop, step)):
+        return range(len_traj)[slice(start, stop, step)]
+
+    elif flist:
+        try:
+            return [int(i) for i in flist.split(',')]
+        except AttributeError:
+            return [int(i) for i in flist]
+        except Exception:
+            raise ValueError(
+                'Cannot generate list of frames from {}'.format(flist)
+                ) from None
     else:
-        raise NotImplementedError(f'Do not know what to do with: {frame_id}')
+        return range(len_traj)
+    
+
+def frame_slice(start=None, stop=None, step=None, ftuple=None):
+
+    if isinstance(ftuple, (list, tuple)) and len(ftuple) == 3:
+        return slice(*[int(i) for i in ftuple])
+    
+    else:
+        return slice(start, stop, step)

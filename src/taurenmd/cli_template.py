@@ -5,6 +5,7 @@ import argparse
 
 from taurenmd import log
 from taurenmd.libs import libcli, libio  # noqa: F401
+from taurenmd.logger import S, T
 
 
 ap = libcli.CustomParser(
@@ -14,14 +15,18 @@ ap = libcli.CustomParser(
     )
 
 ap.add_argument(
-    'trajectory',
-    help='The trajectory file',
-    )
-
-ap.add_argument(
     'topology',
     help='Topology file.',
     type=str,
+    )
+
+ap.add_argument(
+    'trajectory',
+    help=(
+        'Trajectory files. If given, multiple trajectories will be'
+        'contactenated by order.'
+        ),
+    nargs='+',
     )
 
 
@@ -38,7 +43,11 @@ def maincli():
 
 
 def main(topology, trajectory, **kwargs):
-    log.info('Starting...')
+    log.info(T('starting'))
+    
+    #
+
+    log.info(S('done'))
     return
 
 
