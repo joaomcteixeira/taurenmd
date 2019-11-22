@@ -16,6 +16,7 @@ Why does this file exist, and why not put this in __main__?
 """
 import sys
 
+import taurenmd.cli_distances as cli_dist
 import taurenmd.cli_fext as cli_fext
 import taurenmd.cli_imagemol as cli_imagemol
 import taurenmd.cli_noSol as cli_noSol
@@ -31,6 +32,14 @@ def load_args():
 
     subparsers = ap.add_subparsers(title='TAURENMD SUBROUTINES')
 
+    ap_dist = subparsers.add_parser(
+        'dist',
+        help='Calculates distances between geometric centres of selections',
+        parents=[cli_dist.ap],
+        add_help=False,
+        )
+    ap_dist.set_defaults(func=cli_dist.main)
+    
     ap_imagemol = subparsers.add_parser(
         'imagemol',
         help='Attempts to image molecules.',

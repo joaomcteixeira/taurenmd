@@ -75,6 +75,7 @@ setup(
     entry_points={
         'console_scripts': [
             'taurenmd = taurenmd.cli:maincli',
+            'taurenmd_dist = taurenmd.cli_distances:maincli',
             'taurenmd_fext = taurenmd.cli_fext:maincli',
             'taurenmd_imagemol = taurenmd.cli_imagemol:maincli',
             'taurenmd_noSol = tauremd.cli_noSol:maincli',
