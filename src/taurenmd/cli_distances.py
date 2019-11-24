@@ -2,8 +2,11 @@
 Does something.
 """
 import argparse
+import copy
 
 import numpy as np
+from bioplottemplates.plots import param
+
 
 from taurenmd import log
 from taurenmd.libs import libcli, libio, libmda, libutil  # noqa: F401
@@ -47,6 +50,48 @@ ap.add_argument(
     type=str,
     )
 
+ap.add_argument(
+    '-f',
+    '--frame',
+    help='Calc distances to a frame instead of relative along traj.',
+    default=None,
+    )
+
+ap.add_argument(
+    '-s',
+    '--start',
+    help='Start frame for slicing.',
+    default=None,
+    type=int,
+    )
+
+ap.add_argument(
+    '-e',
+    '--stop',
+    help='Stop frame for slicing: exclusive',
+    default=None,
+    type=int,
+    )
+
+ap.add_argument(
+    '-p',
+    '--step',
+    help='Step value for slicing',
+    default=None,
+    type=int,
+    )
+
+ap.add_argument(
+    '-v',
+    '--plotvars',
+    help=(
+        'Plot variables. '
+        'Example: -v xlabel=frames ylabel=RMSD color=red.'
+        ),
+    nargs='*',
+    action=libcli.ParamsToDict,
+    )
+
 
 def load_args():
     """Load user arguments."""
@@ -68,10 +113,12 @@ def main(
         start=None,
         stop=None,
         step=None,
+        frame=None,
+        plotvars=None,
         **kwargs
         ):
     log.info(T('starting'))
-    
+
     u = libmda.mda_load_universe(topology, *list(trajectory))
 
     frame_slice = libutil.frame_slice(
@@ -85,17 +132,46 @@ def main(
 
     distances = np.ones(len(u.trajectory), dtype=np.float32)
     
+    if frame is not None:
+        u.trajectory[int(frame)]
+        first_coords = copy.deepcopy(atom_sel1.center_of_geometry())
+
+    
     # https://www.mdanalysis.org/MDAnalysisTutorial/atomgroups.html
     # https://www.mdanalysis.org/docs/documentation_pages/core/groups.html#MDAnalysis.core.groups.AtomGroup.center_of_geometry
     for i, ts in enumerate(u.trajectory[frame_slice]):
-        distances[i] = np.linalg.norm(
-            np.subtract(
-                atom_sel1.center_of_geometry(),
-                atom_sel2.center_of_geometry(),
-                )
-            )
+            if frame is not None:
+                distances[i] = np.linalg.norm(
+                    np.subtract(
+                        first_coords,
+                        atom_sel2.center_of_geometry(),
+                        )
+                    )
+            else:
+                distances[i] = np.linalg.norm(
+                    np.subtract(
+                        atom_sel1.center_of_geometry(),
+                        atom_sel2.center_of_geometry(),
+                        )
+                    )
 
     print(distances)
+    
+    if plotvars is None:
+        plotvars = dict()
+    
+    if 'labels' not in plotvars:
+        plotvars['labels'] = '{} dist {}'.format(sel1, sel2)
+
+    log.info(T('plot params:'))
+    for k, v in plotvars.items():
+        log.info(S('{} = {!r}', k, v))
+
+    param.plot(
+        list(range(len(u.trajectory))[frame_slice]),
+        distances,
+        **plotvars,
+        )
 
     log.info(S('done'))
     return
