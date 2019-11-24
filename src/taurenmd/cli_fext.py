@@ -114,7 +114,7 @@ def main(
     
     u = libmda.mda_load_universe(topology, *list(trajectory))
     
-    frames_to_extract = libutil.frames_list(
+    frames_to_extract = libutil.frame_list(
         len(u.trajectory),
         start=start,
         stop=stop,
