@@ -16,6 +16,7 @@ Why does this file exist, and why not put this in __main__?
 """
 import sys
 
+from taurenmd import log
 import taurenmd.cli_distances as cli_dist
 import taurenmd.cli_fext as cli_fext
 import taurenmd.cli_imagemol as cli_imagemol
@@ -99,6 +100,7 @@ def load_args():
 
 def maincli():
     args = load_args()
+    log.debug(args)
     args.func(**vars(args))
 
 
