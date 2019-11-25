@@ -17,6 +17,7 @@ Why does this file exist, and why not put this in __main__?
 import sys
 
 from taurenmd import log
+import taurenmd.cli_angle as cli_angle
 import taurenmd.cli_distances as cli_dist
 import taurenmd.cli_fext as cli_fext
 import taurenmd.cli_imagemol as cli_imagemol
@@ -32,6 +33,14 @@ def load_args():
     ap = libcli.CustomParser(description=__doc__)
 
     subparsers = ap.add_subparsers(title='TAURENMD SUBROUTINES')
+
+    ap_angle = subparsers.add_parser(
+        'angle',
+        help='Calculates the angle between a plane along the trajectory.',
+        parents=[cli_angle.ap],
+        add_help=False,
+        )
+    ap_angle.set_defaults(func=cli_angle.main)
 
     ap_dist = subparsers.add_parser(
         'dist',
