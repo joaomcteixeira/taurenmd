@@ -4,6 +4,7 @@ Changelog
 0.5.0
 -----
 
+* args to plot passed as list are transformed to tuple
 * added distance calc and plot interface :code:`cli_distances`
 * :code:`trajedit` now saves topology unwrapped
 
