@@ -9,6 +9,10 @@ taurenmd
 Stable version
 --------------
 
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3551990.svg
+    :target: https://doi.org/10.5281/zenodo.3551990
+    :alt: Zenodo
+
 .. image:: https://img.shields.io/travis/joaomcteixeira/taurenmd/master?label=TravisCI
     :target: https://travis-ci.org/joaomcteixeira/taurenmd
     :alt: Travis master branch
