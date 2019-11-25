@@ -2,15 +2,11 @@
 Does something.
 """
 import argparse
-import copy
-import math
 
-import numpy as np
 from bioplottemplates.plots import param
 
-
 from taurenmd import log
-from taurenmd.libs import libcli, libio, libmda, libutil  # noqa: F401
+from taurenmd.libs import libcalc, libcli, libmda, libutil
 from taurenmd.logger import S, T
 
 
@@ -91,31 +87,6 @@ ap.add_argument(
     )
 
 
-def calc_plane_eq(p1, p2, p3):
-    # http://kitchingroup.cheme.cmu.edu/blog/2015/01/18/Equation-of-a-plane-through-three-points/
-    v1 = p3 - p1
-    v2 = p2 - p1
-    cp = np.cross(v1, v2)
-    a, b, c = cp
-    d = np.dot(cp, p3)
-    return a, b, c, d
-
-
-def calc_angle(a1, b1, c1, a2, b2, c2):
-    # from: https://www.geeksforgeeks.org/angle-between-two-planes-in-3d/ 
-    d = ( a1 * a2 + b1 * b2 + c1 * c2 )
-    e1 = math.sqrt( a1 * a1 + b1 * b1 + c1 * c1)
-    e2 = math.sqrt( a2 * a2 + b2 * b2 + c2 * c2)
-    d = d / (e1 * e2)
-    try:
-        return math.degrees(math.acos(d))
-    except ValueError:
-        # happens when ValueError: math domain error
-        # this is division by zero, means math.acos(d) is 0
-        log.info(S('ValueError returned angle 0.0 found'))
-        return 0.0
-
-
 def load_args():
     """Load user arguments."""
     cmd = ap.parse_args()
@@ -139,7 +110,7 @@ def main(
         plotvars=None,
         **kwargs
         ):
-    log.info(T('starting'))
+    log.info(T('calculating angles'))
 
     u = libmda.mda_load_universe(topology, *list(trajectory))
 
@@ -148,14 +119,15 @@ def main(
         stop=stop,
         step=step,
         )
-   
+    log.info(S('for slice {}', frame_slice))
+
     log.info(T('calculating plane eq. for first frame'))
     u.trajectory[0]
     reference_point_1 = u.select_atoms(plane_selection[0]).center_of_geometry()
     reference_point_2 = u.select_atoms(plane_selection[1]).center_of_geometry()
     reference_point_3 = u.select_atoms(plane_selection[2]).center_of_geometry()
 
-    ra, rb, rc, rd = calc_plane_eq(
+    ra, rb, rc, rd = libcalc.calc_plane_eq(
         reference_point_1,
         reference_point_2,
         reference_point_3,
@@ -164,17 +136,26 @@ def main(
     
     log.info(T('Calculating angles'))
     angles = []
-    for ts in u.trajectory[frame_slice]:
-        
+    for fi, ts in zip(
+            range(len(u.trajectory))[frame_slice],
+            u.trajectory[frame_slice],
+            ):
+
         point1 = u.select_atoms(plane_selection[0]).center_of_geometry()
         point2 = u.select_atoms(plane_selection[1]).center_of_geometry()
         point3 = u.select_atoms(plane_selection[2]).center_of_geometry()
         
-        a, b, c, d = calc_plane_eq(point1, point2, point3)
+        a, b, c, d = libcalc.calc_plane_eq(point1, point2, point3)
 
-        angles.append(calc_angle(ra, rb, rc, a, b, c))
-   
-    print(angles)
+        try:
+            angles.append(libcalc.calc_angle(ra, rb, rc, a, b, c))
+        except ValueError:
+            # happens when ValueError: math domain error
+            # this is division by zero, means math.acos(d) is 0
+            log.info(S('ValueError returned angle 0.0 found'))
+            angles.append(0.0)
+    
+    log.info(S('calculated a total of {} angles.', len(angles)))
 
     if plotvars is None:
         plotvars = dict()

@@ -7,7 +7,6 @@ import copy
 import numpy as np
 from bioplottemplates.plots import param
 
-
 from taurenmd import log
 from taurenmd.libs import libcli, libio, libmda, libutil  # noqa: F401
 from taurenmd.logger import S, T
@@ -117,7 +116,7 @@ def main(
         plotvars=None,
         **kwargs
         ):
-    log.info(T('starting'))
+    log.info(T('measuring distances'))
 
     u = libmda.mda_load_universe(topology, *list(trajectory))
 
@@ -126,36 +125,36 @@ def main(
         stop=stop,
         step=step,
         )
-    
+    log.info(S('for slice {}', frame_slice))
+   
+    log.info(T('defining atom seletions'))
+    log.info(S('atom selection #1: {}', sel1))
+    log.info(S('atom selection #2: {}', sel2))
     atom_sel1 = u.select_atoms(sel1)
     atom_sel2 = u.select_atoms(sel2)
 
-    distances = np.ones(len(u.trajectory), dtype=np.float32)
+    distances = np.ones(len(u.trajectory[frame_slice]), dtype=np.float32)
     
     if frame is not None:
         u.trajectory[int(frame)]
-        first_coords = copy.deepcopy(atom_sel1.center_of_geometry())
+        reference_cog = copy.deepcopy(atom_sel1.center_of_geometry())
 
-    
+    log.info(T('Calculating distances'))
     # https://www.mdanalysis.org/MDAnalysisTutorial/atomgroups.html
     # https://www.mdanalysis.org/docs/documentation_pages/core/groups.html#MDAnalysis.core.groups.AtomGroup.center_of_geometry
     for i, ts in enumerate(u.trajectory[frame_slice]):
-            if frame is not None:
-                distances[i] = np.linalg.norm(
-                    np.subtract(
-                        first_coords,
-                        atom_sel2.center_of_geometry(),
-                        )
-                    )
-            else:
-                distances[i] = np.linalg.norm(
-                    np.subtract(
-                        atom_sel1.center_of_geometry(),
-                        atom_sel2.center_of_geometry(),
-                        )
-                    )
 
-    print(distances)
+        if frame is None:
+            reference_cog = atom_sel1.center_of_geometry()
+
+        distances[i] = np.linalg.norm(
+            np.subtract(
+                reference_cog,
+                atom_sel2.center_of_geometry(),
+                )
+            )
+    
+    log.info(S('calculated a total of {} distances.', len(distances)))
     
     if plotvars is None:
         plotvars = dict()

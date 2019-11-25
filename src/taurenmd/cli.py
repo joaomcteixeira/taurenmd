@@ -16,7 +16,6 @@ Why does this file exist, and why not put this in __main__?
 """
 import sys
 
-from taurenmd import log
 import taurenmd.cli_angle as cli_angle
 import taurenmd.cli_distances as cli_dist
 import taurenmd.cli_fext as cli_fext
@@ -25,6 +24,7 @@ import taurenmd.cli_noSol as cli_noSol
 import taurenmd.cli_report as cli_report
 import taurenmd.cli_rmsd as cli_rmsd
 import taurenmd.cli_trajedit as cli_trajedit
+from taurenmd import log
 from taurenmd.libs import libcli
 
 
