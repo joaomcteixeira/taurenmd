@@ -1,5 +1,9 @@
 """
-Does something.
+Plane angle calculator.
+
+Calculates the angle of a plane against itself in the reference frame
+    along the whole trajectory. The plane is defined by the three
+    centres of geometry of tree given selections.
 """
 import argparse
 
