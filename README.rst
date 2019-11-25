@@ -94,9 +94,9 @@ Development Branch
     :target: https://taurenmd.readthedocs.io/en/latest/index.html
     :alt: Read the Docs (latest)
 
-.. image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.4.1/develop
+.. image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.5.0/develop
     :alt: Commits since latest release
-    :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.4.1...develop
+    :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.5.0...develop
 
 The latest development is hosted at the `develop branch`_.
 
