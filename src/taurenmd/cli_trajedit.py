@@ -243,6 +243,12 @@ def main(
         log.info(S('saving frame 0 to: {}', top_output.resolve()))
         with mda.Writer(Path(top_output).str(), selection.n_atoms) as W:
             for ts in u.trajectory[sliceObj][0:1]:
+                if unwrap:
+                    log.debug(S('unwrapping for topology', indent=2))
+                    selection.unwrap(
+                        reference=unwrap_reference,
+                        compound=unwrap_compound,
+                        )
                 W.write(selection)
     
     log.info(S('Done'))

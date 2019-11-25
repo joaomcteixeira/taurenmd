@@ -16,12 +16,15 @@ Why does this file exist, and why not put this in __main__?
 """
 import sys
 
+import taurenmd.cli_angle as cli_angle
+import taurenmd.cli_distances as cli_dist
 import taurenmd.cli_fext as cli_fext
 import taurenmd.cli_imagemol as cli_imagemol
 import taurenmd.cli_noSol as cli_noSol
 import taurenmd.cli_report as cli_report
 import taurenmd.cli_rmsd as cli_rmsd
 import taurenmd.cli_trajedit as cli_trajedit
+from taurenmd import log
 from taurenmd.libs import libcli
 
 
@@ -31,6 +34,22 @@ def load_args():
 
     subparsers = ap.add_subparsers(title='TAURENMD SUBROUTINES')
 
+    ap_angle = subparsers.add_parser(
+        'angle',
+        help='Calculates the angle between a plane along the trajectory.',
+        parents=[cli_angle.ap],
+        add_help=False,
+        )
+    ap_angle.set_defaults(func=cli_angle.main)
+
+    ap_dist = subparsers.add_parser(
+        'dist',
+        help='Calculates distances between geometric centres of selections',
+        parents=[cli_dist.ap],
+        add_help=False,
+        )
+    ap_dist.set_defaults(func=cli_dist.main)
+    
     ap_imagemol = subparsers.add_parser(
         'imagemol',
         help='Attempts to image molecules.',
@@ -90,6 +109,7 @@ def load_args():
 
 def maincli():
     args = load_args()
+    log.debug(args)
     args.func(**vars(args))
 
 

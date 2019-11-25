@@ -28,11 +28,16 @@ class ParamsToDict(argparse.Action):
                 param_dict[kv] = True
             else:
                 if ',' in v:
-                    v = v.split(',')
-                    
-                try:
-                    param_dict[k] = float(v)
-                except (ValueError, TypeError):  # is string or list
-                    param_dict[k] = v
-        
+                    vs = v.split(',')
+                    try:
+                        param_dict[k] = tuple(float(i) for i in vs)
+                    except (ValueError, TypeError):
+                        param_dict[k] = tuple(i for i in vs)
+
+                else:
+                    try:
+                        param_dict[k] = float(v)
+                    except (ValueError, TypeError):  # is string or list
+                        param_dict[k] = v
+            
         setattr(namespace, self.dest, param_dict)
