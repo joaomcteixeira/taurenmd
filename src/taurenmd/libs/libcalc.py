@@ -1,7 +1,9 @@
 """
 Calculate parameters.
 """
+import math
 
+import numpy as np
 from MDAnalysis.analysis.rms import RMSD as mdaRMSD
 
 from taurenmd import log
@@ -69,3 +71,22 @@ def mda_rmsd_combined_chains(
     # rmsds[:, ii] = R.rmsd[:, 2][self._fslicer]
     
     return R.rmsd[frame_slice, 2]
+
+
+def calc_plane_eq(p1, p2, p3):
+    # http://kitchingroup.cheme.cmu.edu/blog/2015/01/18/Equation-of-a-plane-through-three-points/
+    v1 = p3 - p1
+    v2 = p2 - p1
+    cp = np.cross(v1, v2)
+    a, b, c = cp
+    d = np.dot(cp, p3)
+    return a, b, c, d
+
+
+def calc_angle(a1, b1, c1, a2, b2, c2):
+    # from: https://www.geeksforgeeks.org/angle-between-two-planes-in-3d/
+    d = (a1 * a2 + b1 * b2 + c1 * c2)
+    e1 = math.sqrt(a1 * a1 + b1 * b1 + c1 * c1)
+    e2 = math.sqrt(a2 * a2 + b2 * b2 + c2 * c2)
+    d = d / (e1 * e2)
+    return math.degrees(math.acos(d))

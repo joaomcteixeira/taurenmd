@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.5.0 (2019-11-24)
+------------------
+
+* created :code:`cli_angle`. Calculates angles between a plane along the trajectory. Plane is given by the three centre_of_geometries of three selections.
+* args to plot passed as list are transformed to tuple
+* added distance calc and plot interface :code:`cli_distances`
+* :code:`trajedit` now saves topology unwrapped
+
 0.4.1 (2019-11-21)
 ------------------
 
