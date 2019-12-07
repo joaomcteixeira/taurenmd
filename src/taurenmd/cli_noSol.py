@@ -2,7 +2,7 @@
 Copies the trajectory without solvent and extracts the first frame.
 """
 
-from taurenmd.libs import libcli, libio
+from taurenmd.libs import libcli, libmdt
 
 
 ap = libcli.CustomParser()
@@ -46,12 +46,18 @@ def maincli():
 def main(
         topology,
         trajectory,
+        selection=None,
         output_pdb='production_noSol.pdb',
         traj_output='production_noSol.dcd',
         **kwargs
         ):
 
-    trj = libio.mdtraj_load_traj(topology, trajectory)
+    trj = libmdt.mdtraj_load_traj(topology, trajectory)
+    
+    if selection:
+        atom_sel = trj.top.select(selection)
+        trj.atom_slice(atom_sel, inplace=True)
+
     trj.remove_solvent(inplace=True)
     trj[0].save_pdb(output_pdb)
     trj.save(traj_output)
