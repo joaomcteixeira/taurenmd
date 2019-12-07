@@ -5,6 +5,28 @@ from taurenmd import Path, log
 from taurenmd.logger import S, T  # noqa: F401
 
 
+def _get_number(path):
+    return int(Path(path).stem.split('_')[-1])
+
+
+def sort_numbered_input(*inputs):
+    """
+    Sort input paths to tail number.
+
+    Input paths or strings should be formatted such:
+        
+        my_trajectory_#.dcd
+
+    where # is the tag evaluated to int and input sorted accordingly.
+
+    Returns
+    -------
+    list
+        The sorted pathlist
+    """
+    return sorted(inputs, key=_get_number)
+   
+
 def report_input(topology, trajectory):
     log.info(S('loading trajectory: {}', trajectory))
     log.info(S('with topology: {}', topology))
