@@ -7,6 +7,9 @@ from taurenmd.libs import libcli, libio, libmdt
 from taurenmd.logger import S, T
 
 
+_TRAJOUTPUT = 'production_imaged.dcd'
+
+
 ap = libcli.CustomParser()
 
 ap.add_argument(
@@ -23,7 +26,7 @@ ap.add_argument(
     '-d',
     '--traj-output',
     help='Output trajectory. Defaults to production_imaged.xtc.',
-    default='production_imaged.xtc',
+    default=_TRAJOUTPUT,
     )
 
 ap.add_argument(
@@ -59,7 +62,9 @@ def protocol1(traj):
     """
     Attempts to image molecules acting on the whole traj.
     """
-    log.info(T('finding molecules'))
+    log.info(T('running reimage protocol #1'))
+    log.info(S('finding molecules'))
+
     mols = traj.top.find_molecules()
     log.info(S('done'))
     
@@ -76,6 +81,11 @@ def protocol1(traj):
 def protocol2(traj):
     """
     Attempts to image molecules frame by frame.
+
+    .. note::
+
+        Have not found a use for this protocol yet.
+
     """
     reimaged = []
     for frame in range(len(traj)):
@@ -101,7 +111,7 @@ def protocol2(traj):
 def main(
         topology,
         trajectory,
-        traj_output='production_imaged.xtc',
+        traj_output=_TRAJOUTPUT,
         top_output=None,
         protocol=1,
         **kwargs
@@ -119,13 +129,15 @@ def main(
     reimaged = protocols[protocol](traj)
 
     log.info(T('saving the output'))
-    reimaged.save(traj_output)
+    reimaged.save_dcd(traj_output)
     log.info(S('saved trajectory: {}', traj_output))
 
     if top_output is None:
         top_output = libio.mk_frame_path(traj_output)
+    else:
+        top_output = Path(top_output)
     
-    reimaged[0].save(Path(top_output).with_suffix('.pdb').str())
+    reimaged[0].save_pdb(top_output.with_suffix('.pdb').str())
     log.info(S('saving frame 0 to: {}', top_output.resolve()))
     return
 
