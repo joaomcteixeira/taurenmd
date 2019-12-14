@@ -19,6 +19,12 @@ class ParamsToDict(argparse.Action):
     
     def __call__(self, parser, namespace, values, option_string=None):
         """Executes."""
+
+        bool_value = {
+            'true': True,
+            'false': False,
+            }
+
         param_dict = {}
         for kv in values:
             # print(param_dict, kv)
@@ -38,6 +44,6 @@ class ParamsToDict(argparse.Action):
                     try:
                         param_dict[k] = float(v)
                     except (ValueError, TypeError):  # is string or list
-                        param_dict[k] = v
+                        param_dict[k] = bool_value.get(v.lower(), v)
             
         setattr(namespace, self.dest, param_dict)

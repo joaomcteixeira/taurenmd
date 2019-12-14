@@ -5,6 +5,7 @@ import math
 
 import numpy as np
 from MDAnalysis.analysis.rms import RMSD as mdaRMSD
+from MDAnalysis.analysis.rms import RMSF as mdaRMSF
 
 from taurenmd import log
 from taurenmd.logger import S, T
@@ -71,6 +72,64 @@ def mda_rmsd_combined_chains(
     # rmsds[:, ii] = R.rmsd[:, 2][self._fslicer]
     
     return R.rmsd[frame_slice, 2]
+
+
+def mda_rmsf(
+        atom_group,
+        frame_slice=None,
+        ):
+    """
+    Calculates combined RMSDs.
+
+    Combined RMSDs considers the selection as a whole.
+
+    Parameters
+    ----------
+    universe
+        The MDAnalysis universe.
+
+    frames : str or tuple, optional
+        The frames to consider.
+        If 'all' considers all frames.
+        Otherwise a tuple is needed of the format (start, end, step),
+        to be used as a slice object.
+        Defaults to `all`.
+
+    selection : str, optional
+        The selection upon which calculate the RMSDs.
+        Defaults to `all`.
+
+    ref_frames : int, optional
+        Defaults to 0.
+    
+    Returns
+    -------
+    Numpy Array
+        The array containing the calculated RMSDs.
+    """
+    log.info(T('Calculating RMSFs'))
+    
+    if frame_slice is None:
+        frame_slice = slice(None, None, None)
+    elif isinstance(frame_slice, slice):
+        pass
+    else:
+        raise ValueError('frame_slice should be NoneType or Slice')
+    
+    log.info(S('for trajectory slice: {}', frame_slice))
+    
+    R = mdaRMSF(
+        atom_group,
+        start=frame_slice.start,
+        stop=frame_slice.stop,
+        step=frame_slice.step,
+        verbose=False)
+    
+    R.run()
+    
+    # rmsds[:, ii] = R.rmsd[:, 2][self._fslicer]
+    
+    return R.rmsf#[frame_slice]
 
 
 def calc_plane_eq(p1, p2, p3):
