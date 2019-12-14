@@ -78,15 +78,10 @@ ap.add_argument(
 
 ap.add_argument(
     '-l',
-    '--selections',
-    help=(
-        'The atom selection upon which calculate the RMSFs. '
-        'You can give multiple selections to calculate multiple RMSFs sets. '
-        'Defauts to \'all\'.'
-        ),
+    '--selection',
+    help='The atom selection upon which calculate the RMSFs.',
     type=str,
     default=None,
-    nargs='+',
     )
 
 ap.add_argument(
@@ -147,8 +142,7 @@ def main(
         start=None,
         stop=None,
         step=None,
-        ref_frame=_REF_FRAME,
-        selections=None,
+        selection=None,
         plotvars=None,
         export=False,
         **kwargs
@@ -164,28 +158,24 @@ def main(
         step=step,
         )
     
-    if selections is None:
-        selections = ['all']
-
+    selection = selection or 'all'
+    print(selection)
     labels = []
     rmsfs = []
-    for selection in selections:
-        current_atom_group = u.select_atoms(selection)
-        labels.extend(get_atom_labels(current_atom_group))
 
-        log.info(S('for selection: {}', selection))
-        rmsfs.extend(
-            libcalc.mda_rmsf(
-                current_atom_group,
-                frame_slice=frame_slice,
-                )
-            )
-   
-    datatable = np.array([labels, rmsfs])#.T
+    atom_group = u.select_atoms(selection)
+    labels = get_atom_labels(atom_group)
 
+    log.info(S('for selection: {}', selection))
+    rmsfs = libcalc.mda_rmsf(
+        atom_group,
+        frame_slice=frame_slice,
+        )
+    
+    print(len(rmsfs))
     if export:
         header=(
-            "# Date: {}\n'"
+            "# Date: {}\n"
             "# Topology: {}\n"
             "# Trajectory : {}\n"
             "# Atom,RMSF\n"
@@ -200,11 +190,8 @@ def main(
                 fh.write('{},{:.5}\n'.format(label, value))
 
 
-    if plotvars is None:
-        plotvars = dict()
-    
-    if 'labels' not in plotvars:
-        plotvars['labels'] = selections
+    plotvars = plotvars or dict()
+    plotvars.setdefault('labels', selection)
 
     log.info(T('plot params:'))
     for k, v in plotvars.items():
