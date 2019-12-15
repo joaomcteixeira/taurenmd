@@ -1,6 +1,7 @@
 """Common operations for client interfaces."""
 import argparse
 import sys
+from datetime import datetime
 
 
 # https://stackoverflow.com/questions/4042452
@@ -19,6 +20,12 @@ class ParamsToDict(argparse.Action):
     
     def __call__(self, parser, namespace, values, option_string=None):
         """Executes."""
+
+        bool_value = {
+            'true': True,
+            'false': False,
+            }
+
         param_dict = {}
         for kv in values:
             # print(param_dict, kv)
@@ -38,6 +45,17 @@ class ParamsToDict(argparse.Action):
                     try:
                         param_dict[k] = float(v)
                     except (ValueError, TypeError):  # is string or list
-                        param_dict[k] = v
+                        param_dict[k] = bool_value.get(v.lower(), v)
             
         setattr(namespace, self.dest, param_dict)
+
+
+def save_command(fname, *args):
+    """Append the input command to a file."""
+    with open(fname, 'a') as fh:
+        fh.write(
+            '[{}] {}\n'.format(
+                datetime.now().strftime("%d/%m/%Y, %H:%M:%S"),
+                ' '.join(args),
+                )
+            )

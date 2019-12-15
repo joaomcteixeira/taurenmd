@@ -18,6 +18,8 @@ include pyproject.toml
 include requirements.yml
 include requirements-dev.yml
 
+prune alphas
+
 include tox.ini .travis.yml .appveyor.yml
 
 global-exclude *.py[cod] __pycache__/* *.so *.dylib
