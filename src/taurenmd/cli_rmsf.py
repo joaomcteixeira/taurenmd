@@ -85,14 +85,6 @@ ap.add_argument(
     )
 
 ap.add_argument(
-    '-r',
-    '--ref-frame',
-    help='The reference frame.',
-    type=int,
-    default=_REF_FRAME,
-    )
-
-ap.add_argument(
     '-v',
     '--plotvars',
     help=(
