@@ -21,6 +21,9 @@ log.addHandler(_db)
 log.addHandler(_ch)
 
 
+CMDFILE = '.taurenmd_cmd_register.log'
+
+
 class Path(type(_Path())):
     """
     Define a common Path to string interface.
