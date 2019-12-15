@@ -16,9 +16,6 @@ from taurenmd.libs import libcalc, libcli, libmda, libutil
 from taurenmd.logger import S, T
 
 
-_REF_FRAME = 0
-
-
 ap = libcli.CustomParser(
     description=__doc__,
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -139,19 +136,19 @@ def main(
         export=False,
         **kwargs
         ):
-    
+   
     log.info(T('starting'))
-    
+   
     u = libmda.mda_load_universe(topology, *list(trajectory))
-    
+   
     frame_slice = libutil.frame_slice(
         start=start,
         stop=stop,
         step=step,
         )
-    
+   
     selection = selection or 'all'
-    print(selection)
+  
     labels = []
     rmsfs = []
 
@@ -163,8 +160,7 @@ def main(
         atom_group,
         frame_slice=frame_slice,
         )
-    
-    print(len(rmsfs))
+
     if export:
         header=(
             "# Date: {}\n"
@@ -183,7 +179,7 @@ def main(
 
 
     plotvars = plotvars or dict()
-    plotvars.setdefault('labels', selection)
+    plotvars.setdefault('series_labels', selection)
 
     log.info(T('plot params:'))
     for k, v in plotvars.items():
