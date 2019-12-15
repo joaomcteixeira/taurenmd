@@ -38,4 +38,4 @@ class Path(type(_Path())):
         return self.resolve().parents[0]
 
 
-__version__ = '0.5.0'
+__version__ = '0.6.0'
