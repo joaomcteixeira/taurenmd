@@ -37,3 +37,22 @@ def mda_report(universe):
     log.info(T('Reporting'))
     log.info(S('number of frames: {}', len(universe.trajectory)))
     log.info(S('number of atoms: {}', len(universe.atoms)))
+
+
+def draw_atom_label_from_atom_group(atom_group):
+    """
+    Translate `atom_group` to list of representing strings
+    for each atom.
+    """
+
+    labels = []
+    for atom in atom_group:
+        s = '{}.{}{}.{}'.format(
+            atom.segment.segid,
+            atom.residue.resnum,
+            atom.resname,
+            atom.name,
+            )
+        labels.append(s)
+
+    return labels

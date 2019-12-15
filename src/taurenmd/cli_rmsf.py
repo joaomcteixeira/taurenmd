@@ -100,26 +100,8 @@ def load_args():
     return cmd
 
 
-def get_atom_labels(atom_group):
-    """
-    Translate `atom_group` to list of representing strings
-    for each atom.
-    """
-
-    labels = []
-    for atom in atom_group:
-        s = '{}.{}{}.{}'.format(
-            atom.segment.segid,
-            atom.residue.resnum,
-            atom.resname,
-            atom.name,
-            )
-        labels.append(s)
-
-    return labels
-
-
 def maincli():
+    """Main client call."""
     cmd = load_args()
     main(**vars(cmd))
     return
@@ -136,7 +118,7 @@ def main(
         export=False,
         **kwargs
         ):
-   
+    """Execute client main logic."""
     log.info(T('starting'))
    
     u = libmda.mda_load_universe(topology, *list(trajectory))
@@ -153,7 +135,7 @@ def main(
     rmsfs = []
 
     atom_group = u.select_atoms(selection)
-    labels = get_atom_labels(atom_group)
+    labels = libmda.draw_atom_label_from_atom_group(atom_group)
 
     log.info(S('for selection: {}', selection))
     rmsfs = libcalc.mda_rmsf(
