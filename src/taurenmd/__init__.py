@@ -21,6 +21,9 @@ log.addHandler(_db)
 log.addHandler(_ch)
 
 
+CMDFILE = '.taurenmd_cmd_register.log'
+
+
 class Path(type(_Path())):
     """
     Define a common Path to string interface.
@@ -35,4 +38,4 @@ class Path(type(_Path())):
         return self.resolve().parents[0]
 
 
-__version__ = '0.5.0'
+__version__ = '0.6.0'

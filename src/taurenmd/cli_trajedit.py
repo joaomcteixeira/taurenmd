@@ -36,6 +36,17 @@ ap.add_argument(
     )
 
 ap.add_argument(
+    '-i',
+    '--insort',
+    help=(
+        'Sorts input trajectory paths according to their tail numbers, '
+        'if paths are formatted: my_trajectory_#.dcd, '
+        'where # is a number.'
+        ),
+    action='store_true',
+    )
+
+ap.add_argument(
     '-s',
     '--start',
     help='Start frame for slicing.',
@@ -162,6 +173,7 @@ def maincli():
 def main(
         topology,
         trajectory,
+        insort=None,
         start=None,
         stop=None,
         step=None,
@@ -178,8 +190,13 @@ def main(
         ):
    
     log.info(T('editing trajectory'))
+    
+    if insort:
+        trajectories = libio.sort_numbered_input(*list(trajectory))
+    else:
+        trajectories = list(trajectory)
 
-    u = libmda.mda_load_universe(topology, *list(trajectory))
+    u = libmda.mda_load_universe(topology, trajectories)
     
     if unwrap:
         log.info(T('unwrapping'))

@@ -1,6 +1,19 @@
 Changelog
 =========
 
+0.6.0 (2019-12-15)
+------------------
+
+* implemented :code:`cli_rmsf` to calculate RMSFs.
+
+0.5.1 (skipped to 0.6.0)
+------------------------
+
+* added sort numbered trajs to :code:`cli_trajedit`
+* added sort numbered trajectory paths in lib
+* improved :code:`cli_imagemol` readability
+* added selection in :code:`cli_noSol`
+
 0.5.0 (2019-11-24)
 ------------------
 

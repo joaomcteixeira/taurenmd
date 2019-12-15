@@ -23,8 +23,9 @@ import taurenmd.cli_imagemol as cli_imagemol
 import taurenmd.cli_noSol as cli_noSol
 import taurenmd.cli_report as cli_report
 import taurenmd.cli_rmsd as cli_rmsd
+import taurenmd.cli_rmsf as cli_rmsf
 import taurenmd.cli_trajedit as cli_trajedit
-from taurenmd import log
+from taurenmd import CMDFILE, log
 from taurenmd.libs import libcli
 
 
@@ -98,6 +99,14 @@ def load_args():
         )
     ap_rmsd.set_defaults(func=cli_rmsd.main)
 
+    ap_rmsf = subparsers.add_parser(
+        'rmsf',
+        help='Calculates and plot RMSFs',
+        parents=[cli_rmsf.ap],
+        add_help=False,
+        )
+    ap_rmsf.set_defaults(func=cli_rmsf.main)
+
     if len(sys.argv) < 2:
         ap.print_help()
         ap.exit()
@@ -108,6 +117,7 @@ def load_args():
 
 
 def maincli():
+    libcli.save_command(CMDFILE, *sys.argv)
     args = load_args()
     log.debug(args)
     args.func(**vars(args))
