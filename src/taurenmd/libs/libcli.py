@@ -59,4 +59,3 @@ def save_command(fname, *args):
                 ' '.join(args),
                 )
             )
-    

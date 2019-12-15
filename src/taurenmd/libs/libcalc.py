@@ -127,9 +127,7 @@ def mda_rmsf(
     
     R.run()
     
-    # rmsds[:, ii] = R.rmsd[:, 2][self._fslicer]
-    
-    return R.rmsf#[frame_slice]
+    return R.rmsf
 
 
 def calc_plane_eq(p1, p2, p3):

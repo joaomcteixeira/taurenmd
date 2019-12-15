@@ -4,11 +4,10 @@ Calculates RMSFS of a selection along the trajectory.
 Uses `MDAnalysis.analysis.rms.RMSF`_, read their documentation for details.
 
 .. _MDAnalysis.analysis.rms.RMSF: https://www.mdanalysis.org/docs/documentation_pages/analysis/rms.html?highlight=rmsf#MDAnalysis.analysis.rms.RMSF
-"""
+"""  # noqa: E501
 import argparse
 from datetime import datetime
 
-import numpy as np
 from bioplottemplates.plots import label_dots
 
 from taurenmd import Path, log  # noqa: F401
@@ -144,13 +143,13 @@ def main(
         )
 
     if export:
-        header=(
+        header = (
             "# Date: {}\n"
             "# Topology: {}\n"
             "# Trajectory : {}\n"
             "# Atom,RMSF\n"
             ).format(
-                datetime.now(),
+                datetime.now().strftime("%d/%m/%Y, %H:%M:%S"),
                 Path(topology).resolve(),
                 [Path(f).resolve().str() for f in trajectory],
                 )
@@ -158,7 +157,6 @@ def main(
             fh.write(header)
             for label, value in zip(labels, rmsfs):
                 fh.write('{},{:.5}\n'.format(label, value))
-
 
     plotvars = plotvars or dict()
     plotvars.setdefault('series_labels', selection)
