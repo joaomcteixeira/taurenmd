@@ -24,6 +24,7 @@ import taurenmd.cli_noSol as cli_noSol
 import taurenmd.cli_report as cli_report
 import taurenmd.cli_rmsd as cli_rmsd
 import taurenmd.cli_rmsf as cli_rmsf
+import taurenmd.cli_rotations as cli_rot
 import taurenmd.cli_trajedit as cli_trajedit
 from taurenmd import CMDFILE, log
 from taurenmd.libs import libcli
@@ -90,6 +91,14 @@ def load_args():
         add_help=False,
         )
     ap_report.set_defaults(func=cli_report.main)
+
+    ap_rot = subparsers.add_parser(
+        'rotations',
+        help='Calculates angular rotations across axes.',
+        parents=[cli_rot.ap],
+        add_help=False,
+        )
+    ap_rot.set_defaults(func=cli_rot.main)
 
     ap_rmsd = subparsers.add_parser(
         'rmsd',
