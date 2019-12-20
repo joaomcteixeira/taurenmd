@@ -3,10 +3,13 @@ Does something.
 """
 import argparse
 
+import numpy as np
+
+from sympy import Plane, Point3D
 
 from sympy import Plane, Point3D
 from taurenmd import log
-from taurenmd.libs import libcli, libio, libmda  # noqa: F401
+from taurenmd.libs import libcalc, libcli, libio, libmda, libutil  # noqa: F401
 from taurenmd.logger import S, T
 
 
@@ -37,6 +40,32 @@ ap.add_argument(
     required=True,
     )
 
+
+ap.add_argument(
+    '-s',
+    '--start',
+    help='Start frame for slicing.',
+    default=None,
+    type=int,
+    )
+
+ap.add_argument(
+    '-e',
+    '--stop',
+    help='Stop frame for slicing: exclusive',
+    default=None,
+    type=int,
+    )
+
+ap.add_argument(
+    '-p',
+    '--step',
+    help='Step value for slicing',
+    default=None,
+    type=int,
+    )
+
+
 def load_args():
     """Load user arguments."""
     cmd = ap.parse_args()
@@ -53,23 +82,29 @@ def main(
         topology,
         trajectory,
         origin_selection,
+        start=None,
+        stop=None,
+        step=None,
         **kwargs,
         ):
     log.info(T('starting'))
     
     u = libmda.mda_load_universe(topology, *list(trajectory))
 
-    atom_group_origin = u.select_atoms(origin_selection)
-    _3_coordinates = [sel.strip() for sel in origin_selection.split('or')]
+    log.info(T('transformation'))
+    fSlice = libutil.frame_slice(start=start, stop=stop, step=step)
+    
+    pABC_atomG = u.select_atoms(origin_selection)
+    ABC_selections = [sel.strip() for sel in origin_selection.split('or')]
     # p stands for point
-    pA_atomG = u.select_atoms(_3_coordinates[0])
-    pB_atomG = u.select_atoms(_3_coordinates[1])
-    pC_atomG = u.select_atoms(_3_coordinates[2])
+    pA_atomG = u.select_atoms(ABC_selections[0])
+    pB_atomG = u.select_atoms(ABC_selections[1])
+    pC_atomG = u.select_atoms(ABC_selections[2])
 
     u.trajectory[0]
     
     # defining the center of reference
-    pABC_cog = atom_group_origin.center_of_geometry()
+    pABC_cog = pABC_atomG.center_of_geometry()
     log.info(T('Original Center of Geometry'))
     log.info(S('for frame: 0'))
     log.info(S('for selection: {}', origin_selection))
@@ -77,8 +112,8 @@ def main(
     
     log.info(T('Transfering'))
     log.info(S('all coordinates of reference frame to the origin 0, 0, 0'))
-    atom_group_origin.positions = atom_group_origin.positions - pABC_cog
-    log.info(S('COG in origin: {}', atom_group_origin.center_of_geometry()))
+    pABC_atomG.positions = pABC_atomG.positions - pABC_cog
+    log.info(S('COG in origin: {}', pABC_atomG.center_of_geometry()))
 
     log.info(T('defining the reference axes'))
     pA_cog = pA_atomG.center_of_geometry()
@@ -89,26 +124,74 @@ def main(
     log.info(S('pB: {}', pB_cog))
     log.info(S('pC: {}', pC_cog))
 
-    log.info(T('Defining Reference Plane'))
-    reference_plane = Plane(
-        Point3D(pA_cog),
-        Point3D(pB_cog),
-        Point3D(pC_cog),
-        )
-    log.info(S('done'))
+    #log.info(T('Defining Reference Plane'))
+    #reference_plane = Plane(
+    #    Point3D(pA_cog),
+    #    Point3D(pB_cog),
+    #    Point3D(pC_cog),
+    #    )
+    #log.info(S('done'))
     
     log.info(T('defining the normal vector to reference plane'))
-    ref_plane_normal = reference_plane.normal_vector
+    #ref_plane_normal = reference_plane.normal_vector
+    #log.info(S('plane normal: {}', ref_plane_normal))
+    ref_plane_normal = libcalc.calc_plane_normal(pA_cog, pB_cog, pC_cog)
+    log.info(S('plane normal: {}', ref_plane_normal))
     log.info(S('done'))
 
     log.info(T('defining the cross product vector'))
-    ref_cross = Plane(
-        Point3D(pA_cog),
-        Point3D(atom_group_origin.center_of_geometry()),
-        Point3D(ref_plane_normal),
-        ).normal_vector
+    ref_plane_cross = np.cross(pA_cog, ref_plane_normal)
+    log.info(S('np cross: {}', ref_plane_cross))
+    
+    roll_angles = []
+    pitch_angles = []
+    yaw_angles = []
 
+    for i, ts in enumerate(u.trajectory[fSlice]):
+        print(f'.. working for frame :{i}')
 
+        pABC_cog_ts = pABC_atomG.center_of_geometry()
+        pABC_atomG.positions = pABC_atomG.positions - pABC_cog_ts
+
+        pA_cog_ts = pA_atomG.center_of_geometry()
+        pB_cog_ts = pB_atomG.center_of_geometry()
+        pC_cog_ts = pC_atomG.center_of_geometry()
+
+        ts_plane_normal = libcalc.calc_plane_normal(
+            pA_cog_ts,
+            pB_cog_ts,
+            pC_cog_ts,
+            )
+
+        ts_plane_cross = np.cross(pA_cog_ts, ts_plane_normal)
+
+        # Calculating Quaternion Rotations
+        roll_Qs_tuples = libcalc.generate_quaternion_rotations(
+            ref_plane_normal,
+            pA_cog_ts,
+            )
+
+        pitch_Qs_tuples = libcalc.generate_quaternion_rotations(
+            ref_plane_cross,
+            ts_plane_normal,
+            )
+
+        yaw_Qs_tuples = libcalc.generate_quaternion_rotations(
+             pA_cog,
+             ts_plane_cross,
+             )
+
+        roll_minimum = libcalc.calc_minimum_Qdistances(roll_Qs_tuples, pA_cog)
+        pitch_minimum = \
+            libcalc.calc_minimum_Qdistances(pitch_Qs_tuples, ref_plane_normal)
+        yaw_minimum = \
+            libcalc.calc_minimum_Qdistances(yaw_Qs_tuples, ref_plane_cross)
+        
+        roll_angles.append(round(roll_minimum.degrees, 3))
+        pitch_angles.append(round(pitch_minimum.degrees, 3))
+        yaw_angles.append(round(yaw_minimum.degrees, 3))
+
+    print(roll_angles)
 
     log.info(S('done'))
     return

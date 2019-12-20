@@ -1,3 +1,7 @@
+from taurenmd import log
+from taurenmd.logger import S, T
+
+
 def frame_list(len_traj, start=None, stop=None, step=None, flist=None,):
     """
     Createa frame list based on the length of trajectory.
@@ -36,7 +40,10 @@ def frame_list(len_traj, start=None, stop=None, step=None, flist=None,):
 def frame_slice(start=None, stop=None, step=None, ftuple=None):
 
     if isinstance(ftuple, (list, tuple)) and len(ftuple) == 3:
-        return slice(*[int(i) for i in ftuple])
+        sliceObject = slice(*[int(i) for i in ftuple])
     
     else:
-        return slice(start, stop, step)
+        sliceObject = slice(start, stop, step)
+    
+    log.info(S('slicing: {}', sliceObject))
+    return sliceObject
