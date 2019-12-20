@@ -1,5 +1,44 @@
 """
-Does something.
+Calculate the Roll, Pitch and Yaw angles along the trajectory.
+
+Given a selection of three regions defined as:
+
+    selection A or selection B or selection C
+
+calculates the roll, pitch and yaw angles of an axis of reference
+calculated around that selection.
+
+The axis of reference is calculated as follows:
+
+    1) the centre of geometry of the selection defines the origin of the
+        reference frame
+       
+       1.1) all frames in the trajectory are centered to that
+            origin.
+
+    2) one of the axis of the reference frame is defined by the unitary
+        vectir of 'selection A'.
+
+    3) the second axis is defined by the normal vector of the plane
+        defined by the centre of geometry of the three selections
+        separately.
+    
+    4) the last axis, is defined by the cross product of the two previous
+        axis.
+
+The above procedure is performed for each frame and the reference frame
+of the first frame is stored as main reference.
+
+Calculating the angles:
+
+Roll)
+    The roll angle is calculated by rotating the 'selection A' unitary
+    vector around the 'reference normal vector' until the Quaternion
+    distance is the minimum between the 'reference selection A' vector
+    and the 'frame i selection A' vector.
+
+Pitch)
+    The same procedure as for Roll but the 
 """
 import argparse
 
