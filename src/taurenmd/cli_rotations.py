@@ -191,8 +191,25 @@ def main(
         pitch_angles.append(round(pitch_minimum.degrees, 3))
         yaw_angles.append(round(yaw_minimum.degrees, 3))
 
-    print(roll_angles)
+    print('... saving roll_angles.csv ...')
+    libio.save_to_file(
+        list(range(1, len(u.trajectory) + 1)),
+        [roll_angles],
+        fname='roll_angles.csv',
+        )
 
+    print('... saving pitch_angles.csv ...')
+    libio.save_to_file(
+        list(range(1, len(u.trajectory) + 1)),
+        [pitch_angles],
+        fname='pitch_angles.csv',
+        )
+    print('... saving yaw_angles.csv ...')
+    libio.save_to_file(
+        list(range(1, len(u.trajectory) + 1)),
+        [yaw_angles],
+        fname='yaw_angles.csv',
+        )
     log.info(S('done'))
     return
 
