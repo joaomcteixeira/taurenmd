@@ -7,8 +7,11 @@ import numpy as np
 from MDAnalysis.analysis.rms import RMSD as mdaRMSD
 from MDAnalysis.analysis.rms import RMSF as mdaRMSF
 
+from pyquaternion import Quaternion as Q
+
 from taurenmd import log
 from taurenmd.logger import S, T
+
 
 
 def mda_rmsd_combined_chains(
@@ -130,11 +133,22 @@ def mda_rmsf(
     return R.rmsf
 
 
+def calc_plane_normal(p1, p2, p3):
+    """
+    Given 3 points, calculates the normal vector
+    of the plane defined by those points.
+    """
+    v1 = p3 - p1
+    v2 = p2 - p1
+
+    return np.cross(v1, v2)  # normal to the plane
+
+
 def calc_plane_eq(p1, p2, p3):
     # http://kitchingroup.cheme.cmu.edu/blog/2015/01/18/Equation-of-a-plane-through-three-points/
     v1 = p3 - p1
     v2 = p2 - p1
-    cp = np.cross(v1, v2)
+    cp = calc_plane_normal(p1, p2, p3)
     a, b, c = cp
     d = np.dot(cp, p3)
     return a, b, c, d
@@ -147,3 +161,32 @@ def calc_angle(a1, b1, c1, a2, b2, c2):
     e2 = math.sqrt(a2 * a2 + b2 * b2 + c2 * c2)
     d = d / (e1 * e2)
     return math.degrees(math.acos(d))
+
+
+def generate_quaternion_rotations(
+        rotation_axis,
+        rotating_vector,
+        start=0,
+        end=360,
+        num=360*3,
+        ):
+    vec_u = Q(vector=rotating_vector).unit
+    rot_u = Q(vector=rotation_axis).unit
+
+    Q_rotated_tuples = []
+    for angle in np.linspace(start, end, num=num):
+        qq = Q(axis=rot_u.vector, degrees=angle)
+        Q_rotated_tuples.append((qq, qq.rotate(vec_u)))
+
+    return Q_rotated_tuples
+
+
+def calc_minimum_Qdistances(rotation_tuples, reference_vector):
+    
+    ref_u = Q(vector=reference_vector).unit
+    
+    minimum = sorted(
+        rotation_tuples,
+        key=lambda x: Q.distance(x[1], ref_u),
+        )
+    return minimum[0][0]

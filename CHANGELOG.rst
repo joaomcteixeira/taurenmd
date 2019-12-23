@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.7.0 (2019-12-23)
+------------------
+
+* implemented :code:`cli_rotations`, calculates roll, pitch and yaw
+    rotation angles of selection.
+
 0.6.0 (2019-12-15)
 ------------------
 

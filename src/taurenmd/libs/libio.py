@@ -73,3 +73,22 @@ def mk_frame_path(input_path, frame=0, ext='.pdb'):
         ).with_suffix('.{}'.format(ext.lstrip('.')))
 
     return top_output
+
+
+def save_to_file(xdata, ydata, fname, header='', fmt='{:.3}', delimiter=','):
+    """
+    Saves data to file.
+    """
+    with open(fname, 'w') as fh:
+        fh.write(header)
+        for label, ydataseries in zip(
+                xdata,
+                zip(*ydata),
+                ):
+
+            fh.write('{}{}{}\n'.format(
+                label,
+                delimiter,
+                delimiter.join(fmt.format(i) for i in ydataseries),
+                ))
+    return
