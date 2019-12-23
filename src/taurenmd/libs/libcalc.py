@@ -6,12 +6,10 @@ import math
 import numpy as np
 from MDAnalysis.analysis.rms import RMSD as mdaRMSD
 from MDAnalysis.analysis.rms import RMSF as mdaRMSF
-
 from pyquaternion import Quaternion as Q
 
 from taurenmd import log
 from taurenmd.logger import S, T
-
 
 
 def mda_rmsd_combined_chains(
@@ -140,14 +138,11 @@ def calc_plane_normal(p1, p2, p3):
     """
     v1 = p3 - p1
     v2 = p2 - p1
-
     return np.cross(v1, v2)  # normal to the plane
 
 
 def calc_plane_eq(p1, p2, p3):
     # http://kitchingroup.cheme.cmu.edu/blog/2015/01/18/Equation-of-a-plane-through-three-points/
-    v1 = p3 - p1
-    v2 = p2 - p1
     cp = calc_plane_normal(p1, p2, p3)
     a, b, c = cp
     d = np.dot(cp, p3)
@@ -168,7 +163,7 @@ def generate_quaternion_rotations(
         rotating_vector,
         start=0,
         end=360,
-        num=360*3,
+        num=360 * 3,
         ):
     vec_u = Q(vector=rotating_vector).unit
     rot_u = Q(vector=rotation_axis).unit
