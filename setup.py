@@ -20,7 +20,7 @@ def read(*names, **kwargs):
 
 setup(
     name='taurenmd',
-    version='0.6.0',
+    version='0.7.0',
     license='GNU GPLv2',
     description='Command-line and library interface for analysis routines in Molecular Dynamics',
     long_description='%s\n%s' % (
@@ -81,6 +81,7 @@ setup(
             'taurenmd_imagemol = taurenmd.cli_imagemol:maincli',
             'taurenmd_noSol = tauremd.cli_noSol:maincli',
             'taurenmd_report = taurenmd.cli_report:maincli',
+            'taurenmd_rot = taurenmd.cli_rot:maincli',
             'taurenmd_rmsf = taurenmd.cli_rmsf:maincli',
             'taurenmd_rmsd = taurenmd.cli_rmsd:maincli',
             'taurenmd_trajedit = taurenmd.cli_trajedit:maincli',
