@@ -14,6 +14,8 @@ from taurenmd import Path, log  # noqa: F401
 from taurenmd.libs import libcalc, libcli, libmda, libutil
 from taurenmd.logger import S, T
 
+_help = 'Calculates and plots RMSFs'
+_name = 'rmsf'
 
 ap = libcli.CustomParser(
     description=__doc__,

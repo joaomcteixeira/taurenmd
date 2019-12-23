@@ -48,6 +48,9 @@ from taurenmd import log
 from taurenmd.libs import libcalc, libcli, libio, libmda, libutil  # noqa: F401
 from taurenmd.logger import S, T
 
+_help = 'Calculates angular rotations across axes.'
+_name = 'rotations'
+
 
 ap = libcli.CustomParser(
     description=__doc__,

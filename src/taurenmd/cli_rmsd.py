@@ -11,6 +11,8 @@ from taurenmd import Path, log  # noqa: F401
 from taurenmd.libs import libcalc, libcli, libmda, libutil
 from taurenmd.logger import S, T
 
+_help = 'Calculates and plots RMSDs.'
+_name = 'rmsd'
 
 _REF_FRAME = 0
 

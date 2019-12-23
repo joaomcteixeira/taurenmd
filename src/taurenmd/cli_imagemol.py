@@ -6,6 +6,8 @@ from taurenmd import Path, log
 from taurenmd.libs import libcli, libio, libmdt
 from taurenmd.logger import S, T
 
+_help = 'Attempts to image molecules.'
+_name = 'imagemol'
 
 _TRAJOUTPUT = 'production_imaged.dcd'
 
