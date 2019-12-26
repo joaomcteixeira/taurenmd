@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.7.1 (2019-12-25)
+------------------
+
+* Readthedocs documentation improvements in structure and content.
+
 0.7.0 (2019-12-23)
 ------------------
 

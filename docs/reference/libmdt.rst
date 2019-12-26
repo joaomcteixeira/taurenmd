@@ -1,5 +1,5 @@
-libmdt - MDTraj
-~~~~~~~~~~~~~~~
+libmdt
+~~~~~~
 
 .. automodule:: taurenmd.libs.libmdt
     :members:

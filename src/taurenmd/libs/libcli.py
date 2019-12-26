@@ -59,3 +59,18 @@ def save_command(fname, *args):
                 ' '.join(args),
                 )
             )
+
+def add_subparser(parser, module):
+    """
+    Adds a subcommand to a parser.
+    """
+    new_ap = parser.add_parser(
+        module._name,
+        description=module.__doc__,
+        help=module._help,
+        parents=[module.ap],
+        add_help=False,
+        )
+
+    new_ap.set_defaults(func=module.main)
+

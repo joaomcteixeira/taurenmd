@@ -1,5 +1,5 @@
 from taurenmd import log
-from taurenmd.logger import S, T
+from taurenmd.logger import S
 
 
 def frame_list(len_traj, start=None, stop=None, step=None, flist=None,):

@@ -1,5 +1,5 @@
-libmda - MDAnalysis
-~~~~~~~~~~~~~~~~~~~
+libmda
+~~~~~~
 
 .. automodule:: taurenmd.libs.libmda
     :members:
