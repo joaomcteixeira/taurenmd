@@ -20,7 +20,7 @@ include requirements-dev.yml
 prune alphas
 prune .ci
 
-include tox.ini .travis.yml .appveyor.yml
+include tox.ini .travis.yml
 
 global-exclude *.py[cod] __pycache__/* *.so *.dylib
 global-exclude tags
