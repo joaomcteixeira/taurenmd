@@ -86,9 +86,9 @@ Development Branch
     :target: https://taurenmd.readthedocs.io/en/latest/index.html
     :alt: Read the Docs (latest)
 
-.. image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.7.0/develop
+.. image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.7.1/develop
     :alt: Commits since latest release
-    :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.7.0...develop
+    :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.7.1...develop
 
 **A command-line interface for analysis routines in Molecular Dynamics.**
 
