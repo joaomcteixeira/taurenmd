@@ -1,5 +1,18 @@
 """
-Input/Output functions for MDTraj.
+Functions that wrap around `MDTraj library`_.
+
+Functions contained in this module operate with MDTraj functionalities,
+wither by using MDTraj to access Molecular Dynamics data or by receiving
+MDTraj data structures and parsing them in some way.
+
+`Simtk OpenMM`_ is also used in some functions.
+
+Read our `citing documentation`_ to understand how to cite multiple
+libraries.
+
+.. _MDTraj library: http://mdtraj.org/1.9.3/index.html
+.. _citing documentation: https://taurenmd.readthedocs.io/en/latest/citing.html
+.. _Simtk OpenMM: http://openmm.org/
 """
 import mdtraj
 import simtk.openmm.app as app
@@ -8,21 +21,29 @@ from taurenmd import Path
 from taurenmd.libs import libio
 
 
-def mdtraj_load_traj(topology, trajectory):
+def load_traj(topology, trajectory):
     """
-    Loads trajectory with MDTraj.
+    Loads trajectory with `MDTraj <http://mdtraj.org/1.9.3/index.html>`_.
+    
+    Uses `mdtraj.load <http://mdtraj.org/1.9.3/api/generated/mdtraj.load.html?highlight=load#mdtraj.load>`_.
+    
+    Example
+    -------
+        
+        >>> libmdt.load_traj('bigtopology.cif', 'trajectory.dcd')
 
     Parameters
     ----------
-    topology
-        The topology file.
+    topology : str or Path
+        Path to the topology file. Accepts MDTraj compatible `topology files <http://mdtraj.org/1.9.3/load_functions.html#trajectory-reference>`_. mmCIF format is loaded using `OpenMM <http://mdtraj.org/1.9.3/api/generated/mdtraj.Topology.html?highlight=from_openmm#mdtraj.Topology.from_openmm>`_.
 
-    traj
-        The trajectory file.
+    trajectory : str or Path
+        Path to the trajectory file. Accepts MDTraj compatible `files <http://mdtraj.org/1.9.3/load_functions.html#trajectory-reference>`_ 
 
     Returns
     -------
-    MDTraj trajectory.
+    MDTraj trajectory
+        `Trajectory object <http://mdtraj.org/1.9.3/api/generated/mdtraj.Trajectory.html#mdtraj-trajectory>`_.
     """
     libio.report_input(topology, trajectory)
 

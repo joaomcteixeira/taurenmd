@@ -3,7 +3,7 @@ Functions that wrap around `MDAnalysis library`_.
 
 Functions contained in this module operate with MDAnalysis (MDA)
 functionalities, either by using MDA to access Molecular Dynamics
-data or by receiving MDA data structures and parsing it in some way.
+data or by receiving MDA data structures and parsing them in some way.
 
 When using functions contained in this library you should `cite both`_
 taurenmd and MDAnalysis.
