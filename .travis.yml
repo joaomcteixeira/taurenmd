@@ -6,7 +6,6 @@ cache: false
 branches:
   only:
   - master
-  - develop
 
 env:
   global:
@@ -26,14 +25,12 @@ matrix:
     - env:
         - TOXENV=clean,py37,codecov,coveralls,report
       python: '3.7'
-#    - env:
-#        - TOXENV=pypy3,codecov,coveralls
-#        - TOXPYTHON=pypy3
-#      python: 'pypy3'
+
 before_install:
   - python --version
   - uname -a
   - lsb_release -a || true
+
 install:
   #- python -mpip install --progress-bar=off tox -rci/requirements.txt
   #- virtualenv --version
@@ -53,11 +50,14 @@ install:
   - conda activate test-environment
   - conda install tox tox-conda -c conda-forge
   - tox --version
+
 script:
   - tox -v
+
 after_failure:
   - more .tox/log/* | cat
   - more .tox/*/log/* | cat
+
 notifications:
   email:
     on_success: never

@@ -3,12 +3,13 @@ taurenmd
 
 .. start-description
 
-Stable version
---------------
-
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3551990.svg
     :target: https://doi.org/10.5281/zenodo.3551990
     :alt: Zenodo
+
+.. image:: https://img.shields.io/readthedocs/taurenmd/latest?label=Read%20the%20Docs
+    :target: https://taurenmd.readthedocs.io/en/latest/index.html
+    :alt: Read the Docs (latest)
 
 .. image:: https://img.shields.io/travis/joaomcteixeira/taurenmd/master?label=TravisCI
     :target: https://travis-ci.org/joaomcteixeira/taurenmd
@@ -26,9 +27,13 @@ Stable version
     :target: https://app.codacy.com/manual/joaomcteixeira/taurenmd/dashboard
     :alt: Codacy master branch
 
-.. image:: https://img.shields.io/readthedocs/taurenmd/stable?label=Read%20the%20Docs
-    :target: https://taurenmd.readthedocs.io/en/stable/index.html
-    :alt: Read the Docs (stable)
+.. image:: https://api.codeclimate.com/v1/badges/d69e2e9866338d88955c/maintainability
+   :target: https://codeclimate.com/github/joaomcteixeira/taurenmd
+   :alt: Code Climate
+
+.. image:: https://img.shields.io/codeclimate/tech-debt/joaomcteixeira/taurenmd?label=Code%20Climate%20tech%20debt
+    :target: https://codeclimate.com/github/joaomcteixeira/taurenmd
+    :alt: Code Climate technical debt
 
 .. image:: https://img.shields.io/pypi/v/taurenmd.svg
     :alt: PyPI Package latest release
@@ -42,45 +47,10 @@ Stable version
     :alt: Supported versions
     :target: https://pypi.org/project/taurenmd
 
-.. image:: https://img.shields.io/pypi/implementation/taurenmd.svg
-    :alt: Supported implementations
-    :target: https://pypi.org/project/taurenmd
-
-
-Development Branch
-------------------
-
-.. image:: https://img.shields.io/travis/joaomcteixeira/taurenmd/develop?label=TravisCI
-    :target: https://travis-ci.org/joaomcteixeira/taurenmd
-    :alt: Travis-CI latest branch
-
-.. image:: https://codecov.io/gh/joaomcteixeira/taurenmd/branch/develop/graph/badge.svg
-    :target: https://codecov.io/gh/joaomcteixeira/taurenmd
-    :alt: Codecov latest branch
-
-.. image:: https://img.shields.io/coveralls/github/joaomcteixeira/taurenmd/develop?label=COVERALLS&logo=COVERALLS
-    :target: https://coveralls.io/github/joaomcteixeira/taurenmd
-    :alt: Coveralls latest
-
-.. image:: https://img.shields.io/codacy/grade/147029f2635e4e62bf670efdef728c28/develop?label=Codacy
-    :target: https://app.codacy.com/manual/joaomcteixeira/taurenmd/dashboard
-    :alt: Codacy latest grade
-
-.. image:: https://api.codeclimate.com/v1/badges/d69e2e9866338d88955c/maintainability
-   :target: https://codeclimate.com/github/joaomcteixeira/taurenmd
-   :alt: Code Climate
-
-.. image:: https://img.shields.io/codeclimate/tech-debt/joaomcteixeira/taurenmd?label=Code%20Climate%20tech%20debt
-    :target: https://codeclimate.com/github/joaomcteixeira/taurenmd
-    :alt: Code Climate technical debt
-
-.. image:: https://img.shields.io/readthedocs/taurenmd/latest?label=Read%20the%20Docs
-    :target: https://taurenmd.readthedocs.io/en/latest/index.html
-    :alt: Read the Docs (latest)
-
-.. image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.7.1/develop
+.. image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.7.1/master
     :alt: Commits since latest release
-    :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.7.1...develop
+    :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.7.1...master
+
 
 **A command-line interface for analysis routines in Molecular Dynamics.**
 
@@ -88,7 +58,7 @@ Development Branch
 
 It bridges the gap between the highly complex (and powerful) Python libraries available for analysis of MD data and the *non-developer* users that lack the programming skills to use those libraries thoroughly. But not only, **taurenmd** also facilitates high throughput operations, even to those proficient *devs*, because complex executions are reduced to a single argument-rich command line.
 
-**Taurenmd** wraps around feature-rich and powerful MD analysis libraries such as :mda:`/` and :mdtraj:`/` (but not only), combining them to extract the best of *those worlds*. We use these libraries to access and extract MD data and calculate observables, and we have also added our own routines of analysis when needed.
+**Taurenmd** wraps around feature-rich and powerful MD analysis libraries such as `MDAnalysis <https://www.mdanalysis.org/>`_ and `MDTraj <http://mdtraj.org>`_ (but not only), combining them to extract the best of *those worlds*. We use these libraries to access and extract MD data and calculate observables, and we have also added our own routines of analysis when needed.
 
 With this said, **taurenmd** aims to be a flexible and extensible peace of software, built as simple and modular as we can think of, to *agile* the incorporation of new functionalities as needed.
 
