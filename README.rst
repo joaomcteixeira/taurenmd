@@ -88,7 +88,7 @@ Development Branch
 
 It bridges the gap between the highly complex (and powerful) Python libraries available for analysis of MD data and the *non-developer* users that lack the programming skills to use those libraries thoroughly. But not only, **taurenmd** also facilitates high throughput operations, even to those proficient *devs*, because complex executions are reduced to a single argument-rich command line.
 
-**Taurenmd** wraps around feature-rich and powerful MD analysis libraries such as :mda:`/` and :mdtraj:`/` (but not only), combining them to extract the best of *those worlds*. We use these libraries to access and extract MD data and calculate observables, and we have also added our own routines of analysis when needed.
+**Taurenmd** wraps around feature-rich and powerful MD analysis libraries such as `MDAnalysis <https://www.mdanalysis.org/>`_ and `MDTraj <http://mdtraj.org>`_ (but not only), combining them to extract the best of *those worlds*. We use these libraries to access and extract MD data and calculate observables, and we have also added our own routines of analysis when needed.
 
 With this said, **taurenmd** aims to be a flexible and extensible peace of software, built as simple and modular as we can think of, to *agile* the incorporation of new functionalities as needed.
 

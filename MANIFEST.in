@@ -1,6 +1,5 @@
 graft docs
 graft src
-graft ci
 graft tests
 
 include .bumpversion.cfg
@@ -19,6 +18,7 @@ include requirements.yml
 include requirements-dev.yml
 
 prune alphas
+prune .ci
 
 include tox.ini .travis.yml .appveyor.yml
 
