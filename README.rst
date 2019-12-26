@@ -14,10 +14,6 @@ Stable version
     :target: https://travis-ci.org/joaomcteixeira/taurenmd
     :alt: Travis master branch
 
-.. image:: https://ci.appveyor.com/api/projects/status/v9r2032bry817tjh/branch/master?svg=true 
-    :target: https://ci.appveyor.com/project/joaomcteixeira/taurenmd
-    :alt: Appveyor master branch
-
 .. image:: https://codecov.io/gh/joaomcteixeira/taurenmd/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/joaomcteixeira/taurenmd
     :alt: Codecov master branch
@@ -57,10 +53,6 @@ Development Branch
 .. image:: https://img.shields.io/travis/joaomcteixeira/taurenmd/develop?label=TravisCI
     :target: https://travis-ci.org/joaomcteixeira/taurenmd
     :alt: Travis-CI latest branch
-
-.. image:: https://ci.appveyor.com/api/projects/status/v9r2032bry817tjh?svg=true
-    :target: https://ci.appveyor.com/project/joaomcteixeira/taurenmd
-    :alt: Appveyor-CI latest branch
 
 .. image:: https://codecov.io/gh/joaomcteixeira/taurenmd/branch/develop/graph/badge.svg
     :target: https://codecov.io/gh/joaomcteixeira/taurenmd
