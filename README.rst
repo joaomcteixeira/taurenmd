@@ -52,7 +52,7 @@ taurenmd
     :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.7.2...master
 
 
-**A command-line interface for analysis routines in Molecular Dynamics.**
+**A command-line interface for analysis routines of Molecular Dynamics data.**
 
 **Taurenmd** provides an easy, flexible and extensible, interface for the most common (and not so common) routines of analysis and representation of Molecular Dynamics (MD) data.
 

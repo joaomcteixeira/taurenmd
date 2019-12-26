@@ -1,7 +1,7 @@
 Installation
 ============
 
-**taurenmd** is written in, and depends on projects written in, `Python <http://www.python.org>`_; therefore, its installation process is based on the Python installation routines and related community-available tools:
+**taurenmd** is written in, and depends on projects written in, `Python <https://www.python.org>`_; therefore, its installation process is based on the Python installation routines and related community-available tools:
 
 #. `package at PyPi <https://pypi.org/project/taurenmd/>`_
 #. `GitHub source repository <https://github.com/joaomcteixeira/taurenmd>`_
