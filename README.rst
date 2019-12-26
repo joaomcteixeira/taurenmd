@@ -1,10 +1,7 @@
 taurenmd
 ========
 
-**Command-line and library interface for analysis routines in Molecular Dynamics.**
-*This is an experimental project.*
-
-.. start-badges
+.. start-description
 
 Stable version
 --------------
@@ -53,18 +50,9 @@ Stable version
     :alt: Supported implementations
     :target: https://pypi.org/project/taurenmd
 
-The stable version is hosted at the `master branch`_.
-
-Notes
-~~~~~
-
-- AppVeyor builds only for py36; see `#1`_
-- Travis is not yet configured for OSX; see `#2`_ 
 
 Development Branch
 ------------------
-
-*where new features are tested and code maybe broken :)*
 
 .. image:: https://img.shields.io/travis/joaomcteixeira/taurenmd/develop?label=TravisCI
     :target: https://travis-ci.org/joaomcteixeira/taurenmd
@@ -102,44 +90,27 @@ Development Branch
     :alt: Commits since latest release
     :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.7.0...develop
 
-The latest development is hosted at the `develop branch`_.
+**A command-line interface for analysis routines in Molecular Dynamics.**
 
-Motivation
-==========
+**Taurenmd** provides an easy, flexible and extensible, interface for the most common (and not so common) routines of analysis and representation of Molecular Dynamics (MD) data.
 
-Provide an easy interface for the most common (and not so common) routines of analysis and data representation for Molecular Dynamics.
+It bridges the gap between the highly complex (and powerful) Python libraries available for analysis of MD data and the *non-developer* users that lack the programming skills to use those libraries thoroughly. But not only, **taurenmd** also facilitates high throughput operations, even to those proficient *devs*, because complex executions are reduced to a single argument-rich command line.
+
+**Taurenmd** wraps around feature-rich and powerful MD analysis libraries such as :mda:`/` and :mdtraj:`/` (but not only), combining them to extract the best of *those worlds*. We use these libraries to access and extract MD data and calculate observables, and we have also added our own routines of analysis when needed.
+
+With this said, **taurenmd** aims to be a flexible and extensible peace of software, built as simple and modular as we can think of, to *agile* the incorporation of new functionalities as needed.
+
+**taurenmd** aims to be a command-line user-directed interface, but its core functions are openly available and distributed in the library architecture. Currently, there are already several *commands* available, some that perform only single tasks, while others allow complex setups, all are *one-liners*.
+
+.. end-description
 
 Documentation
 =============
 
-Read the documentation: https://taurenmd.readthedocs.io
+**taurenmd** full documentation is available at: https://taurenmd.readthedocs.io, read there:
 
-Dependencies
-============
+#. how to install
+#. usage
+#. citing
+#. *etc...*
 
-:code:`taurenmd` wraps around high performance Molecular Dynamics analysis libraries, such as: `MDAnalysis`_, `MDTraj`_, `OpenMM`_ (and implementing others...); and it contains its own routines for data representation and export, such as curated plotting templates through `matplotlib`_ and `bioplottemplates`_.
-
-
-Citing
-======
-
-When using and citing :code:`taurenmd`, you **SHOULD** by all means cite the Molecular Dynamics (MD) analysis libraries upon which :code:`taurenmd` wraps. Please read through each project's documentation to understand how to cite them; these projects are linked in the `Dependencies` header.
-
-Acknowledges
-============
-
-The concept of this project is largely inspired in the `pdb-tools`_ *one script one action* idea.
-Thanks to `JoaoRodrigues`_ for all the mentoring on MD! CI in this repository provided by `cookiecutter-pylibrary`_ with final setup by me.
-
-.. _pdb-tools: https://github.com/haddocking/pdb-tools
-.. _JoaoRodrigues: https://github.com/JoaoRodrigues
-.. _MDTraj: https://github.com/mdtraj/mdtraj
-.. _MDAnalysis: https://www.mdanalysis.org/
-.. _OpenMM: https://github.com/openmm/openmm
-.. _matplotlib: https://matplotlib.org/
-.. _bioplottemplates: https://github.com/joaomcteixeira/python-bioplottemplates
-.. _cookiecutter-pylibrary: https://github.com/ionelmc/cookiecutter-pylibrary
-.. _master branch: https://github.com/joaomcteixeira/taurenmd/tree/master
-.. _develop branch: https://github.com/joaomcteixeira/taurenmd/tree/develop
-.. _#1: https://github.com/joaomcteixeira/taurenmd/issues/1
-.. _#2: https://github.com/joaomcteixeira/taurenmd/issues/2

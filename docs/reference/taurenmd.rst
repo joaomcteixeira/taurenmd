@@ -1,9 +1,5 @@
-taurenmd
-========
-
-.. testsetup::
-
-    from taurenmd import *
+taurenmd module
+===============
 
 .. automodule:: taurenmd
     :members:

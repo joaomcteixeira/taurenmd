@@ -4,6 +4,8 @@ Copies the trajectory without solvent and extracts the first frame.
 
 from taurenmd.libs import libcli, libmdt
 
+_help = 'Removes solvent and extracts first frame'
+_name = 'noSol'
 
 ap = libcli.CustomParser()
 

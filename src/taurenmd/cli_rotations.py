@@ -38,18 +38,18 @@ Roll)
     and the 'frame i selection A' vector.
 
 Pitch)
-    The same procedure as for Roll but the 
+    The same procedure as for Roll but the
 """
 import argparse
 
 import numpy as np
 
-from sympy import Plane, Point3D
-
-from sympy import Plane, Point3D
 from taurenmd import log
 from taurenmd.libs import libcalc, libcli, libio, libmda, libutil  # noqa: F401
 from taurenmd.logger import S, T
+
+_help = 'Calculates angular rotations across axes.'
+_name = 'rotations'
 
 
 ap = libcli.CustomParser(
@@ -163,17 +163,7 @@ def main(
     log.info(S('pB: {}', pB_cog))
     log.info(S('pC: {}', pC_cog))
 
-    #log.info(T('Defining Reference Plane'))
-    #reference_plane = Plane(
-    #    Point3D(pA_cog),
-    #    Point3D(pB_cog),
-    #    Point3D(pC_cog),
-    #    )
-    #log.info(S('done'))
-    
     log.info(T('defining the normal vector to reference plane'))
-    #ref_plane_normal = reference_plane.normal_vector
-    #log.info(S('plane normal: {}', ref_plane_normal))
     ref_plane_normal = libcalc.calc_plane_normal(pA_cog, pB_cog, pC_cog)
     log.info(S('plane normal: {}', ref_plane_normal))
     log.info(S('done'))
@@ -216,9 +206,9 @@ def main(
             )
 
         yaw_Qs_tuples = libcalc.generate_quaternion_rotations(
-             pA_cog,
-             ts_plane_cross,
-             )
+            pA_cog,
+            ts_plane_cross,
+            )
 
         roll_minimum = libcalc.calc_minimum_Qdistances(roll_Qs_tuples, pA_cog)
         pitch_minimum = \

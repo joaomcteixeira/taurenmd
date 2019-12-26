@@ -6,6 +6,9 @@ import argparse
 from taurenmd import log
 from taurenmd.libs import libcli, libmda
 
+_help = 'Reports on trajectory details.'
+_name = 'report'
+
 
 ap = libcli.CustomParser(
     description=__doc__,

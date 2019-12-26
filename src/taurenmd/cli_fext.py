@@ -7,6 +7,8 @@ from taurenmd import Path, log
 from taurenmd.libs import libcli, libmda, libutil
 from taurenmd.logger import S
 
+_help = 'Extracts single frames from trajectory.'
+_name = 'fext'
 
 ap = libcli.CustomParser(
     description=__doc__,

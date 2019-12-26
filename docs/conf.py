@@ -13,6 +13,8 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
+    'sphinxarg.ext',
+    'sphinx.ext.autosectionlabel',
 ]
 source_suffix = '.rst'
 master_doc = 'index'
@@ -27,6 +29,9 @@ templates_path = ['.']
 extlinks = {
     'issue': ('https://github.com/joaomcteixeira/taurenmd/issues/%s', '#'),
     'pr': ('https://github.com/joaomcteixeira/taurenmd/pull/%s', 'PR #'),
+    'mda': ('https://www.mdanalysis.org', 'MDAnalysis'),
+    'mdtraj': ('http://mdtraj.org/1.9.3', 'MDTraj'),
+    'openmm': ('https://openmmtools.readthedocs.io/en/0.18.1', 'OpenMM'),
 }
 # on_rtd is whether we are on readthedocs.org
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
@@ -40,7 +45,7 @@ html_use_smartypants = True
 html_last_updated_fmt = '%b %d, %Y'
 html_split_index = False
 html_sidebars = {
-   '**': ['searchbox.html', 'globaltoc.html', 'sourcelink.html'],
+    '**': ['searchbox.html', 'globaltoc.html', 'sourcelink.html'],
 }
 html_short_title = '%s-%s' % (project, version)
 

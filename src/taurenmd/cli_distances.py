@@ -11,6 +11,8 @@ from taurenmd import log
 from taurenmd.libs import libcli, libio, libmda, libutil  # noqa: F401
 from taurenmd.logger import S, T
 
+_help = 'Calculates distances between geometric centres of selections. '
+_name = 'dist'
 
 ap = libcli.CustomParser(
     description=__doc__,

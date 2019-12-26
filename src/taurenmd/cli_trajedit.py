@@ -14,6 +14,8 @@ from taurenmd import Path, log
 from taurenmd.libs import libio, libmda
 from taurenmd.logger import S, T
 
+_help = 'Edits trajectory in many different ways.'
+_name = 'trajedit'
 
 ap = argparse.ArgumentParser(
     description=__doc__,
@@ -157,6 +159,9 @@ ap.add_argument(
     default='fragments',
     type=str,
     )
+
+def _ap():
+    return ap
 
 
 def load_args():

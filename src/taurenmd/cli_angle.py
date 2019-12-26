@@ -1,9 +1,7 @@
 """
 Plane angle calculator.
 
-Calculates the angle of a plane against itself in the reference frame
-    along the whole trajectory. The plane is defined by the three
-    centres of geometry of tree given selections.
+Calculates the angle of a plane against itself in the reference frame along the whole trajectory. The plane is defined by the three centres of geometry of tree given selections.
 """
 import argparse
 
@@ -13,6 +11,8 @@ from taurenmd import log
 from taurenmd.libs import libcalc, libcli, libmda, libutil
 from taurenmd.logger import S, T
 
+_help='Calculates the angle between a plane along the trajectory'
+_name='angle'
 
 ap = libcli.CustomParser(
     description=__doc__,

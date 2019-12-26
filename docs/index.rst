@@ -1,17 +1,28 @@
-========
+Welcome to taurenmd Documentation!
+===================================
+
+.. include:: ../README.rst
+   :start-after: .. start-description
+   :end-before: .. end-description
+
+You can read now through the **contents** bellow.
+
 Contents
 ========
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
-   readme
    installation
    usage
-   reference/index
+   reference/clients
    contributing
+   citing
    authors
    changelog
+   acknowledgments
+   license
+   reference/index
 
 Indices and tables
 ==================
@@ -19,4 +30,5 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
 
