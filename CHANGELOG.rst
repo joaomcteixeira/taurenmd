@@ -4,6 +4,8 @@ Changelog
 0.7.1 (2019-12-25)
 ------------------
 
+* Dropped Appveyor and EXPLICIT Windows support because of #1.
+* restructured project GitHub layout. Deprecated develop branch.
 * Readthedocs documentation improvements in structure and content.
 
 0.7.0 (2019-12-23)
