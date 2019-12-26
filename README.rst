@@ -23,9 +23,9 @@ taurenmd
     :target: https://coveralls.io/github/joaomcteixeira/taurenmd
     :alt: Coveralls master
 
-.. image:: https://img.shields.io/codacy/grade/147029f2635e4e62bf670efdef728c28/master?label=Codacy
-    :target: https://app.codacy.com/manual/joaomcteixeira/taurenmd/dashboard
-    :alt: Codacy master branch
+.. image:: https://api.codacy.com/project/badge/Grade/147029f2635e4e62bf670efdef728c28
+    :target: https://www.codacy.com/manual/joaomcteixeira/taurenmd?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=joaomcteixeira/taurenmd&amp;utm_campaign=Badge_Grade
+    :alt: Codacy
 
 .. image:: https://api.codeclimate.com/v1/badges/d69e2e9866338d88955c/maintainability
    :target: https://codeclimate.com/github/joaomcteixeira/taurenmd
