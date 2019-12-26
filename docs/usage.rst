@@ -1,7 +1,7 @@
 Usage
 =====
 
-**Taurenmd** provides a command-line interface to many routines in Molecular Dynamics data analysis, therefore **taurenmd** runs by executing one-line and argument-rich commands at the :code:`terminal`.
+**Taurenmd** provides a command-line interface to many routines in Molecular Dynamics data analysis, therefore **taurenmd** runs by executing one-line and argument-rich commands on the :code:`terminal`.
 
 **Taurenmd** uses and wraps around *third-party* libraries to handle MD data, please refer to our :ref:`citing` section.
 
@@ -9,7 +9,7 @@ We have several *command* interfaces already implemented, our :ref:`Command-line
 
 :IMPORTANT: Do not forget to activate the python environment where you installed *taurenmd* in case it is not yet activated. Please read through our :ref:`Installation` page.
 
-To access to the complete list of *taurenmd commands* with a summary information for each, execute.::
+To access to the complete list of *taurenmd commands* with a summary information for each, execute::
 
     taurenmd
 
@@ -35,7 +35,7 @@ You can also use :ref:`trajedit` to extract a specific frame from a trajectory::
 
     taurenmd trajedit topology.pdb trajectory.xtc -d frame40.pdb -s 40 -e 41 -O
 
-but,for this example, you could instead use the :ref:`fext` interface::
+but, for this example, you could instead use the :ref:`fext` interface::
 
     taurenmd fext topology.pdb trajectory.xtc -f 40 -x .pdb -f frame_
 

@@ -1,5 +1,5 @@
-taurenmd
-========
+taurenmd module
+===============
 
 .. automodule:: taurenmd
     :members:

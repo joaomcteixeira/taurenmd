@@ -35,31 +35,47 @@ If you are proposing a feature:
 Development
 ===========
 
-To set up `taurenmd` for local development:
+To contribute to the development of taurenmd, set up a local environment:
 
-1. Fork `taurenmd <https://github.com/joaomcteixeira/taurenmd>`_
-   (look for the "Fork" button).
-2. Clone your fork locally::
+1. Create a new :code:`taurenmd` environment and install all its dependencies but do NOT install *taurenmd* itself, see :ref:`Installation` page.
 
-    git clone git@github.com:joaomcteixeira/taurenmd.git
+2. taurenmd relies on `tox <https://tox.readthedocs.io/en/latest/>`_ to manage continuous integration (CI) and collaborative development; install it together with `tox-conda <https://github.com/tox-dev/tox-conda>`_::
 
-3. Create a branch for local development::
+    # with Anaconda
+    conda install -c conda-forge tox
+    conda install -c conda-forge tox-conda
+    
+    # with PyPi
+    pip install tox
+    pip install tox-conda
+
+3. Fork `taurenmd <https://github.com/joaomcteixeira/taurenmd>`_ (look for the "Fork" button).
+
+4. Clone your fork locally::
+
+    git clone https://github.com/YOUR-USER-NAME/taurenmd.git <destination folder> 
+
+5. Navigate to the fork folder and create a branch for local development::
 
     git checkout -b name-of-your-bugfix-or-feature
 
+6. Install a development version of your development branch::
+
+    python setup.py develop
+
    Now you can make your changes locally.
 
-4. When you're done making changes run all the checks and docs builder with `tox <https://tox.readthedocs.io/en/latest/install.html>`_ one command::
+7. When you're done making changes run all the checks and docs builder with **tox** one command::
 
     tox
 
-5. Commit your changes and push your branch to GitHub::
+5. Commit your changes and push your branch to your *taurenmd fork* on GitHub::
 
     git add .
     git commit -m "Your detailed description of your changes."
     git push origin name-of-your-bugfix-or-feature
 
-6. Submit a pull request through the GitHub website.
+6. `Submit a pull request through the GitHub website <https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request>`_.
 
 Pull Request Guidelines
 -----------------------
@@ -81,7 +97,14 @@ For merging, you should:
 Tips
 ----
 
-To run a subset of tests::
+You can run individual test environment with tox, for example, to test lint::
 
-    tox -e envname -- pytest -k test_myfeature
+    tox -e check 
 
+to test documentation::
+
+    tox -e docs
+
+to perform coverage-reported tests::
+
+    tox -e py37-cover
