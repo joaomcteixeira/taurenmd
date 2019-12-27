@@ -1,4 +1,10 @@
-"""Common operations for client interfaces."""
+"""
+Shared operations for client interfaces.
+
+This module contains functions and classes that are shared amongst the
+client interfaces. It contains also others used to enhance the user
+experience.
+"""
 import argparse
 import sys
 from datetime import datetime
@@ -16,7 +22,19 @@ class CustomParser(argparse.ArgumentParser):
 
 
 class ParamsToDict(argparse.Action):
-    """Convert command-line parameters to dict."""
+    """
+    Convert command-line parameters in an argument to a dictionary.
+
+    Example
+    -------
+    
+    Where ``-x`` is an optional argument of the command-line client
+    interface.
+
+        >>> par1=1 par2='my name' par3=[1,2,3]
+        >>> {'par1': 1, 'par2': 'my name', 'par3': [1, 2, 3]}
+
+    """
     
     def __call__(self, parser, namespace, values, option_string=None):
         """Executes."""
@@ -51,7 +69,17 @@ class ParamsToDict(argparse.Action):
 
 
 def save_command(fname, *args):
-    """Append the input command to a file."""
+    """
+    Append the execution command to a log file.
+
+    Parameters
+    ----------
+    fname : string or Path
+        The file name of the log file where to append the command.
+
+    *args : strings
+        String parts that compose the command.
+    """
     with open(fname, 'a') as fh:
         fh.write(
             '[{}] {}\n'.format(
@@ -63,6 +91,19 @@ def save_command(fname, *args):
 def add_subparser(parser, module):
     """
     Adds a subcommand to a parser.
+
+    Parameters
+    ----------
+    parser : `argparse.add_suparsers object <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser.add_subparsers>`_
+        The parser to add the subcommand to.
+
+    module
+        A python module containing the characteristics of a taurenmd
+        client interface. Client interface modules require the following
+        attributes: ``__doc__`` which feeds the `description argument <https://docs.python.org/3/library/argparse.html#description>`_
+        of `add_parser <https://docs.python.org/3/library/argparse.html#other-utilities>`_, ``_help`` which feeds `help <https://docs.python.org/3/library/argparse.html#help>`_, ``ap``
+        which is an `ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_, and a ``main`` function,
+        which executes the main logic of the interface.
     """
     new_ap = parser.add_parser(
         module._name,
@@ -73,4 +114,3 @@ def add_subparser(parser, module):
         )
 
     new_ap.set_defaults(func=module.main)
-

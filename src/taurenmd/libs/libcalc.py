@@ -29,10 +29,11 @@ from MDAnalysis.analysis.rms import RMSF as mdaRMSF
 from pyquaternion import Quaternion as Q
 
 from taurenmd import log
+from taurenmd.libs import libio
 from taurenmd.logger import S, T
 
 
-def mda_rmsd_combined_chains(
+def mda_rmsd(
         universe,
         frame_slice=None,
         selection='all',
@@ -59,20 +60,20 @@ def mda_rmsd_combined_chains(
     MDAnalysis Universe
         The MDAnalysis `universe <https://www.mdanalysis.org/docs/documentation_pages/core/universe.html?highlight=universe#core-object-universe-mdanalysis-core-universe>`_.
 
-    frames : None or slice obj, optional
-        The frames to consider. If ``None`` considers all frames.
-        A slice object can be used for advanced slicing, for example:
-        ``slice(None, 50, 2)``, slices from start to frame 50 (*exclusive*)
-        every 2 frames.
-        Defaults to `None`.
+    frames : any, optional
+        The frames in the trajectory to consider.
+        If ``None`` considers all frames.
+        Accepts any argument that
+        :py:func:`taurenmd.libs.libio.evaluate_to_slice` can receive.
+        Defaults to ``None``.
 
     selection : str, optional
         The selection upon which calculate the RMSDs.
-        Defaults to `all`.
+        Defaults to ``'all'``.
 
     ref_frames : int, optional
         The reference frame against which calculate the RMSDs.
-        Defaults to 0.
+        Defaults to ``0``.
     
     Returns
     -------
@@ -86,12 +87,11 @@ def mda_rmsd_combined_chains(
         If ``frame_slice`` is not ``None`` or ``slice`` object.
 
     MDAnalysis Exceptions
-        MDAnalysis related exceptions if something goes wrong with
-        RMSD calculation.
+        Any exceptions that could come from MDAnalysis RMSF computation.
     """
     log.info(T('Calculating RMSDs'))
     
-    frame_slice = libutil.evaluate_to_slice(value=frame_slice)
+    frame_slice = libio.evaluate_to_slice(value=frame_slice)
 
     log.info(S('for selection: {}', selection))
     log.info(S('for trajectory slice: {}', frame_slice))
@@ -127,7 +127,7 @@ def mda_rmsf(
        `MDAnalysis Atom group <https://www.mdanalysis.org/docs/documentation_pages/core/groups.html?highlight=atom%20group#MDAnalysis.core.groups.AtomGroup>`_.
 
     frame_slice : any, optional
-        Any argument that :py:func:`taurenmd.libs.libutil.evaluate_to_slice` can receive.
+        Any argument that :py:func:`taurenmd.libs.libio.evaluate_to_slice` can receive.
         Defaults to ``None``, considers all frames.
     
     Returns
@@ -143,7 +143,7 @@ def mda_rmsf(
     """
     log.info(T('Calculating RMSFs'))
    
-    frame_slice = libutil.evaluate_to_slice(value=frame_slice)
+    frame_slice = libio.evaluate_to_slice(value=frame_slice)
      
     log.info(S('for trajectory slice: {}', frame_slice))
    
@@ -164,7 +164,7 @@ def calc_plane_normal(p1, p2, p3):
     """
     Calculates the normal vector for the (p1, p2, p3) plane.
 
-    Given 3 points, calculates the normal vector
+    Given 3 XYZ space coordinate points, calculates the normal vector
     of the plane defined by those points.
 
     Parameters
