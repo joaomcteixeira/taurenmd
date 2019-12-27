@@ -39,10 +39,10 @@ but, for this example, you could instead use the :ref:`fext` interface::
 
     taurenmd fext topology.pdb trajectory.xtc -f 40 -x .pdb -f frame_
 
-Each an every :code:`taurenmd` sub command is available directly as a main command by appending a :code:`t` to its name, for example::
+Each an every :code:`taurenmd` sub command is available directly as a main command by appending a :code:`tmd` to its name, for example::
 
     taurenmd trajedit
     # equals
-    ttrajedit
+    tmdtrajedit
 
 
