@@ -17,37 +17,18 @@ ap = libcli.CustomParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
         )
 
-ap.add_argument(
-    'topology',
-    help='The topology file',
-    )
+libcli.add_top_argument(ap)
+libcli.add_traj_argument(ap)
+libcli.add_trajout_arg(ap)
+libcli.add_topout_arg(ap)
 
 ap.add_argument(
-    'trajectory',
-    help='The trajectory file.',
-    )
-
-ap.add_argument(
-    '-d',
-    '--traj-output',
-    help='Output trajectory. Defaults to production_imaged.xtc.',
-    default=_TRAJOUTPUT,
-    )
-
-ap.add_argument(
-    '-o',
-    '--top-output',
-    help=(
-        'File name to save the first frame of the imaged trajectory.'
-        ' Defaults to the --traj-output path + \'_frame0.pdb.'
-        ),
-    default=None,
-    )
-
-ap.add_argument(
-    '-p',
+    '-i',
     '--protocol',
-    help='The protocol with which reimage.',
+    help=(
+        'The protocol with which reimage. '
+        'Read main command description for details.'
+        ),
     default=1,
     type=int,
     )

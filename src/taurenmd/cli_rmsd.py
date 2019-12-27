@@ -14,97 +14,18 @@ from taurenmd.logger import S, T
 _help = 'Calculates and plots RMSDs.'
 _name = 'rmsd'
 
-_REF_FRAME = 0
-
-
 ap = libcli.CustomParser(
     description=__doc__,
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-ap.add_argument(
-    'topology',
-    help='Topology file.',
-    type=str,
-    )
-
-ap.add_argument(
-    'trajectory',
-    help=(
-        'Trajectory files. If given, multiple trajectories will be'
-        'contactenated by order.'
-        ),
-    nargs='+',
-    )
-
-ap.add_argument(
-    '-s',
-    '--start',
-    help='Start frame for slicing.',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-e',
-    '--stop',
-    help='Stop frame for slicing: exclusive',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-p',
-    '--step',
-    help='Step value for slicing',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-x',
-    '--export',
-    help=(
-        'Export calculated RMSDs to CSV file. '
-        'If given defaults to rmsd.csv, alternatively, '
-        'you can give a specific file name.'
-        ),
-    default=False,
-    const='rmsd.csv',
-    nargs='?',
-    )
-
-ap.add_argument(
-    '-l',
-    '--selections',
-    help=(
-        'The atom selection upon which calculate the RMSDs. '
-        'You can give multiple selections to calculate multiple RMSDs sets. '
-        'Defauts to \'all\'.'
-        ),
-    type=str,
-    default=None,
-    nargs='+',
-    )
-
-ap.add_argument(
-    '-r',
-    '--ref-frame',
-    help='The reference frame.',
-    type=int,
-    default=_REF_FRAME,
-    )
-
-ap.add_argument(
-    '-v',
-    '--plotvars',
-    help=(
-        'Plot variables. '
-        'Example: -v xlabel=frames ylabel=RMSD color=red.'
-        ),
-    nargs='*',
-    action=libcli.ParamsToDict,
-    )
+libcli.add_top_argument(ap)
+libcli.add_traj_argument(ap)
+libcli.add_slice_opt_arguments(ap)
+libcli.add_selections_argument(ap)
+libcli.add_export_arg(ap)
+libcli.add_reference_frame(ap)
+libcli.add_plot_params(ap)
 
 
 def load_args():
@@ -127,16 +48,17 @@ def main(
         start=None,
         stop=None,
         step=None,
-        ref_frame=_REF_FRAME,
+        ref_frame=0,
         selections=None,
+        plot=False,
         plotvars=None,
         export=False,
         **kwargs
         ):
-    
+    """Main client logic."""
     log.info(T('starting'))
     
-    u = libmda.mda_load_universe(topology, *list(trajectory))
+    u = libmda.load_universe(topology, *list(trajectory))
     
     frame_slice = libio.frame_slice(
         start=start,
@@ -149,7 +71,7 @@ def main(
     rmsds = []
     for selection in selections:
         rmsds.append(
-            libcalc.mda_rmsd_combined_chains(
+            libcalc.mda_rmsd(
                 u,
                 frame_slice=frame_slice,
                 selection=selection,
@@ -180,22 +102,21 @@ def main(
             comments='#',
             encoding=None,
             )
-
-    if plotvars is None:
-        plotvars = dict()
     
-    if 'labels' not in plotvars:
-        plotvars['labels'] = selections
+    if plot:
 
-    log.info(T('plot params:'))
-    for k, v in plotvars.items():
-        log.info(S('{} = {!r}', k, v))
-    
-    param.plot(
-        list(range(len(u.trajectory))[frame_slice]),
-        rmsds,
-        **plotvars,
-        )
+        plotvars = plotvars or dict()
+        plotvars.setdefault('labels', selections)
+
+        log.info(T('plot params:'))
+        for k, v in plotvars.items():
+            log.info(S('{} = {!r}', k, v))
+        
+        param.plot(
+            list(range(len(u.trajectory))[frame_slice]),
+            rmsds,
+            **plotvars,
+            )
 
     return
 

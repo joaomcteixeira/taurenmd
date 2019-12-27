@@ -44,7 +44,7 @@ def main(
         topology,
         trajectory,
         plane_selection,
-        frame=0,
+        ref_frame=0,
         start=None,
         stop=None,
         step=None,
@@ -63,8 +63,8 @@ def main(
     log.info(S('for slice {}', frame_slice))
 
     log.info(T('calculating plane eq. for reference frame'))
-    log.info(S('using frame: {}', frame))
-    u.trajectory[frame]
+    log.info(S('using frame: {}', ref_frame))
+    u.trajectory[ref_frame]
     reference_point_1 = u.select_atoms(plane_selection[0]).center_of_geometry()
     reference_point_2 = u.select_atoms(plane_selection[1]).center_of_geometry()
     reference_point_3 = u.select_atoms(plane_selection[2]).center_of_geometry()

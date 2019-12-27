@@ -14,29 +14,10 @@ ap = libcli.CustomParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-ap.add_argument(
-    'topology',
-    help='The topology structure.',
-    )
-
-ap.add_argument(
-    'trajectory',
-    help='The trajectory',
-    )
-
-ap.add_argument(
-    '-o',
-    '--output_pdb',
-    help='Output PDB file.',
-    default='production_noHOH.pdb',
-    )
-
-ap.add_argument(
-    '-d',
-    '--traj_output',
-    help='The trajectory output.',
-    default='production_noHOH.dcd',
-    )
+libcli.add_top_argument(ap)
+libcli.add_single_traj_argument(ap)
+libcli.add_trajout_arg(ap)
+libcli.add_topout_arg(ap)
 
 
 def load_args():

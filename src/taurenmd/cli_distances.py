@@ -19,20 +19,11 @@ ap = libcli.CustomParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-ap.add_argument(
-    'topology',
-    help='Topology file.',
-    type=str,
-    )
-
-ap.add_argument(
-    'trajectory',
-    help=(
-        'Trajectory files. If given, multiple trajectories will be'
-        'contactenated by order.'
-        ),
-    nargs='+',
-    )
+libcli.add_top_argument(ap)
+libcli.add_traj_argument(ap)
+libcli.add_reference_frame(ap)
+libcli.add_slice_opt_arguments(ap)
+libcli.add_plot_params(ap)
 
 ap.add_argument(
     '-l1',
@@ -48,48 +39,6 @@ ap.add_argument(
     help='Second selection.',
     default='all',
     type=str,
-    )
-
-ap.add_argument(
-    '-f',
-    '--frame',
-    help='Calc distances to a frame instead of relative along traj.',
-    default=None,
-    )
-
-ap.add_argument(
-    '-s',
-    '--start',
-    help='Start frame for slicing.',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-e',
-    '--stop',
-    help='Stop frame for slicing: exclusive',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-p',
-    '--step',
-    help='Step value for slicing',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-v',
-    '--plotvars',
-    help=(
-        'Plot variables. '
-        'Example: -v xlabel=frames ylabel=RMSD color=red.'
-        ),
-    nargs='*',
-    action=libcli.ParamsToDict,
     )
 
 
@@ -114,7 +63,7 @@ def main(
         start=None,
         stop=None,
         step=None,
-        frame=None,
+        ref_frame=None,
         plotvars=None,
         **kwargs
         ):
@@ -137,8 +86,8 @@ def main(
 
     distances = np.ones(len(u.trajectory[frame_slice]), dtype=np.float32)
     
-    if frame is not None:
-        u.trajectory[int(frame)]
+    if ref_frame is not None:
+        u.trajectory[int(ref_frame)]
         reference_cog = copy.deepcopy(atom_sel1.center_of_geometry())
 
     log.info(T('Calculating distances'))
@@ -146,7 +95,7 @@ def main(
     # https://www.mdanalysis.org/docs/documentation_pages/core/groups.html#MDAnalysis.core.groups.AtomGroup.center_of_geometry
     for i, ts in enumerate(u.trajectory[frame_slice]):
 
-        if frame is None:
+        if ref_frame is None:
             reference_cog = atom_sel1.center_of_geometry()
 
         distances[i] = np.linalg.norm(

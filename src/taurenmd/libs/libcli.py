@@ -65,7 +65,8 @@ class ParamsToDict(argparse.Action):
                     except (ValueError, TypeError):  # is string or list
                         param_dict[k] = bool_value.get(v.lower(), v)
             
-        setattr(namespace, self.dest, param_dict)
+        setattr(namespace, 'plotvars', param_dict)
+        setattr(namespace, self.dest, True)
 
 
 def save_command(fname, *args):
@@ -120,13 +121,17 @@ def add_subparser(parser, module):
 
 
 # arguments list
+# d: trajectory output
 # e: slice stop
-# f: reference frame
+# g: atom selections
 # l: selection
+# o: topology output
 # p: slice step
+# r: reference frame
 # s: slice start
 # t: framelist
 # v: plot
+# x: export data to table
 # z: plane selection
 
 
@@ -148,6 +153,8 @@ def add_top_argument(parser):
 def add_traj_argument(parser):
     """
     Add trajectory positional argument to parser.
+    
+    Accepts multiple trajectory files.
 
     Parameters
     ----------
@@ -162,6 +169,22 @@ def add_traj_argument(parser):
             'trajectories will be concatenated by input order.'
             ),
         nargs='+',
+        )
+
+def add_single_traj_argument(parser):
+    """
+    Add trajectory positional argument to parser.
+    
+    Accepts a single trajectory file.
+    
+    Parameters
+    ----------
+    parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
+        The argument parser to add the trajectory positionl argument.
+    """
+    parser.add_argument(
+        'trajectory',
+        help='Path to the trajectory file.',
         )
 
 
@@ -243,6 +266,35 @@ def add_selection_argument(parser):
         )
 
 
+def add_selections_argument(parser):
+    """
+    Add selections optional argument.
+
+    Selections argument is a string that defines a list of atom selections,
+    this is defined by ``-g`` and ``--selections``, and defaults to ``all``.
+
+    Parameters
+    ----------
+    parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
+        The argument parser to which add the selections argument.
+    """
+    parser.add_argument(
+        '-g',
+        '--selections',
+        help=(
+            'List of atom selections to operate with. '
+            'Selection rules are as defined by the MD analysis '
+            'library used by the client interface. '
+            'For instructions read the main command-line client description. '
+            'Defaults to None, uses a single selection considering all '
+            'atoms. '
+            "Example: -g 'segid A' 'segid B' 'name CA'"
+            ),
+        default=None,
+        nargs='+',
+        )
+
+
 def add_flist_argument(parser):
     """
     Adds frame list argument.
@@ -303,7 +355,7 @@ def add_reference_frame(parser):
     Depending on the client logic the reference frame might have different
     meanings.
 
-    Is defined by ``-f`` and ``--ref-frame``.
+    Is defined by ``-r`` and ``--ref-frame``.
 
     Defaults to ``0``.
 
@@ -313,7 +365,7 @@ def add_reference_frame(parser):
         The argument parser to which add the refence-frame argument.
     """
     parser.add_argument(
-        '-f',
+        '-r',
         '--ref-frame',
         help=(
             'The frame in the trajectory that serves as '
@@ -344,7 +396,7 @@ def add_plot_params(parser):
         '-v',
         '--plot',
         help=(
-            'Plot results. ',
+            'Plot results. '
             'Additional arguments can be given to configure the plot '
             'style. '
             'Example: -v xlabel=frames ylabel=RMSD color=red.'
@@ -354,6 +406,79 @@ def add_plot_params(parser):
             'Defaults to ``None``, no plot is produced.'
             ),
         nargs='*',
-        default=None,
+        default=False,
         action=ParamsToDict,
+        )
+
+def add_topout_arg(parser):
+    """
+    Add argument to export first frame as topology PDB file.
+
+    Defined by ``-o`` and ``--top-output``.
+
+    Parameters
+    ----------
+    parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
+        The argument parser to which add the topology output argument.
+    """
+    parser.add_argument(
+        '-o',
+        '--top-output',
+        help=(
+            'File name to save the first frame of the imaged trajectory. '
+            'If name starts with \'_\', it is used as suffix. '
+            ' Defaults to input trajectory path + \'_frame0.pdb\'.'
+            ),
+        default=False,
+        const='_frame0.pdb',
+        nargs='?',
+        )
+
+
+def add_trajout_arg(parser):
+    """
+    Add argument to export trajectory after client modifications.
+
+    Defined by ``-d`` and ``--traj-output``.
+
+    Parameters
+    ----------
+    parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
+        The argument parser to which add the trajectory output argument.
+    """
+    parser.add_argument(
+        '-d',
+        '--traj-output',
+        help=(
+            'Modified trajectory output file name. '
+            'File type will be defined by file name extension. '
+            'Defaults to traj_out.dcd.'
+            ),
+        default='traj_out.dcd',
+        )
+
+def add_export_arg(parser):
+    """
+    Add export argument.
+
+    Export argument configures data export to a text file in table format.
+
+    Is defined by ``-x`` and ``--export``.
+
+    Parameters
+    ----------
+    parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
+        The argument parser to which add the export argument.
+    """
+    parser.add_argument(
+        '-x',
+        '--export',
+        help=(
+            'Export calculated values to a CSV file. '
+            'Defaults to results.csv, alternatively, '
+            'you can give a specific file name.'
+            ),
+        default=False,
+        const='rmsd.csv',
+        nargs='?',
         )
