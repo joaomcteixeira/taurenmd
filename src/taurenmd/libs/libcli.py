@@ -35,10 +35,9 @@ class ParamsToDict(argparse.Action):
         >>> {'par1': 1, 'par2': 'my name', 'par3': [1, 2, 3]}
 
     """
-    
-    def __call__(self, parser, namespace, values, option_string=None):
-        """Executes."""
 
+    def __call__(self, parser, namespace, values, option_string=None):
+        """Execute."""
         bool_value = {
             'true': True,
             'false': False,
@@ -88,9 +87,10 @@ def save_command(fname, *args):
                 )
             )
 
+
 def add_subparser(parser, module):
     """
-    Adds a subcommand to a parser.
+    Add a subcommand to a parser.
 
     Parameters
     ----------
@@ -101,10 +101,11 @@ def add_subparser(parser, module):
         A python module containing the characteristics of a taurenmd
         client interface. Client interface modules require the following
         attributes: ``__doc__`` which feeds the `description argument <https://docs.python.org/3/library/argparse.html#description>`_
-        of `add_parser <https://docs.python.org/3/library/argparse.html#other-utilities>`_, ``_help`` which feeds `help <https://docs.python.org/3/library/argparse.html#help>`_, ``ap``
-        which is an `ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_, and a ``main`` function,
-        which executes the main logic of the interface.
-    """
+        of `add_parser <https://docs.python.org/3/library/argparse.html#other-utilities>`_,
+        ``_help`` which feeds `help <https://docs.python.org/3/library/argparse.html#help>`_,
+        ``ap`` which is an `ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_,
+        and a ``main`` function, which executes the main logic of the interface.
+    """  # noqa: E501
     new_ap = parser.add_parser(
         module._name,
         description=module.__doc__,

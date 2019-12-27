@@ -45,7 +45,7 @@ import argparse
 import numpy as np
 
 from taurenmd import log
-from taurenmd.libs import libcalc, libcli, libio, libmda, libutil  # noqa: F401
+from taurenmd.libs import libcalc, libcli, libio, libmda  # noqa: F401
 from taurenmd.logger import S, T
 
 _help = 'Calculates angular rotations across axes.'
@@ -131,7 +131,7 @@ def main(
     u = libmda.mda_load_universe(topology, *list(trajectory))
 
     log.info(T('transformation'))
-    fSlice = libutil.frame_slice(start=start, stop=stop, step=step)
+    fSlice = libio.frame_slice(start=start, stop=stop, step=step)
     
     pABC_atomG = u.select_atoms(origin_selection)
     ABC_selections = [sel.strip() for sel in origin_selection.split('or')]
@@ -210,11 +210,20 @@ def main(
             ts_plane_cross,
             )
 
-        roll_minimum = libcalc.calc_minimum_Qdistances(roll_Qs_tuples, pA_cog)
-        pitch_minimum = \
-            libcalc.calc_minimum_Qdistances(pitch_Qs_tuples, ref_plane_normal)
-        yaw_minimum = \
-            libcalc.calc_minimum_Qdistances(yaw_Qs_tuples, ref_plane_cross)
+        roll_minimum = libcalc.sort_by_minimum_Qdistances(
+            roll_Qs_tuples,
+            pA_cog,
+            )[0][0]
+
+        pitch_minimum = libcalc.sort_by_minimum_Qdistances(
+            pitch_Qs_tuples,
+            ref_plane_normal,
+            )[0][0]
+
+        yaw_minimum = libcalc.sort_by_minimum_Qdistances(
+            yaw_Qs_tuples,
+            ref_plane_cross,
+            )[0][0]
         
         roll_angles.append(round(roll_minimum.degrees, 3))
         pitch_angles.append(round(pitch_minimum.degrees, 3))

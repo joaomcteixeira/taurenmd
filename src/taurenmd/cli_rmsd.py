@@ -8,7 +8,7 @@ import numpy as np
 from bioplottemplates.plots import param
 
 from taurenmd import Path, log  # noqa: F401
-from taurenmd.libs import libcalc, libcli, libmda, libutil
+from taurenmd.libs import libcalc, libcli, libmda, libio
 from taurenmd.logger import S, T
 
 _help = 'Calculates and plots RMSDs.'
@@ -137,7 +137,7 @@ def main(
     
     u = libmda.mda_load_universe(topology, *list(trajectory))
     
-    frame_slice = libutil.frame_slice(
+    frame_slice = libio.frame_slice(
         start=start,
         stop=stop,
         step=step,

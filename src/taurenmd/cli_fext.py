@@ -4,7 +4,7 @@ Extracts frames to PDB files.
 import argparse
 
 from taurenmd import Path, log
-from taurenmd.libs import libcli, libmda, libutil
+from taurenmd.libs import libcli, libmda, libio
 from taurenmd.logger import S
 
 _help = 'Extracts single frames from trajectory.'
@@ -116,7 +116,7 @@ def main(
     
     u = libmda.mda_load_universe(topology, *list(trajectory))
     
-    frames_to_extract = libutil.frame_list(
+    frames_to_extract = libio.frame_list(
         len(u.trajectory),
         start=start,
         stop=stop,

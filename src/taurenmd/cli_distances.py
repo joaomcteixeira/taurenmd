@@ -8,7 +8,7 @@ import numpy as np
 from bioplottemplates.plots import param
 
 from taurenmd import log
-from taurenmd.libs import libcli, libio, libmda, libutil  # noqa: F401
+from taurenmd.libs import libcli, libio, libmda  # noqa: F401
 from taurenmd.logger import S, T
 
 _help = 'Calculates distances between geometric centres of selections. '
@@ -122,7 +122,7 @@ def main(
 
     u = libmda.mda_load_universe(topology, *list(trajectory))
 
-    frame_slice = libutil.frame_slice(
+    frame_slice = libio.frame_slice(
         start=start,
         stop=stop,
         step=step,

@@ -23,7 +23,7 @@ from taurenmd.libs import libio
 
 def load_traj(topology, trajectory):
     """
-    Loads trajectory with `MDTraj <http://mdtraj.org/1.9.3/index.html>`_.
+    Load trajectory with `MDTraj <http://mdtraj.org/1.9.3/index.html>`_.
     
     Uses `mdtraj.load <http://mdtraj.org/1.9.3/api/generated/mdtraj.load.html?highlight=load#mdtraj.load>`_.
     
@@ -38,13 +38,13 @@ def load_traj(topology, trajectory):
         Path to the topology file. Accepts MDTraj compatible `topology files <http://mdtraj.org/1.9.3/load_functions.html#trajectory-reference>`_. mmCIF format is loaded using `OpenMM <http://mdtraj.org/1.9.3/api/generated/mdtraj.Topology.html?highlight=from_openmm#mdtraj.Topology.from_openmm>`_.
 
     trajectory : str or Path
-        Path to the trajectory file. Accepts MDTraj compatible `files <http://mdtraj.org/1.9.3/load_functions.html#trajectory-reference>`_ 
+        Path to the trajectory file. Accepts MDTraj compatible `files <http://mdtraj.org/1.9.3/load_functions.html#trajectory-reference>`_
 
     Returns
     -------
     MDTraj trajectory
         `Trajectory object <http://mdtraj.org/1.9.3/api/generated/mdtraj.Trajectory.html#mdtraj-trajectory>`_.
-    """
+    """  # noqa: E501
     libio.report_input(topology, trajectory)
 
     topp = Path(topology)

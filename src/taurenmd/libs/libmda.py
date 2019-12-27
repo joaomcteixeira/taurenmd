@@ -20,8 +20,8 @@ from taurenmd.logger import S, T
 
 def load_universe(topology, *trajectories):
     """
-    Load MDAnalysis universe from topology and list of trajectories.
-    
+    Load MDAnalysis universe.
+
     Accepts MDAnalysis compatible `topology formats`_ and
     `trajectory formats`_. Read further on the `MDAnalysis Universe`_.
 
@@ -53,7 +53,7 @@ def load_universe(topology, *trajectories):
     Return
     ------
     MDAnalysis Universe
-    """
+    """  # noqa: E501 D412
     libio.report_input(topology, trajectories)
     universe = mda.Universe(topology, trajectories)
     report(universe)
@@ -79,7 +79,7 @@ def report(universe):
     -------
     None
 
-    """
+    """  # noqa: E501
     log.info(T('Reporting'))
     log.info(S('number of frames: {}', len(universe.trajectory)))
     log.info(S('number of atoms: {}', len(universe.atoms)))
@@ -107,8 +107,7 @@ def draw_atom_label_from_atom_group(atom_group):
     list of strings
         Containing the atom string representation for each atom in
         the Atom Group.
-    """
-
+    """  # noqa: E501
     labels = []
     for atom in atom_group:
         s = '{}.{}{}.{}'.format(

@@ -85,7 +85,7 @@ def export_data_to_file(
         delimiter=',',
         ):
     """
-    Saves data to file.
+    Save data to file.
 
     Following the format:
 
@@ -242,7 +242,7 @@ def evaluate_to_slice(*, value=None, start=None, stop=None, end=None):
     ------
     ValueError
         If slice can not be computed.
-    """
+    """  # noqa: E501
     if any((start, stop, end)):
         return slice(start, stop, end)
 
@@ -284,4 +284,3 @@ def evaluate_to_slice(*, value=None, start=None, stop=None, end=None):
 
     else:
         raise ValueError('slice object could not be generated')
-
