@@ -20,7 +20,7 @@ When using these functions, you should always cite taurenmd together
 with the other library(ies) used. `Read our citing reference page`_.
 
 .. _Read our citing reference page: https://taurenmd.readthedocs.io/en/latest/citing.html
-"""
+"""  # noqa: E501
 import math
 
 import numpy as np
@@ -40,7 +40,7 @@ def mda_rmsd(
         ref_frame=0,
         ):
     """
-    Calculates RMSDs observed for a selection.
+    Calculate RMSDs observed for a selection.
     
     Uses `MDAnalysis RMSD <https://www.mdanalysis.org/docs/documentation_pages/analysis/rms.html?highlight=rmsd#MDAnalysis.analysis.rms.RMSD>`_.
 
@@ -88,7 +88,7 @@ def mda_rmsd(
 
     MDAnalysis Exceptions
         Any exceptions that could come from MDAnalysis RMSF computation.
-    """
+    """  # noqa: E501
     log.info(T('Calculating RMSDs'))
     
     frame_slice = libio.evaluate_to_slice(value=frame_slice)
@@ -117,7 +117,7 @@ def mda_rmsf(
         frame_slice=None,
         ):
     """
-    Calculates RMSFs.
+    Calculate RMSFs.
 
     Uses `MDAnalysis RMSF <https://www.mdanalysis.org/docs/documentation_pages/analysis/rms.html?highlight=rmsd#MDAnalysis.analysis.rms.RMSF>`_.
 
@@ -140,7 +140,7 @@ def mda_rmsf(
     ------
     MDAnalysis Exceptions
         Any exceptions that could come from MDAnalysis RMSF computation.
-    """
+    """  # noqa: E501
     log.info(T('Calculating RMSFs'))
    
     frame_slice = libio.evaluate_to_slice(value=frame_slice)
@@ -162,7 +162,7 @@ def mda_rmsf(
 
 def calc_plane_normal(p1, p2, p3):
     """
-    Calculates the normal vector for the (p1, p2, p3) plane.
+    Calculate the normal vector for the (p1, p2, p3) plane.
 
     Given 3 XYZ space coordinate points, calculates the normal vector
     of the plane defined by those points.
@@ -202,7 +202,7 @@ def calc_plane_eq(p1, p2, p3):
         .. math::
         
             ax + by + cz = d
-    """
+    """  # noqa: E501
     cp = calc_plane_normal(p1, p2, p3)
     a, b, c = cp
     d = np.dot(cp, p3)
@@ -211,7 +211,7 @@ def calc_plane_eq(p1, p2, p3):
 
 def calc_planes_angle(a1, b1, c1, a2, b2, c2):
     """
-    Calculates the angle between two planes.
+    Calculate the angle between two planes.
 
     Plane 1 is defined by a1, b1, c1 plane parameters,
     plane 2 is defined by a2, b2, c2, where:
@@ -233,7 +233,7 @@ def calc_planes_angle(a1, b1, c1, a2, b2, c2):
     -------
     float
         The angle between plane 1 and plane 2 in degrees.
-    """
+    """  # noqa: E501
     d = (a1 * a2 + b1 * b2 + c1 * c2)
     e1 = math.sqrt(a1 * a1 + b1 * b1 + c1 * c1)
     e2 = math.sqrt(a2 * a2 + b2 * b2 + c2 * c2)
@@ -286,7 +286,7 @@ def generate_quaternion_rotations(
         ``np.linspace(start, end, num=num)`` and tuple elements
         are the rotation quatertion used to rotate ``rotation_vector``
         and the resulting rotated vector in its unitary form.
-    """
+    """  # noqa: E501
     vec_u = Q(vector=rotating_vector).unit
     rot_u = Q(vector=rotation_axis).unit
 
