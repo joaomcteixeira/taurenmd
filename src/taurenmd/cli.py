@@ -14,6 +14,7 @@ Why does this file exist, and why not put this in __main__?
 
   Also see (1) from http://click.pocoo.org/5/setuptools/#setuptools-integration
 """
+import argparse
 import sys
 
 import taurenmd.cli_angle as cli_angle
@@ -30,8 +31,10 @@ from taurenmd import CMDFILE, log
 from taurenmd.libs import libcli
 
 
-ap = libcli.CustomParser(description=__doc__)
-subparsers = ap.add_subparsers(title='TAURENMD SUBROUTINES')
+ap = libcli.CustomParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+subparsers = ap.add_subparsers(
+    title='TAURENMD SUBROUTINES',
+    )
 
 libcli.add_subparser(subparsers, cli_angle)
 libcli.add_subparser(subparsers, cli_dist)

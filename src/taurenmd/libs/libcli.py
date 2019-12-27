@@ -16,8 +16,9 @@ class CustomParser(argparse.ArgumentParser):
     
     def error(self, message):
         """Present error message."""
-        sys.stderr.write('error: %s\n' % message)
-        self.print_help()
+        sys.stderr.write(self.format_help())
+        sys.stderr.write('*** INPUT ERROR: {}\n'.format(message))
+        sys.stderr.write('*** read the usage details above\n')
         sys.exit(2)
 
 
@@ -112,6 +113,7 @@ def add_subparser(parser, module):
         help=module._help,
         parents=[module.ap],
         add_help=False,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
         )
 
     new_ap.set_defaults(func=module.main)
