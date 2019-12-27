@@ -10,7 +10,7 @@ from datetime import datetime
 
 from bioplottemplates.plots import label_dots
 
-from taurenmd import Path, log  # noqa: F401
+from taurenmd import CMDFILE, Path, log  # noqa: F401
 from taurenmd.libs import libcalc, libcli, libmda, libio
 from taurenmd.logger import S, T
 
@@ -19,7 +19,7 @@ _name = 'rmsf'
 
 ap = libcli.CustomParser(
     description=__doc__,
-    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
 ap.add_argument(
@@ -104,6 +104,7 @@ def load_args():
 def maincli():
     """Main client call."""
     cmd = load_args()
+    libcli.save_command(CMDFILE, *sys.argv)
     main(**vars(cmd))
     return
 

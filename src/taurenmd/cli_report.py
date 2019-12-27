@@ -3,7 +3,7 @@ Report on trajectory characteristics.
 """
 import argparse
 
-from taurenmd import log
+from taurenmd import CMDFILE, log
 from taurenmd.libs import libcli, libmda
 
 _help = 'Reports on trajectory details.'
@@ -36,6 +36,7 @@ def load_args():
 
 def maincli():
     cmd = load_args()
+    libcli.save_command(CMDFILE, *sys.argv)
     main(**vars(cmd))
     return
 

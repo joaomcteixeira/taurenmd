@@ -57,7 +57,6 @@ def load_args():
 
 
 def maincli():
-    libcli.save_command(CMDFILE, *sys.argv)
 
     if len(sys.argv) < 2:
         ap.print_help()
@@ -65,6 +64,8 @@ def maincli():
 
     args = load_args()
     log.debug(args)
+
+    libcli.save_command(CMDFILE, *sys.argv)
     args.func(**vars(args))
 
 

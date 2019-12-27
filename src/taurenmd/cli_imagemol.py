@@ -1,8 +1,9 @@
 """
 Attempt image molecule with mdtraj.
 """
+import argparse
 
-from taurenmd import Path, log
+from taurenmd import CMDFILE, Path, log
 from taurenmd.libs import libcli, libio, libmdt
 from taurenmd.logger import S, T
 
@@ -11,8 +12,10 @@ _name = 'imagemol'
 
 _TRAJOUTPUT = 'production_imaged.dcd'
 
-
-ap = libcli.CustomParser()
+ap = libcli.CustomParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        )
 
 ap.add_argument(
     'topology',
@@ -57,6 +60,7 @@ def load_args():
 
 def maincli():
     cmd = load_args()
+    libcli.save_command(CMDFILE, *sys.argv)
     main(**vars(cmd))
 
 

@@ -3,15 +3,14 @@ Does something.
 """
 import argparse
 
-from taurenmd import log
+from taurenmd import CMDFILE, log
 from taurenmd.libs import libcli, libio  # noqa: F401
 from taurenmd.logger import S, T
 
 
 ap = libcli.CustomParser(
     description=__doc__,
-    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-    # formatter_class=argparse.RawDescriptionHelpFormatter,
+    formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
 ap.add_argument(
@@ -38,6 +37,7 @@ def load_args():
 
 def maincli():
     cmd = load_args()
+    libcli.save_command(CMDFILE, *sys.argv)
     main(**vars(cmd))
     return
 

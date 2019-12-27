@@ -1,13 +1,18 @@
 """
 Copies the trajectory without solvent and extracts the first frame.
 """
+import argparse
 
+from taurenmd import CMDFILE
 from taurenmd.libs import libcli, libmdt
 
 _help = 'Removes solvent and extracts first frame'
 _name = 'noSol'
 
-ap = libcli.CustomParser()
+ap = libcli.CustomParser(
+    description=__doc__,
+    formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
 
 ap.add_argument(
     'topology',
@@ -40,8 +45,8 @@ def load_args():
 
 
 def maincli():
-    
     cmd = load_args()
+    libcli.save_command(CMDFILE, *sys.argv)
     main(**vars(cmd))
 
 

@@ -47,7 +47,7 @@ Examples
 """
 import argparse
 
-from taurenmd import Path, log
+from taurenmd import CMDFILE, Path, log
 from taurenmd.libs import libcli, libmda, libio
 from taurenmd.logger import S
 
@@ -89,6 +89,7 @@ def load_args():
 def maincli():
     """Execute as main client."""
     cmd = load_args()
+    libcli.save_command(CMDFILE, *sys.argv)
     main(**vars(cmd))
     return
 
