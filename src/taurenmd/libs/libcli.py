@@ -115,3 +115,141 @@ def add_subparser(parser, module):
         )
 
     new_ap.set_defaults(func=module.main)
+
+
+def add_top_argument(parser):
+    """
+    Add topology positional argument to parser.
+
+    Parameters
+    ----------
+    parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
+        The argument parser to add the topology positionl argument.
+    """
+    parser.add_argument(
+        'topology',
+        help='Path to the topology file.',
+        type=str,
+        )
+
+def add_traj_argument(parser):
+    """
+    Add trajectory positional argument to parser.
+
+    Parameters
+    ----------
+    parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
+        The argument parser to add the trajectory positionl argument.
+    """
+    parser.add_argument(
+        'trajectory',
+        help=(
+            'Path to the trajectory files. '
+            'If multiple files are given, '
+            'trajectories will be concatenated by input order.'
+            ),
+        nargs='+',
+        )
+
+
+def add_slice_opt_arguments(parser):
+    """
+    Add start, stop and step slicing arguments.
+    
+    Slicing arguments are according to `Python Slice object <https://docs.python.org/3/library/functions.html#slice>`_
+
+    Parameters
+    ----------
+    parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
+        The argument parser to add the trajectory positionl argument.
+    """
+    parser.add_argument(
+        '-s',
+        '--start',
+        help=(
+            'The starting index for the frame slicing. '
+            'Frames are 0-indexed, so the first frame is -s 0. '
+            'The starting index is inclusive. '
+            'Defaults to None, considers from the beginning.'
+            ),
+        default=None,
+        type=int,
+        )
+
+    parser.add_argument(
+        '-e',
+        '--stop',
+        help=(
+            'The ending index for the frame slicing. '
+            'Frames are 0-indexed, so the last frame of a 500 frame '
+            'trajectory is index 499, but because '
+            'the ending index is exclusive, -e 500 is required. '
+            'Defaults to None, considers to the end.'
+            ),
+        default=None,
+        type=int,
+        )
+
+    parser.add_argument(
+        '-p',
+        '--step',
+        help=(
+            'The periodicity step value for the frame slicing, '
+            '-p 10 means every 10 frames. '
+            'Defaults to None, considers every 1 frame.'
+            ),
+        default=None,
+        type=int,
+        )
+
+
+def add_selection_argument(parser):
+    """
+    Adds selection optional argument.
+
+    Selection argument is a string that defines the atom selection,
+    this is defined by ``-l`` and ``--selection``, and defaults to ``all``.
+
+    Parameters
+    ----------
+    parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
+        The argument parser to which add the selection argument.
+    """
+    parser.add_argument(
+        '-l',
+        '--selection',
+        help=(
+            'Atom selection for the output trajectory. '
+            'Selection rules are as defined by the MD analysis '
+            'library used by the client interface. '
+            'For instructions read the main command-line client description. '
+            'Defaults to \'all\'.'
+            ),
+        default='all',
+        type=str,
+        )
+
+
+def add_flist_argument(parser):
+    """
+    Adds frame list argument.
+
+    Registers a list of frame numbers, is defined by ``-t`` and ``--flist``.
+
+    Parameters
+    ----------
+    parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
+        The argument parser to which add the flist argument.
+    """
+    parser.add_argument(
+        '-t',
+        '--flist',
+        help=(
+            'List of frames (time steps) to consider.'
+            'If applicable, this can used instead of the start, stop '
+            'and step slicing arguments.'
+            ),
+        default=False,
+        nargs='+',
+        )
+

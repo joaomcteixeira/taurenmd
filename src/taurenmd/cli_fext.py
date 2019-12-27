@@ -1,5 +1,49 @@
 """
-Extracts frames to PDB files.
+Extract trajectory frames to individual files.
+
+Normally used to extract frames to PDB topology files so those can
+be inspected independently.
+
+This client interface uses `MDAnalysis library <https://www.mdanalysis.org/>`_,
+refer to our `Citing` page for instructions on how to cite.
+
+.. note::
+
+    Frame number is 0-indexed.
+
+Examples
+--------
+
+    Extracts frames 11 to 49 (inclusive), remember frames index start
+    at 0:
+
+    >>> taurenmd fext topology.pdb trajectory.dcd -s 10 -e 50
+
+    Extracts the first frame:
+
+    >>> taurenmd fext topology.pdb trajectory.dcd -flist 0
+
+    Extracts a selection of frames:
+
+    >>> taurenmd fext topology.pdb trajectory.dcd -flist 0,10,23,345
+
+    Frame file types can be specified:
+
+    >>> taurenmd fext topology.pdb trajectory.dcd -p 10 -x .dcd
+
+    Atom selection can be specified as well, the following extracts
+    only the 'segid A' atom region of the first frame. Selection rules
+    are as decribed for `MDAnalysis selection <https://www.mdanalysis.org/docs/documentation_pages/selections.html>`_
+
+    >>> taurenmd fext topology.pdb trajectory.xtc -flist 0 -l 'segid A'
+
+    Multiple trajectories can be given, they will be contatenated:
+
+    >>> taurenmd fext top.pdb traj1.xtc traj2.xtc traj3.xtc -p 10
+
+    Can also be used as main command:
+
+    >>> tmdfext topology.pdb ...
 """
 import argparse
 
@@ -12,56 +56,14 @@ _name = 'fext'
 
 ap = libcli.CustomParser(
     description=__doc__,
-    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-    # formatter_class=argparse.RawDescriptionHelpFormatter,
+    formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-ap.add_argument(
-    'topology',
-    help='Topology file.',
-    type=str,
-    )
-
-ap.add_argument(
-    'trajectory',
-    help=(
-        'Trajectory files. If given, multiple trajectories will be'
-        'contactenated by order.'
-        ),
-    nargs='+',
-    )
-
-ap.add_argument(
-    '-s',
-    '--start',
-    help='Start frame for slicing.',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-e',
-    '--stop',
-    help='Stop frame for slicing: exclusive',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-p',
-    '--step',
-    help='Step value for slicing',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-t',
-    '--flist',
-    help='List of frames (time steps) to extract.',
-    default=False,
-    nargs='+',
-    )
+libcli.add_top_argument(ap)
+libcli.add_traj_argument(ap)
+libcli.add_slice_opt_arguments(ap)
+libcli.add_selection_argument(ap)
+libcli.add_flist_argument(ap)
 
 ap.add_argument(
     '-f',
@@ -77,17 +79,6 @@ ap.add_argument(
     default='.pdb',
     )
 
-ap.add_argument(
-    '-l',
-    '--selection',
-    help=(
-        'Atom selection for the output trajectory. '
-        'Read: https://www.mdanalysis.org/docs/documentation_pages/selections.html'  # noqa: E501
-        ),
-    default='all',
-    type=str,
-    )
-
 
 def load_args():
     """Load user arguments."""
@@ -96,6 +87,7 @@ def load_args():
 
 
 def maincli():
+    """Execute as main client."""
     cmd = load_args()
     main(**vars(cmd))
     return
@@ -112,9 +104,10 @@ def main(
         ext='pdb',
         selection='all',
         **kwargs):
+    """Execute main client logic."""
     log.info('Starting...')
     
-    u = libmda.mda_load_universe(topology, *list(trajectory))
+    u = libmda.load_universe(topology, *list(trajectory))
     
     frames_to_extract = libio.frame_list(
         len(u.trajectory),
