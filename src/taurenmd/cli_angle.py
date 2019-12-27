@@ -11,7 +11,7 @@ from taurenmd import CMDFILE, log
 from taurenmd.libs import libcalc, libcli, libmda, libio
 from taurenmd.logger import S, T
 
-_help='Calculates the angle between a plane along the trajectory'
+_help='Calculates the angle between a plane along the trajectory.'
 _name='angle'
 
 ap = libcli.CustomParser(
@@ -19,75 +19,12 @@ ap = libcli.CustomParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-ap.add_argument(
-    'topology',
-    help='Topology file.',
-    type=str,
-    )
-
-ap.add_argument(
-    'trajectory',
-    help=(
-        'Trajectory files. If given, multiple trajectories will be'
-        'contactenated by order.'
-        ),
-    nargs='+',
-    )
-
-ap.add_argument(
-    '-l',
-    '--plane-selection',
-    help=(
-        'Three selections which center of geometry defines the '
-        'the plane. For example: \'segid A\' \'segidB \' \'segid C\'.'
-        ' The angle will be calculated between this plane along the trajectory '
-        ' to the reference frame.'
-        ),
-    nargs=3
-    )
-
-ap.add_argument(
-    '-f',
-    '--frame',
-    help='Calc distances to a frame instead of relative along traj.',
-    default=0,
-    type=int,
-    )
-
-ap.add_argument(
-    '-s',
-    '--start',
-    help='Start frame for slicing.',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-e',
-    '--stop',
-    help='Stop frame for slicing: exclusive',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-p',
-    '--step',
-    help='Step value for slicing',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-v',
-    '--plotvars',
-    help=(
-        'Plot variables. '
-        'Example: -v xlabel=frames ylabel=RMSD color=red.'
-        ),
-    nargs='*',
-    action=libcli.ParamsToDict,
-    )
+libcli.add_top_argument(ap)
+libcli.add_traj_argument(ap)
+libcli.add_slice_opt_arguments(ap)
+libcli.add_plane_selection(ap)
+libcli.add_reference_frame(ap)
+libcli.add_plot_params(ap)
 
 
 def load_args():
@@ -125,8 +62,9 @@ def main(
         )
     log.info(S('for slice {}', frame_slice))
 
-    log.info(T('calculating plane eq. for first frame'))
-    u.trajectory[0]
+    log.info(T('calculating plane eq. for reference frame'))
+    log.info(S('using frame: {}', frame))
+    u.trajectory[frame]
     reference_point_1 = u.select_atoms(plane_selection[0]).center_of_geometry()
     reference_point_2 = u.select_atoms(plane_selection[1]).center_of_geometry()
     reference_point_3 = u.select_atoms(plane_selection[2]).center_of_geometry()

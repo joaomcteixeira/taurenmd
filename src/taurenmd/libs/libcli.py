@@ -119,6 +119,17 @@ def add_subparser(parser, module):
     new_ap.set_defaults(func=module.main)
 
 
+# arguments list
+# e: slice stop
+# f: reference frame
+# l: selection
+# p: slice step
+# s: slice start
+# t: framelist
+# v: plot
+# z: plane selection
+
+
 def add_top_argument(parser):
     """
     Add topology positional argument to parser.
@@ -255,3 +266,94 @@ def add_flist_argument(parser):
         nargs='+',
         )
 
+def add_plane_selection(parser):
+    """
+    Adds plane selection argument.
+
+    Plane selection is a selection of three regions separated by 'or'
+    operator.
+    
+    Is defined by ``-z`` and ``--plane-selection``.
+
+    Parameters
+    ----------
+    parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
+        The argument parser to which add the plane-selection argument.
+    """
+    parser.add_argument(
+        '-z',
+        '--plane-selection',
+        help=(
+            'A selection string representing three atom regions, '
+            'separated by \'or\' operator. '
+            'The plane is defined by the three centres of geometry '
+            'of the three selections. For example: '
+            '-h \'segid A or segid B  or segid C\'.'
+            ),
+        nargs=3
+        )
+
+
+def add_reference_frame(parser):
+    """
+    Adds a reference frame argument.
+
+    Reference frame is the frame to compute the parameter against.
+
+    Depending on the client logic the reference frame might have different
+    meanings.
+
+    Is defined by ``-f`` and ``--ref-frame``.
+
+    Defaults to ``0``.
+
+    Parameters
+    ----------
+    parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
+        The argument parser to which add the refence-frame argument.
+    """
+    parser.add_argument(
+        '-f',
+        '--ref-frame',
+        help=(
+            'The frame in the trajectory that serves as '
+            'reference to compute against.'
+            'Defaults to 0.'
+            ),
+        default=0,
+        type=int,
+        )
+
+def add_plot_params(parser):
+    """
+    Adds plot parameters.
+
+    Plot kwargs that will be passed to the plotting function.
+
+    Defined by ``-v`` and ``--plot``.
+
+    If given, plot results. Additional arguments can be given to
+    specify the plot parameters.
+
+    Parameters
+    ----------
+    parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
+        The argument parser to which add the plot argument.
+    """
+    parser.add_argument(
+        '-v',
+        '--plot',
+        help=(
+            'Plot results. ',
+            'Additional arguments can be given to configure the plot '
+            'style. '
+            'Example: -v xlabel=frames ylabel=RMSD color=red.'
+            'Accepted plot arguments are defined by the function used '
+            'to plot the result. The main description of this client '
+            'which plotting function is used. '
+            'Defaults to ``None``, no plot is produced.'
+            ),
+        nargs='*',
+        default=None,
+        action=ParamsToDict,
+        )
