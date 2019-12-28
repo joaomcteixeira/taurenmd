@@ -1,19 +1,56 @@
 """
-Module that contains the command line app.
+Usage Examples
+==============
+To access to the complete list of *taurenmd commands* with a summary
+information for each, execute:
 
-Why does this file exist, and why not put this in __main__?
+    >>> taurenmd
 
-  You might be tempted to import things from __main__ later, but that will cause
-  problems: the code will get executed twice:
+Using ``trajedit`` as an example, lets inspect its functionality:
 
-  - When you run `python -mtaurenmd` python will execute
-    ``__main__.py`` as a script. That means there won't be any
-    ``taurenmd.__main__`` in ``sys.modules``.
-  - When you import __main__ it will get executed again (as a module) because
-    there's no ``taurenmd.__main__`` in ``sys.modules``.
+    >>> taurenmd trajedit -h
 
-  Also see (1) from http://click.pocoo.org/5/setuptools/#setuptools-integration
+With ``trajedit`` you can edit a trajectory in many different ways.
+For example, convert a trajectory to another format:
+
+    >>> taurenmd trajedit topology.pdb trajectory.xtc -d new_trajectory.dcd
+
+The above command reads the original ``trajectory.xtc`` file and outputs
+the new ``new_trajectory.dcd``. You can also use ``trajedit`` to reduce
+the trajectory size, say by slicing every 10 frames:
+
+    >>> taurenmd trajedit topology.pdb trajetory.xtc -d traj_p10.xtc -p 10
+
+the ``-p`` option refers to the slicing step size, in this case ``10`` -
+reads every 10 frames. Likewise, you can pass a *start* (``-s``) and an
+*end* (``-e``) arguments:
+
+    >>> taurenmd trajedit topology.pdb trajectory.xtc -d traj_s50_e500_p10.xtc -s 50 -e 500 -p 10
+
+Also, you can extract an Atom Selection from a trajectory to a new trajectory
+file. The example bellow creates a new trajectory from the input one containing
+only atoms belonging to chain A. In cases like this it is useful to extract
+the atom selection as an independent topology file.
+
+    >>> taurenmd trajedit top.pdb traj.xtc -d chainA.xtc -o chainA_topology.pdb
+
+You can also use ``trajedit`` to extract a specific frame from a trajectory:
+
+    >>> taurenmd trajedit topology.pdb trajectory.xtc -d frame40.pdb -s 40 -e 41
+
+but, for this example, you could instead use the ``fext`` interface:
+
+    >>> taurenmd fext topology.pdb trajectory.xtc -f 40 -x .pdb -f frame_
+
+Each an every ``taurenmd`` sub command is available directly as a main
+routine by prefixing a ``tmd`` to its name, for example:
+
+    >>> taurenmd trajedit
+    >>> # equals to
+    >>> tmdtrajedit
 """
+# link to logo
+# http://patorjk.com/software/taag/#p=display&h=0&f=Epic&t=taurenmd
 import argparse
 import sys
 
@@ -27,12 +64,15 @@ import taurenmd.cli_rmsd as cli_rmsd
 import taurenmd.cli_rmsf as cli_rmsf
 import taurenmd.cli_rotations as cli_rot
 import taurenmd.cli_trajedit as cli_trajedit
-from taurenmd import log
+from taurenmd import _doc, log
 from taurenmd.libs import libcli
 from taurenmd.logger import CMDFILE
 
 
-ap = libcli.CustomParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+ap = libcli.CustomParser(
+    description=_doc + __doc__,
+    formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
 subparsers = ap.add_subparsers(
     title='taurenmd subroutines',
     )
@@ -61,6 +101,7 @@ def maincli():
 
     if len(sys.argv) < 2:
         ap.print_help()
+        ap.print_usage()
         ap.exit()
 
     args = load_args()
