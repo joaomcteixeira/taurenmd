@@ -61,9 +61,9 @@ ap = libcli.CustomParser(
 
 libcli.add_top_argument(ap)
 libcli.add_traj_argument(ap)
-libcli.add_slice_opt_arguments(ap)
 libcli.add_selection_argument(ap)
 libcli.add_flist_argument(ap)
+libcli.add_slice_opt_arguments(ap)
 
 ap.add_argument(
     '-f',

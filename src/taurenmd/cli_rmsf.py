@@ -24,9 +24,9 @@ ap = libcli.CustomParser(
 
 libcli.add_top_argument(ap)
 libcli.add_traj_argument(ap)
+libcli.add_selection_argument(ap)
 libcli.add_slice_opt_arguments(ap)
 libcli.add_export_arg(ap)
-libcli.add_selection_argument(ap)
 libcli.add_plot_params(ap)
 
 

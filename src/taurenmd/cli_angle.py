@@ -21,9 +21,9 @@ ap = libcli.CustomParser(
 
 libcli.add_top_argument(ap)
 libcli.add_traj_argument(ap)
-libcli.add_slice_opt_arguments(ap)
 libcli.add_plane_selection(ap)
 libcli.add_reference_frame(ap)
+libcli.add_slice_opt_arguments(ap)
 libcli.add_plot_params(ap)
 
 
