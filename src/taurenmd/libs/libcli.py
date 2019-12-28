@@ -336,13 +336,13 @@ def add_plane_selection(parser):
         '-z',
         '--plane-selection',
         help=(
-            'A selection string representing three atom regions, '
-            'separated by \'or\' operator. '
+            'Three selection strings representing three atom regions. '
             'The plane is defined by the three centres of geometry '
             'of the three selections. For example: '
-            '-h \'segid A or segid B  or segid C\'.'
+            '-z \'segid A\' \'segid B\'  \'segid C\'.'
             ),
-        nargs=3
+        required=True,
+        nargs=3,
         )
 
 
@@ -482,3 +482,5 @@ def add_export_arg(parser):
         const='rmsd.csv',
         nargs='?',
         )
+
+    

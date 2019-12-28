@@ -31,7 +31,6 @@ libcli.add_plot_params(ap)
 def load_args():
     """Load user arguments."""
     cmd = ap.parse_args()
-    input(cmd)
     return cmd
 
 

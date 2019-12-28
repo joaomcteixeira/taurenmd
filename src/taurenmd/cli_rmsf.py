@@ -22,82 +22,17 @@ ap = libcli.CustomParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-ap.add_argument(
-    'topology',
-    help='Topology file.',
-    type=str,
-    )
-
-ap.add_argument(
-    'trajectory',
-    help=(
-        'Trajectory files. If given, multiple trajectories will be'
-        'contactenated by order.'
-        ),
-    nargs='+',
-    )
-
-ap.add_argument(
-    '-s',
-    '--start',
-    help='Start frame for slicing.',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-e',
-    '--stop',
-    help='Stop frame for slicing: exclusive',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-p',
-    '--step',
-    help='Step value for slicing',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-x',
-    '--export',
-    help=(
-        'Export calculated RMSFs to CSV file. '
-        'If given defaults to rmsf.csv, alternatively, '
-        'you can give a specific file name.'
-        ),
-    default=False,
-    const='rmsf.csv',
-    nargs='?',
-    )
-
-ap.add_argument(
-    '-l',
-    '--selection',
-    help='The atom selection upon which calculate the RMSFs.',
-    type=str,
-    default=None,
-    )
-
-ap.add_argument(
-    '-v',
-    '--plotvars',
-    help=(
-        'Plot variables. '
-        'Example: -v xlabel=frames ylabel=RMSD color=red.'
-        ),
-    nargs='*',
-    action=libcli.ParamsToDict,
-    )
+libcli.add_top_argument(ap)
+libcli.add_traj_argument(ap)
+libcli.add_slice_opt_arguments(ap)
+libcli.add_export_arg(ap)
+libcli.add_selection_argument(ap)
+libcli.add_plot_params(ap)
 
 
 def load_args():
     """Load user arguments."""
     cmd = ap.parse_args()
-    input(cmd)
     return cmd
 
 
@@ -115,7 +50,7 @@ def main(
         start=None,
         stop=None,
         step=None,
-        selection=None,
+        selection='all',
         plotvars=None,
         export=False,
         **kwargs
@@ -130,8 +65,6 @@ def main(
         stop=stop,
         step=step,
         )
-   
-    selection = selection or 'all'
   
     labels = []
     rmsfs = []

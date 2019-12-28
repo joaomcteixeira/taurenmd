@@ -57,51 +57,10 @@ ap = libcli.CustomParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-ap.add_argument(
-    'topology',
-    help='Topology file.',
-    type=str,
-    )
-
-ap.add_argument(
-    'trajectory',
-    help=(
-        'Trajectory files. If given, multiple trajectories will be'
-        'contactenated by order.'
-        ),
-    nargs='+',
-    )
-
-ap.add_argument(
-    '--origin-selection',
-    help='The selection to define the plane',
-    required=True,
-    )
-
-
-ap.add_argument(
-    '-s',
-    '--start',
-    help='Start frame for slicing.',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-e',
-    '--stop',
-    help='Stop frame for slicing: exclusive',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-p',
-    '--step',
-    help='Step value for slicing',
-    default=None,
-    type=int,
-    )
+libcli.add_top_argument(ap)
+libcli.add_traj_argument(ap)
+libcli.add_plane_selection(ap)
+libcli.add_slice_opt_arguments(ap)
 
 
 def load_args():
@@ -120,7 +79,7 @@ def maincli():
 def main(
         topology,
         trajectory,
-        origin_selection,
+        plane_selection,
         start=None,
         stop=None,
         step=None,
@@ -134,7 +93,7 @@ def main(
     fSlice = libio.frame_slice(start=start, stop=stop, step=step)
     
     pABC_atomG = u.select_atoms(origin_selection)
-    ABC_selections = [sel.strip() for sel in origin_selection.split('or')]
+    ABC_selections = plane_selection
     # p stands for point
     pA_atomG = u.select_atoms(ABC_selections[0])
     pB_atomG = u.select_atoms(ABC_selections[1])
@@ -229,26 +188,20 @@ def main(
         pitch_angles.append(round(pitch_minimum.degrees, 3))
         yaw_angles.append(round(yaw_minimum.degrees, 3))
 
-    print('... saving roll_angles.csv ...')
-    libio.save_to_file(
-        list(range(1, len(u.trajectory) + 1)),
-        [roll_angles],
-        fname='roll_angles.csv',
-        )
 
-    print('... saving pitch_angles.csv ...')
-    libio.save_to_file(
-        list(range(1, len(u.trajectory) + 1)),
-        [pitch_angles],
-        fname='pitch_angles.csv',
-        )
-    print('... saving yaw_angles.csv ...')
-    libio.save_to_file(
-        list(range(1, len(u.trajectory) + 1)),
-        [yaw_angles],
-        fname='yaw_angles.csv',
-        )
-    log.info(S('done'))
+    log.info(T('Saving data to files'))
+    for data, fname in zip(
+            [roll_angles, pitch_angles, yaw_angles],
+            ['roll_angles.csv', 'pitch_angles.csv', 'yaw_angles.csv'],
+            ):
+
+        log.info(S('saving {}', fname ))
+        libio.save_to_file(
+            list(range(1, len(u.trajectory) + 1)),
+            [data],
+            fname=fname,
+            )
+        log.info(S('done'))
     return
 
 
