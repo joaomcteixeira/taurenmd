@@ -6,11 +6,12 @@ Uses `MDAnalysis.analysis.rms.RMSF`_, read their documentation for details.
 .. _MDAnalysis.analysis.rms.RMSF: https://www.mdanalysis.org/docs/documentation_pages/analysis/rms.html?highlight=rmsf#MDAnalysis.analysis.rms.RMSF
 """  # noqa: E501
 import argparse
+import functools
 from datetime import datetime
 
 from bioplottemplates.plots import label_dots
 
-from taurenmd import CMDFILE, Path, log  # noqa: F401
+from taurenmd import Path, log  # noqa: F401
 from taurenmd.libs import libcalc, libcli, libmda, libio
 from taurenmd.logger import S, T
 
@@ -28,20 +29,6 @@ libcli.add_atom_selection_arg(ap)
 libcli.add_slice_arg(ap)
 libcli.add_data_export_arg(ap)
 libcli.add_plot_arg(ap)
-
-
-def load_args():
-    """Load user arguments."""
-    cmd = ap.parse_args()
-    return cmd
-
-
-def maincli():
-    """Main client call."""
-    cmd = load_args()
-    libcli.save_command(CMDFILE, *sys.argv)
-    main(**vars(cmd))
-    return
 
 
 def main(
@@ -108,6 +95,9 @@ def main(
         )
 
     return
+
+
+maincli = functools.partial(libcli.maincli, ap, main)
 
 
 if __name__ == '__main__':

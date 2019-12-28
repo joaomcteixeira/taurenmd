@@ -2,8 +2,9 @@
 Does something.
 """
 import argparse
+import functools
 
-from taurenmd import CMDFILE, log
+from taurenmd import log
 from taurenmd.libs import libcli, libio  # noqa: F401
 from taurenmd.logger import S, T
 
@@ -18,19 +19,6 @@ libcli.add_trajectories_arg(ap)
 #libcli.add_trajectory_arg(ap)
 
 
-def load_args():
-    """Load user arguments."""
-    cmd = ap.parse_args()
-    return cmd
-
-
-def maincli():
-    cmd = load_args()
-    libcli.save_command(CMDFILE, *sys.argv)
-    main(**vars(cmd))
-    return
-
-
 def main(topology, trajectories, **kwargs):
 #def main(topology, trajectory, **kwargs):
     log.info(T('starting'))
@@ -39,6 +27,8 @@ def main(topology, trajectories, **kwargs):
 
     log.info(S('done'))
     return
+
+maincli = functools.partial(libcli.maincli, ap, main)
 
 
 if __name__ == '__main__':

@@ -46,8 +46,9 @@ Examples
     >>> tmdfext topology.pdb ...
 """
 import argparse
+import functools
 
-from taurenmd import CMDFILE, Path, log
+from taurenmd import Path, log
 from taurenmd.libs import libcli, libmda, libio
 from taurenmd.logger import S
 
@@ -78,20 +79,6 @@ ap.add_argument(
     help='Extension of frame files. Defaulst to .pdb',
     default='.pdb',
     )
-
-
-def load_args():
-    """Load user arguments."""
-    cmd = ap.parse_args()
-    return cmd
-
-
-def maincli():
-    """Execute as main client."""
-    cmd = load_args()
-    libcli.save_command(CMDFILE, *sys.argv)
-    main(**vars(cmd))
-    return
 
 
 def main(
@@ -141,6 +128,7 @@ def main(
 
     return
 
+maincli = functools.partial(libcli.maincli, ap, main)
 
 if __name__ == '__main__':
     maincli()

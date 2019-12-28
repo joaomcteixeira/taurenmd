@@ -2,12 +2,13 @@
 Does something.
 """
 import argparse
+import functools
 from datetime import datetime
 
 import numpy as np
 from bioplottemplates.plots import param
 
-from taurenmd import CMDFILE, Path, log
+from taurenmd import Path, log
 from taurenmd.libs import libcalc, libcli, libmda, libio
 from taurenmd.logger import S, T
 
@@ -26,19 +27,6 @@ libcli.add_reference_frame_arg(ap)
 libcli.add_slice_arg(ap)
 libcli.add_data_export_arg(ap)
 libcli.add_plot_arg(ap)
-
-
-def load_args():
-    """Load user arguments."""
-    cmd = ap.parse_args()
-    return cmd
-
-
-def maincli():
-    cmd = load_args()
-    libcli.save_command(CMDFILE, *sys.argv)
-    main(**vars(cmd))
-    return
 
 
 def main(
@@ -118,6 +106,9 @@ def main(
             )
 
     return
+
+
+maincli = functools.partial(libcli.maincli, ap, main)
 
 
 if __name__ == '__main__':

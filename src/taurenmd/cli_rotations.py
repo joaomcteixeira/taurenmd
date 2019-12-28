@@ -41,10 +41,11 @@ Pitch)
     The same procedure as for Roll but the
 """
 import argparse
+import functools
 
 import numpy as np
 
-from taurenmd import CMDFILE, log
+from taurenmd import log
 from taurenmd.libs import libcalc, libcli, libio, libmda  # noqa: F401
 from taurenmd.logger import S, T
 
@@ -61,19 +62,6 @@ libcli.add_topology_arg(ap)
 libcli.add_trajectories_arg(ap)
 libcli.add_plane_selection_arg(ap)
 libcli.add_slice_arg(ap)
-
-
-def load_args():
-    """Load user arguments."""
-    cmd = ap.parse_args()
-    return cmd
-
-
-def maincli():
-    cmd = load_args()
-    libcli.save_command(CMDFILE, *sys.argv)
-    main(**vars(cmd))
-    return
 
 
 def main(
@@ -203,6 +191,9 @@ def main(
             )
         log.info(S('done'))
     return
+
+
+maincli = functools.partial(libcli.maincli, ap, main)
 
 
 if __name__ == '__main__':

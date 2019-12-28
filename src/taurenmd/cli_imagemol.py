@@ -2,8 +2,9 @@
 Attempt image molecule with mdtraj.
 """
 import argparse
+import functools
 
-from taurenmd import CMDFILE, Path, log
+from taurenmd import Path, log
 from taurenmd.libs import libcli, libio, libmdt
 from taurenmd.logger import S, T
 
@@ -30,17 +31,6 @@ ap.add_argument(
     default=1,
     type=int,
     )
-
-
-def load_args():
-    cmd = ap.parse_args()
-    return cmd
-
-
-def maincli():
-    cmd = load_args()
-    libcli.save_command(CMDFILE, *sys.argv)
-    main(**vars(cmd))
 
 
 def protocol1(traj):
@@ -125,6 +115,9 @@ def main(
     reimaged[0].save_pdb(top_output.with_suffix('.pdb').str())
     log.info(S('saving frame 0 to: {}', top_output.resolve()))
     return
+
+
+maincli = functools.partial(libcli.maincli, ap, main)
 
 
 if __name__ == '__main__':

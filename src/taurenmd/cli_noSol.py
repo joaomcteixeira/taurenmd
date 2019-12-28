@@ -2,8 +2,8 @@
 Copies the trajectory without solvent and extracts the first frame.
 """
 import argparse
+import functools
 
-from taurenmd import CMDFILE
 from taurenmd.libs import libcli, libmdt
 
 _help = 'Removes solvent and extracts first frame'
@@ -18,17 +18,6 @@ libcli.add_topology_arg(ap)
 libcli.add_trajectory_arg(ap)
 libcli.add_traj_output_arg(ap)
 libcli.add_top_output_arg(ap)
-
-
-def load_args():
-    cmd = ap.parse_args()
-    return cmd
-
-
-def maincli():
-    cmd = load_args()
-    libcli.save_command(CMDFILE, *sys.argv)
-    main(**vars(cmd))
 
 
 def main(
@@ -49,6 +38,9 @@ def main(
     trj.remove_solvent(inplace=True)
     trj[0].save_pdb(output_pdb)
     trj.save(traj_output)
+
+
+maincli = functools.partial(libcli.maincli, ap, main)
 
 
 if __name__ == '__main__':

@@ -9,6 +9,21 @@ import argparse
 import sys
 from datetime import datetime
 
+from taurenmd.logger import CMDFILE
+
+
+def load_args(ap):
+    """Load user arguments."""
+    cmd = ap.parse_args()
+    return cmd
+
+
+def maincli(ap, main):
+    cmd = load_args(ap)
+    save_command(CMDFILE, *sys.argv)
+    main(**vars(cmd))
+    return
+
 
 # https://stackoverflow.com/questions/4042452
 class CustomParser(argparse.ArgumentParser):

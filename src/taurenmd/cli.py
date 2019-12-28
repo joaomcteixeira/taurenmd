@@ -27,13 +27,14 @@ import taurenmd.cli_rmsd as cli_rmsd
 import taurenmd.cli_rmsf as cli_rmsf
 import taurenmd.cli_rotations as cli_rot
 import taurenmd.cli_trajedit as cli_trajedit
-from taurenmd import CMDFILE, log
+from taurenmd import log
 from taurenmd.libs import libcli
+from taurenmd.logger import CMDFILE
 
 
 ap = libcli.CustomParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
 subparsers = ap.add_subparsers(
-    title='TAURENMD SUBROUTINES',
+    title='taurenmd subroutines',
     )
 
 libcli.add_subparser(subparsers, cli_angle)

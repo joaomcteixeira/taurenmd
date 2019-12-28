@@ -4,10 +4,11 @@ Plane angle calculator.
 Calculates the angle of a plane against itself in the reference frame along the whole trajectory. The plane is defined by the three centres of geometry of tree given selections.
 """
 import argparse
+import functools
 
 from bioplottemplates.plots import param
 
-from taurenmd import CMDFILE, log
+from taurenmd import log
 from taurenmd.libs import libcalc, libcli, libmda, libio
 from taurenmd.logger import S, T
 
@@ -25,19 +26,6 @@ libcli.add_plane_selection_arg(ap)
 libcli.add_reference_frame_arg(ap)
 libcli.add_slice_arg(ap)
 libcli.add_plot_arg(ap)
-
-
-def load_args():
-    """Load user arguments."""
-    cmd = ap.parse_args()
-    return cmd
-
-
-def maincli():
-    cmd = load_args()
-    libcli.save_command(CMDFILE, *sys.argv)
-    main(**vars(cmd))
-    return
 
 
 def main(
@@ -117,6 +105,9 @@ def main(
 
     log.info(S('done'))
     return
+
+
+maincli = functools.partial(libcli.maincli, ap, main)
 
 
 if __name__ == '__main__':

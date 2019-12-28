@@ -1,5 +1,7 @@
 """Manages operations with logging."""
 
+CMDFILE = '.taurenmd_cmd_register.log'
+
 
 class TitleLog:
     """Format string to title."""
