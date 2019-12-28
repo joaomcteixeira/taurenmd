@@ -135,7 +135,7 @@ def add_subparser(parser, module):
 # z: plane selection
 
 
-def add_top_argument(parser):
+def add_topology_arg(parser):
     """
     Add topology positional argument to parser.
 
@@ -150,7 +150,7 @@ def add_top_argument(parser):
         type=str,
         )
 
-def add_traj_argument(parser):
+def add_trajectories_arg(parser):
     """
     Add trajectory positional argument to parser.
     
@@ -162,7 +162,7 @@ def add_traj_argument(parser):
         The argument parser to add the trajectory positionl argument.
     """
     parser.add_argument(
-        'trajectory',
+        'trajectories',
         help=(
             'Path to the trajectory files. '
             'If multiple files are given, '
@@ -171,7 +171,7 @@ def add_traj_argument(parser):
         nargs='+',
         )
 
-def add_single_traj_argument(parser):
+def add_trajectory_arg(parser):
     """
     Add trajectory positional argument to parser.
     
@@ -188,7 +188,7 @@ def add_single_traj_argument(parser):
         )
 
 
-def add_slice_opt_arguments(parser):
+def add_slice_arg(parser):
     """
     Add start, stop and step slicing arguments.
     
@@ -239,7 +239,7 @@ def add_slice_opt_arguments(parser):
         )
 
 
-def add_selection_argument(parser):
+def add_atom_selection_arg(parser):
     """
     Adds selection optional argument.
 
@@ -266,7 +266,7 @@ def add_selection_argument(parser):
         )
 
 
-def add_selections_argument(parser):
+def add_atom_selections_arg(parser):
     """
     Add selections optional argument.
 
@@ -295,7 +295,7 @@ def add_selections_argument(parser):
         )
 
 
-def add_flist_argument(parser):
+def add_frame_list_arg(parser):
     """
     Adds frame list argument.
 
@@ -318,7 +318,7 @@ def add_flist_argument(parser):
         nargs='+',
         )
 
-def add_plane_selection(parser):
+def add_plane_selection_arg(parser):
     """
     Adds plane selection argument.
 
@@ -346,7 +346,7 @@ def add_plane_selection(parser):
         )
 
 
-def add_reference_frame(parser):
+def add_reference_frame_arg(parser):
     """
     Adds a reference frame argument.
 
@@ -376,7 +376,7 @@ def add_reference_frame(parser):
         type=int,
         )
 
-def add_plot_params(parser):
+def add_plot_arg(parser):
     """
     Adds plot parameters.
 
@@ -410,7 +410,7 @@ def add_plot_params(parser):
         action=ParamsToDict,
         )
 
-def add_topout_arg(parser):
+def add_top_output_arg(parser):
     """
     Add argument to export first frame as topology PDB file.
 
@@ -435,7 +435,7 @@ def add_topout_arg(parser):
         )
 
 
-def add_trajout_arg(parser):
+def add_traj_output_arg(parser):
     """
     Add argument to export trajectory after client modifications.
 
@@ -457,7 +457,7 @@ def add_trajout_arg(parser):
         default='traj_out.dcd',
         )
 
-def add_export_arg(parser):
+def add_data_export_arg(parser):
     """
     Add export argument.
 

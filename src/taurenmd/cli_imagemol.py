@@ -10,17 +10,15 @@ from taurenmd.logger import S, T
 _help = 'Attempts to image molecules.'
 _name = 'imagemol'
 
-_TRAJOUTPUT = 'production_imaged.dcd'
-
 ap = libcli.CustomParser(
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
         )
 
-libcli.add_top_argument(ap)
-libcli.add_traj_argument(ap)
-libcli.add_trajout_arg(ap)
-libcli.add_topout_arg(ap)
+libcli.add_topology_arg(ap)
+libcli.add_trajectory_arg(ap)
+libcli.add_traj_output_arg(ap)
+libcli.add_top_output_arg(ap)
 
 ap.add_argument(
     '-i',
@@ -98,7 +96,7 @@ def protocol2(traj):
 def main(
         topology,
         trajectory,
-        traj_output=_TRAJOUTPUT,
+        traj_output='imaged.dcd',
         top_output=None,
         protocol=1,
         **kwargs

@@ -14,10 +14,10 @@ ap = libcli.CustomParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-libcli.add_top_argument(ap)
-libcli.add_single_traj_argument(ap)
-libcli.add_trajout_arg(ap)
-libcli.add_topout_arg(ap)
+libcli.add_topology_arg(ap)
+libcli.add_trajectory_arg(ap)
+libcli.add_traj_output_arg(ap)
+libcli.add_top_output_arg(ap)
 
 
 def load_args():
@@ -35,8 +35,8 @@ def main(
         topology,
         trajectory,
         selection=None,
-        output_pdb='production_noSol.pdb',
-        traj_output='production_noSol.dcd',
+        output_pdb='noSol_frame0.pdb',
+        traj_output='noSol.dcd',
         **kwargs
         ):
 

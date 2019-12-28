@@ -15,8 +15,8 @@ ap = libcli.CustomParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-libcli.add_top_argument(ap)
-libcli.add_traj_argument(ap)
+libcli.add_topology_arg(ap)
+libcli.add_trajectories_arg(ap)
 
 
 def load_args():
@@ -32,9 +32,9 @@ def maincli():
     return
 
 
-def main(topology, trajectory, **kwargs):
+def main(topology, trajectories, **kwargs):
     log.info(T('reporting'))
-    libmda.mda_load_universe(topology, *list(trajectory))
+    libmda.mda_load_universe(topology, *trajectories)
     log.info(S('done'))
     return
 

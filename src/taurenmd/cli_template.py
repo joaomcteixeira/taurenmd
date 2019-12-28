@@ -13,20 +13,9 @@ ap = libcli.CustomParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-ap.add_argument(
-    'topology',
-    help='Topology file.',
-    type=str,
-    )
-
-ap.add_argument(
-    'trajectory',
-    help=(
-        'Trajectory files. If given, multiple trajectories will be'
-        'contactenated by order.'
-        ),
-    nargs='+',
-    )
+libcli.add_topology_arg(ap)
+libcli.add_trajectories_arg(ap)
+#libcli.add_trajectory_arg(ap)
 
 
 def load_args():
@@ -42,7 +31,8 @@ def maincli():
     return
 
 
-def main(topology, trajectory, **kwargs):
+def main(topology, trajectories, **kwargs):
+#def main(topology, trajectory, **kwargs):
     log.info(T('starting'))
     
     #

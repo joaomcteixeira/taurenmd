@@ -19,12 +19,12 @@ ap = libcli.CustomParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-libcli.add_top_argument(ap)
-libcli.add_traj_argument(ap)
-libcli.add_plane_selection(ap)
-libcli.add_reference_frame(ap)
-libcli.add_slice_opt_arguments(ap)
-libcli.add_plot_params(ap)
+libcli.add_topology_arg(ap)
+libcli.add_trajectories_arg(ap)
+libcli.add_plane_selection_arg(ap)
+libcli.add_reference_frame_arg(ap)
+libcli.add_slice_arg(ap)
+libcli.add_plot_arg(ap)
 
 
 def load_args():
@@ -42,7 +42,7 @@ def maincli():
 
 def main(
         topology,
-        trajectory,
+        trajectories,
         plane_selection,
         ref_frame=0,
         start=None,
@@ -53,7 +53,7 @@ def main(
         ):
     log.info(T('calculating angles'))
 
-    u = libmda.mda_load_universe(topology, *list(trajectory))
+    u = libmda.mda_load_universe(topology, *trajectories)
 
     frame_slice = libio.frame_slice(
         start=start,

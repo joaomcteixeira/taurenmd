@@ -19,11 +19,11 @@ ap = libcli.CustomParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-libcli.add_top_argument(ap)
-libcli.add_traj_argument(ap)
-libcli.add_reference_frame(ap)
-libcli.add_slice_opt_arguments(ap)
-libcli.add_plot_params(ap)
+libcli.add_topology_arg(ap)
+libcli.add_trajectories_arg(ap)
+libcli.add_reference_frame_arg(ap)
+libcli.add_slice_arg(ap)
+libcli.add_plot_arg(ap)
 
 ap.add_argument(
     '-l1',
@@ -57,7 +57,7 @@ def maincli():
 
 def main(
         topology,
-        trajectory,
+        trajectories,
         sel1='all',
         sel2='all',
         start=None,
@@ -69,7 +69,7 @@ def main(
         ):
     log.info(T('measuring distances'))
 
-    u = libmda.mda_load_universe(topology, *list(trajectory))
+    u = libmda.mda_load_universe(topology, *trajectories)
 
     frame_slice = libio.frame_slice(
         start=start,

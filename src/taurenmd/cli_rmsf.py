@@ -22,12 +22,12 @@ ap = libcli.CustomParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-libcli.add_top_argument(ap)
-libcli.add_traj_argument(ap)
-libcli.add_selection_argument(ap)
-libcli.add_slice_opt_arguments(ap)
-libcli.add_export_arg(ap)
-libcli.add_plot_params(ap)
+libcli.add_topology_arg(ap)
+libcli.add_trajectories_arg(ap)
+libcli.add_atom_selection_arg(ap)
+libcli.add_slice_arg(ap)
+libcli.add_data_export_arg(ap)
+libcli.add_plot_arg(ap)
 
 
 def load_args():
@@ -46,7 +46,7 @@ def maincli():
 
 def main(
         topology,
-        trajectory,
+        trajectories,
         start=None,
         stop=None,
         step=None,
@@ -58,7 +58,7 @@ def main(
     """Execute client main logic."""
     log.info(T('starting'))
    
-    u = libmda.mda_load_universe(topology, *list(trajectory))
+    u = libmda.mda_load_universe(topology, *trajectories)
    
     frame_slice = libio.frame_slice(
         start=start,
