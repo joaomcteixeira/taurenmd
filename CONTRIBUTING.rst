@@ -77,6 +77,11 @@ To contribute to the development of taurenmd, set up a local environment:
 
 6. `Submit a pull request through the GitHub website <https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request>`_.
 
+Client Template
+---------------
+
+We provide a command-line client `template file <https://github.com/joaomcteixeira/taurenmd/blob/master/src/taurenmd/_cli_template.py>`_ from which you can start developing your own command-line new client, copy it to a new file and follow its instructions.
+
 Pull Request Guidelines
 -----------------------
 
