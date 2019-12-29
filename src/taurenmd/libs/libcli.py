@@ -457,9 +457,11 @@ def add_top_output_arg(parser):
         '-o',
         '--top-output',
         help=(
-            'File name to save the first frame of the imaged trajectory. '
+            'Export first edited trajectory frame as topololy file. ' 
+            'You can specify the exact file name, otherwise, defaults to '
+            'input trajectory path + \'_frame0.pdb\'.'
             'If name starts with \'_\', it is used as suffix. '
-            ' Defaults to input trajectory path + \'_frame0.pdb\'.'
+            'If name ends with \'_\', it is used as prefix. '
             ),
         default=False,
         const='_frame0.pdb',

@@ -1,5 +1,5 @@
-Client Image Molecule
-=====================
+Client Image Molecule with MDTraj
+=================================
 
 .. argparse::
    :module: taurenmd.cli_imagemol
