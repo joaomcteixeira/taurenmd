@@ -16,11 +16,11 @@ This TOC lists all *taurenmd subroutines*, click on each one to read on specific
 .. toctree::
    :maxdepth: 1
 
-   cli_angle
    cli_distances
    cli_fext
    cli_imagemol
    cli_nosol
+   cli_pangle
    cli_report
    cli_rmsd
    cli_rmsf

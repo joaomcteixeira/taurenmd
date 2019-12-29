@@ -10,7 +10,11 @@ _________ _______           _______  _______  _        _______  ______
    )_(   |/     \|(_______)|/   \__/(_______/|/    )_)|/     \|(______/ 
                                                                        
 **A command-line interface for Molecular Dynamics Analysis routines.**
+"""
 
+_BANNER = __doc__
+
+_DOCSTRING = """
 version: 0.7.2
 
 Documentation
@@ -30,8 +34,7 @@ import logging
 
 from taurenmd.core import Path
 
-
-_doc = __doc__
+__doc__ += _DOCSTRING
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)

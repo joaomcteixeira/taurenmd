@@ -9,6 +9,7 @@ import argparse
 import sys
 from datetime import datetime
 
+from taurenmd import _BANNER, _DOCSTRING
 from taurenmd.logger import CMDFILE
 
 
@@ -31,7 +32,11 @@ class CustomParser(argparse.ArgumentParser):
     
     def error(self, message):
         """Present error message."""
-        sys.stderr.write(self.format_help())
+        sys.stdout.write(_BANNER)
+        sys.stdout.write(_DOCSTRING)
+        sys.stdout.write('\n')
+        sys.stdout.write(self.format_help())
+        self.print_usage()
         sys.stderr.write('*** INPUT ERROR: {}\n'.format(message))
         sys.stderr.write('*** read the usage details above\n')
         sys.exit(2)
@@ -490,11 +495,11 @@ def add_data_export_arg(parser):
         '--export',
         help=(
             'Export calculated values to a CSV file. '
-            'Defaults to results.csv, alternatively, '
+            'Defaults to \'results.csv\', alternatively, '
             'you can give a specific file name.'
             ),
         default=False,
-        const='rmsd.csv',
+        const='results.csv',
         nargs='?',
         )
 

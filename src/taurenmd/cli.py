@@ -54,7 +54,7 @@ routine by prefixing a ``tmd`` to its name, for example:
 import argparse
 import sys
 
-import taurenmd.cli_angle as cli_angle
+import taurenmd.cli_pangle as cli_pangle
 import taurenmd.cli_distances as cli_dist
 import taurenmd.cli_fext as cli_fext
 import taurenmd.cli_imagemol as cli_imagemol
@@ -64,20 +64,20 @@ import taurenmd.cli_rmsd as cli_rmsd
 import taurenmd.cli_rmsf as cli_rmsf
 import taurenmd.cli_rotations as cli_rot
 import taurenmd.cli_trajedit as cli_trajedit
-from taurenmd import _doc, log
+from taurenmd import _BANNER, _DOCSTRING, log
 from taurenmd.libs import libcli
 from taurenmd.logger import CMDFILE
 
 
 ap = libcli.CustomParser(
-    description=_doc + __doc__,
+    description=__doc__,
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 subparsers = ap.add_subparsers(
     title='taurenmd subroutines',
     )
 
-libcli.add_subparser(subparsers, cli_angle)
+libcli.add_subparser(subparsers, cli_pangle)
 libcli.add_subparser(subparsers, cli_dist)
 libcli.add_subparser(subparsers, cli_fext)
 libcli.add_subparser(subparsers, cli_imagemol)
@@ -100,6 +100,9 @@ def load_args():
 def maincli():
 
     if len(sys.argv) < 2:
+        sys.stdout.write(_BANNER)
+        sys.stdout.write(_DOCSTRING)
+        sys.stdout.write('\n')
         ap.print_help()
         ap.print_usage()
         ap.exit()

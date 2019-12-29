@@ -98,7 +98,7 @@ setup(
     entry_points={
         'console_scripts': [
             'taurenmd = taurenmd.cli:maincli',
-            'tmdangle = taurenmd.cli_angle:maincli',
+            'tmdpangle = taurenmd.cli_pangle:maincli',
             'tmddist = taurenmd.cli_distances:maincli',
             'tmdfext = taurenmd.cli_fext:maincli',
             'tmdimagemol = taurenmd.cli_imagemol:maincli',

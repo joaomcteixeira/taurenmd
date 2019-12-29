@@ -1,7 +1,42 @@
 """
-Plane angle calculator.
+Client Plane Angular Oscillations
+=================================
 
-Calculates the angle of a plane against itself in the reference frame along the whole trajectory. The plane is defined by the three centres of geometry of tree given selections.
+Calculate angular oscillation of a plane along the trajectory.
+
+A plane is defined by the centers of geometry of three atom selection
+groups. The angle between that plane in each frame and itself in the
+reference frame is computed. Angle can be reported in degrees (default)
+or radians.
+
+**Algorithm:**
+
+Plane equation is computed by :py:func:taurenmnd.libs.libcalc.calc_plane_eq.
+Angle between planes is computed by :py:func:libcalc.calc_planes_angle.
+Refer to our documentation page for more details.
+
+**Examples:**
+
+#. Given a protein of 3 subunits (chains or segids) calculate the
+angle variation of a plane that crosses the protein longitudinally:
+
+    >>> taurenmd pangle top.pdb traj.xtc -z 'segid A' 'segid B' 'segid C' -x
+
+``-x`` exports the data to a CSV file. You can also plot the data with
+the ``-v`` option:
+
+    >>> [...] -v title=my-plot-title xlabel=frames ylabel=degrees ...
+
+where ``[...]`` is the previous command example.
+
+#. ``pangle`` can be run directly as main command instead of subroutine:
+
+    >>> tmdpangle
+
+**References:**
+
+* MD data is accessed using `MDAnalysis <https://www.mdanalysis.org>`_.
+* plotting is performed by `python-bioplottemplates plot param function <https://python-bioplottemplates.readthedocs.io/en/latest/reference/plots.html#bioplottemplates.plots.param.plot>`_. 
 """
 import argparse
 import functools
@@ -13,7 +48,7 @@ from taurenmd.libs import libcalc, libcli, libmda, libio
 from taurenmd.logger import S, T
 
 _help='Calculates the angle between a plane along the trajectory.'
-_name='angle'
+_name='pangle'
 
 ap = libcli.CustomParser(
     description=__doc__,
@@ -36,10 +71,12 @@ def main(
         topology,
         trajectories,
         plane_selection,
+        aunit='degrees',
         ref_frame=0,
         start=None,
         stop=None,
         step=None,
+        plot=False,
         plotvars=None,
         **kwargs
         ):
@@ -82,7 +119,12 @@ def main(
         a, b, c, d = libcalc.calc_plane_eq(point1, point2, point3)
 
         try:
-            angles.append(libcalc.calc_angle(ra, rb, rc, a, b, c))
+            angles.append(
+                libcalc.calc_planes_angle(
+                    ra, rb, rc, a, b, c,
+                    aunit=aunit,
+                    )
+                )
         except ValueError:
             # happens when ValueError: math domain error
             # this is division by zero, means math.acos(d) is 0
@@ -90,22 +132,37 @@ def main(
             angles.append(0.0)
     
     log.info(S('calculated a total of {} angles.', len(angles)))
+   
+    if export:
+        libio.export_data_to_file(
+            list(range(len(u.trajectory))[frame_slice]),
+            angles,
+            fname=export,
+            header=(
+                '# Angular oscillation between a plane representatives\n'
+                f'# topology: {topology}\n',
+                f'# trajectories: {", ".join(trajectories)}\n'
+                f'# selections: {plane_selection}\n'
+                f'# frame,angle({aunit})\n'
+                ),
+            )
 
-    if plotvars is None:
-        plotvars = dict()
-    
-    if 'labels' not in plotvars:
-        plotvars['labels'] = 'plane: {}'.format(' and '.join(plane_selection))
+    if plot:
+        plotvars = plotvars or dict()
+        plotvars.setdefault(
+            'labels',
+            'plane: {}'.format(' and '.join(plane_selection)),
+            )
 
-    log.info(T('plot params:'))
-    for k, v in plotvars.items():
-        log.info(S('{} = {!r}', k, v))
+        log.info(T('plot params:'))
+        for k, v in plotvars.items():
+            log.info(S('{} = {!r}', k, v))
 
-    param.plot(
-        list(range(len(u.trajectory))[frame_slice]),
-        angles,
-        **plotvars,
-        )
+        param.plot(
+            list(range(len(u.trajectory))[frame_slice]),
+            angles,
+            **plotvars,
+            )
 
     log.info(S('done'))
     return
