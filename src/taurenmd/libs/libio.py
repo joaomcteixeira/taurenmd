@@ -38,7 +38,70 @@ def report_input(topology, trajectory):
     return
 
 
-def mk_frame_path(input_path, frame=0, ext='.pdb'):
+def add_prefix_to_path(ipath, prefix):
+    """
+    Add prefix to file path.
+    
+    Example
+    -------
+
+        >>> mk_frame_path('traj_output.xtc', prefix='my_prefix')
+        >>> my_prefix_traj_output.xtc
+
+    Parameters
+    ----------
+    ipath : str or Path
+        The file path to alter.
+
+    prefix : str
+        The complete prefix for the file name.
+
+    Returns
+    -------
+    :py:func:`taurenmd.core.Path`
+        The new file path.
+    """
+    ipath_ = Path(ipath)
+    return Path(
+        ipath_.myparents(),
+        '{}{}'.format(prefix, ipath_.name),
+        )
+
+
+def add_suffix_to_path(ipath, suffix):
+    """
+    Add suffix to file path.
+    
+    Example
+    -------
+
+        >>> mk_frame_path('traj_output.xtc', suffix='my_suffix.pdb')
+        >>> traj_output_my_suffix.pdb
+
+    Parameters
+    ----------
+    ipath : str or Path
+        The file path to alter.
+
+    suffix : str
+        The complete suffix for the file name, extension should be
+        included in the suffix, extension of the ``ipath`` is
+        ignored.
+
+    Returns
+    -------
+    :py:func:`taurenmd.core.Path`
+        The new file path.
+    """
+    ipath_ = Path(ipath)
+    return Path(
+        ipath_.myparents(),
+        '{}{}'.format(ipath_.stem, suffix),
+        )
+
+
+
+def mk_frame_path(ipath, frame=0, ext='.pdb', suffix=None):
     """
     Create the path name for a frame.
 
@@ -50,10 +113,10 @@ def mk_frame_path(input_path, frame=0, ext='.pdb'):
 
         >>> mk_frame_path('traj_output.xtc')
         >>> traj_output_frame0.pdb
-
+   
     Parameters
     ----------
-    input_path : str or Path
+    ipath : str or Path
         The file path. Normally, trajectory file path.
 
     frame : int, optional
@@ -64,16 +127,47 @@ def mk_frame_path(input_path, frame=0, ext='.pdb'):
 
     Returns
     -------
-    Path
-        The frame-labeled output path.
+    :py:func:`taurenmd.core.Path`
+        The new file path.
     """
-    input_path = Path(input_path)
-    top_output = Path(
-        input_path.myparents(),
-        '{}_frame{}'.format(input_path.stem, frame),
+    ipath_ = Path(ipath)
+    return Path(
+        ipath_.myparents(),
+        '{}_frame{}'.format(ipath_.stem, frame),
         ).with_suffix('.{}'.format(ext.lstrip('.')))
 
-    return top_output
+
+def parse_top_output(top_output, traj_output):
+    """
+    Parse different output definitions for topology output file name.
+   
+    If ``top_output`` startswith ``_`` uses :py:func:add_suffix_to_path.
+    If ``top_output`` endswith ``_`` uses :py:func:add_prefix_to_path.
+    Else: Return Path object of ``top_output``.
+
+
+    Parameters
+    ----------
+    top_output : str or Path
+        The string to evaluate.
+
+    traj_output : str or Path
+        The trajectory output file name. Return value depends on
+        this parameters.
+
+    Returns
+    -------
+    :py:func:`taurenmd.core.Path`
+        The new topology file path.
+    """
+    if top_output.startswith('_'):
+        return add_suffix_to_path(traj_output, suffix=top_output)
+
+    elif top_output.endswidth('_'):
+        return add_prefix_to_path(traj_output, prefix=top_output)
+
+    else:
+        return Path(top_output)
 
 
 def export_data_to_file(

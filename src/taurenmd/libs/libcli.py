@@ -12,6 +12,18 @@ from datetime import datetime
 from taurenmd import _BANNER, _DOCSTRING
 from taurenmd.logger import CMDFILE
 
+ref_mdt = "* MD data is accessed and/or processed using `MDTraj <https://mdtraj.org/>`_."
+"""Command-line docstring to reference MDTraj package."""
+
+ref_mda = "* MD data is accessed using `MDAnalysis <https://www.mdanalysis.org>`_.\n"
+"""Command-line docstring to reference MDAnalysis package."""
+
+ref_mda_selection = "* selection commands follow MDAnalysis `selection nomenclature <https://www.mdanalysis.org/docs/documentation_pages/selections.html#>`_.\n"
+"""Command-line docstring to reference MDAnalysis selection commands."""
+
+ref_plottemplates = "* plotting is performed by `python-bioplottemplates plot param function <https://python-bioplottemplates.readthedocs.io/en/latest/reference/plots.html#bioplottemplates.plots.param.plot>`_.\n"
+"""Command-line docstring to reference python-bioplottemplates."""
+
 
 def load_args(ap):
     """Load user arguments."""

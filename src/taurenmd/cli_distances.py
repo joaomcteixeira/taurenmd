@@ -1,6 +1,6 @@
 """
 Client Distance Calculator
-=========================
+==========================
 
 **Calculates distances between centers of geometry of two selections.**
 
@@ -40,8 +40,6 @@ where ``[...]`` is the previous command example.
 
 **References:**
 
-* MD data is accessed using `MDAnalysis <https://www.mdanalysis.org>`_. Therefore, selection commands follow MDAnalysis `selection nomenclature <https://www.mdanalysis.org/docs/documentation_pages/selections.html#>`_.
-* plotting is performed by `python-bioplottemplates plot param function <https://python-bioplottemplates.readthedocs.io/en/latest/reference/plots.html#bioplottemplates.plots.param.plot>`_. 
 """
 import argparse
 import copy
@@ -53,6 +51,12 @@ from bioplottemplates.plots import param
 from taurenmd import log
 from taurenmd.libs import libcli, libio, libmda  # noqa: F401
 from taurenmd.logger import S, T
+
+__doc__ += (
+    f'{libcli.ref_mda}'
+    f'{libcli.ref_mda_selection}'
+    f'{libcli.ref_plottemplates}'
+    )
 
 _help = 'Calculates distances between geometric centers of selections. '
 _name = 'dist'

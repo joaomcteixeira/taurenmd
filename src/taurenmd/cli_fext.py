@@ -45,7 +45,6 @@ be inspected independently.
 
 **References:**
 
-* MD data is accessed using `MDAnalysis <https://www.mdanalysis.org>`_
 """
 import argparse
 import functools
@@ -53,6 +52,11 @@ import functools
 from taurenmd import Path, log
 from taurenmd.libs import libcli, libmda, libio
 from taurenmd.logger import S
+
+__doc__ += (
+    f'{libcli.ref_mda}'
+    f'{libcli.ref_mda_selection}'
+    )
 
 _help = 'Extracts frames from trajectory.'
 _name = 'fext'
