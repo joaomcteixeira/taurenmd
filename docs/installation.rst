@@ -43,7 +43,7 @@ Other dependencies automatically installed are listed bellow:
 Supported Platforms
 -------------------
 
-**taurenmd** is designed to run natively under any `platform compatible with Python <https://pythondev.readthedocs.io/platforms.html>`_ (paths are not hard coded :code:`;-)`). However, the libraries **taurenmd** depends on may or may not be compatible with all OS platforms, you should look for a platform compatible with all the required Molecular Dynamics analysis libraries. We can guarantee **taurenmd** works fully with all its dependencies under Ubuntu 18.04 LTS. You may wish to read further on how continuous integration is :ref:`managed for this project <continuous integration>`.
+**taurenmd** is designed to run natively under any `platform compatible with Python <https://pythondev.readthedocs.io/platforms.html>`_ (paths are not hard coded :code:`;-)`). However, the libraries **taurenmd** depends on may or may not be compatible with all OS platforms, and we are not responsible for providing such compatibility or support; you should choose a platform compatible with all the required Molecular Dynamics analysis libraries used by *taurenmd*. We can guarantee **taurenmd** works fully with all its dependencies under Ubuntu 18.04 LTS. You may wish to read further on how continuous integration is :ref:`managed for this project <continuous integration>`.
 
 Installation steps
 ------------------

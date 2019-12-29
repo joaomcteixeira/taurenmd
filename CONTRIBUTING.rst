@@ -108,3 +108,8 @@ to test documentation::
 to perform coverage-reported tests::
 
     tox -e py37-cover
+
+Continuous Integration
+======================
+
+This project follows Continuous Integration (CI) good practices (let us know if something can be improved). As referred in the previous section, CI environment is provided by `tox <https://tox.readthedocs.io/en/latest/>`_ in combination with `tox-conda <https://github.com/tox-dev/tox-conda>`_. All *tox* testing environments run on `Travis-CI <https://travis-ci.org/joaomcteixeira/taurenmd>`_; there, we check for code style integrity, documentation, tests and test coverage, **all** dependencies are installed. CI configuration is defined in the `tox.ini <https://github.com/joaomcteixeira/taurenmd/blob/master/tox.ini>`_ file.
