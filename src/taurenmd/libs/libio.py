@@ -78,8 +78,8 @@ def mk_frame_path(input_path, frame=0, ext='.pdb'):
 
 def export_data_to_file(
         xdata,
-        ydata,
-        fname,
+        *ydata,
+        fname='results.csv',
         header='',
         fmt='{:.3}',
         delimiter=',',
