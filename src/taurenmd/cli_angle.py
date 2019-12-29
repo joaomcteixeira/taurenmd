@@ -28,6 +28,10 @@ libcli.add_slice_arg(ap)
 libcli.add_plot_arg(ap)
 
 
+def _ap():
+    return ap
+
+
 def main(
         topology,
         trajectories,

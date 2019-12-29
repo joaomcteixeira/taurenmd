@@ -83,6 +83,10 @@ def protocol2(traj):
     return reimaged_traj
 
 
+def _ap():
+    return ap
+
+
 def main(
         topology,
         trajectory,

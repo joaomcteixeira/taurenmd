@@ -20,6 +20,10 @@ libcli.add_topology_arg(ap)
 libcli.add_trajectories_arg(ap)
 
 
+def _ap():
+    return ap
+
+
 def main(topology, trajectories, **kwargs):
     log.info(T('reporting'))
     libmda.load_universe(topology, *trajectories)

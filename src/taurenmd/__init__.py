@@ -27,8 +27,9 @@ for complete details on how to cite properly:
     https://taurenmd.readthedocs.io/en/latest/citing.html
 """
 import logging
-import os
-from pathlib import Path as _Path
+
+from taurenmd.core import Path
+
 
 _doc = __doc__
 
@@ -49,20 +50,5 @@ _ch.setFormatter(logging.Formatter('%(message)s'))
 
 log.addHandler(_db)
 log.addHandler(_ch)
-
-
-class Path(type(_Path())):
-    """
-    Define a common Path to string interface.
-
-    Avoids using os.fspath around libs.
-    """
-    def str(self):
-        """Return string version of Path."""
-        return os.fspath(self)
-    
-    def myparents(self):
-        return self.resolve().parents[0]
-
 
 __version__ = '0.7.2'

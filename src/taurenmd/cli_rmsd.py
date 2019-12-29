@@ -29,6 +29,10 @@ libcli.add_data_export_arg(ap)
 libcli.add_plot_arg(ap)
 
 
+def _ap():
+    return ap
+
+
 def main(
         topology,
         trajectories,

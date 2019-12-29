@@ -58,7 +58,7 @@ import taurenmd.cli_angle as cli_angle
 import taurenmd.cli_distances as cli_dist
 import taurenmd.cli_fext as cli_fext
 import taurenmd.cli_imagemol as cli_imagemol
-import taurenmd.cli_noSol as cli_noSol
+import taurenmd.cli_nosol as cli_nosol
 import taurenmd.cli_report as cli_report
 import taurenmd.cli_rmsd as cli_rmsd
 import taurenmd.cli_rmsf as cli_rmsf
@@ -81,7 +81,7 @@ libcli.add_subparser(subparsers, cli_angle)
 libcli.add_subparser(subparsers, cli_dist)
 libcli.add_subparser(subparsers, cli_fext)
 libcli.add_subparser(subparsers, cli_imagemol)
-libcli.add_subparser(subparsers, cli_noSol)
+libcli.add_subparser(subparsers, cli_nosol)
 libcli.add_subparser(subparsers, cli_report)
 libcli.add_subparser(subparsers, cli_rmsd)
 libcli.add_subparser(subparsers, cli_rmsf)

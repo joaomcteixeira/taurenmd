@@ -102,7 +102,7 @@ setup(
             'tmddist = taurenmd.cli_distances:maincli',
             'tmdfext = taurenmd.cli_fext:maincli',
             'tmdimagemol = taurenmd.cli_imagemol:maincli',
-            'tmdnoSol = tauremd.cli_noSol:maincli',
+            'tmdnosol = tauremd.cli_nosol:maincli',
             'tmdreport = taurenmd.cli_report:maincli',
             'tmdrot = taurenmd.cli_rot:maincli',
             'tmdrmsf = taurenmd.cli_rmsf:maincli',

@@ -7,7 +7,7 @@ import functools
 from taurenmd.libs import libcli, libmdt
 
 _help = 'Removes solvent and extracts first frame'
-_name = 'noSol'
+_name = 'nosol'
 
 ap = libcli.CustomParser(
     description=__doc__,
@@ -18,6 +18,10 @@ libcli.add_topology_arg(ap)
 libcli.add_trajectory_arg(ap)
 libcli.add_traj_output_arg(ap)
 libcli.add_top_output_arg(ap)
+
+
+def _ap():
+    return ap
 
 
 def main(

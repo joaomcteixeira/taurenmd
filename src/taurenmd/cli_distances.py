@@ -43,6 +43,10 @@ ap.add_argument(
     )
 
 
+def _ap():
+    return ap
+
+
 def main(
         topology,
         trajectories,
