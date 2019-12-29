@@ -1,5 +1,47 @@
 """
-Does something.
+Client Distance Calculator
+=========================
+
+**Calculates distances between centers of geometry of two selections.**
+
+Distance is given in 3D XYZ coordinate space units.
+
+**Algorithm:**
+
+Distance between centers of geometry is calculated by::
+
+    np.linalg.norm(np.subtract(coord1, coord2))
+
+Where, ``coord*`` are the centers of geometry of each atom selection
+``-l1`` and ``-l2``, respectively.
+Read further on `np.linalg.norm <https://docs.scipy.org/doc/numpy/reference/generated/numpy.linalg.norm.html>`_
+and `np.subtract <https://docs.scipy.org/doc/numpy/reference/generated/numpy.subtract.html?highlight=subtract#numpy-subtract>`_.
+
+**Examples:**
+
+1. Calculate the distances between two carbon alphas:
+
+    >>> taurenmd dist top.pdb traj.dcd -l1 'resnum 10 and name CA' -l2 'resum 20 and name CA'
+
+2. Calculate the distances between two chains:
+
+    >>> taurenmd dist top.pdb traj.dcd -l1 'segid A' -l2 'segid B'
+
+``-x`` exports the data to a CSV file. You can also plot the data with
+the ``-v`` option:
+
+    >>> [...] -x distances.csv -v title=my-plot-title xlabel=frames ylabel=degrees ...
+
+where ``[...]`` is the previous command example.
+
+3. ``dist`` can be run directly as main command instead of subroutine:
+
+    >>> tmddist
+
+**References:**
+
+* MD data is accessed using `MDAnalysis <https://www.mdanalysis.org>`_. Therefore, selection commands follow MDAnalysis `selection nomenclature <https://www.mdanalysis.org/docs/documentation_pages/selections.html#>`_.
+* plotting is performed by `python-bioplottemplates plot param function <https://python-bioplottemplates.readthedocs.io/en/latest/reference/plots.html#bioplottemplates.plots.param.plot>`_. 
 """
 import argparse
 import copy
@@ -12,7 +54,7 @@ from taurenmd import log
 from taurenmd.libs import libcli, libio, libmda  # noqa: F401
 from taurenmd.logger import S, T
 
-_help = 'Calculates distances between geometric centres of selections. '
+_help = 'Calculates distances between geometric centers of selections. '
 _name = 'dist'
 
 ap = libcli.CustomParser(
@@ -22,9 +64,6 @@ ap = libcli.CustomParser(
 
 libcli.add_topology_arg(ap)
 libcli.add_trajectories_arg(ap)
-libcli.add_reference_frame_arg(ap)
-libcli.add_slice_arg(ap)
-libcli.add_plot_arg(ap)
 
 ap.add_argument(
     '-l1',
@@ -42,6 +81,10 @@ ap.add_argument(
     type=str,
     )
 
+libcli.add_slice_arg(ap)
+libcli.add_data_export_arg(ap)
+libcli.add_plot_arg(ap)
+
 
 def _ap():
     return ap
@@ -55,13 +98,14 @@ def main(
         start=None,
         stop=None,
         step=None,
-        ref_frame=None,
+        export=False,
+        plot=False,
         plotvars=None,
         **kwargs
         ):
     log.info(T('measuring distances'))
 
-    u = libmda.mda_load_universe(topology, *trajectories)
+    u = libmda.load_universe(topology, *trajectories)
 
     frame_slice = libio.frame_slice(
         start=start,
@@ -78,42 +122,48 @@ def main(
 
     distances = np.ones(len(u.trajectory[frame_slice]), dtype=np.float32)
     
-    if ref_frame is not None:
-        u.trajectory[int(ref_frame)]
-        reference_cog = copy.deepcopy(atom_sel1.center_of_geometry())
-
     log.info(T('Calculating distances'))
     # https://www.mdanalysis.org/MDAnalysisTutorial/atomgroups.html
     # https://www.mdanalysis.org/docs/documentation_pages/core/groups.html#MDAnalysis.core.groups.AtomGroup.center_of_geometry
     for i, ts in enumerate(u.trajectory[frame_slice]):
 
-        if ref_frame is None:
-            reference_cog = atom_sel1.center_of_geometry()
-
         distances[i] = np.linalg.norm(
             np.subtract(
-                reference_cog,
+                atom_sel1.center_of_geometry(),
                 atom_sel2.center_of_geometry(),
                 )
             )
     
     log.info(S('calculated a total of {} distances.', len(distances)))
     
-    if plotvars is None:
-        plotvars = dict()
-    
-    if 'labels' not in plotvars:
-        plotvars['labels'] = '{} dist {}'.format(sel1, sel2)
+    if export:
+        libio.export_data_to_file(
+            list(range(len(u.trajectory))[frame_slice]),
+            distances,
+            fname=export,
+            header=(
+                '# Distances between two selections centers of geomemtry\n'
+                f'# topology: {topology}\n',
+                f'# trajectories: {", ".join(trajectories)}\n'
+                f'# selection #1: {sel1}\n'
+                f'# selection #2: {sel2}\n'
+                f'# frame,distance\n'
+                ),
+            )
 
-    log.info(T('plot params:'))
-    for k, v in plotvars.items():
-        log.info(S('{} = {!r}', k, v))
+    if plot:
+        plotvars = plotvars or dict()
+        plotvars.setdefault('labels', '{} dist {}'.format(sel1, sel2))
 
-    param.plot(
-        list(range(len(u.trajectory))[frame_slice]),
-        distances,
-        **plotvars,
-        )
+        log.info(T('plot params:'))
+        for k, v in plotvars.items():
+            log.info(S('{} = {!r}', k, v))
+
+        param.plot(
+            list(range(len(u.trajectory))[frame_slice]),
+            distances,
+            **plotvars,
+            )
 
     log.info(S('done'))
     return

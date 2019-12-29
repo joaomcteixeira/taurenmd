@@ -2,7 +2,7 @@
 Client Plane Angular Oscillations
 =================================
 
-Calculate angular oscillation of a plane along the trajectory.
+**Calculate angular oscillation of a plane along the trajectory.**
 
 A plane is defined by the centers of geometry of three atom selection
 groups. The angle between that plane in each frame and itself in the
@@ -17,25 +17,25 @@ Refer to our documentation page for more details.
 
 **Examples:**
 
-#. Given a protein of 3 subunits (chains or segids) calculate the
+1. Given a protein of 3 subunits (chains or segids) calculate the
 angle variation of a plane that crosses the protein longitudinally:
 
     >>> taurenmd pangle top.pdb traj.xtc -z 'segid A' 'segid B' 'segid C' -x
 
-``-x`` exports the data to a CSV file. You can also plot the data with
+2. ``-x`` exports the data to a CSV file. You can also plot the data with
 the ``-v`` option:
 
     >>> [...] -v title=my-plot-title xlabel=frames ylabel=degrees ...
 
 where ``[...]`` is the previous command example.
 
-#. ``pangle`` can be run directly as main command instead of subroutine:
+3. ``pangle`` can be run directly as main command instead of subroutine:
 
     >>> tmdpangle
 
 **References:**
 
-* MD data is accessed using `MDAnalysis <https://www.mdanalysis.org>`_.
+* MD data is accessed using `MDAnalysis <https://www.mdanalysis.org>`_. Therefore, selection commands follow MDAnalysis `selection nomenclature <https://www.mdanalysis.org/docs/documentation_pages/selections.html#>`_.
 * plotting is performed by `python-bioplottemplates plot param function <https://python-bioplottemplates.readthedocs.io/en/latest/reference/plots.html#bioplottemplates.plots.param.plot>`_. 
 """
 import argparse
@@ -60,6 +60,7 @@ libcli.add_trajectories_arg(ap)
 libcli.add_plane_selection_arg(ap)
 libcli.add_reference_frame_arg(ap)
 libcli.add_slice_arg(ap)
+libcli.add_data_export_arg(ap)
 libcli.add_plot_arg(ap)
 
 

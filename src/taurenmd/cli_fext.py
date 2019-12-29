@@ -1,49 +1,51 @@
 """
-Extract trajectory frames to individual files.
+Client Frame Extract
+====================
+
+**Extract trajectory frames to individual files.**
 
 Normally used to extract frames to PDB topology files so those can
 be inspected independently.
-
-This client interface uses `MDAnalysis library <https://www.mdanalysis.org/>`_,
-refer to our `Citing` page for instructions on how to cite.
 
 .. note::
 
     Frame number is 0-indexed.
 
-Examples
---------
+**Examples:**
 
-    Extracts frames 11 to 49 (inclusive), remember frames index start
-    at 0:
+1. Extracts frames 11 to 49 (inclusive), remember frames index start at 0:
 
     >>> taurenmd fext topology.pdb trajectory.dcd -s 10 -e 50
 
-    Extracts the first frame:
+2. Extracts the first frame:
 
     >>> taurenmd fext topology.pdb trajectory.dcd -flist 0
 
-    Extracts a selection of frames:
+3. Extracts a selection of frames:
 
     >>> taurenmd fext topology.pdb trajectory.dcd -flist 0,10,23,345
 
-    Frame file types can be specified:
+4. Frame file types can be specified:
 
     >>> taurenmd fext topology.pdb trajectory.dcd -p 10 -x .dcd
 
-    Atom selection can be specified as well, the following extracts
+5. Atom selection can be specified as well, the following extracts
     only the 'segid A' atom region of the first frame. Selection rules
-    are as decribed for `MDAnalysis selection <https://www.mdanalysis.org/docs/documentation_pages/selections.html>`_
+    are as decribed for `MDAnalysis selection <https://www.mdanalysis.org/docs/documentation_pages/selections.html>`_.
 
     >>> taurenmd fext topology.pdb trajectory.xtc -flist 0 -l 'segid A'
 
-    Multiple trajectories can be given, they will be contatenated:
+6. Multiple trajectories can be given, they will be contatenated:
 
     >>> taurenmd fext top.pdb traj1.xtc traj2.xtc traj3.xtc -p 10
 
-    Can also be used as main command:
+7. Can also be used as main command:
 
     >>> tmdfext topology.pdb ...
+
+**References:**
+
+* MD data is accessed using `MDAnalysis <https://www.mdanalysis.org>`_
 """
 import argparse
 import functools
@@ -52,7 +54,7 @@ from taurenmd import Path, log
 from taurenmd.libs import libcli, libmda, libio
 from taurenmd.logger import S
 
-_help = 'Extracts single frames from trajectory.'
+_help = 'Extracts frames from trajectory.'
 _name = 'fext'
 
 ap = libcli.CustomParser(
