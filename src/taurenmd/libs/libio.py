@@ -265,16 +265,9 @@ def frame_list(len_traj, start=None, stop=None, step=None, flist=None,):
         return range(len_traj)
     
 
-def _frame_slice(start=None, stop=None, step=None, ftuple=None):
-
-    if isinstance(ftuple, (list, tuple)) and len(ftuple) == 3:
-        sliceObject = slice(*[int(i) for i in ftuple])
-    
-    else:
-        sliceObject = slice(start, stop, step)
-    
-    log.info(S('slicing: {}', sliceObject))
-    return sliceObject
+def frame_slice(start=None, stop=None, step=None,):
+    log.info(S('slicing: {}:{}:{}', start, stop, step))
+    return slice(start, stop, step)
 
 
 def evaluate_to_slice(*, value=None, start=None, stop=None, end=None):

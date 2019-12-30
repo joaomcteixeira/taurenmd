@@ -21,6 +21,12 @@ ref_mda = "* MD data is accessed using `MDAnalysis <https://www.mdanalysis.org>`
 ref_mda_selection = "* selection commands follow MDAnalysis `selection nomenclature <https://www.mdanalysis.org/docs/documentation_pages/selections.html#>`_.\n"
 """Command-line docstring to reference MDAnalysis selection commands."""
 
+ref_mda_unwrap = "* unwrap performed by MDAnalysis `unwrap <https://www.mdanalysis.org/docs/documentation_pages/core/groups.html?highlight=unwrap#MDAnalysis.core.groups.AtomGroup.unwrap>`_.\n"
+"""Command-line docstring to reference MDAnalysis selection.unwrap method."""
+
+ref_mda_alignto = "* align performed by MDAnalysis `unwrap <https://www.mdanalysis.org/docs/documentation_pages/analysis/align.html?highlight=alignto#MDAnalysis.analysis.align.alignto>`_.\n"
+"""Command-line docstring to reference MDAnalysis alignto function."""
+
 ref_plottemplates_param = "* plotting is performed by `python-bioplottemplates plot param function <https://python-bioplottemplates.readthedocs.io/en/latest/reference/plots.html#bioplottemplates.plots.param.plot>`_.\n"
 """Command-line docstring to reference python-bioplottemplates param plot."""
 
@@ -163,6 +169,7 @@ def add_subparser(parser, module):
 # d: trajectory output
 # e: slice stop
 # g: atom selections
+# i: sort input by trail int
 # l: selection
 # o: topology output
 # p: slice step
@@ -192,6 +199,29 @@ def add_angle_unit_arg(parser):
         help='Angular unit, either degrees or radians.',
         choices=['degrees', 'radians'],
         default='degrees',
+        )
+
+
+def add_insort_arg(parser):
+    """
+    Sorts input by trail int.
+
+    Applies :py:func:`taurenmd.libs.libio.sort_numbered_input`.
+
+    Parameters
+    ----------
+    parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
+        The argument parser to add the insort argument.
+    """
+    parser.add_argument(
+        '-i',
+        '--insort',
+        help=(
+            'Sorts input trajectories paths according to their tail numbers, '
+            'if paths are formatted as follows: my_trajectory_#.dcd, '
+            'where # is a number.'
+            ),
+        action='store_true',
         )
 
 

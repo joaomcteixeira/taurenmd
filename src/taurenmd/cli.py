@@ -32,7 +32,7 @@ file. The example bellow creates a new trajectory from the input one containing
 only atoms belonging to chain A. In cases like this it is useful to extract
 the atom selection as an independent topology file.
 
-    >>> taurenmd trajedit top.pdb traj.xtc -d chainA.xtc -o chainA_topology.pdb
+    >>> taurenmd trajedit top.pdb traj.xtc -l 'segid A' -d chainA.xtc -o chainA_topology.pdb
 
 You can also use ``trajedit`` to extract a specific frame from a trajectory:
 

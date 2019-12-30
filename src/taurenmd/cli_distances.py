@@ -110,13 +110,12 @@ def main(
     log.info(T('measuring distances'))
 
     u = libmda.load_universe(topology, *trajectories)
-
+    
     frame_slice = libio.frame_slice(
         start=start,
         stop=stop,
         step=step,
         )
-    log.info(S('for slice {}', frame_slice))
    
     log.info(T('defining atom seletions'))
     log.info(S('atom selection #1: {}', sel1))
