@@ -21,8 +21,14 @@ ref_mda = "* MD data is accessed using `MDAnalysis <https://www.mdanalysis.org>`
 ref_mda_selection = "* selection commands follow MDAnalysis `selection nomenclature <https://www.mdanalysis.org/docs/documentation_pages/selections.html#>`_.\n"
 """Command-line docstring to reference MDAnalysis selection commands."""
 
-ref_plottemplates = "* plotting is performed by `python-bioplottemplates plot param function <https://python-bioplottemplates.readthedocs.io/en/latest/reference/plots.html#bioplottemplates.plots.param.plot>`_.\n"
-"""Command-line docstring to reference python-bioplottemplates."""
+ref_plottemplates_param = "* plotting is performed by `python-bioplottemplates plot param function <https://python-bioplottemplates.readthedocs.io/en/latest/reference/plots.html#bioplottemplates.plots.param.plot>`_.\n"
+"""Command-line docstring to reference python-bioplottemplates param plot."""
+
+ref_plottemplates_labeldots = "* plotting is performed by `python-bioplottemplates plot labeldots function <https://python-bioplottemplates.readthedocs.io/en/latest/reference/plots.html#bioplottemplates.plots.label_dots.plot>`_.\n"
+"""Command-line docstring to reference python-bioplottemplates labeldots plot."""
+
+ref_pyquaternion = "* Quaterion operations are performed with `pyquaterion <http://kieranwynn.github.io/pyquaternion/>`_.\n"
+"""Command-line docstring to reference pyquaterion lib."""
 
 
 def load_args(ap):
@@ -153,6 +159,7 @@ def add_subparser(parser, module):
 
 
 # arguments list
+# a: angle unit
 # d: trajectory output
 # e: slice stop
 # g: atom selections
@@ -165,6 +172,27 @@ def add_subparser(parser, module):
 # v: plot
 # x: export data to table
 # z: plane selection
+
+def add_angle_unit_arg(parser):
+    """
+    Adds angle unit selectiona argument to parser.
+
+    Is defined by ``-a`` and ``--aunit``.
+
+    Wether angles are to be calculated in degrees or radians.
+
+    Parameters
+    ----------
+    parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
+        The argument parser to add the topology positionl argument.
+    """
+    parser.add_argument(
+        '-a',
+        '--aunit',
+        help='Angular unit, either degrees or radians.',
+        choices=['degrees', 'radians'],
+        default='degrees',
+        )
 
 
 def add_topology_arg(parser):

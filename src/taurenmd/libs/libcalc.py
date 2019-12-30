@@ -209,7 +209,7 @@ def calc_plane_eq(p1, p2, p3):
     return a, b, c, d
 
 
-def calc_planes_angle(a1, b1, c1, a2, b2, c2):
+def calc_planes_angle(a1, b1, c1, a2, b2, c2, aunit='radians'):
     """
     Calculate the angle between two planes.
 
@@ -228,17 +228,25 @@ def calc_planes_angle(a1, b1, c1, a2, b2, c2):
     ----------
     a1, b1, c1, a2, b2, c2 : float
         Plane parameters
+    
+    angle : str, optional
+        ``degrees`` returns angle quantity in degrees, else returns
+        in radians.
 
     Returns
     -------
     float
-        The angle between plane 1 and plane 2 in degrees.
+        The angle between plane 1 and plane 2.
     """  # noqa: E501
     d = (a1 * a2 + b1 * b2 + c1 * c2)
     e1 = math.sqrt(a1 * a1 + b1 * b1 + c1 * c1)
     e2 = math.sqrt(a2 * a2 + b2 * b2 + c2 * c2)
     d = d / (e1 * e2)
-    return math.degrees(math.acos(d))
+    angle = math.acos(d)
+    if aunit == 'degrees':
+        return math.degrees(angle)
+    else:
+        return angle
 
 
 def generate_quaternion_rotations(

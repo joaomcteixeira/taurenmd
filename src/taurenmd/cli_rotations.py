@@ -1,44 +1,69 @@
 """
-Calculate the Roll, Pitch and Yaw angles along the trajectory.
+Client Calculate Rotations
+==========================
 
-Given a selection of three regions defined as:
+**Calculate the Roll, Pitch and Yaw angles along the trajectory.**
 
-    selection A or selection B or selection C
+Read further on roll, pitch and yaw angles (Euler Angles) -
+`wikipedia <https://en.wikipedia.org/wiki/Euler_angles>`_.
 
-calculates the roll, pitch and yaw angles of an axis of reference
-calculated around that selection.
+Here we decompose these movements around the three different axis
+centered at an origin using Quaternion rotation.
 
-The axis of reference is calculated as follows:
+The axis of reference 
 
-    1) the centre of geometry of the selection defines the origin of the
-        reference frame
-       
-       1.1) all frames in the trajectory are centered to that
-            origin.
+**Algorithm:**
 
-    2) one of the axis of the reference frame is defined by the unitary
-        vectir of 'selection A'.
+Given a selection of three regions, ``selection A``, ``selection B``
+and ``selection C``:
 
-    3) the second axis is defined by the normal vector of the plane
-        defined by the centre of geometry of the three selections
-        separately.
-    
-    4) the last axis, is defined by the cross product of the two previous
-        axis.
+1. Centers the system to the three selections center of geometry for
+every frame, this is called the *origin*,
 
-The above procedure is performed for each frame and the reference frame
-of the first frame is stored as main reference.
+2. Calculates a plane given by the center of geometries of the three
+selections, plane ABC,
+
+3. Defines the vector OA that goes from the origin to the center of
+geometry of ``selection A``, this represents the Yaw axis.
+
+4. Defines the normal vector to the plane ABC (ABCn), this represents the
+Roll axis,
+
+5. Defines the cross product betwee vectors OA and ABCn (AONn), this is the
+Pitch axis,
+
+6. Calculates this axis of reference for every frame
 
 Calculating the angles:
 
+Angles represent the right hand rotation around an axis of the sistem in
+a i-frame compared to the reference frame. Quaterion distance is calculated
+by :py:func:`taurenmd.libs.libcalc.generate_quaternion_rotations` and
+:py:func:`taurenmd.libs.libcalc.sort_by_minimum_Qdistances`.
+
 Roll)
-    The roll angle is calculated by rotating the 'selection A' unitary
-    vector around the 'reference normal vector' until the Quaternion
-    distance is the minimum between the 'reference selection A' vector
-    and the 'frame i selection A' vector.
+    The roll angle is calculated by rotating the unitary vector OA
+    around vector ABCn until the Quaternion distance is the minimum
+    between the vector OAi (in frame) and vector OA in reference frame.
 
 Pitch)
-    The same procedure as for Roll but the
+    The pitch angle is calculated by rotating the unitary vector ABCn
+    around vector AONn until the Quaternion distance is the minimum
+    between the vector ABCni (in frame) and vector ABCn in reference frame.
+
+Yaw)
+    The pitch angle is calculated by rotating the unitary vector AONn
+    around vector OA until the Quaternion distance is the minimum
+    between the vector AONni (in frame) and vector AONn in reference frame.
+
+**Examples:**
+
+1. In the case of an homotrimer, define the axis and the origin on the trimers:
+
+    >>> taurenmd rorations -z 'segid A' 'segid B' 'segid C' -x rotations.csv
+
+**References:**
+
 """
 import argparse
 import functools
@@ -49,9 +74,14 @@ from taurenmd import log
 from taurenmd.libs import libcalc, libcli, libio, libmda  # noqa: F401
 from taurenmd.logger import S, T
 
+__doc__ += (
+    f'{libcli.ref_mda}'
+    f'{libcli.ref_mda_selection}'
+    f'{libcli.ref_pyquaternion}'
+    )
+
 _help = 'Calculates angular rotations across axes.'
 _name = 'rotations'
-
 
 ap = libcli.CustomParser(
     description=__doc__,
@@ -61,7 +91,9 @@ ap = libcli.CustomParser(
 libcli.add_topology_arg(ap)
 libcli.add_trajectories_arg(ap)
 libcli.add_plane_selection_arg(ap)
+libcli.add_angle_unit_arg(ap)
 libcli.add_slice_arg(ap)
+libcli.add_data_export_arg(ap)
 
 
 def _ap():
@@ -72,9 +104,11 @@ def main(
         topology,
         trajectories,
         plane_selection,
+        aunit='degrees',
         start=None,
         stop=None,
         step=None,
+        export=False,
         **kwargs,
         ):
     log.info(T('starting'))
@@ -176,24 +210,45 @@ def main(
             ref_plane_cross,
             )[0][0]
         
-        roll_angles.append(round(roll_minimum.degrees, 3))
-        pitch_angles.append(round(pitch_minimum.degrees, 3))
-        yaw_angles.append(round(yaw_minimum.degrees, 3))
+        if aunit == 'degrees':
+            roll_angles.append(round(roll_minimum.degrees, 3))
+            pitch_angles.append(round(pitch_minimum.degrees, 3))
+            yaw_angles.append(round(yaw_minimum.degrees, 3))
+        else:
+            roll_angles.append(round(roll_minimum.radians, 3))
+            pitch_angles.append(round(pitch_minimum.radians, 3))
+            yaw_angles.append(round(yaw_minimum.radians, 3))
+    
+    if export:
+        file_names = []
+        for _fname in ['roll', 'pitch', 'yaw']:
+            file_names.append(
+                libio.add_prefix_to_path(
+                    export,
+                    f"{_fname}_angles_",
+                    )
+                )
 
+        log.info(T('Saving data to files'))
+        for data, fname in zip(
+                [roll_angles, pitch_angles, yaw_angles],
+                file_names,
+                ):
 
-    log.info(T('Saving data to files'))
-    for data, fname in zip(
-            [roll_angles, pitch_angles, yaw_angles],
-            ['roll_angles.csv', 'pitch_angles.csv', 'yaw_angles.csv'],
-            ):
-
-        log.info(S('saving {}', fname ))
-        libio.save_to_file(
-            list(range(1, len(u.trajectory) + 1)),
-            [data],
-            fname=fname,
-            )
+            log.info(S('saving {}', fname ))
+            libio.export_data_to_file(
+                list(range(len(u.trajectory))[fSlice]),
+                data,
+                fname=fname,
+                header=(
+                    f'# Topology: {topology}\n'
+                    f'# Trajectories: {", ".join(trajectories)}\n'
+                    f'# Plane Selection: {plane_selection}\n'
+                    f'# frame,ange{aunit}\n'
+                    ),
+                )
         log.info(S('done'))
+
     return
 
 

@@ -1,9 +1,44 @@
 """
-Calculates RMSFS of a selection along the trajectory.
+Client Calculate RMSF
+=====================
 
-Uses `MDAnalysis.analysis.rms.RMSF`_, read their documentation for details.
+**Calculates RMSFS of a selection along the trajectory slice.**
 
-.. _MDAnalysis.analysis.rms.RMSF: https://www.mdanalysis.org/docs/documentation_pages/analysis/rms.html?highlight=rmsf#MDAnalysis.analysis.rms.RMSF
+**Algorithm:**
+
+Calculates the RMSF values along a trajectory slice for different
+selections. If multiple selections are given creates a series data
+for that selection.
+
+RMSF is calculated using :py:func:`taurenmd.libs.libcalc.mda_rmsf`.
+
+If multiple selections are given, separate calculations are performed
+in sequence. Result files (data tables and plots) are exported
+separately for each selection. Selections can't be overlayed easily
+in a single plot because they do not share the same labels.
+
+**Examples:**
+
+1. Calculate RMSF of the whole system:
+
+    >>> taurenmd rmsf top.pdb traj.dcd -e rmsf.csv
+
+2. Calculates RMSFs for different selections:
+
+    >>> taurenmd rmsf top.pdb traj.dcd -g 'segid A' 'segid B' -e
+
+3. ``-x`` exports the data to a CSV file. You can also plot the data with
+the ``-v`` option:
+
+    >>> [...] -x rmsf.csv -v title=my-plot-title xlabel=frames ylabel=RMSFs ...
+
+where ``[...]`` is the previous command example.
+
+4. you can also use ``tmdrmsf`` instead of ``taurenmd rmsf``.
+
+**References:**
+
+
 """  # noqa: E501
 import argparse
 import functools
@@ -15,6 +50,12 @@ from taurenmd import Path, log  # noqa: F401
 from taurenmd.libs import libcalc, libcli, libmda, libio
 from taurenmd.logger import S, T
 
+__doc__ += (
+    f'{libcli.ref_mda}'
+    f'{libcli.ref_mda_selection}'
+    f'{libcli.ref_plottemplates_labeldots}'
+    )
+
 _help = 'Calculates and plots RMSFs'
 _name = 'rmsf'
 
@@ -25,7 +66,7 @@ ap = libcli.CustomParser(
 
 libcli.add_topology_arg(ap)
 libcli.add_trajectories_arg(ap)
-libcli.add_atom_selection_arg(ap)
+libcli.add_atom_selections_arg(ap)
 libcli.add_slice_arg(ap)
 libcli.add_data_export_arg(ap)
 libcli.add_plot_arg(ap)
@@ -41,13 +82,13 @@ def main(
         start=None,
         stop=None,
         step=None,
-        selection='all',
+        selections=None,
         plotvars=None,
         export=False,
         **kwargs
         ):
     """Execute client main logic."""
-    log.info(T('starting'))
+    log.info(T('starting RMSFs calculation'))
    
     u = libmda.mda_load_universe(topology, *trajectories)
    
@@ -57,46 +98,62 @@ def main(
         step=step,
         )
   
-    labels = []
-    rmsfs = []
-
-    atom_group = u.select_atoms(selection)
-    labels = libmda.draw_atom_label_from_atom_group(atom_group)
-
-    log.info(S('for selection: {}', selection))
-    rmsfs = libcalc.mda_rmsf(
-        atom_group,
-        frame_slice=frame_slice,
-        )
-
-    if export:
-        header = (
-            "# Date: {}\n"
-            "# Topology: {}\n"
-            "# Trajectory : {}\n"
-            "# Atom,RMSF\n"
-            ).format(
-                datetime.now().strftime("%d/%m/%Y, %H:%M:%S"),
-                Path(topology).resolve(),
-                [Path(f).resolve().str() for f in trajectory],
-                )
-        with open(export, 'w') as fh:
-            fh.write(header)
-            for label, value in zip(labels, rmsfs):
-                fh.write('{},{:.5}\n'.format(label, value))
-
-    plotvars = plotvars or dict()
-    plotvars.setdefault('series_labels', selection)
-
-    log.info(T('plot params:'))
-    for k, v in plotvars.items():
-        log.info(S('{} = {!r}', k, v))
+    if selections is None:
+        selections = ['all']
     
-    label_dots.plot(
-        labels,
-        rmsfs,
-        **plotvars,
-        )
+    if not isinstance(selections, list):
+        raise TypeError('selections is not list type')
+    
+    log.info(T('calculating'))
+    for sel in selections:
+        labels = []
+        rmsfs = []
+        log.info(S('for selection: {}', sel))
+        atom_group = u.select_atoms(sel)
+        labels = libmda.draw_atom_label_from_atom_group(atom_group)
+       
+        rmsfs = libcalc.mda_rmsf(
+            atom_group,
+            frame_slice=frame_slice,
+            )
+
+        if export:
+            libio.export_data_to_file(
+                labels,
+                rmsfs,
+                fname=libio.add_prefix_to_path(
+                    export,
+                    f"{sel.replace(' ', '_')}_",
+                    ),
+                header = (
+                    "# Date: {}\n"
+                    "# Topology: {}\n"
+                    "# Trajectories {}\n"
+                    "# Atom,RMSF\n"
+                    ).format(
+                        datetime.now().strftime("%d/%m/%Y, %H:%M:%S"),
+                        Path(topology).resolve(),
+                        [Path(f).resolve().str() for f in trajectory],
+                        ),
+                )
+    
+        if plot:
+            plotvars = plotvars or dict()
+            plotvars.setdefault('series_labels', selection)
+            plotvars['filename'] = libio.add_prefix_to_path(
+                plotvars.get('filename', 'rmsf.pdf'),
+                f"{sel.replace(' ', '_')}_",
+                )
+
+            log.info(T('plot params:'))
+            for k, v in plotvars.items():
+                log.info(S('{} = {!r}', k, v))
+            
+            label_dots.plot(
+                labels,
+                rmsfs,
+                **plotvars,
+                )
 
     return
 

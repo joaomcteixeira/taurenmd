@@ -48,7 +48,7 @@ from taurenmd.logger import S, T
 __doc__ += (
     f'{libcli.ref_mda}'
     f'{libcli.ref_mda_selection}'
-    f'{libcli.ref_plottemplates}'
+    f'{libcli.ref_plottemplates_param}'
     )
 
 _help='Calculates the angle between a plane along the trajectory.'
@@ -62,6 +62,7 @@ ap = libcli.CustomParser(
 libcli.add_topology_arg(ap)
 libcli.add_trajectories_arg(ap)
 libcli.add_plane_selection_arg(ap)
+libcli.add_angle_unit_arg(ap)
 libcli.add_reference_frame_arg(ap)
 libcli.add_slice_arg(ap)
 libcli.add_data_export_arg(ap)

@@ -55,7 +55,7 @@ from taurenmd.logger import S, T
 __doc__ += (
     f'{libcli.ref_mda}'
     f'{libcli.ref_mda_selection}'
-    f'{libcli.ref_plottemplates}'
+    f'{libcli.ref_plottemplates_param}'
     )
 
 _help = 'Calculates distances between geometric centers of selections. '

@@ -1,5 +1,39 @@
 """
-Does something.
+Client Calculate RMSDs
+======================
+
+**Calculates RMSDs of a region.**
+
+**Algorithm:**
+
+Calculates the RMSD values along a trajectory slice for different
+selections. If multiple selections are given creates a series data
+for that selection.
+
+RMSD is calculated using :py:func:`taurenmd.libs.libcalc.mda_rmsd`.
+
+**Examples:**
+
+1. Calculate RMSD of the whole system:
+
+    >>> taurenmd rmsd top.pdb traj.dcd -e rmsd.csv
+
+2. Calculates RMSDs for different selections:
+
+    >>> taurenmd rmsd top.pdb traj.dcd -g 'segid A' 'segid B' -e
+
+3. ``-x`` exports the data to a CSV file. You can also plot the data with
+the ``-v`` option:
+
+    >>> [...] -x rmsd.csv -v title=my-plot-title xlabel=frames ylabel=RMSDs ...
+
+where ``[...]`` is the previous command example.
+
+4. you can also use ``tmdrmsd`` instead of ``taurenmd rmsd``.
+
+**References:**
+
+
 """
 import argparse
 import functools
@@ -11,6 +45,12 @@ from bioplottemplates.plots import param
 from taurenmd import Path, log
 from taurenmd.libs import libcalc, libcli, libmda, libio
 from taurenmd.logger import S, T
+
+__doc__ += (
+    f'{libcli.ref_mda}'
+    f'{libcli.ref_mda_selection}'
+    f'{libcli.ref_plottemplates_param}'
+    )
 
 _help = 'Calculates and plots RMSDs.'
 _name = 'rmsd'
@@ -41,9 +81,9 @@ def main(
         step=None,
         ref_frame=0,
         selections=None,
+        export=False,
         plot=False,
         plotvars=None,
-        export=False,
         **kwargs
         ):
     """Main client logic."""
@@ -59,6 +99,7 @@ def main(
     
     if selections is None:
         selections = ['all']
+
     rmsds = []
     for selection in selections:
         rmsds.append(
@@ -70,32 +111,27 @@ def main(
                 )
             )
     if export:
-        np.savetxt(
-            export,
-            np.array([range(len(u.trajectory))[frame_slice]] + rmsds).T,
-            fmt=['%d'] + ['%.5e'] * len(rmsds),
+        libio.export_data_to_file(
+            list(range(len(u.trajectory))[frame_slice]),
+            *rmsds,
+            fname=export,
             delimiter=',',
-            newline='\n',
             header=(
-                "Date: {}\n'"
-                "Topology: {}\n"
-                "Trajectory : {}\n"
-                "ref frame: {}\n"
-                "frame number, {}\n"
+                "# Date: {}\n'"
+                "# Topology: {}\n"
+                "# Trajectories : {}\n"
+                "# ref frame: {}\n"
+                "# frame number, {}\n"
                 ).format(
                     datetime.now(),
                     Path(topology).resolve(),
                     [Path(f).resolve().str() for f in trajectory],
-                    ','.join(selections),
                     ref_frame,
+                    ','.join(selections),
                     ),
-            footer='',
-            comments='#',
-            encoding=None,
             )
     
     if plot:
-
         plotvars = plotvars or dict()
         plotvars.setdefault('labels', selections)
 
