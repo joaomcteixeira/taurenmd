@@ -154,7 +154,7 @@ def main(
     log.info(S('saved trajectory: {}', traj_output))
 
     if top_output:
-        fout = libio.parse_topout(top_output)
+        fout = libio.parse_top_output(top_output, traj_output)
         reimaged[0].save(fout.str())
         log.info(S('saving frame 0 to: {}', top_output.resolve()))
 

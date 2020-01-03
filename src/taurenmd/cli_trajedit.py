@@ -187,7 +187,7 @@ def main(
 
     log.info(S('selecting: {}', selection))
     atom_selection = u.select_atoms(selection)
-    log.info(S('with {} atoms', selection.n_atoms, indent=2))
+    log.info(S('with {} atoms', atom_selection.n_atoms, indent=2))
 
     log.info(T('saving trajectory'))
     traj_output = Path(traj_output)
@@ -203,7 +203,7 @@ def main(
             
             if unwrap:
                 log.debug(S('unwrapping', indent=2))
-                selection.unwrap(
+                atom_selection.unwrap(
                     reference=unwrap_reference,
                     compound=unwrap_compound,
                     )
@@ -217,7 +217,7 @@ def main(
 
     if top_output:
         log.info(T('saving topology'))
-        fout = libcli.parse_top_output(top_output)
+        fout = libio.parse_top_output(top_output, traj_output)
         log.info(S('saving frame 0 to: {}', fout.resolve()))
         with mda.Writer(fout.str(), atom_selection.n_atoms) as W:
             for ts in u.trajectory[sliceObj][0:1]:
@@ -227,7 +227,7 @@ def main(
                         reference=unwrap_reference,
                         compound=unwrap_compound,
                         )
-                W.write(selection)
+                W.write(atom_selection)
     
     log.info(S('Done'))
     return

@@ -93,7 +93,7 @@ def add_suffix_to_path(ipath, suffix):
     :py:func:`taurenmd.core.Path`
         The new file path.
     """
-    ipath_ = Path(ipath)
+    ipath_ = _get_ipath(ipath)
     return Path(
         ipath_.myparents(),
         '{}{}'.format(ipath_.stem, suffix),
@@ -130,14 +130,23 @@ def mk_frame_path(ipath, frame=0, ext='.pdb', suffix=None):
     :py:func:`taurenmd.core.Path`
         The new file path.
     """
-    ipath_ = Path(ipath)
+    ipath_ = _get_ipath(ipath)
+
     return Path(
         ipath_.myparents(),
         '{}_frame{}'.format(ipath_.stem, frame),
         ).with_suffix('.{}'.format(ext.lstrip('.')))
 
 
-def parse_top_output(top_output, traj_output):
+def _get_ipath(ipath):
+    try:
+        return Path(ipath)
+    except TypeError as err:
+        log.exception(err)
+        return Path()
+
+
+def parse_top_output(top_output, traj_output=None):
     """
     Parse different output definitions for topology output file name.
    

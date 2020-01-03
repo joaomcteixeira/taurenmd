@@ -89,7 +89,7 @@ def main(
     trj.remove_solvent(inplace=True, exclude=maintain)
     
     if top_output:
-        fout = libcli.parse_top_output(top_output)
+        fout = libcli.parse_top_output(top_output, traj_output)
         trj[0].save(fout.str())
         log.info(S('first frame topology saved: {}', fout))
    
