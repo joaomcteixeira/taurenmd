@@ -4,7 +4,15 @@ Usage Examples
 To access to the complete list of *taurenmd commands* with a summary
 information for each, execute:
 
+    >>> taurenmd -h
+
+or simply:
+
     >>> taurenmd
+
+To see the current version number:
+
+    >>> taurenmd -v
 
 Using ``trajedit`` as an example, lets inspect its functionality:
 

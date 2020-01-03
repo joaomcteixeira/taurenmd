@@ -1,23 +1,46 @@
 """Handle input and output general operations."""
+import re
+
 from taurenmd import Path, log
 from taurenmd.logger import S, T  # noqa: F401
 
 
-def _get_number(path):
-    return int(Path(path).stem.split('_')[-1])
+def get_number(path):
+    """
+    Extract tail number from path.
+    
+    Examples
+    --------
+
+        traj_1.dcd' -> 1
+        traj_3.dcd' -> 3
+        traj_1231.dcd' -> 1231
+        traj_0011.dcd' -> 11
+        traj_1_.dcd' -> 1
+        traj_20200101_1.dcd -> 1
+
+    Parameters
+    ----------
+    path : str or Path obj
+        The path to evaluate.
+
+    Returns
+    -------
+    int
+        The tail integer of the path.
+    """
+    digit_re = re.compile('_\d+')
+    stem = Path(path).stem
+    number = re.findall('\d+', stem)[-1]
+    return int(number)
 
 
 def sort_numbered_input(*inputs):
     """
     Sort input paths to tail number.
 
-    Input paths or strings should be formatted such::
-        
-        >>> my_trajectory_#.dcd
+    Sort criteria is provided by :py:func:`get_number`.
 
-    Where ``#`` is the tag evaluated to ``int`` used to sort
-    the input list.
-    
     Parameters
     ----------
     *inputs : str of Paths
@@ -28,7 +51,13 @@ def sort_numbered_input(*inputs):
     list
         The sorted pathlist.
     """
-    return sorted(inputs, key=_get_number)
+    try:
+        return sorted(inputs, key=get_number)
+    except TypeError as err:
+        log.exception(err)
+        emsg = "Mind the packing *argument, input should be strings or Paths"
+        raise ValueError(emsg)
+
    
 
 def report_input(topology, trajectory):
@@ -46,6 +75,11 @@ def add_prefix_to_path(ipath, prefix):
     -------
 
         >>> mk_frame_path('traj_output.xtc', prefix='my_prefix')
+        >>> my_prefixtraj_output.xtc
+
+    Mind the ``_`` is not placed automatically.
+
+        >>> mk_frame_path('traj_output.xtc', prefix='my_prefix_')
         >>> my_prefix_traj_output.xtc
 
     Parameters
@@ -61,7 +95,7 @@ def add_prefix_to_path(ipath, prefix):
     :py:func:`taurenmd.core.Path`
         The new file path.
     """
-    ipath_ = Path(ipath)
+    ipath_ = _get_ipath(ipath)
     return Path(
         ipath_.myparents(),
         '{}{}'.format(prefix, ipath_.name),
@@ -72,10 +106,23 @@ def add_suffix_to_path(ipath, suffix):
     """
     Add suffix to file path.
     
-    Example
-    -------
+    If suffix has extention, updates the path extension, otherwise
+    keeps the original extension.
+    
+    Examples
+    --------
 
-        >>> mk_frame_path('traj_output.xtc', suffix='my_suffix.pdb')
+        >>> mk_frame_path('traj_output.xtc', suffix='my_suffix')
+        >>> traj_outputmy_suffix.xtc
+
+    Mind the underscore is not placed automatically:
+
+        >>> mk_frame_path('traj_output.xtc', suffix='_my_suffix')
+        >>> traj_output_my_suffix.xtc
+   
+    Updating extensions:
+
+        >>> mk_frame_path('traj_output.xtc', suffix='_my_suffix.pdb')
         >>> traj_output_my_suffix.pdb
 
     Parameters
@@ -94,25 +141,30 @@ def add_suffix_to_path(ipath, suffix):
         The new file path.
     """
     ipath_ = _get_ipath(ipath)
-    return Path(
+    result = Path(
         ipath_.myparents(),
         '{}{}'.format(ipath_.stem, suffix),
         )
+    
+    extension = Path(suffix).suffix or ipath_.suffix
+    return result.with_suffix(extension)
 
 
-
-def mk_frame_path(ipath, frame=0, ext='.pdb', suffix=None):
+def mk_frame_path(ipath, frame=0, ext='.pdb', leading=0, suffix=None):
     """
     Create the path name for a frame.
 
-    Given an input_path (usually the name of the trajectory), create
-    the corresponding frame file name.
+    Given an input_path ``ipath`` (usually the name of the trajectory),
+    create the corresponding frame file name.
 
     Example
     -------
 
         >>> mk_frame_path('traj_output.xtc')
         >>> traj_output_frame0.pdb
+       
+        >>> mk_frame_path('traj_output.xtc', frame=4, leading=4)
+        >>> traj_output_frame0004.pdb
    
     Parameters
     ----------
@@ -121,21 +173,34 @@ def mk_frame_path(ipath, frame=0, ext='.pdb', suffix=None):
 
     frame : int, optional
         The frame to label the new path.
+        Defaults to ``0``.
 
     ext : str, optional
-        The returned file desired extension. Defaults to ``.pdb``.
+        The returned file desired extension.
+        Defaults to ``.pdb``.
+
+    leading : int
+        The leading zeros to left append to the frame number.
+        Defaults to ``0``.
+    
+    suffix : str
+        Complete specifications of the desired suffix.
+        If ``suffix`` is given, ``frame`` and ``ext`` and ``leading``
+        are ignored and :py:func:`add_suffix_to_path` is used directly.
 
     Returns
     -------
     :py:func:`taurenmd.core.Path`
         The new file path.
     """
-    ipath_ = _get_ipath(ipath)
-
-    return Path(
-        ipath_.myparents(),
-        '{}_frame{}'.format(ipath_.stem, frame),
-        ).with_suffix('.{}'.format(ext.lstrip('.')))
+    if suffix:
+        return add_suffix_to_path(ipath, suffix)
+    else:
+        ipath_ = _get_ipath(ipath)
+        return Path(
+            ipath_.myparents(),
+            '{}_frame{}'.format(ipath_.stem, str(frame).zfill(leading)),
+            ).with_suffix('.{}'.format(ext.lstrip('.')))
 
 
 def _get_ipath(ipath):
@@ -169,10 +234,10 @@ def parse_top_output(top_output, traj_output=None):
     :py:func:`taurenmd.core.Path`
         The new topology file path.
     """
-    if top_output.startswith('_'):
+    if str(top_output).startswith('_'):
         return add_suffix_to_path(traj_output, suffix=top_output)
 
-    elif top_output.endswidth('_'):
+    elif str(top_output).endswith('_'):
         return add_prefix_to_path(traj_output, prefix=top_output)
 
     else:
@@ -184,7 +249,7 @@ def export_data_to_file(
         *ydata,
         fname='results.csv',
         header='',
-        fmt='{:.3}',
+        fmt='{:.3f}',
         delimiter=',',
         ):
     """
@@ -223,6 +288,7 @@ def export_data_to_file(
     """
     with open(fname, 'w') as fh:
         fh.write(header)
+        fh.write('\n')
         for label, ydataseries in zip(
                 xdata,
                 zip(*ydata),
@@ -231,7 +297,7 @@ def export_data_to_file(
             fh.write('{}{}{}\n'.format(
                 label,
                 delimiter,
-                delimiter.join(fmt.format(i) for i in ydataseries),
+                delimiter.join(fmt.format(float(i)) for i in ydataseries),
                 ))
     return
 
