@@ -474,6 +474,9 @@ def evaluate_to_slice(*, value=None, start=None, stop=None, step=None):
     elif value is None:
         return slice(None, None, None)
 
+    elif isinstance(value, slice):
+        return value
+
     elif isinstance(value, str):
         if value.find(':') > -1:
             values = value.split(':')

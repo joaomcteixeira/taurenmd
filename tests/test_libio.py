@@ -228,9 +228,11 @@ def test_frame_slice():
     'value,start,stop,step,expected',
     [
         ('1,100,2', None, None, None, slice(1, 100, 2)),
+        ('::2', None, None, None, slice(None, None, 2)),
         ('1:100:2', None, None, None, slice(1, 100, 2)),
         ('1:None:2', None, None, None, slice(1, None, 2)),
         (None, 10, None, None, slice(10, None, None)),
+        (slice(None), None, None, None, slice(None, None, None)),
         (None, 10, 100, None, slice(10, 100, None)),
         (None, 10, 100, 3, slice(10, 100, 3)),
         ((0, 50, 3), None, None, None, slice(0, 50, 3)),
