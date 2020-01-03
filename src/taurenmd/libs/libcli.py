@@ -515,11 +515,11 @@ def add_top_output_arg(parser):
         '-o',
         '--top-output',
         help=(
-            'Export first edited trajectory frame as topololy file. ' 
+            'Export edited trajectory first frame as topololy file. ' 
             'You can specify the exact file name, otherwise, defaults to '
-            'input trajectory path + \'_frame0.pdb\'.'
-            'If name starts with \'_\', it is used as suffix. '
-            'If name ends with \'_\', it is used as prefix. '
+            'input trajectory path + \'_frame0.pdb\'. '
+            'Also, if name starts with \'_\', it is used as file suffix, '
+            'if name ends with \'_\', it is used as prefix, instead.'
             ),
         default=False,
         const='_frame0.pdb',

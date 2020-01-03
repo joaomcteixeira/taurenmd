@@ -30,8 +30,8 @@ be inspected independently.
     >>> taurenmd fext topology.pdb trajectory.dcd -p 10 -x .dcd
 
 5. Atom selection can be specified as well, the following extracts
-    only the 'segid A' atom region of the first frame. Selection rules
-    are as decribed for `MDAnalysis selection <https://www.mdanalysis.org/docs/documentation_pages/selections.html>`_.
+only the 'segid A' atom region of the first frame. Selection rules
+are as decribed for `MDAnalysis selection <https://www.mdanalysis.org/docs/documentation_pages/selections.html>`_.
 
     >>> taurenmd fext topology.pdb trajectory.xtc -flist 0 -l 'segid A'
 

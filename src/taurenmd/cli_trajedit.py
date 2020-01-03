@@ -22,6 +22,33 @@ All operations are performed with `MDAnalysis <https://www.mdanalysis.org>`_.
 
     >>> taurenmd trajedit top.pdb traj.xtd -d traj.dcd
 
+2. Extracts a part of the trajectory atoms, in this example ``segid A``,
+the option ``-o`` saves the first frame of the new trajectory to a topology
+file:
+
+    >>> taurenmd trajedit top.pdb traj.xtc -d tsegidA.dcd -o -l "segid A"
+
+3. You can slice the trajectory by appending the following ``-s``, ``-e`` or
+``-p`` options, this saves only every 100 frames:
+
+    >>> [...] -p 100
+
+4. You can align the trajectory to a part of the system, for example,
+align the whole system to one of its subunits:
+
+    >>> taurenmd trajedit top.pdb traj.dcd -d alignedA.dcd -a "segid A and name CA"
+
+5. further restrain the output to a specific subselection with ``-l``:
+    
+    >>> [...] -l "segid A or segid B"
+
+6. ``trajedit`` also implements the ``unwrap`` method from which is an
+alternative approach to the ``imagemol`` client, that implements from
+``MDTraj``. See references section.
+
+    >>> taurenmd trajedit top.pdb traj.dcd -d unwrapped.dcd -w -o unwrapped_frame0.pdb
+
+
 **References:**
 
 """
@@ -61,18 +88,10 @@ libcli.add_top_output_arg(ap)
 ap.add_argument(
     '-a',
     '--align',
-    help='Align selection (l) to a atom subselection',
-    action='store_true',
-    )
-
-ap.add_argument(
-    '--align-selection',
-    help=(
-        'The reference atom group to which align the trajectory to. '
-        'Must be subselection of --selection.'
-        ),
-    type=str,
-    default='all',
+    help='Align system to a atom group.',
+    default=False,
+    const='all',
+    nargs='?',
     )
 
 ap.add_argument(
@@ -135,7 +154,6 @@ def main(
         unwrap_reference=None,
         unwrap_compound='fragments',
         align=False,
-        align_selection='all',
         **kwargs,
         ):
    
@@ -156,20 +174,20 @@ def main(
         u_top = mda.Universe(topology).select_atoms(selection)
         log.info(T('Alignment'))
         log.info(S('trajectory selection will be aligned to subselection:'))
-        log.info(S('- {}', align_selection, indent=2))
+        log.info(S('- {}', align, indent=2))
     
     log.info(T('transformation'))
     sliceObj = libio.frame_slice(start, stop, step)
 
     log.info(S('selecting: {}', selection))
-    selection = u.select_atoms(selection)
+    atom_selection = u.select_atoms(selection)
     log.info(S('with {} atoms', selection.n_atoms, indent=2))
 
     log.info(T('saving trajectory'))
     traj_output = Path(traj_output)
     log.info(S('destination: {}', traj_output.resolve().str()))
 
-    with mda.Writer(traj_output.str(), selection.n_atoms) as W:
+    with mda.Writer(traj_output.str(), atom_selection.n_atoms) as W:
         for i, ts in zip(
                 range(len(u.trajectory))[sliceObj],
                 u.trajectory[sliceObj],
@@ -185,13 +203,9 @@ def main(
                     )
 
             if align:
-                mdaalign.alignto(
-                    selection,
-                    u_top,
-                    select=align_selection,
-                    )
+                mdaalign.alignto(u, u, select=align,)
 
-            W.write(selection)
+            W.write(atom_selection)
     
     log.info(S('trajectory saved'))
 
@@ -199,7 +213,7 @@ def main(
         log.info(T('saving topology'))
         fout = libcli.parse_top_output(top_output)
         log.info(S('saving frame 0 to: {}', fout.resolve()))
-        with mda.Writer(fout.str(), selection.n_atoms) as W:
+        with mda.Writer(fout.str(), atom_selection.n_atoms) as W:
             for ts in u.trajectory[sliceObj][0:1]:
                 if unwrap:
                     log.debug(S('unwrapping for topology', indent=2))
