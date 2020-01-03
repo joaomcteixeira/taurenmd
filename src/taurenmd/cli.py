@@ -64,7 +64,7 @@ import taurenmd.cli_rmsd as cli_rmsd
 import taurenmd.cli_rmsf as cli_rmsf
 import taurenmd.cli_rotations as cli_rot
 import taurenmd.cli_trajedit as cli_trajedit
-from taurenmd import _BANNER, _DOCSTRING, log
+from taurenmd import __version__, _BANNER, _DOCSTRING, log
 from taurenmd.libs import libcli
 from taurenmd.logger import CMDFILE
 
@@ -79,6 +79,18 @@ ap = libcli.CustomParser(
     description=__doc__,
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
+
+ap.add_argument(
+    '-v',
+    '--version',
+    action='version',
+    version=(
+        f'{_BANNER}\n'
+        f'version: {__version__}\n\n'
+        f'to see the list of all versions visit: https://github.com/joaomcteixeira/taurenmd/releases\n'
+        )
+    )
+
 subparsers = ap.add_subparsers(
     title='taurenmd subroutines',
     )
