@@ -12,12 +12,23 @@ def get_number(path):
     Examples
     --------
 
-        traj_1.dcd' -> 1
-        traj_3.dcd' -> 3
-        traj_1231.dcd' -> 1231
-        traj_0011.dcd' -> 11
-        traj_1_.dcd' -> 1
-        traj_20200101_1.dcd -> 1
+        >>> get_number('traj_1.dcd')
+        >>> 1
+        
+        >>> get_number('traj_3.dcd')
+        >>> 3
+        
+        >>> get_number('traj_1231.dcd')
+        >>> 1231
+        
+        >>> get_number('traj_0011.dcd')
+        >>> 11
+        
+        >>> get_number('traj_1_.dcd')
+        >>> 1
+        
+        >>> get_number('traj_20200101_1.dcd')
+        >>> 1
 
     Parameters
     ----------
@@ -29,9 +40,8 @@ def get_number(path):
     int
         The tail integer of the path.
     """
-    digit_re = re.compile('_\d+')
     stem = Path(path).stem
-    number = re.findall('\d+', stem)[-1]
+    number = re.findall(r'\d+', stem)[-1]
     return int(number)
 
 
@@ -281,7 +291,7 @@ def export_data_to_file(
         is not placed, it should be already provided if desired.
 
     fmt : str
-        The float format. Defaults to ``{:.3}``.
+        The float format. Defaults to ``{:.3f}``.
 
     delimiter : str
         The string delimiter between columns. Defaults to ``,``.
@@ -305,39 +315,76 @@ def export_data_to_file(
 def frame_list(len_traj, start=None, stop=None, step=None, flist=None,):
     """
     Create frame integer list from a length and slice parameters.
+    
+    Examples
+    --------
+
+        >>> frame_list(10)
+        >>> list(range(10)) # returns
+
+        >>> frame_list(10, start=2, stop=5)
+        >>> list(range(2, 5)) # returns
+
+        >>> frame_list(10, 2, 50)
+        >>> list(range(2, 10)) # returns
+
+        >>> frame_list(10, None, None, 2)
+        >>> list(range(0, 10, 2)) # returns
+
+        >>> frame_list(10, flist='1,2,45,65')
+        >>> [1, 2, 45, 65]
+
+        >>> frame_list(10, flist=[1, 2, 45, 65])
+        >>> [1, 2, 45, 65]
+
+        >>> frame_list(10, flist=['1', '2', '45', '65'])
+        >>> [1, 2, 45, 65]
+        
+        >>> frame_list(None, flist=['1', '2', '45', '65'])
+        >>> [1, 2, 45, 65]
 
     Parameters
     ----------
+    len_traj : int
+        The length to evaluate. Normally this is the length of the
+        trajectory.
+
     start : int or None, optional
-        The start index for the slice object.
+        The start index for the frame list after length evaluation.
         Defaults to ``None``.
     
     stop : int or None, optional
-        The stop index for the slice object.
+        The stop index for the frame list after length evaluation.
         Defaults to ``None``.
 
     step: int or None, optional
-        the step index for the slice object.
+        the step index for the frame list after length evaluation.
         Defaults to ``None``.
 
     flist : list-like, or comma-separated string, optional
         The list of specific frames.
         Defaults to ``None``.
+
+    Returns
+    -------
+    list
+        The resulting frame list.
     """
     if any((start, stop, step)):
-        return range(len_traj)[slice(start, stop, step)]
+        return list(range(len_traj)[slice(start, stop, step)])
 
     elif flist:
         try:
             return [int(i) for i in flist.split(',')]
         except AttributeError:
-            return [int(i) for i in flist]
-        except Exception:
-            raise ValueError(
-                'Cannot generate list of frames from {}'.format(flist)
-                ) from None
+            try:
+                return [int(i) for i in flist]
+            except TypeError:
+                raise ValueError(
+                    'Cannot generate list of frames from {}'.format(flist)
+                    ) from None
     else:
-        return range(len_traj)
+        return list(range(len_traj))
     
 
 def frame_slice(start=None, stop=None, step=None,):
@@ -345,7 +392,7 @@ def frame_slice(start=None, stop=None, step=None,):
     return slice(start, stop, step)
 
 
-def evaluate_to_slice(*, value=None, start=None, stop=None, end=None):
+def evaluate_to_slice(*, value=None, start=None, stop=None, step=None):
     """
     Evaluate to slice.
     
@@ -356,7 +403,7 @@ def evaluate_to_slice(*, value=None, start=None, stop=None, end=None):
     Examples
     --------
 
-        >>> evalute_to_slice(value='1,100,2')
+        >>> evaluate_to_slice(value='1,100,2')
         >>> slice(1, 100, 2)
         
         >>> evaluate_to_slice(start=10)
@@ -405,27 +452,24 @@ def evaluate_to_slice(*, value=None, start=None, stop=None, end=None):
     ValueError
         If slice can not be computed.
     """  # noqa: E501
-    if any((start, stop, end)):
-        return slice(start, stop, end)
 
-    elif isinstance(value, (list, tuple)) and len(value) == 3:
-
+    def convert(a):
         try:
-            start = int(value[0])
+            return int(a)
         except (ValueError, TypeError):
-            start = None
+            return None
+    
+    def eval_types(list_):
+        types = (int, str, type(None))
+        return all(isinstance(i, types) for i in list_)
 
-        try:
-            stop = int(value[1])
-        except (ValueError, TypeError):
-            stop = None
+    if any((start, stop, step)) and eval_types([start, stop, step]):
+        return slice(convert(start), convert(stop), convert(step))
 
-        try:
-            step = int(value[2])
-        except (ValueError, TypeError):
-            step = None
-
-        return slice(start, stop, step)
+    elif isinstance(value, (list, tuple)) \
+            and len(value) == 3 \
+            and eval_types(value):
+        return slice(convert(value[0]), convert(value[1]), convert(value[2]))
 
     elif value is None:
         return slice(None, None, None)
@@ -437,9 +481,12 @@ def evaluate_to_slice(*, value=None, start=None, stop=None, end=None):
             values = value.split(',')
         else:
             values = value.split()
-
-        start, stop, step = [i if i else None for i in values]
-        return slice(start, stop, step)
+        
+        indexes = [start, stop, step]
+        for i, v in enumerate(values):
+            indexes[i] = convert(v)
+            
+        return slice(*indexes)
     
     elif isinstance(value, int):
         return slice(value)

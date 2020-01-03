@@ -186,3 +186,72 @@ def test_export_data_to_file_2():
     fexp = export_data_expected_2.open().read()
     assert fres == fexp
     fout.unlink()
+
+
+@pytest.mark.parametrize(
+    'inputs,expected',
+    [
+        ((10,), list(range(10))),
+        ((10, 2, 5), list(range(2, 5))),
+        ((10, 2, 50), list(range(2, 10))),
+        ((10, None, None, 2), list(range(0, 10, 2))),
+        ((10, None, None, None, '1,2,45,65'), [1, 2, 45, 65]),
+        ((10, None, None, None, [1, 2, 45, 65]), [1, 2, 45, 65]),
+        ((10, None, None, None, ['1', '2', '45', '65']), [1, 2, 45, 65]),
+        ((None, None, None, None, ['1', '2', '45', '65']), [1, 2, 45, 65]),
+        ],
+    )
+def test_frame_list(inputs, expected):
+    """Test make frame list."""
+    result = io.frame_list(*inputs)
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    'lent,flist,error',
+    [
+        (10, 123, ValueError),
+        (None, None, TypeError),
+        ]
+    )
+def test_frame_list_error(lent, flist, error):
+    with pytest.raises(error):
+        io.frame_list(lent, flist=flist)
+
+
+def test_frame_slice():
+    result = io.frame_slice(1, 100, 2)
+    assert result == slice(1, 100, 2)
+
+
+@pytest.mark.parametrize(
+    'value,start,stop,step,expected',
+    [
+        ('1,100,2', None, None, None, slice(1, 100, 2)),
+        ('1:100:2', None, None, None, slice(1, 100, 2)),
+        ('1:None:2', None, None, None, slice(1, None, 2)),
+        (None, 10, None, None, slice(10, None, None)),
+        (None, 10, 100, None, slice(10, 100, None)),
+        (None, 10, 100, 3, slice(10, 100, 3)),
+        ((0, 50, 3), None, None, None, slice(0, 50, 3)),
+        ((0, '50', 3), None, None, None, slice(0, 50, 3)),
+        ((None, 100, None), None, None, None, slice(None, 100, None)),
+        ('10', None, None, None, slice(10, None, None)),
+        (10, None, None, None, slice(None, 10, None)),
+        (None, None, None, None, slice(None, None, None)),
+        (None, {}, None, None, slice(None, None, None)),
+        ],
+    )
+def test_evaluate_to_slice(value, start, stop, step, expected):
+    result = io.evaluate_to_slice(
+        value=value,
+        start=start,
+        stop=stop,
+        step=step,
+        )
+    assert result == expected
+
+
+def test_evaluate_to_slice_error():
+    with pytest.raises(ValueError):
+        io.evaluate_to_slice(value={})
