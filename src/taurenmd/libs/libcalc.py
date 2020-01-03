@@ -60,7 +60,7 @@ def mda_rmsd(
     MDAnalysis Universe
         The MDAnalysis `universe <https://www.mdanalysis.org/docs/documentation_pages/core/universe.html?highlight=universe#core-object-universe-mdanalysis-core-universe>`_.
 
-    frames : any, optional
+    frame_slice : any, optional
         The frames in the trajectory to consider.
         If ``None`` considers all frames.
         Accepts any argument that
@@ -255,6 +255,7 @@ def generate_quaternion_rotations(
         start=0,
         end=360,
         num=360 * 3,
+        endpoint=True,
         ):
     """
     Generate quaternion rotations of a vector around and axis.
@@ -299,7 +300,7 @@ def generate_quaternion_rotations(
     rot_u = Q(vector=rotation_axis).unit
 
     Q_rotated_tuples = []
-    for angle in np.linspace(start, end, num=num):
+    for angle in np.linspace(start, end, num=num, endpoint=endpoint):
         qq = Q(axis=rot_u.vector, degrees=angle)
         Q_rotated_tuples.append((qq, qq.rotate(vec_u)))
 
@@ -337,6 +338,6 @@ def sort_by_minimum_Qdistances(rotation_tuples, reference_vector):
     
     minimum = sorted(
         rotation_tuples,
-        key=lambda x: Q.distance(x[1], ref_u),
+        key=lambda x: math.degrees(Q.distance(x[1], ref_u)) % 360,
         )
     return minimum
