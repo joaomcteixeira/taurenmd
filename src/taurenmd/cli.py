@@ -69,6 +69,12 @@ from taurenmd.libs import libcli
 from taurenmd.logger import CMDFILE
 
 
+__author__ = 'Joao M.C. Teixeira'
+__email__ = 'joaomcteixeira@gmail.com'
+__maintainer__ = 'Joao M.C. Teixeira'
+__credits__ = ['Joao M.C. Teixeira']
+__status__ = 'Production'
+
 ap = libcli.CustomParser(
     description=__doc__,
     formatter_class=argparse.RawDescriptionHelpFormatter,

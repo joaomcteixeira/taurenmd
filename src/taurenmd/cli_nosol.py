@@ -30,6 +30,12 @@ import functools
 
 from taurenmd.libs import libcli, libmdt
 
+__author__ = 'Joao M.C. Teixeira'
+__email__ = 'joaomcteixeira@gmail.com'
+__maintainer__ = 'Joao M.C. Teixeira'
+__credits__ = ['Joao M.C. Teixeira']
+__status__ = 'Production'
+
 __doc__ += libcli.ref_mdt
 
 _help = 'Removes solvent from trajectory.'

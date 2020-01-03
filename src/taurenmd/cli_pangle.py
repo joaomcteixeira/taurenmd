@@ -45,6 +45,12 @@ from taurenmd import log
 from taurenmd.libs import libcalc, libcli, libmda, libio
 from taurenmd.logger import S, T
 
+__author__ = 'Joao M.C. Teixeira'
+__email__ = 'joaomcteixeira@gmail.com'
+__maintainer__ = 'Joao M.C. Teixeira'
+__credits__ = ['Joao M.C. Teixeira']
+__status__ = 'Production'
+
 __doc__ += (
     f'{libcli.ref_mda}'
     f'{libcli.ref_mda_selection}'
