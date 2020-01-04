@@ -128,7 +128,7 @@ def save_command(fname, *args):
         fh.write(
             '[{}] {}\n'.format(
                 datetime.now().strftime("%d/%m/%Y, %H:%M:%S"),
-                ' '.join(args),
+                ' '.join(str(a) for a in args),
                 )
             )
 
