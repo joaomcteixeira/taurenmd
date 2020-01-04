@@ -54,6 +54,6 @@ def load_traj(topology, trajectory):
     else:
         top = topp.str()
 
-    mdtrajectory = mdtraj.load(trajectory, top=top)
+    mdtrajectory = mdtraj.load(Path(trajectory).str(), top=top)
 
     return mdtrajectory
