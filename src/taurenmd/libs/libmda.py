@@ -13,7 +13,7 @@ taurenmd and MDAnalysis.
 """
 import MDAnalysis as mda
 
-from taurenmd import log
+from taurenmd import log, Path
 from taurenmd.libs import libio
 from taurenmd.logger import S, T
 
@@ -55,7 +55,10 @@ def load_universe(topology, *trajectories):
     MDAnalysis Universe
     """  # noqa: E501 D412
     libio.report_input(topology, trajectories)
-    universe = mda.Universe(topology, trajectories)
+    universe = mda.Universe(
+        Path(topology).str(),
+        [Path(i).str() for i in trajectories],
+        )
     report(universe)
     return universe
 
@@ -113,7 +116,7 @@ def draw_atom_label_from_atom_group(atom_group):
         s = '{}.{}{}.{}'.format(
             atom.segment.segid,
             atom.residue.resnum,
-            atom.resname,
+            atom.resname.title(),
             atom.name,
             )
         labels.append(s)

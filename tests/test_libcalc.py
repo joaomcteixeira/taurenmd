@@ -137,4 +137,3 @@ def test_sort_by_minimum():
     assert isinstance(result[0][1], Q)
     assert result[0][0].degrees < 0.001
     assert abs(result[0][-1].degrees - 180) < 0.001
-    assert False
