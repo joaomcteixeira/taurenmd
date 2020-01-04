@@ -46,8 +46,7 @@ def load_args(ap):
 def maincli(ap, main):
     cmd = load_args(ap)
     save_command(CMDFILE, *sys.argv)
-    main(**vars(cmd))
-    return
+    return main(**vars(cmd))
 
 
 # https://stackoverflow.com/questions/4042452
