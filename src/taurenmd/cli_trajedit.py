@@ -53,6 +53,7 @@ alternative approach to the ``imagemol`` client, that implements from
 
 """
 import argparse
+import functools
 
 import MDAnalysis as mda
 from MDAnalysis.analysis import align as mdaalign
@@ -133,17 +134,6 @@ ap.add_argument(
 
 def _ap():
     return ap
-
-
-def load_args():
-    cmd = ap.parse_args()
-    return cmd
-
-
-def maincli():
-    cmd = load_args()
-    main(**vars(cmd))
-    return
 
 
 def main(
@@ -232,6 +222,8 @@ def main(
     log.info(S('Done'))
     return
 
+
+maincli = functools.partial(libcli.maincli, ap, main)
 
 if __name__ == '__main__':
     maincli()

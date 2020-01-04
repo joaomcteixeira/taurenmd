@@ -48,7 +48,7 @@ import functools
 import numpy as np
 from bioplottemplates.plots import param
 
-from taurenmd import log
+from taurenmd import log, Path
 from taurenmd.libs import libcli, libio, libmda  # noqa: F401
 from taurenmd.logger import S, T
 
@@ -108,6 +108,9 @@ def main(
         **kwargs
         ):
     log.info(T('measuring distances'))
+    
+    topology = Path(topology)
+    trajectories = [Path(t) for t in trajectories]
 
     u = libmda.load_universe(topology, *trajectories)
     
@@ -146,8 +149,8 @@ def main(
             fname=export,
             header=(
                 '# Distances between two selections centers of geomemtry\n'
-                f'# topology: {topology}\n',
-                f'# trajectories: {", ".join(trajectories)}\n'
+                f'# topology: {topology}\n'
+                f'# trajectories: {", ".join(p.str() for p in trajectories)}\n'
                 f'# selection #1: {sel1}\n'
                 f'# selection #2: {sel2}\n'
                 f'# frame,distance\n'

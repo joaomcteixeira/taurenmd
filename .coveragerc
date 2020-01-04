@@ -13,4 +13,8 @@ parallel = true
 [report]
 show_missing = true
 precision = 2
-omit = *migrations*
+omit = 
+    *migrations*
+    *_cli_template.py
+exclude_lines =
+    if __name__ == .__main__.:
