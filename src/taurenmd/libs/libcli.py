@@ -405,6 +405,7 @@ def add_frame_list_arg(parser):
             ),
         default=False,
         nargs='+',
+        type=int,
         )
 
 def add_plane_selection_arg(parser):

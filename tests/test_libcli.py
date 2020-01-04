@@ -167,6 +167,14 @@ def test_topology_input(cmd, expected):
     assert v['topology'] == expected
 
 
+def test_topology_input_error():
+    """Test topology input error."""
+    parser = argparse.ArgumentParser()
+    lc.add_topology_arg(parser)
+    with pytest.raises(SystemExit):
+        parser.parse_args([])
+
+
 @pytest.mark.parametrize(
     'cmd,expected',
     [
@@ -237,6 +245,51 @@ def test_atom_selection_args(cmd, expected):
     v = vars(parser.parse_args(cmd))
     assert v['selection'] == expected
 
+
+@pytest.mark.parametrize(
+    'cmd',
+    [
+        ('-l selA selB'),
+        ('--selection selB selC selD'),
+        ],
+    )
+def test_atom_selection_error(cmd):
+    """Test atom selection error."""
+    parser = argparse.ArgumentParser()
+    lc.add_atom_selection_arg(parser)
+    with pytest.raises(SystemExit):
+        parser.parse_args(cmd.split())
+
+
+@pytest.mark.parametrize(
+    'cmd,expected',
+    [
+        (['-g', "name CA"], ['name CA']),
+        (['--selections', "name CA", "segid A"], ['name CA', 'segid A']),
+        ([], None),
+        ],
+    )
+def test_atom_selections_args(cmd, expected):
+    """Test atom selection arg."""
+    parser = argparse.ArgumentParser()
+    lc.add_atom_selections_arg(parser)
+    v = vars(parser.parse_args(cmd))
+    assert v['selections'] == expected
+
+
+@pytest.mark.parametrize(
+    'cmd',
+    [
+        ('-g'),
+        ('--selections'),
+        ],
+    )
+def test_atom_selections_error(cmd):
+    """Test atom selection error."""
+    parser = argparse.ArgumentParser()
+    lc.add_atom_selections_arg(parser)
+    with pytest.raises(SystemExit):
+        parser.parse_args(cmd.split())
 
 @pytest.mark.parametrize(
     'cmd,expected',
@@ -399,3 +452,21 @@ def test_traj_output_arg_error(cmd):
     lc.add_traj_output_arg(parser)
     with pytest.raises(SystemExit):
         parser.parse_args([cmd])
+
+
+@pytest.mark.parametrize(
+    'cmd,expected',
+    [
+        ('-x', 'results.csv'),
+        ('--export', 'results.csv'),
+        ('-x data.csv', 'data.csv'),
+        ('--export data.csv', 'data.csv'),
+        ('', False),
+        ],
+    )
+def test_data_export_arg(cmd, expected):
+    """Test data export arg."""
+    parser = argparse.ArgumentParser()
+    lc.add_data_export_arg(parser)
+    v = vars(parser.parse_args(cmd.split()))
+    assert v['export'] == expected
