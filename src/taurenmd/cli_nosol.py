@@ -28,7 +28,9 @@ Removes solvent from trajectory using `MDTraj.remove_solvent <http://mdtraj.org/
 import argparse
 import functools
 
-from taurenmd.libs import libcli, libmdt
+from taurenmd import log, Path
+from taurenmd.libs import libcli, libio, libmdt
+from taurenmd.logger import S, T
 
 __author__ = 'Joao M.C. Teixeira'
 __email__ = 'joaomcteixeira@gmail.com'
@@ -89,7 +91,7 @@ def main(
     trj.remove_solvent(inplace=True, exclude=maintain)
     
     if top_output:
-        fout = libcli.parse_top_output(top_output, traj_output)
+        fout = libio.parse_top_output(top_output, traj_output)
         trj[0].save(fout.str())
         log.info(S('first frame topology saved: {}', fout))
    

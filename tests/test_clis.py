@@ -147,3 +147,101 @@ def test_cli_distances_2():
         )
     assert not Path('dist.csv').exists()
     assert not Path('dist.pdf').exists()
+
+
+def test_cli_fext_1():
+    """Test client frame extract."""
+    cli_fext.main(
+        toptest,
+        [trajtest],
+        start=4,
+        stop=6,
+        step=None,
+        prefix='timestep_',
+        ext='pdb',
+        selection='name CA',
+        )
+    p1 = Path('timestep_04.pdb')
+    p2 = Path('timestep_05.pdb')
+    assert p1.exists()
+    assert p2.exists()
+    p1.unlink()
+    p2.unlink()
+
+
+def test_cli_imagemol():
+    """Test imagemol."""
+    cli_imagemol.main(
+        toptest,
+        trajtest,
+        traj_output='testimage.dcd',
+        top_output='testtop.pdb',
+        protocol=1,
+        )
+    p1 = Path('testimage.dcd')
+    p2 = Path('testtop.pdb')
+    assert p1.exists()
+    assert p2.exists()
+
+
+def test_cli_imagemol_2():
+    """Test imagemol."""
+    cli_imagemol.main(
+        toptest,
+        trajtest,
+        traj_output='testimage.dcd',
+        top_output=False,
+        protocol=2,
+        )
+
+def test_cli_nosol_1():
+    """Test cli nosol."""
+    cli_nosol.main(
+        toptest,
+        trajtest,
+        selection='name CA',
+        maintain=None,
+        top_output='_f0.pdb',
+        traj_output='nosol.dcd',
+        )
+    p1 = Path('nosol.dcd')
+    p2 = Path('nosol_f0.pdb')
+    assert p1.exists()
+    assert p2.exists()
+    p1.unlink()
+    p2.unlink()
+
+
+def test_cli_nosol_2():
+    """Test cli nosol."""
+    cli_nosol.main(
+        toptest,
+        trajtest,
+        selection=None,
+        maintain=['CL'],
+        top_output='_f1.pdb',
+        traj_output='nosol.dcd',
+        )
+    p1 = Path('nosol.dcd')
+    p2 = Path('nosol_f1.pdb')
+    assert p1.exists()
+    assert p2.exists()
+    p1.unlink()
+    p2.unlink()
+
+
+def test_cli_nosol_2():
+    """Test cli nosol."""
+    cli_nosol.main(
+        toptest,
+        trajtest,
+        selection=None,
+        maintain=['CL', 'NA'],
+        top_output=None,
+        traj_output='nosol.dcd',
+        )
+    p1 = Path('nosol.dcd')
+    p2 = Path('nosol_f1.pdb')
+    assert p1.exists()
+    assert not p2.exists()
+    p1.unlink()
