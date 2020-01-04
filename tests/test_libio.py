@@ -147,7 +147,7 @@ def test_export_data_to_file_1():
     """Test export data to file."""
     xdata = list(range(10))
     ydata = list(range(0, 20, 2))
-    header="#this is an header"
+    header="#this is an header\n"
     fout = Path(datap, 'exporttest.csv')
     io.export_data_to_file(
         xdata,
@@ -171,7 +171,7 @@ def test_export_data_to_file_2():
     ydata = [ydata, ydata]
     assert isinstance(ydata, list)
     assert len(ydata) == 2
-    header="#this is an header"
+    header="#this is an header\n"
     fout = Path(datap, 'exporttest.csv')
     io.export_data_to_file(
         xdata,

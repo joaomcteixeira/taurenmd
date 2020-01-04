@@ -298,7 +298,6 @@ def export_data_to_file(
     """
     with open(fname, 'w') as fh:
         fh.write(header)
-        fh.write('\n')
         for label, ydataseries in zip(
                 xdata,
                 zip(*ydata),
