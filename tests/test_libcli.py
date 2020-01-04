@@ -297,3 +297,105 @@ def test_plane_selection_error(cmd):
     lc.add_plane_selection_arg(parser)
     with pytest.raises(SystemExit):
         parser.parse_args(cmd)
+
+
+@pytest.mark.parametrize(
+    'cmd,expected',
+    [
+        ('-r 1', 1),
+        ('--ref-frame 2', 2),
+        ('', 0),
+        ],
+    )
+def test_reference_frame(cmd, expected):
+    """Test reference frame."""
+    parser = argparse.ArgumentParser()
+    lc.add_reference_frame_arg(parser)
+    v = vars(parser.parse_args(cmd.split()))
+    assert v['ref_frame'] == expected
+
+
+@pytest.mark.parametrize(
+    'cmd',
+    [
+        (['-r', 'A', 'B', 'D', 'E']),
+        ],
+    )
+def test_reference_frame_error(cmd):
+    """Test plane selection error."""
+    parser = argparse.ArgumentParser()
+    lc.add_reference_frame_arg(parser)
+    with pytest.raises(SystemExit):
+        parser.parse_args(cmd)
+
+
+@pytest.mark.parametrize(
+    'cmd,expected',
+    [
+        (['-v', 'title=mytitle'], {'title': 'mytitle'}),
+        (
+            ['--plot', 'title=mytitle', 'colors=a,b,c'],
+            {
+                'title': 'mytitle',
+                'colors': ('a', 'b', 'c')
+                }),
+        ],
+    )
+def test_plot_arg(cmd, expected):
+    """Test plot args."""
+    parser = argparse.ArgumentParser()
+    lc.add_plot_arg(parser)
+    v = vars(parser.parse_args(cmd))
+    assert v['plot'] == True
+    assert 'plotvars' in v
+    assert v['plotvars'] == expected
+
+
+@pytest.mark.parametrize(
+    'cmd,expected',
+    [
+        ('-o', '_frame0.pdb'),
+        ('', False),
+        ('--top-output', '_frame0.pdb'),
+        ('--top-output frame0_', 'frame0_'),
+        ],
+    )
+def test_topoutput_args(cmd, expected):
+    """Test top output."""
+    parser = argparse.ArgumentParser()
+    lc.add_top_output_arg(parser)
+    v = vars(parser.parse_args(cmd.split()))
+    assert v['top_output'] == expected
+    
+
+@pytest.mark.parametrize(
+    'cmd,expected',
+    [
+        ('-d traj.pdb', 'traj.pdb'),
+        ('', 'traj_out.dcd'),
+        ('--traj-output traj_out.pdb', 'traj_out.pdb'),
+        ('--traj-output newtraj.xtc', 'newtraj.xtc'),
+        ],
+    )
+def test_trajoutput_args(cmd, expected):
+    """Test traj output."""
+    parser = argparse.ArgumentParser()
+    lc.add_traj_output_arg(parser)
+    v = vars(parser.parse_args(cmd.split()))
+    assert v['traj_output'] == expected
+
+
+
+@pytest.mark.parametrize(
+    'cmd',
+    [
+        ('-t'),
+        ('--traj-output'),
+        ],
+    )
+def test_traj_output_arg_error(cmd):
+    """Test top output error."""
+    parser = argparse.ArgumentParser()
+    lc.add_traj_output_arg(parser)
+    with pytest.raises(SystemExit):
+        parser.parse_args([cmd])
