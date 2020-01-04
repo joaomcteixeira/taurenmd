@@ -41,7 +41,7 @@ import functools
 
 from bioplottemplates.plots import param
 
-from taurenmd import log
+from taurenmd import log, Path
 from taurenmd.libs import libcalc, libcli, libmda, libio
 from taurenmd.logger import S, T
 
@@ -88,13 +88,17 @@ def main(
         start=None,
         stop=None,
         step=None,
+        export=False,
         plot=False,
         plotvars=None,
         **kwargs
         ):
     log.info(T('calculating angles'))
+    
+    topology = Path(topology)
+    trajectories = [Path(t) for t in trajectories]
 
-    u = libmda.mda_load_universe(topology, *trajectories)
+    u = libmda.load_universe(topology, *trajectories)
 
     frame_slice = libio.frame_slice(
         start=start,
@@ -130,18 +134,12 @@ def main(
         
         a, b, c, d = libcalc.calc_plane_eq(point1, point2, point3)
 
-        try:
-            angles.append(
-                libcalc.calc_planes_angle(
-                    ra, rb, rc, a, b, c,
-                    aunit=aunit,
-                    )
+        angles.append(
+            libcalc.calc_planes_angle(
+                ra, rb, rc, a, b, c,
+                aunit=aunit,
                 )
-        except ValueError:
-            # happens when ValueError: math domain error
-            # this is division by zero, means math.acos(d) is 0
-            log.info(S('ValueError returned angle 0.0 found'))
-            angles.append(0.0)
+            )
     
     log.info(S('calculated a total of {} angles.', len(angles)))
    
@@ -152,8 +150,8 @@ def main(
             fname=export,
             header=(
                 '# Angular oscillation between a plane representatives\n'
-                f'# topology: {topology}\n',
-                f'# trajectories: {", ".join(trajectories)}\n'
+                f'# topology: {topology}\n'
+                f'# trajectories: {", ".join(p.str() for p in trajectories)}\n'
                 f'# selections: {plane_selection}\n'
                 f'# frame,angle({aunit})\n'
                 ),

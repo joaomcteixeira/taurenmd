@@ -182,6 +182,8 @@ def test_cli_imagemol():
     p2 = Path('testtop.pdb')
     assert p1.exists()
     assert p2.exists()
+    p1.unlink()
+    p2.unlink()
 
 
 def test_cli_imagemol_2():
@@ -193,6 +195,10 @@ def test_cli_imagemol_2():
         top_output=False,
         protocol=2,
         )
+    p1 = Path('testimage.dcd')
+    assert p1.exists()
+    p1.unlink()
+
 
 def test_cli_nosol_1():
     """Test cli nosol."""
@@ -245,3 +251,38 @@ def test_cli_nosol_2():
     assert p1.exists()
     assert not p2.exists()
     p1.unlink()
+
+
+def test_cli_pangle_1():
+    """Test client plane angle."""
+    cli_pangle.main(
+        toptest,
+        [trajtest],
+        ['resnum 10', 'resnum 20', 'resnum 30'],
+        aunit='degrees',
+        export='angles.csv',
+        plot=True,
+        plotvars={'filename': 'angles.pdf'},
+        )
+    p1 = Path('angles.csv')
+    p2 = Path('angles.pdf')
+    assert p1.exists()
+    assert p2.exists()
+    p1.unlink()
+    p2.unlink()
+
+
+def test_cli_pangle_2():
+    """Test client plane angle."""
+    cli_pangle.main(
+        toptest,
+        [trajtest],
+        ['resnum 10', 'resnum 20', 'resnum 30'],
+        aunit='radians',
+        export=False,
+        plot=False,
+        )
+
+def test_cli_report_1():
+    """Test cli report."""
+    cli_report.main(toptest, [trajtest])
