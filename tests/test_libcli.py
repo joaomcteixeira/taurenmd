@@ -3,6 +3,7 @@ import argparse
 
 import pytest
 
+from taurenmd import Path
 from taurenmd.libs import libcli as lc
 
 
@@ -77,3 +78,32 @@ def test_ParamsToDick(key, value, expected):
 
     assert 'plotvars' in v
     assert v['plotvars'][key.rstrip('=')] == expected
+
+
+def test_save_command():
+    """Tests only the interface."""
+    lc.save_command('testcommandsave', 1, 2, 3, 4)
+    Path('testcommandsave').unlink()
+
+
+def test_add_subparser():
+    """Test adds subparser."""
+    def mainfunc():
+        return 'this is main func'
+    parser = argparse.ArgumentParser()
+    subparser = parser.add_subparsers()
+    parserm = argparse.ArgumentParser()
+    parserm.add_argument('foo')
+    parserm.add_argument('--bar', nargs=1, default=False)
+    pseudomodule = argparse.Namespace(
+        _name='mycmd',
+        __doc__='Module documentation',
+        _help='short help',
+        ap=parserm,
+        main=mainfunc,
+        )
+
+    lc.add_subparser(subparser, pseudomodule)
+    v = vars(parser.parse_args('mycmd this_foo --bar b'.split()))
+    assert v['foo'] == 'this_foo'
+    assert v['bar'] == ['b']
