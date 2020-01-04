@@ -88,8 +88,10 @@ def test_save_command():
 
 def test_add_subparser():
     """Test adds subparser."""
+
     def mainfunc():
         return 'this is main func'
+
     parser = argparse.ArgumentParser()
     subparser = parser.add_subparsers()
     parserm = argparse.ArgumentParser()
@@ -107,3 +109,191 @@ def test_add_subparser():
     v = vars(parser.parse_args('mycmd this_foo --bar b'.split()))
     assert v['foo'] == 'this_foo'
     assert v['bar'] == ['b']
+
+
+@pytest.mark.parametrize(
+    'cmd,expected',
+    [
+        ('-a degrees', 'degrees'),
+        ('--aunit degrees', 'degrees'),
+        ('-a radians', 'radians'),
+        ('--aunit radians', 'radians'),
+        ('', 'degrees'),
+        ]
+    )
+def test_angle_unit(cmd, expected):
+    """Test angle unit argument."""
+    parser = argparse.ArgumentParser()
+    lc.add_angle_unit_arg(parser)
+    v = vars(parser.parse_args(cmd.split()))
+    assert v['aunit'] == expected
+
+
+def test_angle_unit_error():
+    """Test sysexit error."""
+    parser = argparse.ArgumentParser()
+    lc.add_angle_unit_arg(parser)
+    with pytest.raises(SystemExit):
+        parser.parse_args('-a'.split())
+
+
+@pytest.mark.parametrize(
+    'cmd,expected',
+    [
+        ('-i', True),
+        ('--insort', True),
+        ('', False),
+        ]
+    )
+def test_insort(cmd, expected):
+    """Test angle unit argument."""
+    parser = argparse.ArgumentParser()
+    lc.add_insort_arg(parser)
+    v = vars(parser.parse_args(cmd.split()))
+    assert v['insort'] == expected
+
+
+@pytest.mark.parametrize(
+    'cmd,expected',
+    [
+        ('topology.pdb', 'topology.pdb'),
+        ]
+    )
+def test_topology_input(cmd, expected):
+    """Test topology argument."""
+    parser = argparse.ArgumentParser()
+    lc.add_topology_arg(parser)
+    v = vars(parser.parse_args(cmd.split()))
+    assert v['topology'] == expected
+
+
+@pytest.mark.parametrize(
+    'cmd,expected',
+    [
+        ('traj1.dcd', ['traj1.dcd']),
+        ('traj1.dcd traj2.dcd', ['traj1.dcd', 'traj2.dcd']),
+        ]
+    )
+def test_trajectories(cmd, expected):
+    """Test trajectories argument."""
+    parser = argparse.ArgumentParser()
+    lc.add_trajectories_arg(parser)
+    v = vars(parser.parse_args(cmd.split()))
+    assert v['trajectories'] == expected
+
+
+@pytest.mark.parametrize(
+    'cmd,expected',
+    [
+        ('traj1.dcd', 'traj1.dcd'),
+        ]
+    )
+def test_trajectory(cmd, expected):
+    """Test trajectory argument."""
+    parser = argparse.ArgumentParser()
+    lc.add_trajectory_arg(parser)
+    v = vars(parser.parse_args(cmd.split()))
+    assert v['trajectory'] == expected
+
+def test_trajectory_error():
+    """Test error in trajectory input."""
+    parser = argparse.ArgumentParser()
+    lc.add_trajectory_arg(parser)
+    with pytest.raises(SystemExit):
+        parser.parse_args('traj1.dcd traj2.dcd'.split())
+
+
+@pytest.mark.parametrize(
+    'cmd,expected',
+    [
+        ('-s 1 -e 100 -p 4', (1, 100, 4)),
+        ('-e 100 -p 4', (None, 100, 4)),
+        ('-s 100 -p 4', (100, None, 4)),
+        ('-s 100 -e 4', (100, 4, None)),
+        ]
+    )
+def test_slice_arg(cmd, expected):
+    """Test slice arguments."""
+    parser = argparse.ArgumentParser()
+    lc.add_slice_arg(parser)
+    v = vars(parser.parse_args(cmd.split()))
+    assert v['start'] == expected[0]
+    assert v['stop'] == expected[1]
+    assert v['step'] == expected[2]
+
+
+@pytest.mark.parametrize(
+    'cmd,expected',
+    [
+        (['-l', "name CA"], 'name CA'),
+        (['--selection', "name CA and segid A"], 'name CA and segid A'),
+        ([], 'all'),
+        ],
+    )
+def test_atom_selection_args(cmd, expected):
+    """Test atom selection arg."""
+    parser = argparse.ArgumentParser()
+    lc.add_atom_selection_arg(parser)
+    v = vars(parser.parse_args(cmd))
+    assert v['selection'] == expected
+
+
+@pytest.mark.parametrize(
+    'cmd,expected',
+    [
+        ('-t 1', [1]),
+        ('--flist 1 2', [1, 2]),
+        ],
+    )
+def test_framelist_arg(cmd, expected):
+    """Test frame list."""
+    parser = argparse.ArgumentParser()
+    lc.add_frame_list_arg(parser)
+    v = vars(parser.parse_args(cmd.split()))
+    assert v['flist'] == expected
+
+
+def test_framelist_error():
+    """Test framelist error."""
+    parser = argparse.ArgumentParser()
+    lc.add_frame_list_arg(parser)
+    with pytest.raises(SystemExit):
+        parser.parse_args(['-t'])
+
+
+@pytest.mark.parametrize(
+    'cmd,expected',
+    [
+        (
+            ['-z', 'segid A', 'segid B', 'segid C'],
+            ['segid A', 'segid B', 'segid C']
+            ),
+        (
+            ['--plane-selection', 'segid A', 'segid B', 'segid C'],
+            ['segid A', 'segid B', 'segid C']
+            ),
+        ],
+    )
+def test_plane_selection(cmd, expected):
+    """Test plane selection."""
+    parser = argparse.ArgumentParser()
+    lc.add_plane_selection_arg(parser)
+    v = vars(parser.parse_args(cmd))
+    assert v['plane_selection'] == expected
+
+
+@pytest.mark.parametrize(
+    'cmd',
+    [
+        (['-z']),
+        (['-z', 'A']),
+        (['-z', 'A', 'B']),
+        (['-z', 'A', 'B', 'D', 'E']),
+        ],
+    )
+def test_plane_selection_error(cmd):
+    """Test plane selection error."""
+    parser = argparse.ArgumentParser()
+    lc.add_plane_selection_arg(parser)
+    with pytest.raises(SystemExit):
+        parser.parse_args(cmd)
