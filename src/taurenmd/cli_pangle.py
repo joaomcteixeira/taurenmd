@@ -150,11 +150,16 @@ def main(
             fname=export,
             header=(
                 '# Angular oscillation between a plane representatives\n'
-                f'# topology: {topology}\n'
-                f'# trajectories: {", ".join(p.str() for p in trajectories)}\n'
-                f'# selections: {plane_selection}\n'
-                f'# frame,angle({aunit})\n'
-                ),
+                '# topology: {}\n'
+                '# trajectories: {}\n'
+                '# selections: {}\n'
+                '# frame,angle({})\n'
+                ).format(
+                    topology,
+                    ', '.join(t.resolve().str() for t in trajectories),
+                    plane_selection,
+                    aunit,
+                    ),
             )
 
     if plot:

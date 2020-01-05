@@ -128,11 +128,11 @@ def main(
                 "# Topology: {}\n"
                 "# Trajectories : {}\n"
                 "# ref frame: {}\n"
-                "# frame number, {}\n"
+                "# frame number,{}\n"
                 ).format(
                     datetime.now(),
                     Path(topology).resolve(),
-                    [Path(f).resolve().str() for f in trajectory],
+                    ', '.join(f.resolve().str() for f in trajectories),
                     ref_frame,
                     ','.join(selections),
                     ),

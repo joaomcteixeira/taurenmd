@@ -149,12 +149,17 @@ def main(
             fname=export,
             header=(
                 '# Distances between two selections centers of geomemtry\n'
-                f'# topology: {topology}\n'
-                f'# trajectories: {", ".join(p.str() for p in trajectories)}\n'
-                f'# selection #1: {sel1}\n'
-                f'# selection #2: {sel2}\n'
-                f'# frame,distance\n'
-                ),
+                '# topology: {}\n'
+                '# trajectories: {}\n'
+                '# selection #1: {}\n'
+                '# selection #2: {}\n'
+                '# frame,distance\n'
+                ).format(
+                    topology,
+                    ', '.join(t.resolve().str() for t in trajectories),
+                    sel1,
+                    sel2,
+                    ),
             )
 
     if plot:

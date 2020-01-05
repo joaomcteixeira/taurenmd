@@ -286,3 +286,107 @@ def test_cli_pangle_2():
 def test_cli_report_1():
     """Test cli report."""
     cli_report.main(toptest, [trajtest])
+
+
+def test_cli_rmsd_1():
+    """Test cli rmsd."""
+    cli_rmsd.main(
+        toptest,
+        [trajtest],
+        selections=['name CA'],
+        )
+
+
+def test_cli_rmsd_2():
+    """Test cli rmsd."""
+    cli_rmsd.main(
+        toptest,
+        [trajtest],
+        selections=None,
+        export='rmsds.csv',
+        plot=True,
+        plotvars={'filename': 'rmsds.pdf'},
+        )
+    p1 = Path('rmsds.csv')
+    p2 = Path('rmsds.pdf')
+    assert p1.exists()
+    assert p2.exists()
+    p1.unlink()
+    p2.unlink()
+
+
+def test_cli_rmsf_1():
+    """Test cli rmsf."""
+    cli_rmsf.main(
+        toptest,
+        [trajtest],
+        selections=['name CA'],
+        )
+
+
+def test_cli_rmsf_2():
+    """Test cli rmsd."""
+    cli_rmsf.main(
+        toptest,
+        [trajtest],
+        selections=None,
+        export='rmsfs.csv',
+        plot=True,
+        plotvars={'filename': 'rmsfs.pdf'},
+        )
+    p1 = Path('rmsfs.csv')
+    p2 = Path('rmsfs.pdf')
+    assert p1.exists()
+    assert p2.exists()
+    p1.unlink()
+    p2.unlink()
+
+
+def test_cli_rmsf_error1():
+    """Test cli rmsd."""
+    with pytest.raises(TypeError):
+        cli_rmsf.main(
+            toptest,
+            [trajtest],
+            selections='name CA',
+            )
+
+
+def test_cli_rmsf_error2():
+    """Test cli rmsd."""
+    with pytest.raises(TypeError):
+        cli_rmsf.main(
+            toptest,
+            [trajtest],
+            selections=[],
+            )
+
+
+def test_cli_rotations_1():
+    """Test cli rotations."""
+    cli_rotations.main(
+        toptest,
+        [trajtest],
+        plane_selection=['resnum 10', 'resnum 20', 'resnum 30'],
+        aunit='radians',
+        export='rots.csv',
+        )
+
+    p1 = Path('roll_angles_rots.csv')
+    p2 = Path('pitch_angles_rots.csv')
+    p3 = Path('yaw_angles_rots.csv')
+    assert p1.exists()
+    assert p2.exists()
+    assert p3.exists()
+    p1.unlink()
+    p2.unlink()
+    p3.unlink()
+
+
+def test_cli_rotations_2():
+    """Test cli rotations."""
+    cli_rotations.main(
+        toptest,
+        [trajtest],
+        plane_selection=['resnum 10', 'resnum 20', 'resnum 30'],
+        )

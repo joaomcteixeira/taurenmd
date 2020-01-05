@@ -70,7 +70,7 @@ import functools
 
 import numpy as np
 
-from taurenmd import log
+from taurenmd import Path, log
 from taurenmd.libs import libcalc, libcli, libio, libmda  # noqa: F401
 from taurenmd.logger import S, T
 
@@ -119,11 +119,15 @@ def main(
         ):
     log.info(T('starting'))
     
-    u = libmda.mda_load_universe(topology, *trajectories)
+    topology = Path(topology)
+    trajectories = [Path(t) for t in trajectories]
+
+    u = libmda.load_universe(topology, *trajectories)
 
     log.info(T('transformation'))
     fSlice = libio.frame_slice(start=start, stop=stop, step=step)
     
+    origin_selection = ' or '.join(plane_selection)
     pABC_atomG = u.select_atoms(origin_selection)
     ABC_selections = plane_selection
     # p stands for point
@@ -247,11 +251,16 @@ def main(
                 data,
                 fname=fname,
                 header=(
-                    f'# Topology: {topology}\n'
-                    f'# Trajectories: {", ".join(trajectories)}\n'
-                    f'# Plane Selection: {plane_selection}\n'
-                    f'# frame,ange{aunit}\n'
-                    ),
+                    '# Topology: {}\n'
+                    '# Trajectories: {}\n'
+                    '# Plane Selection: {}\n'
+                    '# frame,ange{}\n'
+                    ).format(
+                        topology,
+                        ', '.join(t.resolve().str() for t in trajectories),
+                        origin_selection,
+                        aunit,
+                        ),
                 )
         log.info(S('done'))
 

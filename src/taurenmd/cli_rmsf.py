@@ -89,14 +89,18 @@ def main(
         stop=None,
         step=None,
         selections=None,
-        plotvars=None,
         export=False,
+        plot=False,
+        plotvars=None,
         **kwargs
         ):
     """Execute client main logic."""
     log.info(T('starting RMSFs calculation'))
-   
-    u = libmda.mda_load_universe(topology, *trajectories)
+    
+    topology = Path(topology)
+    trajectories = [Path(t) for t in trajectories]
+
+    u = libmda.load_universe(topology, *trajectories)
    
     frame_slice = libio.frame_slice(
         start=start,
@@ -107,8 +111,8 @@ def main(
     if selections is None:
         selections = ['all']
     
-    if not isinstance(selections, list):
-        raise TypeError('selections is not list type')
+    if not isinstance(selections, list) or len(selections) == 0:
+        raise TypeError('selections must be LIST with at least one element')
     
     log.info(T('calculating'))
     for sel in selections:
@@ -127,10 +131,7 @@ def main(
             libio.export_data_to_file(
                 labels,
                 rmsfs,
-                fname=libio.add_prefix_to_path(
-                    export,
-                    f"{sel.replace(' ', '_')}_",
-                    ),
+                fname=export,
                 header = (
                     "# Date: {}\n"
                     "# Topology: {}\n"
@@ -139,17 +140,13 @@ def main(
                     ).format(
                         datetime.now().strftime("%d/%m/%Y, %H:%M:%S"),
                         Path(topology).resolve(),
-                        [Path(f).resolve().str() for f in trajectory],
+                        ', '.join(f.resolve().str() for f in trajectories),
                         ),
                 )
     
         if plot:
             plotvars = plotvars or dict()
-            plotvars.setdefault('series_labels', selection)
-            plotvars['filename'] = libio.add_prefix_to_path(
-                plotvars.get('filename', 'rmsf.pdf'),
-                f"{sel.replace(' ', '_')}_",
-                )
+            plotvars.setdefault('series_labels', selections)
 
             log.info(T('plot params:'))
             for k, v in plotvars.items():
