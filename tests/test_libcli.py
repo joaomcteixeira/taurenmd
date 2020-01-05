@@ -34,7 +34,7 @@ def test_maincli():
         return cov
     parser = argparse.ArgumentParser()
     parser.add_argument('--cov', nargs=argparse.REMAINDER)
-    result = lc.maincli(parser, myfunc) 
+    result = lc.maincli(parser, myfunc)
     # since we have it, lets play it with and close the circle
     assert result == '--cov-report=term-missing -vv tests'.split()
 

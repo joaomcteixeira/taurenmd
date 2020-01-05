@@ -155,6 +155,9 @@ def main(
    
     log.info(T('editing trajectory'))
     
+    topology = Path(topology)
+    trajectories = [Path(t) for t in trajectories]
+
     if insort:
         trajectories = libio.sort_numbered_input(*trajectories)
 
@@ -167,7 +170,7 @@ def main(
         log.info(S('compound: {}', unwrap_compound))
 
     if align:
-        u_top = mda.Universe(topology).select_atoms(selection)
+        u_top = mda.Universe(topology.str()).select_atoms(selection)
         log.info(T('Alignment'))
         log.info(S('trajectory selection will be aligned to subselection:'))
         log.info(S('- {}', align, indent=2))
@@ -213,7 +216,7 @@ def main(
             for ts in u.trajectory[sliceObj][0:1]:
                 if unwrap:
                     log.debug(S('unwrapping for topology', indent=2))
-                    selection.unwrap(
+                    atom_selection.unwrap(
                         reference=unwrap_reference,
                         compound=unwrap_compound,
                         )

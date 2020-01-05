@@ -29,6 +29,7 @@ def test_get_number(in1, expected):
     'in1,expected',
     [
         (['t_1.dcd', 't_11.dcd', 't_2.dcd'], ['t_1.dcd', 't_2.dcd', 't_11.dcd']),
+        (['b.dcd', 'c.dcd', 'a.dcd'], ['a.dcd', 'b.dcd', 'c.dcd']),
         ],
     )
 def test_sort_numbered_input_1(in1, expected):
@@ -39,7 +40,7 @@ def test_sort_numbered_input_1(in1, expected):
 @pytest.mark.parametrize(
     'in1,error',
     [
-        (['t_1.dcd', 't_11.dcd', 't_2.dcd'], ValueError),
+        (['t_1.dcd', 't_11.dcd', 't_2.dcd'], TypeError),
         ]
     )
 def test_sort_numbered_inputs_error(in1, error):

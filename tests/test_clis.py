@@ -1,11 +1,14 @@
 """Test taurenmd client interfaces."""
 import argparse
+import copy
 import functools
 import inspect
+import sys
 
 import pytest
 
 from taurenmd import (
+    __main__ as main_module,
     cli,
     cli_distances,
     cli_fext,
@@ -40,47 +43,122 @@ def client(request):
     return request.param
 
 
-def test_has_maincli(client):
+def test_main_module():
+    """Test main module entry point."""
+    assert hasattr(main_module, 'maincli')
+
+
+def test_main_module_if():
+    """Test cli main entry point."""
+    lines = inspect.getsource(main_module).split('\n')
+    assert lines[-3] == "if __name__ == '__main__':"
+    assert lines[-2] == "    maincli()"
+    assert lines[-1] == ''
+
+
+def test_cli_script_1():
+    """Test cli main entry point."""
+    assert hasattr(cli, 'maincli')
+
+
+def test_cli_script_2():
+    """Test cli has load_args function."""
+    assert hasattr(cli, 'load_args')
+
+
+def test_cli_script_3():
+    """Test cli has _ap function."""
+    assert hasattr(cli, '_ap')
+
+
+def test_cli__ap_returns():
+    """Test cli _ap returns ap."""
+    assert isinstance(cli._ap(), argparse.ArgumentParser)
+
+
+def test_cli_script_4():
+    """Test cli main if __name__ part."""
+    lines = inspect.getsource(cli).split('\n')
+    assert lines[-3] == "if __name__ == '__main__':"
+    assert lines[-2] == "    maincli()"
+    assert lines[-1] == ''
+
+
+def test_cli_load_args():
+    """Test cli load_args functions."""
+    backup = copy.deepcopy(sys.argv)
+    sys.argv = ['taurenmd', 'report', toptest.str(), trajtest.str()]
+    result = cli.load_args()
+    assert isinstance(result, argparse.Namespace)
+    sys.argv = copy.deepcopy(backup)
+
+
+def test_cli_maincli_execution():
+    """Test cli maincli execution."""
+    backup = copy.deepcopy(sys.argv)
+    sys.argv = ['taurenmd', 'report', toptest.str(), trajtest.str()]
+    cli.maincli()
+    sys.argv = copy.deepcopy(backup)
+
+
+def test_cli_maincli_SystemExit():
+    """Test cli.py maincli() SystemExit."""
+    backup = copy.deepcopy(sys.argv)
+    sys.argv = ['taurenmd']
+    with pytest.raises(SystemExit):
+        cli.maincli()
+    sys.argv = copy.deepcopy(backup)
+
+
+def test_clients_have_maincli(client):
     """Test all modules have maincli."""
     assert hasattr(client, 'maincli')
 
 
-def test_has__ap(client):
+def test_clientes_have__ap(client):
     """Test all modules have _ap."""
     assert hasattr(client, '_ap')
 
 
-def test_has__ap_returns(client):
-    """Test all modules have _ap."""
+def test_clients_have__ap_returns(client):
+    """Test all modules _ap() return ap."""
     assert isinstance(client._ap(), argparse.ArgumentParser)
 
 
-def test_has_help(client):
+def test_clients_have_help(client):
     """Test all modules have help."""
     assert hasattr(client, '_help')
 
 
-def test_has_main(client):
+def test_clients_have_main(client):
     """Test all modules have main."""
     assert hasattr(client, 'main')
 
 
-def test_has_ap(client):
+def test_clients_if_main_code(client):
+    """Test if __name__ == '__main__' code lines."""
+    lines = inspect.getsource(client).split('\n')
+    assert lines[-3] == "if __name__ == '__main__':"
+    assert lines[-2] == "    maincli()"
+    assert lines[-1] == ''
+
+
+def test_clients_have_ap(client):
     """Test all modules have ap."""
     assert hasattr(client, 'ap')
 
 
-def test_main_partial_type(client):
+def test_clients_main_partial_type(client):
     """Test maincli partial type."""
     assert isinstance(client.maincli, functools.partial)
 
 
-def test_maincli_partial_func(client):
+def test_clients_maincli_partial_func(client):
     """Test maincli partial args."""
     assert client.maincli.func == (lc.maincli)
 
 
-def test_maincli_partial_args(client):
+def test_clients_maincli_partial_args(client):
     """Test maincli partial args."""
     assert client.maincli.args == (client.ap, client.main)
 
@@ -104,14 +182,6 @@ def test_maincli_partial_args(client):
 def test_help(module, name):
     """Test name messages."""
     assert module._name == name
-
-
-def test_if_main_code(client):
-    """Test if __name__ == '__main__' code lines."""
-    lines = inspect.getsource(client).split('\n')
-    assert lines[-3] == "if __name__ == '__main__':"
-    assert lines[-2] == "    maincli()"
-    assert lines[-1] == ''
 
 
 def test_cli_distances_1():
@@ -390,3 +460,73 @@ def test_cli_rotations_2():
         [trajtest],
         plane_selection=['resnum 10', 'resnum 20', 'resnum 30'],
         )
+
+
+def test_cli_trajedit_1():
+    """Test trajedit 1."""
+    cli_trajedit.main(
+        toptest,
+        [trajtest],
+        insort=True,
+        selection='name CA',
+        traj_output='traj.dcd',
+        top_output='topooo.pdb',
+        unwrap=True,
+        align='name CA',
+        )
+    p1 = Path('traj.dcd')
+    p2 = Path('topooo.pdb')
+    assert p1.exists()
+    assert p2.exists()
+    p1.unlink()
+    p2.unlink()
+
+
+def test_cli_trajedit_2():
+    """Test trajedit 2."""
+    cli_trajedit.main(
+        toptest,
+        [trajtest],
+        )
+    p1 = Path('traj_out.dcd')
+    assert p1.exists()
+    p1.unlink()
+
+
+def test_cli_trajedit_3():
+    """Test trajedit 3."""
+    cli_trajedit.main(
+        toptest,
+        [trajtest],
+        top_output='topooo.pdb',
+        )
+    p2 = Path('topooo.pdb')
+    p1 = Path('traj_out.dcd')
+    assert p1.exists()
+    assert p2.exists()
+    p1.unlink()
+    p2.unlink()
+
+### test argparse
+
+@pytest.mark.parametrize(
+    'module,cmd',
+    [
+        (cli, 'fext top.pdb traj1.xtc traj2.xtc'),
+        (cli, 'dist top.pdb traj1.xtc traj2.xtc -l1 selA -l2 selB -s 1 -e 2 -p 3 -x -v'),
+        (cli, 'imagemol top.pdb traj.xtc -d tout.xtc -o'),
+        (cli, 'imagemol top.pdb traj.xtc -d tout.xtc -o out.pdb'),
+        (cli, 'pangle top.pdb traj_1.xtc traj_2.xtc -x -v title=title -s 1 -e 2 -p 3 -z selA selB selC -a radians'),
+        (cli, 'trajedit top.pdb traj1.xtc traj2.xtc -i -l segA -s 1 -e 10 -p 2 -d tout.xtc -o'),
+        (cli, 'nosol top.pdb traj.xtc -d tout.xtc -o out.pdb -m NA'),
+        (cli, 'rmsd top.pdb traj1.xtc traj2.xtc -g segA segB -s 1 -e 10 -p 2 -r 10 -x data.csv -v'),
+        (cli, 'rmsd top.pdb traj1.xtc traj2.xtc -g segA segB -s 1 -e 10 -p 2 -r 10 -x data.csv -v title=1'),
+        (cli, 'rmsf top.pdb traj1.xtc traj2.xtc -g segA segB -s 1 -e 10 -p 2 -x data.csv -v title=1'),
+        (cli, 'rotations top.pdb traj1.xtc traj2.xtc -z segA segB segC -s 1 -e 10 -p 2 -a radians -x data.csv'),
+        (cli, 'report top.pdb traj1.xtc traj2.xtc'),
+        ],
+    )
+def test_ap_interface(module, cmd):
+    """Test argparse interface of command lines"""
+    module.ap.parse_args(cmd.split())
+

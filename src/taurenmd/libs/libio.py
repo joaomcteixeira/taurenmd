@@ -49,7 +49,8 @@ def sort_numbered_input(*inputs):
     """
     Sort input paths to tail number.
 
-    Sort criteria is provided by :py:func:`get_number`.
+    If possible, sort criteria is provided by :py:func:`get_number`.
+    If paths do not have a numbered tag, sort paths alphabetically.
 
     Parameters
     ----------
@@ -66,7 +67,11 @@ def sort_numbered_input(*inputs):
     except TypeError as err:
         log.exception(err)
         emsg = "Mind the packing *argument, input should be strings or Paths"
-        raise ValueError(emsg)
+        raise TypeError(emsg)
+    except IndexError as err:
+        log.exception(err)
+        log.info(S('sorting done by string type'))
+        return sorted(inputs)
 
    
 

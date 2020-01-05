@@ -11,5 +11,5 @@ Why does this file exist, and why __main__? For more info, read:
 from taurenmd.cli import maincli
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     maincli()

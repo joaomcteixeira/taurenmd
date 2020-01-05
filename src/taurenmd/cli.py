@@ -124,7 +124,7 @@ def load_args():
 
 
 def maincli():
-
+    """Main client interface."""
     if len(sys.argv) < 2:
         sys.stdout.write(_BANNER)
         sys.stdout.write(_DOCSTRING)
