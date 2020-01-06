@@ -20,7 +20,7 @@ Documentation improvements
 taurenmd could always use more documentation, whether as part of the
 official taurenmd docs, in docstrings, or even on the web in blog posts,
 articles, and such. Write as a *feature* `issue <https://github.com/joaomcteixeira/taurenmd/issues>`_ describing what you
-would like to see improved in the documention, and if you can do
+would like to see improved in the documentation, and if you can do
 it just `Pull Request <https://github.com/joaomcteixeira/taurenmd/pulls>`_ you proposed updates. 
 
 Feature requests and feedback
@@ -39,7 +39,7 @@ Code Development
 
 To contribute to the development of *taurenmd*, set up a local environment:
 
-1. Create a new :code:`taurenmd` environment and install all its dependencies but do NOT install *taurenmd* itself, see :ref:`Installation` page.
+1. Create a new :code:`taurenmddev` environment and install all its dependencies but do NOT install *taurenmd* itself, see the **Installation** page.
 
 2. *taurenmd* relies on `tox <https://tox.readthedocs.io/en/latest/>`_ to manage continuous integration (CI) and collaborative development; install it together with `tox-conda <https://github.com/tox-dev/tox-conda>`_::
 
@@ -47,7 +47,7 @@ To contribute to the development of *taurenmd*, set up a local environment:
     conda install -c conda-forge tox
     conda install -c conda-forge tox-conda
     
-    # with PyPi
+    # with PyPI
     pip install tox
     pip install tox-conda
 
@@ -61,7 +61,7 @@ To contribute to the development of *taurenmd*, set up a local environment:
 
     git checkout -b name-of-your-bugfix-or-feature
 
-6. Install a development version of your development branch::
+6. Install a development version of your development branch, remember to active the :code:`taurenmddev` environment::
 
     python setup.py develop
 
@@ -71,13 +71,13 @@ To contribute to the development of *taurenmd*, set up a local environment:
 
     tox
 
-5. Commit your changes and push your branch to your *taurenmd fork* on GitHub::
+8. Commit your changes and push your branch to your *taurenmd fork* on GitHub::
 
     git add .
     git commit -m "Your detailed description of your changes."
     git push origin name-of-your-bugfix-or-feature
 
-6. `Submit a pull request through the GitHub website <https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request>`_.
+9. `Submit a pull request through the GitHub website <https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request>`_.
 
 A New Command-line client
 -------------------------
@@ -126,4 +126,4 @@ Continuous Integration
 
 This project follows Continuous Integration (CI) good practices (let us know if something can be improved). As referred in the previous section, CI environment is provided by `tox <https://tox.readthedocs.io/en/latest/>`_ in combination with `tox-conda <https://github.com/tox-dev/tox-conda>`_. All *tox* testing environments run on `Travis-CI <https://travis-ci.org/joaomcteixeira/taurenmd>`_; there, we check for code style integrity, documentation, tests and test coverage, **all** dependencies are installed. CI configuration is defined in the `tox.ini <https://github.com/joaomcteixeira/taurenmd/blob/master/tox.ini>`_ file.
 
-Currently, we do not provide thorough testing for Windows platforms. *taurenmd* depends on several research libraries and we cannot and should not attempt to guarantee proper installation of those libraries on all platforms. Therefore we decided to provide full test coverage just for Linux systems where we know those libraries are compatible with. You may wish to read our :ref:`Installation` page.
+Currently, we do not provide thorough testing for Windows platforms. *taurenmd* depends on several research libraries and we cannot and should not attempt to guarantee proper installation of those libraries on all platforms. Therefore we decided to provide full test coverage just for Linux systems where we know those libraries are compatible with. You may wish to read our **Installation** page.
