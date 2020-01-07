@@ -1,25 +1,27 @@
 Installation
 ============
 
-**taurenmd** is written in, and depends on projects written in, `Python <https://www.python.org>`_; therefore, its installation process is based on the Python installation routines and related community-available tools:
+**taurenmd** is written in, and depends on projects written in, `Python <https://www.python.org>`_; therefore, its installation process is based on the Python installation routines and related community-available tools. Find this project's:
 
-#. `package at PyPi <https://pypi.org/project/taurenmd/>`_
+#. `package at PyPI <https://pypi.org/project/taurenmd/>`_
 #. `GitHub source repository <https://github.com/joaomcteixeira/taurenmd>`_
 
 Dependencies
 ------------
 
-Installing :code:`taurenmd` does **not** install **all** its dependencies. **Why?** Because we rely on large and complex dependencies required to manage the Molecular Dynamics (MD) data, such as `MDAnalysis <https://www.mdanalysis.org>`_ and `MDTraj <https://mdtraj.org/>`_, and we acknowledge that:
+Installing :code:`taurenmd` does **not** install **all** its dependencies. **Why?** Because taurenmd relies on large and complex libraries required to manage the Molecular Dynamics (MD) data, such as `MDAnalysis <https://www.mdanalysis.org>`_ and `MDTraj <https://mdtraj.org/>`_, and we acknowledge that:
 
-1. we should not attempt to guarantee proper installation of those complex (non-pure Python) libraries on our own (even via PyPI or Anaconda).
+1. it lies outside this project scope to guarantee proper installation of those complex (non-pure Python) libraries, even relying on PyPI or Anaconda.
 2. many MD researchers actually do not work on the stable-release version of those *libraries*, instead they work on:
 
   * cutting edge *development* versions,
   * forked versions,
   * source-compiled versions
+  So installing the deployed version of those libraries by default might be counter productive (though this could be disabled by the user using the ``--no-deps`` option)
 
-3. for those who want to work with the stable-release version of these dependencies, their respective websites provide very straightforward ways to install them, you should refer to those, *please continue reading*.
-4. lastly and minor, not all dependencies are required for every *taurenmd command*.
+3. Though, for those who want to work with the stable-release version of these dependencies, their respective websites provide very straightforward ways to install them, you should refer to those, *please continue reading*, and just continue with taurenmd installation on top of them.
+4. platform compatibility (read further)
+5. lastly and minor, not all dependencies are required for every *taurenmd command*.
 
 For these reasons, we have decided **not** to install these large dependencies together with *taurenmd*; other minor dependencies are automatically installed, though. Bellow a list of the dependencies you should install yourself prior to installing *taurenmd*.
 
@@ -43,7 +45,7 @@ Other dependencies automatically installed are listed bellow:
 Supported Platforms
 -------------------
 
-**taurenmd** is designed to run natively under any `platform compatible with Python <https://pythondev.readthedocs.io/platforms.html>`_ (paths are not hard coded :code:`;-)`). However, the libraries **taurenmd** depends on may or may not be compatible with all OS platforms, and we are not responsible for providing such compatibility or support; you should choose a platform compatible with all the required Molecular Dynamics analysis libraries used by *taurenmd*. We can guarantee **taurenmd** works fully with all its dependencies under Ubuntu 18.04 LTS. You may wish to read further on how continuous integration is :ref:`managed for this project <continuous integration>`.
+**taurenmd** is designed to run natively under any `platform compatible with Python <https://pythondev.readthedocs.io/platforms.html>`_ (paths are not hard coded ``;-)``). However, the libraries **taurenmd** depends on may or may not be compatible with all OS platforms, and we are not responsible for providing such compatibility or support; you should choose a platform compatible with all the required Molecular Dynamics analysis libraries used by *taurenmd*. We can guarantee **taurenmd** works fully with all its dependencies under Ubuntu 18.04 LTS. You may wish to read further on how continuous integration is :ref:`managed for this project <continuous integration>`.
 
 Installation steps
 ------------------

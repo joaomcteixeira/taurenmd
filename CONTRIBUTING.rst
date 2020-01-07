@@ -82,17 +82,20 @@ To contribute to the development of *taurenmd*, set up a local environment:
 A New Command-line client
 -------------------------
 
-One of the most natural and straight forward ways to contribute to *taurenmd* is
-to develop another client command-line interface. We provide a command-line client
+One of the most natural and straightforward ways to contribute to *taurenmd* is
+to develop a client command-line interface that provides a functionality that
+serves your needs so that it become available in the *taurenmd* workflow.
+We provide a command-line client
 `template file <https://github.com/joaomcteixeira/taurenmd/blob/master/src/taurenmd/_cli_template.py>`_
 from which you can start developing your own command-line new client,
-copy it to a new file and follow its instructions. Instructions to client
-development are written as comments in the ``_cli_template.py`` file.
+just copy the template file to a new file named ``cli_NAME.py`` and follow
+the instructions provided as comments in the ``_cli_template.py`` file;
+found the template file under ``src/taurenmd/`` folder.
 
 Pull Request Guidelines
 -----------------------
 
-If you need some code review or feedback while you're developing the code just make the pull request.
+If you need some code review or feedback while you're developing the code just make a pull request.
 
 For merging, you should:
 
@@ -126,4 +129,4 @@ Continuous Integration
 
 This project follows Continuous Integration (CI) good practices (let us know if something can be improved). As referred in the previous section, CI environment is provided by `tox <https://tox.readthedocs.io/en/latest/>`_ in combination with `tox-conda <https://github.com/tox-dev/tox-conda>`_. All *tox* testing environments run on `Travis-CI <https://travis-ci.org/joaomcteixeira/taurenmd>`_; there, we check for code style integrity, documentation, tests and test coverage, **all** dependencies are installed. CI configuration is defined in the `tox.ini <https://github.com/joaomcteixeira/taurenmd/blob/master/tox.ini>`_ file.
 
-Currently, we do not provide thorough testing for Windows platforms. *taurenmd* depends on several research libraries and we cannot and should not attempt to guarantee proper installation of those libraries on all platforms. Therefore we decided to provide full test coverage just for Linux systems where we know those libraries are compatible with. You may wish to read our **Installation** page.
+Currently, we do not provide thorough testing for Windows platforms. *taurenmd* depends on several research libraries and we cannot, and should not, attempt to guarantee proper installation of those libraries on all platforms. Therefore we decided to provide full test coverage just for Linux systems where we know those libraries operate fully. You may wish to read our **Installation** page.
