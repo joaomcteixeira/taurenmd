@@ -8,6 +8,7 @@ tags
 *.debug
 *.bk
 *.cif
+*.log
 
 # Packages
 *.egg
