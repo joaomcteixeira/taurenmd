@@ -16,6 +16,7 @@ Reports on various trajectory details.
 import argparse
 import functools
 
+import taurenmd.core as tcore
 from taurenmd import log
 from taurenmd.libs import libcli, libmda
 from taurenmd.logger import S, T
@@ -26,7 +27,7 @@ __maintainer__ = 'Joao M.C. Teixeira'
 __credits__ = ['Joao M.C. Teixeira']
 __status__ = 'Production'
 
-__doc__ += libcli.ref_mda
+__doc__ += tcore.ref_mda
 
 _help = 'Reports on trajectory details.'
 _name = 'report'

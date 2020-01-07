@@ -1,6 +1,8 @@
 """Manages operations with logging."""
 
-CMDFILE = '.taurenmd_cmd_register.log'
+DEBUGFILE = '.taurenmd.debug'
+LOGFILE = '.taurenmd.log'
+CMDFILE = '.taurenmd.cmd'
 
 
 class TitleLog:

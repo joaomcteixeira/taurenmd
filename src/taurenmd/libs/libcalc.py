@@ -28,11 +28,13 @@ from MDAnalysis.analysis.rms import RMSD as mdaRMSD
 from MDAnalysis.analysis.rms import RMSF as mdaRMSF
 from pyquaternion import Quaternion as Q
 
-from taurenmd import log
-from taurenmd.libs import libio
+import taurenmd.core as tcore
+from taurenmd import log, references
+from taurenmd.libs import libcli, libio
 from taurenmd.logger import S, T
 
 
+@libcli.add_reference(tcore.ref_mda)
 def mda_rmsd(
         universe,
         frame_slice=None,
@@ -112,6 +114,7 @@ def mda_rmsd(
     return R.rmsd[frame_slice, 2]
 
 
+@libcli.add_reference(tcore.ref_mda)
 def mda_rmsf(
         atom_group,
         frame_slice=None,
@@ -249,6 +252,7 @@ def calc_planes_angle(a1, b1, c1, a2, b2, c2, aunit='radians'):
         return angle
 
 
+@libcli.add_reference(tcore.ref_pyquaternion)
 def generate_quaternion_rotations(
         rotation_axis,
         rotating_vector,
@@ -307,6 +311,7 @@ def generate_quaternion_rotations(
     return Q_rotated_tuples
 
 
+@libcli.add_reference(tcore.ref_pyquaternion)
 def sort_by_minimum_Qdistances(rotation_tuples, reference_vector):
     """
     Sort a list of quaternion rotation tuples.

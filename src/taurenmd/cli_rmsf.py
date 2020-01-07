@@ -46,8 +46,9 @@ from datetime import datetime
 
 from bioplottemplates.plots import label_dots
 
+import taurenmd.core as tcore
 from taurenmd import Path, log  # noqa: F401
-from taurenmd.libs import libcalc, libcli, libmda, libio
+from taurenmd.libs import libcalc, libcli, libmda, libio, libplot
 from taurenmd.logger import S, T
 
 __author__ = 'Joao M.C. Teixeira'
@@ -57,9 +58,9 @@ __credits__ = ['Joao M.C. Teixeira']
 __status__ = 'Production'
 
 __doc__ += (
-    f'{libcli.ref_mda}'
-    f'{libcli.ref_mda_selection}'
-    f'{libcli.ref_plottemplates_labeldots}'
+    f'{tcore.ref_mda}'
+    f'{tcore.ref_mda_selection}'
+    f'{tcore.ref_plottemplates_labeldots}'
     )
 
 _help = 'Calculates and plots RMSFs'
@@ -152,7 +153,7 @@ def main(
             for k, v in plotvars.items():
                 log.info(S('{} = {!r}', k, v))
             
-            label_dots.plot(
+            libplot.label_dots(
                 labels,
                 rmsfs,
                 **plotvars,

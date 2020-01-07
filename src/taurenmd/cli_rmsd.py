@@ -40,10 +40,10 @@ import functools
 from datetime import datetime
 
 import numpy as np
-from bioplottemplates.plots import param
 
+import taurenmd.core as tcore
 from taurenmd import Path, log
-from taurenmd.libs import libcalc, libcli, libmda, libio
+from taurenmd.libs import libcalc, libcli, libmda, libio, libplot
 from taurenmd.logger import S, T
 
 
@@ -54,9 +54,9 @@ __credits__ = ['Joao M.C. Teixeira']
 __status__ = 'Production'
 
 __doc__ += (
-    f'{libcli.ref_mda}'
-    f'{libcli.ref_mda_selection}'
-    f'{libcli.ref_plottemplates_param}'
+    f'{tcore.ref_mda}'
+    f'{tcore.ref_mda_selection}'
+    f'{tcore.ref_plottemplates_param}'
     )
 
 _help = 'Calculates and plots RMSDs.'
@@ -146,7 +146,7 @@ def main(
         for k, v in plotvars.items():
             log.info(S('{} = {!r}', k, v))
         
-        param.plot(
+        libplot.param(
             list(range(len(u.trajectory))[frame_slice]),
             rmsds,
             **plotvars,

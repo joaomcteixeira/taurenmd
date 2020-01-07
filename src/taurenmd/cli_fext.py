@@ -49,6 +49,7 @@ are as decribed for `MDAnalysis selection <https://www.mdanalysis.org/docs/docum
 import argparse
 import functools
 
+import taurenmd.core as tcore
 from taurenmd import Path, log
 from taurenmd.libs import libcli, libmda, libio
 from taurenmd.logger import S
@@ -60,8 +61,8 @@ __credits__ = ['Joao M.C. Teixeira']
 __status__ = 'Production'
 
 __doc__ += (
-    f'{libcli.ref_mda}'
-    f'{libcli.ref_mda_selection}'
+    f'{tcore.ref_mda}'
+    f'{tcore.ref_mda_selection}'
     )
 
 _help = 'Extracts frames from trajectory.'

@@ -9,32 +9,9 @@ import argparse
 import sys
 from datetime import datetime
 
-from taurenmd import _BANNER, _DOCSTRING
+import taurenmd.core as tcore
+from taurenmd import references, _BANNER, _DOCSTRING
 from taurenmd.logger import CMDFILE
-
-ref_mdt = "* MD data is accessed and/or processed using `MDTraj <https://mdtraj.org/>`_."
-"""Command-line docstring to reference MDTraj package."""
-
-ref_mda = "* MD data is accessed using `MDAnalysis <https://www.mdanalysis.org>`_.\n"
-"""Command-line docstring to reference MDAnalysis package."""
-
-ref_mda_selection = "* selection commands follow MDAnalysis `selection nomenclature <https://www.mdanalysis.org/docs/documentation_pages/selections.html#>`_.\n"
-"""Command-line docstring to reference MDAnalysis selection commands."""
-
-ref_mda_unwrap = "* unwrap performed by MDAnalysis `unwrap <https://www.mdanalysis.org/docs/documentation_pages/core/groups.html?highlight=unwrap#MDAnalysis.core.groups.AtomGroup.unwrap>`_.\n"
-"""Command-line docstring to reference MDAnalysis selection.unwrap method."""
-
-ref_mda_alignto = "* align performed by MDAnalysis `unwrap <https://www.mdanalysis.org/docs/documentation_pages/analysis/align.html?highlight=alignto#MDAnalysis.analysis.align.alignto>`_.\n"
-"""Command-line docstring to reference MDAnalysis alignto function."""
-
-ref_plottemplates_param = "* plotting is performed by `python-bioplottemplates plot param function <https://python-bioplottemplates.readthedocs.io/en/latest/reference/plots.html#bioplottemplates.plots.param.plot>`_.\n"
-"""Command-line docstring to reference python-bioplottemplates param plot."""
-
-ref_plottemplates_labeldots = "* plotting is performed by `python-bioplottemplates plot labeldots function <https://python-bioplottemplates.readthedocs.io/en/latest/reference/plots.html#bioplottemplates.plots.label_dots.plot>`_.\n"
-"""Command-line docstring to reference python-bioplottemplates labeldots plot."""
-
-ref_pyquaternion = "* Quaterion operations are performed with `pyquaterion <http://kieranwynn.github.io/pyquaternion/>`_.\n"
-"""Command-line docstring to reference pyquaterion lib."""
 
 
 def load_args(ap):
@@ -46,7 +23,28 @@ def load_args(ap):
 def maincli(ap, main):
     cmd = load_args(ap)
     save_command(CMDFILE, *sys.argv)
-    return main(**vars(cmd))
+    result = main(**vars(cmd))
+    save_references()
+    return result
+
+
+def add_reference(ref):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            references.add(ref)
+            result = func(*args, **kwargs)
+            return result
+        return wrapper
+    return decorator
+
+
+def save_references():
+    """Save used references to log file."""
+    out = [f'{i}: {ref}' for i, ref in enumerate(sorted(references), start=2)]
+    with open(CMDFILE, 'a') as fh:
+        fh.write('References:\n')
+        fh.write(f'1: {tcore.ref_taurenmd}')
+        fh.write(''.join(out))
 
 
 # https://stackoverflow.com/questions/4042452

@@ -58,6 +58,7 @@ import functools
 import MDAnalysis as mda
 from MDAnalysis.analysis import align as mdaalign
 
+import taurenmd.core as tcore
 from taurenmd import Path, log
 from taurenmd.libs import libcli, libio, libmda
 from taurenmd.logger import S, T
@@ -69,10 +70,10 @@ __credits__ = ['Joao M.C. Teixeira']
 __status__ = 'Production'
 
 __doc__ += (
-    f'{libcli.ref_mda}'
-    f'{libcli.ref_mda_selection}'
-    f'{libcli.ref_mda_unwrap}'
-    f'{libcli.ref_mda_alignto}'
+    f'{tcore.ref_mda}'
+    f'{tcore.ref_mda_selection}'
+    f'{tcore.ref_mda_unwrap}'
+    f'{tcore.ref_mda_alignto}'
     )
 
 _help = 'Edits trajectory in many different ways.'

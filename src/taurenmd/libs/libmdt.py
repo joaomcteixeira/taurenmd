@@ -17,10 +17,12 @@ libraries.
 import mdtraj
 import simtk.openmm.app as app
 
-from taurenmd import Path
-from taurenmd.libs import libio
+import taurenmd.core as tcore
+from taurenmd import Path, references
+from taurenmd.libs import libcli, libio
 
 
+@libcli.add_reference(tcore.ref_mdt)
 def load_traj(topology, trajectory):
     """
     Load trajectory with `MDTraj <http://mdtraj.org/1.9.3/index.html>`_.

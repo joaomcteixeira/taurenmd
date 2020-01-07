@@ -11,6 +11,8 @@ _________ _______           _______  _______  _        _______  ______
                                                                        
 **A command-line interface for Molecular Dynamics Analysis routines.**
 """
+# link to logo
+# http://patorjk.com/software/taag/#p=display&h=0&f=Epic&t=taurenmd
 
 _BANNER = __doc__
 
@@ -33,13 +35,14 @@ for complete details on how to cite properly:
 import logging
 
 from taurenmd.core import Path
+from taurenmd.logger import CMDFILE, DEBUGFILE, LOGFILE
 
 __doc__ += _DOCSTRING
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
-_db = logging.FileHandler('.taurenmd.debug', mode='w')
+_db = logging.FileHandler(DEBUGFILE, mode='w')
 _db.setLevel(logging.DEBUG)
 _db.setFormatter(
     logging.Formatter(
@@ -47,11 +50,18 @@ _db.setFormatter(
         )
     )
 
+_info = logging.FileHandler(LOGFILE, mode='w')
+_info.setLevel(logging.INFO)
+_info.setFormatter(logging.Formatter('%(message)s'))
+
 _ch = logging.StreamHandler()
 _ch.setLevel(logging.INFO)
 _ch.setFormatter(logging.Formatter('%(message)s'))
 
 log.addHandler(_db)
+log.addHandler(_info)
 log.addHandler(_ch)
 
 __version__ = '0.7.2'
+
+references = set()

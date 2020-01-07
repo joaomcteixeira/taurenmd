@@ -13,11 +13,13 @@ taurenmd and MDAnalysis.
 """
 import MDAnalysis as mda
 
-from taurenmd import log, Path
-from taurenmd.libs import libio
-from taurenmd.logger import S, T
+import taurenmd.core as tcore
+from taurenmd import references, log, Path
+from taurenmd.libs import libcli, libio
+from taurenmd.logger import CMDFILE, S, T
 
 
+@libcli.add_reference(tcore.ref_mda)
 def load_universe(topology, *trajectories):
     """
     Load MDAnalysis universe.
@@ -63,6 +65,7 @@ def load_universe(topology, *trajectories):
     return universe
 
 
+@libcli.add_reference(tcore.ref_mda)
 def report(universe):
     """
     Report information about the Universe.
@@ -88,6 +91,7 @@ def report(universe):
     log.info(S('number of atoms: {}', len(universe.atoms)))
 
 
+@libcli.add_reference(tcore.ref_mda)
 def draw_atom_label_from_atom_group(atom_group):
     """
     Translate MDAnalysis Atom Group to list of strings for each atom.

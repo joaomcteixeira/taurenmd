@@ -56,9 +56,24 @@ routine by prefixing a ``tmd`` to its name, for example:
     >>> taurenmd trajedit
     >>> # equals to
     >>> tmdtrajedit
+
+Logging
+-------
+
+taurenmd logs all its running activity as follows:
+
+* ``.taurenmd.cmd``, keeps an historic register of the taurenmd commands
+run on a given folder together with a list of the other research projects
+that must be cited for that particular run; these are the libraries taurenmd
+used to access and process the MD data. It also servers as a record for your
+research project.
+
+* ``.taurenmd.log``, a user readable logging information, the very same that is
+printed in the ``terminal`` during runtime. Overwrites previous runs.
+
+* ``.taurenmd.debug``, a full verbose log with all runtime information for the
+LAST run. Overwrites previous runs.
 """
-# link to logo
-# http://patorjk.com/software/taag/#p=display&h=0&f=Epic&t=taurenmd
 import argparse
 import sys
 
@@ -95,7 +110,8 @@ ap.add_argument(
     version=(
         f'{_BANNER}\n'
         f'version: {__version__}\n\n'
-        f'to see the list of all versions visit: https://github.com/joaomcteixeira/taurenmd/releases\n'
+        'to see the list of all versions visit:'
+        'https://github.com/joaomcteixeira/taurenmd/releases\n'
         )
     )
 
@@ -137,7 +153,9 @@ def maincli():
     log.debug(args)
 
     libcli.save_command(CMDFILE, *sys.argv)
-    args.func(**vars(args))
+    result = args.func(**vars(args))
+    libcli.save_references()
+    return result
 
 
 if __name__ == '__main__':

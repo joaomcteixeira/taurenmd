@@ -28,6 +28,7 @@ Removes solvent from trajectory using `MDTraj.remove_solvent <http://mdtraj.org/
 import argparse
 import functools
 
+import taurenmd.core as tcore
 from taurenmd import log, Path
 from taurenmd.libs import libcli, libio, libmdt
 from taurenmd.logger import S, T
@@ -38,7 +39,7 @@ __maintainer__ = 'Joao M.C. Teixeira'
 __credits__ = ['Joao M.C. Teixeira']
 __status__ = 'Production'
 
-__doc__ += libcli.ref_mdt
+__doc__ += tcore.ref_mdt
 
 _help = 'Removes solvent from trajectory.'
 _name = 'nosol'

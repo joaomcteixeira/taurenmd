@@ -3,19 +3,9 @@ import argparse
 
 import pytest
 
-from taurenmd import Path
+from taurenmd import Path, references
 from taurenmd.libs import libcli as lc
-
-
-def test_references():
-    assert isinstance(lc.ref_mdt, str)
-    assert isinstance(lc.ref_mda, str)
-    assert isinstance(lc.ref_mda_selection, str)
-    assert isinstance(lc.ref_mda_unwrap, str)
-    assert isinstance(lc.ref_mda_alignto, str)
-    assert isinstance(lc.ref_plottemplates_param, str)
-    assert isinstance(lc.ref_plottemplates_labeldots, str)
-    assert isinstance(lc.ref_pyquaternion, str)
+from taurenmd.logger import CMDFILE
 
 
 def test_load_args():
@@ -37,6 +27,16 @@ def test_maincli():
     result = lc.maincli(parser, myfunc)
     # since we have it, lets play it with and close the circle
     assert result == '--cov-report=term-missing -vv tests'.split()
+
+
+def test_save_refs():
+    """Test save references."""
+    references.add("zello world")
+    lc.save_references()
+    p1 = Path(CMDFILE)
+    s = p1.open().readlines()
+    assert s[-1].split(':')[1][1:] == 'zello world'
+    p1.unlink()
 
 
 def test_CustomParser():
@@ -72,8 +72,7 @@ def test_ParamsToDick(key, value, expected):
         parser,
         namespace,
         [f'{key}{value}'],
-       )
-    
+        )
     v = vars(namespace)
 
     assert 'plotvars' in v

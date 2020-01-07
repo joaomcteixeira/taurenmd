@@ -70,6 +70,7 @@ import functools
 
 import numpy as np
 
+import taurenmd.core as tcore
 from taurenmd import Path, log
 from taurenmd.libs import libcalc, libcli, libio, libmda  # noqa: F401
 from taurenmd.logger import S, T
@@ -81,9 +82,9 @@ __credits__ = ['Joao M.C. Teixeira']
 __status__ = 'Production'
 
 __doc__ += (
-    f'{libcli.ref_mda}'
-    f'{libcli.ref_mda_selection}'
-    f'{libcli.ref_pyquaternion}'
+    f'{tcore.ref_mda}'
+    f'{tcore.ref_mda_selection}'
+    f'{tcore.ref_pyquaternion}'
     )
 
 _help = 'Calculates angular rotations across axes.'

@@ -45,6 +45,7 @@ Uses `MDTraj.Trajectory.image_molecule <http://mdtraj.org/1.9.3/api/generated/md
 import argparse
 import functools
 
+import taurenmd.core as tcore
 from taurenmd import Path, log
 from taurenmd.libs import libcli, libio, libmdt
 from taurenmd.logger import S, T
@@ -56,7 +57,7 @@ __credits__ = ['Joao M.C. Teixeira']
 __status__ = 'Production'
 
 __doc__ += (
-    f'{libcli.ref_mdt}'
+    f'{tcore.ref_mdt}'
     )
 
 _help = 'Attempts to image molecules.'

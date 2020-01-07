@@ -46,16 +46,16 @@ import copy
 import functools
 
 import numpy as np
-from bioplottemplates.plots import param
 
+import taurenmd.core as tcore
 from taurenmd import log, Path
-from taurenmd.libs import libcli, libio, libmda  # noqa: F401
+from taurenmd.libs import libcli, libio, libmda, libplot  # noqa: F401
 from taurenmd.logger import S, T
 
 __doc__ += (
-    f'{libcli.ref_mda}'
-    f'{libcli.ref_mda_selection}'
-    f'{libcli.ref_plottemplates_param}'
+    f'{tcore.ref_mda}'
+    f'{tcore.ref_mda_selection}'
+    f'{tcore.ref_plottemplates_param}'
     )
 
 _help = 'Calculates distances between geometric centers of selections. '
@@ -170,7 +170,7 @@ def main(
         for k, v in plotvars.items():
             log.info(S('{} = {!r}', k, v))
 
-        param.plot(
+        libplot.param(
             list(range(len(u.trajectory))[frame_slice]),
             distances,
             **plotvars,
