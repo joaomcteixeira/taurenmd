@@ -185,7 +185,7 @@ def test_clients_maincli_partial_args(client):
         (cli_trajedit, 'trajedit'),
         ],
     )
-def test_help(module, name):
+def test_cli__name(module, name):
     """Test name messages."""
     assert module._name == name
 
