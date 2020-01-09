@@ -16,7 +16,6 @@ To install taurenmd in developer mode run:
 To install taurenmd without ANY of its dependencies:
 
     >>> python setup.py --no-deps
-
 """
 from __future__ import absolute_import, print_function
 
@@ -85,7 +84,7 @@ setup(
         'Molecular Biology',
         'Biochemistry',
         ],
-    python_requires='>=3, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*',
+    python_requires='>=3.6, <3.8',
     install_requires=[
         'bioplottemplates',
         'pyquaternion',
@@ -98,6 +97,10 @@ setup(
     entry_points={
         'console_scripts': [
             'taurenmd = taurenmd.cli:maincli',
+            # add bellow, by alphabetical, order your newly developed
+            # client, following the nomenclature provided,
+            # where NAME is the command line name of your subroutine.
+            # 'tmdNAME = taurenmd.cli_NAME:maincli',
             'tmdpangle = taurenmd.cli_pangle:maincli',
             'tmddist = taurenmd.cli_distances:maincli',
             'tmdfext = taurenmd.cli_fext:maincli',

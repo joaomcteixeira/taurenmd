@@ -77,6 +77,8 @@ LAST run. Overwrites previous runs.
 import argparse
 import sys
 
+# add bellow, by alphabetical order your newly developed cli
+# import taurenmd.cli_NAME as cli_NAME
 import taurenmd.cli_pangle as cli_pangle
 import taurenmd.cli_distances as cli_dist
 import taurenmd.cli_fext as cli_fext
@@ -95,6 +97,7 @@ from taurenmd.logger import CMDFILE
 __author__ = 'Joao M.C. Teixeira'
 __email__ = 'joaomcteixeira@gmail.com'
 __maintainer__ = 'Joao M.C. Teixeira'
+# add yourself to the credits
 __credits__ = ['Joao M.C. Teixeira']
 __status__ = 'Production'
 
@@ -119,6 +122,9 @@ subparsers = ap.add_subparsers(
     title='taurenmd subroutines',
     )
 
+# add your client to this block following the example of the
+# other clients.
+# libcli.add_subparser(subparsers, cli_NAME)
 libcli.add_subparser(subparsers, cli_pangle)
 libcli.add_subparser(subparsers, cli_dist)
 libcli.add_subparser(subparsers, cli_fext)
@@ -129,6 +135,9 @@ libcli.add_subparser(subparsers, cli_rmsd)
 libcli.add_subparser(subparsers, cli_rmsf)
 libcli.add_subparser(subparsers, cli_rot)
 libcli.add_subparser(subparsers, cli_trajedit)
+
+# Done :-) There is nothing else to do here if you are implementing a new
+# client interface.
 
 
 def _ap():

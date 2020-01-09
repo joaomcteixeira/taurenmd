@@ -10,6 +10,8 @@ import pytest
 from taurenmd import (
     __main__ as main_module,
     cli,
+    # import here by alphabetical order the cli interfaces you are
+    # implementing
     cli_distances,
     cli_fext,
     cli_imagemol,
@@ -27,6 +29,7 @@ from . import *
 
 @pytest.fixture(
     params=[
+        # add your new client to this list.
         cli_distances,
         cli_fext,
         cli_imagemol,
@@ -167,6 +170,9 @@ def test_clients_maincli_partial_args(client):
 @pytest.mark.parametrize(
     'module,name',
     [
+        # add here the name of your client, this ensures that changes
+        # in the command interface get noticed by the tests.
+        # (cli_NAME, 'NAME'),
         (cli_distances, 'dist'),
         (cli_fext, 'fext'),
         (cli_imagemol, 'imagemol'),
@@ -182,6 +188,19 @@ def test_clients_maincli_partial_args(client):
 def test_help(module, name):
     """Test name messages."""
     assert module._name == name
+
+
+# write a test function that calls the main function for your client.
+# and add any additional modification or output confirmation that you
+# find appropriate so that test coverage is 100% and you asure the 
+# correct output is generate. Read through the other client for examples.
+# there is a final test to add at the end of the file, do not miss it.
+
+#def test_cli_NAME_1():
+#    """Test cli NAME."""
+#    cli_NAME.main(
+#        #params...
+#        )
 
 
 def test_cli_distances_1():
@@ -512,6 +531,7 @@ def test_cli_trajedit_3():
 @pytest.mark.parametrize(
     'module,cmd',
     [
+        # add command examples to this list
         (cli, 'fext top.pdb traj1.xtc traj2.xtc'),
         (cli, 'dist top.pdb traj1.xtc traj2.xtc -l1 selA -l2 selB -s 1 -e 2 -p 3 -x -v'),
         (cli, 'imagemol top.pdb traj.xtc -d tout.xtc -o'),
