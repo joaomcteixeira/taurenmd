@@ -59,3 +59,5 @@ ref_plottemplates_labeldots = "* plotting is performed by `python-bioplottemplat
 ref_pyquaternion = "* Quaterion operations are performed with `pyquaterion <http://kieranwynn.github.io/pyquaternion/>`_.\n"
 """Command-line docstring to reference pyquaterion lib."""
 
+ref_numpy = '* Matrix operations were performed with `Numpy <https://www.scipy.org/citing.html>`_.'
+"""Command-line docstring to reference numpy lib."""

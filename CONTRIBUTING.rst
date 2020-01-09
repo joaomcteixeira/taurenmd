@@ -84,12 +84,12 @@ A New Command-line client
 
 One of the most natural and straightforward ways to contribute to *taurenmd* is
 to develop a client command-line interface that provides a functionality that
-serves your needs so that it become available in the *taurenmd* workflow.
+serves your needs so that it becomes available in the *taurenmd* workflow.
 We provide a command-line client
 `template file <https://github.com/joaomcteixeira/taurenmd/blob/master/src/taurenmd/_cli_template.py>`_
 from which you can start developing your own command-line new client,
 just copy the template file to a new file named ``cli_NAME.py`` and follow
-the instructions provided as comments in the ``_cli_template.py`` file;
+the instructions provided as comments in the file;
 found the template file under ``src/taurenmd/`` folder.
 
 Pull Request Guidelines
@@ -122,7 +122,7 @@ to test documentation::
 
 to perform coverage-reported tests::
 
-    tox -e py37-cover
+    tox -e py37
 
 Continuous Integration
 ======================

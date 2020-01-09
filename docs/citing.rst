@@ -22,9 +22,9 @@ Citing Dependencies
 
 :IMPORTANT: When using and citing :code:`taurenmd`, you **SHOULD by all means** cite the Molecular Dynamics (MD) analysis libraries, and others, with which :code:`taurenmd` operates for the executions you have used. These MD libraries are the :ref:`**tauremd** software dependencies <dependencies>`. Taurenmd uses different libraries for the different :ref:`client interfaces <Usage>`, each command-line interface documentation has a ``References`` section that indicates third party libraries used that you should cite.
 
-.. todo::
+.. note::
 
-    after each command execution a :code:`.citing` file is created indicated the *additional* projects you should also cite; you should refer to that project webpage and read through their citing instructions.
+    after each command execution, the command used for that execution is appended to the `taurenmd.cmd` file. Also a reference to each thirdpary project used during that execution is appended bellow the command history, follow the citing instruction to properly cite the related projects. 
 
 Links to citing instructions of other research projects **taurenmd** uses as dependencies, alphabetical order:
 

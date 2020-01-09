@@ -1,6 +1,6 @@
 """
 Usage Examples
-==============
+--------------
 To access to the complete list of *taurenmd commands* with a summary
 information for each, execute:
 
@@ -62,16 +62,16 @@ Logging
 
 taurenmd logs all its running activity as follows:
 
-* ``.taurenmd.cmd``, keeps an historic register of the taurenmd commands
-run on a given folder together with a list of the other research projects
+1. ``.taurenmd.cmd``, keeps an historic register of the taurenmd commands
+run on a given folder together with a list of the research projects
 that must be cited for that particular run; these are the libraries taurenmd
 used to access and process the MD data. It also servers as a record for your
 research project.
 
-* ``.taurenmd.log``, a user readable logging information, the very same that is
+2. ``.taurenmd.log``, a user readable logging information, the very same that is
 printed in the ``terminal`` during runtime. Overwrites previous runs.
 
-* ``.taurenmd.debug``, a full verbose log with all runtime information for the
+3. ``.taurenmd.debug``, a full verbose log with all runtime information for the
 LAST run. Overwrites previous runs.
 """
 import argparse
