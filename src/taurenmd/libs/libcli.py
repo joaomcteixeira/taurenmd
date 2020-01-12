@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 import taurenmd.core as tcore
-from taurenmd import references, _BANNER, _DOCSTRING
+from taurenmd import references, __version__, _BANNER, _DOCSTRING
 from taurenmd.logger import CMDFILE
 
 
@@ -173,9 +173,35 @@ def add_subparser(parser, module):
 # r: reference frame
 # s: slice start
 # t: framelist
-# v: plot
+# plot: plot
 # x: export data to table
 # z: plane selection
+
+
+def add_version_arg(parser):
+    """
+    Add version ``-v`` option to parser.
+    
+    Displays a message informing the current version.
+    Also accessible via ``--version``.
+
+    Parameters
+    ----------
+    parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
+        The argument parser to add the version argument.
+    """  # noqa: E501
+    parser.add_argument(
+        '-v',
+        '--version',
+        action='version',
+        version=(
+            f'{_BANNER}\n'
+            f'version: {__version__}\n\n'
+            'to see the list of all versions visit:'
+            'https://github.com/joaomcteixeira/taurenmd/releases\n'
+            )
+        )
+
 
 def add_angle_unit_arg(parser):
     """
@@ -470,7 +496,7 @@ def add_plot_arg(parser):
 
     Plot kwargs that will be passed to the plotting function.
 
-    Defined by ``-v`` and ``--plot``.
+    Defined by ``--plot``.
 
     If given, plot results. Additional arguments can be given to
     specify the plot parameters.
@@ -481,13 +507,12 @@ def add_plot_arg(parser):
         The argument parser to which add the plot argument.
     """
     parser.add_argument(
-        '-v',
         '--plot',
         help=(
             'Plot results. '
             'Additional arguments can be given to configure the plot '
             'style. '
-            'Example: -v xlabel=frames ylabel=RMSD color=red.'
+            'Example: --plot xlabel=frames ylabel=RMSD color=red.'
             'Accepted plot arguments are defined by the function used '
             'to plot the result. The main description of this client '
             'which plotting function is used. '

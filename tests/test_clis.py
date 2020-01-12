@@ -27,22 +27,29 @@ from taurenmd.libs import libcli as lc
 
 from . import *
 
-@pytest.fixture(
-    params=[
-        # add your new client to this list.
-        cli_distances,
-        cli_fext,
-        cli_imagemol,
-        cli_nosol,
-        cli_pangle,
-        cli_report,
-        cli_rmsd,
-        cli_rmsf,
-        cli_rotations,
-        cli_trajedit,
-        ]
-    )
+
+subclients = [
+    # add your new client to this list.
+    cli_distances,
+    cli_fext,
+    cli_imagemol,
+    cli_nosol,
+    cli_pangle,
+    cli_report,
+    cli_rmsd,
+    cli_rmsf,
+    cli_rotations,
+    cli_trajedit,
+    ]
+
+
+@pytest.fixture(params=subclients)
 def client(request):
+    return request.param
+
+
+@pytest.fixture(params=[cli] + subclients)
+def all_clients(request):
     return request.param
 
 
@@ -57,6 +64,13 @@ def test_main_module_if():
     assert lines[-3] == "if __name__ == '__main__':"
     assert lines[-2] == "    maincli()"
     assert lines[-1] == ''
+
+
+def test_cli__version(all_clients):
+    """Test clients have version parameter."""
+    with pytest.raises(SystemExit) as err:
+        all_clients.ap.parse_args(['-v'])
+    assert err.value.code == 0
 
 
 def test_cli_script_1():
@@ -533,15 +547,15 @@ def test_cli_trajedit_3():
     [
         # add command examples to this list
         (cli, 'fext top.pdb traj1.xtc traj2.xtc'),
-        (cli, 'dist top.pdb traj1.xtc traj2.xtc -l1 selA -l2 selB -s 1 -e 2 -p 3 -x -v'),
+        (cli, 'dist top.pdb traj1.xtc traj2.xtc -l1 selA -l2 selB -s 1 -e 2 -p 3 -x --plot'),
         (cli, 'imagemol top.pdb traj.xtc -d tout.xtc -o'),
         (cli, 'imagemol top.pdb traj.xtc -d tout.xtc -o out.pdb'),
-        (cli, 'pangle top.pdb traj_1.xtc traj_2.xtc -x -v title=title -s 1 -e 2 -p 3 -z selA selB selC -a radians'),
+        (cli, 'pangle top.pdb traj_1.xtc traj_2.xtc -x --plot title=title -s 1 -e 2 -p 3 -z selA selB selC -a radians'),
         (cli, 'trajedit top.pdb traj1.xtc traj2.xtc -i -l segA -s 1 -e 10 -p 2 -d tout.xtc -o'),
         (cli, 'nosol top.pdb traj.xtc -d tout.xtc -o out.pdb -m NA'),
-        (cli, 'rmsd top.pdb traj1.xtc traj2.xtc -g segA segB -s 1 -e 10 -p 2 -r 10 -x data.csv -v'),
-        (cli, 'rmsd top.pdb traj1.xtc traj2.xtc -g segA segB -s 1 -e 10 -p 2 -r 10 -x data.csv -v title=1'),
-        (cli, 'rmsf top.pdb traj1.xtc traj2.xtc -g segA segB -s 1 -e 10 -p 2 -x data.csv -v title=1'),
+        (cli, 'rmsd top.pdb traj1.xtc traj2.xtc -g segA segB -s 1 -e 10 -p 2 -r 10 -x data.csv --plot'),
+        (cli, 'rmsd top.pdb traj1.xtc traj2.xtc -g segA segB -s 1 -e 10 -p 2 -r 10 -x data.csv --plot title=1'),
+        (cli, 'rmsf top.pdb traj1.xtc traj2.xtc -g segA segB -s 1 -e 10 -p 2 -x data.csv --plot title=1'),
         (cli, 'rotations top.pdb traj1.xtc traj2.xtc -z segA segB segC -s 1 -e 10 -p 2 -a radians -x data.csv'),
         (cli, 'report top.pdb traj1.xtc traj2.xtc'),
         ],

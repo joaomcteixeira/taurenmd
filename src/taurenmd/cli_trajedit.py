@@ -84,6 +84,7 @@ ap = argparse.ArgumentParser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
+libcli.add_version_arg(ap)
 libcli.add_topology_arg(ap)
 libcli.add_trajectories_arg(ap)
 libcli.add_insort_arg(ap)

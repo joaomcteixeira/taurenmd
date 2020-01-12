@@ -384,7 +384,7 @@ def test_reference_frame_error(cmd):
 @pytest.mark.parametrize(
     'cmd,expected',
     [
-        (['-v', 'title=mytitle'], {'title': 'mytitle'}),
+        (['--plot', 'title=mytitle'], {'title': 'mytitle'}),
         (
             ['--plot', 'title=mytitle', 'colors=a,b,c'],
             {

@@ -106,17 +106,7 @@ ap = libcli.CustomParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-ap.add_argument(
-    '-v',
-    '--version',
-    action='version',
-    version=(
-        f'{_BANNER}\n'
-        f'version: {__version__}\n\n'
-        'to see the list of all versions visit:'
-        'https://github.com/joaomcteixeira/taurenmd/releases\n'
-        )
-    )
+libcli.add_version_arg(ap)
 
 subparsers = ap.add_subparsers(
     title='taurenmd subroutines',
