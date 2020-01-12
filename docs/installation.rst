@@ -70,21 +70,21 @@ From scratch
 
     conda activate taurenmdenv
 
-3. Install each of the *large library* dependencies, visit their respective website for instructions, see `Dependencies`_ section.
+4. Install each of the *large library* dependencies, visit their respective website for instructions, see `Dependencies`_ section.
 
-4. Either you use Anaconda or PyPI, install **taurenmd** running the following command::
+5. Either you use Anaconda or PyPI, install **taurenmd** running the following command::
 
     pip install taurenmd
 
-5. To update **taurenmd** simply::
+6. To update **taurenmd** simply::
 
     pip install -upgrade taurenmd
 
-6. At this moment you should have all ``taurenmd`` command-line interfaces available on your system, run on your ``terminal``::
+7. At this moment you should have all ``taurenmd`` command-line interfaces available on your system, run on your ``terminal``::
 
     taurenmd
 
-7. In case something is failing, please write us an `Issue <https://github.com/joaomcteixeira/taurenmd/issues>`_ explaining your situation.
+8. In case something is failing, please write us an `Issue <https://github.com/joaomcteixeira/taurenmd/issues>`_ explaining your situation.
 
 From GitHub
 ```````````
