@@ -11,7 +11,7 @@ from datetime import datetime
 from functools import wraps
 
 import taurenmd.core as tcore
-from taurenmd import _BANNER, __version__, references
+from taurenmd import _BANNER, references
 from taurenmd.logger import CMDFILE
 
 
@@ -218,11 +218,11 @@ def add_version_arg(parser):
         '-v',
         '--version',
         action='version',
+        # the _BANNER contains information on the version number
         version=(
             f'{_BANNER}\n'
-            f'version: {__version__}\n\n'
-            'A record of the previous versions can be found at:\n'
-            'https://taurenmd.readthedocs.io/en/latest/changelog.html\n'
+            f'A record of the previous versions can be found at:\n'
+            f'https://taurenmd.readthedocs.io/en/latest/changelog.html\n'
             )
         )
 

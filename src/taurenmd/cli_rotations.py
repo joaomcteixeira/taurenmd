@@ -4,12 +4,10 @@
 *Calculate the Roll, Pitch and Yaw angles along the trajectory.**
 
 Read further on roll, pitch and yaw angles (Euler Angles) -
-`wikipedia <https://en.wikipedia.org/wiki/Euler_angles>`_.
+[wikipedia](https://en.wikipedia.org/wiki/Euler_angles).
 
 Here we decompose these movements around the three different axis
 centered at an origin using Quaternion rotation.
-
-The axis of reference
 
 ## Algorithm
 

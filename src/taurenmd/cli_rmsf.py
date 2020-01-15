@@ -7,7 +7,7 @@ Calculates the RMSF values along a trajectory slice for different
 selections. If multiple selections are given creates a series data
 for that selection.
 
-RMSF is calculated using :py:func:`taurenmd.libs.libcalc.mda_rmsf`.
+RMSF is calculated using [libcalc.mda_rmsf](https://taurenmd.readthedocs.io/en/latest/reference/libcalc.html#taurenmd.libs.libcalc.mda_rmsf).
 
 If multiple selections are given, separate calculations are performed
 in sequence. Result files (data tables and plots) are exported

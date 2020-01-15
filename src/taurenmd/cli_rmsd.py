@@ -7,7 +7,7 @@ Calculates the RMSD values along a trajectory slice for different
 selections. If multiple selections are given creates a series data
 for that selection.
 
-RMSD is calculated using :py:func:`taurenmd.libs.libcalc.mda_rmsd`.
+RMSD is calculated using [libcalc.mda_rmsd](https://taurenmd.readthedocs.io/en/latest/reference/libcalc.html#taurenmd.libs.libcalc.mda_rmsd).
 
 ## Examples
 
