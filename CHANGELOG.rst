@@ -10,9 +10,16 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
-0.8.0 (2020-mm-dd)
+0.8.1 (2020-xx-xx)
 ------------------
 
+* PR
+* Corrected version display in documentation
+
+0.8.0 (2020-01-15)
+------------------
+
+* PR #13
 * Code architecture improvements
 * Complete project main documentation
 * Complete library documentation

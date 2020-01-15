@@ -23,7 +23,7 @@ import logging
 from taurenmd.core import Path  # noqa: F401
 from taurenmd.logger import DEBUGFILE, LOGFILE
 
-__version__ = '0.7.2'
+__version__ = '0.8.0'
 
 _BANNER = __doc__.format(__version__)
 
@@ -47,14 +47,11 @@ libraries when using taurenmd. Please visit our documentation page
 for complete details on how to cite properly:
 
     https://taurenmd.readthedocs.io/en/latest/citing.html
-
-Usage
-=====
 """.format(__version__)
 
-__doc__ += _DOCUMENTATION
+__doc__ = _BANNER + _DOCUMENTATION
 
-_INTERFACE_DESCRIPTION = __doc__
+_INTERFACE_DESCRIPTION = __doc__ + "Usage\n=====\n\n"
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
