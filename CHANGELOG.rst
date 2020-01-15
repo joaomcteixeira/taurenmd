@@ -5,9 +5,18 @@ This project follows strictly `Semantic Versioning 2.0 <https://semver.org/#sema
 
 Upon release of version 1.0.0, all additions to the ``master`` branch are done by PR followed by its respective version increment and release on `PyPI <https://pypi.org/project/taurenmd/>`_.
 
+Upon version 0.8, and before version 1, SV2 major version increments are reflected in the minor number, and minor and patch increments are reflected together in the patch number. Everything else follows SV2 rules, in this way users can track backwards incompatibilities if they happen.
 
 Changelog
 =========
+
+0.8.0 (2020-mm-dd)
+------------------
+
+* Code architecture improvements
+* Complete documentation
+* command line documented
+* Code clean
 
 0.7.2 (2019-12-25)
 ------------------
