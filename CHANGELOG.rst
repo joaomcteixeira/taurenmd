@@ -10,7 +10,7 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
-0.8.0 (2020-mm-dd)
+0.8.0 (2020-01-15)
 ------------------
 
 * Code architecture improvements
