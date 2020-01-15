@@ -7,7 +7,6 @@ __pycache__
 tags
 *.debug
 *.bk
-*.cif
 *.log
 
 # Packages
