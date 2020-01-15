@@ -1,4 +1,6 @@
 """
+taurenmd main client interface.
+
 Usage Examples
 --------------
 To access to the complete list of *taurenmd commands* with a summary
@@ -73,23 +75,23 @@ printed in the ``terminal`` during runtime. Overwrites previous runs.
 
 3. ``.taurenmd.debug``, a full verbose log with all runtime information for the
 LAST run. Overwrites previous runs.
-"""
+"""  # noqa: E501
 import argparse
 import sys
 
 # add bellow, by alphabetical order your newly developed cli
 # import taurenmd.cli_NAME as cli_NAME
-import taurenmd.cli_pangle as cli_pangle
 import taurenmd.cli_distances as cli_dist
 import taurenmd.cli_fext as cli_fext
 import taurenmd.cli_imagemol as cli_imagemol
 import taurenmd.cli_nosol as cli_nosol
+import taurenmd.cli_pangle as cli_pangle
 import taurenmd.cli_report as cli_report
 import taurenmd.cli_rmsd as cli_rmsd
 import taurenmd.cli_rmsf as cli_rmsf
 import taurenmd.cli_rotations as cli_rot
 import taurenmd.cli_trajedit as cli_trajedit
-from taurenmd import __version__, _BANNER, _DOCSTRING, log
+from taurenmd import _BANNER, _DOCSTRING, log
 from taurenmd.libs import libcli
 from taurenmd.logger import CMDFILE
 
@@ -135,11 +137,12 @@ def _ap():
 
 
 def load_args():
+    """Load user input arguments."""
     return ap.parse_args()
 
 
 def maincli():
-    """Main client interface."""
+    """Execute main client logic."""
     if len(sys.argv) < 2:
         sys.stdout.write(_BANNER)
         sys.stdout.write(_DOCSTRING)

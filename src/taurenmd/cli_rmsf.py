@@ -1,8 +1,5 @@
 """
-Client Calculate RMSF
-=====================
-
-**Calculates RMSFS of a selection along the trajectory slice.**
+Calculate RMSFS of a selection along the trajectory slice.
 
 **Algorithm:**
 
@@ -44,12 +41,11 @@ import argparse
 import functools
 from datetime import datetime
 
-from bioplottemplates.plots import label_dots
-
 import taurenmd.core as tcore
 from taurenmd import Path, log  # noqa: F401
-from taurenmd.libs import libcalc, libcli, libmda, libio, libplot
+from taurenmd.libs import libcalc, libcli, libio, libmda, libplot
 from taurenmd.logger import S, T
+
 
 __author__ = 'Joao M.C. Teixeira'
 __email__ = 'joaomcteixeira@gmail.com'
@@ -63,7 +59,7 @@ __doc__ += (
     f'{tcore.ref_plottemplates_labeldots}'
     )
 
-_help = 'Calculates and plots RMSFs'
+_help = 'Calculate RMSFS for a selection and trajectory slice.'
 _name = 'rmsf'
 
 ap = libcli.CustomParser(
@@ -134,7 +130,7 @@ def main(
                 labels,
                 rmsfs,
                 fname=export,
-                header = (
+                header=(
                     "# Date: {}\n"
                     "# Topology: {}\n"
                     "# Trajectories {}\n"

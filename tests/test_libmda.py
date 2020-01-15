@@ -1,10 +1,9 @@
 """Test libmda."""
-
-import pytest
 import MDAnalysis as mda
 
 from taurenmd.libs import libmda as la
-from . import *
+
+from . import toptest, trajtest
 
 
 def test_load_universe_1():

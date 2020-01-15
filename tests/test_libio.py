@@ -6,6 +6,7 @@ from taurenmd.libs import libio as io
 
 from . import datap, export_data_expected, export_data_expected_2
 
+
 @pytest.mark.parametrize(
     'in1,expected',
     [
@@ -28,7 +29,10 @@ def test_get_number(in1, expected):
 @pytest.mark.parametrize(
     'in1,expected',
     [
-        (['t_1.dcd', 't_11.dcd', 't_2.dcd'], ['t_1.dcd', 't_2.dcd', 't_11.dcd']),
+        (
+            ['t_1.dcd', 't_11.dcd', 't_2.dcd'],
+            ['t_1.dcd', 't_2.dcd', 't_11.dcd'],
+            ),
         (['b.dcd', 'c.dcd', 'a.dcd'], ['a.dcd', 'b.dcd', 'c.dcd']),
         ],
     )
@@ -36,6 +40,7 @@ def test_sort_numbered_input_1(in1, expected):
     """Test sort numbered inputs."""
     result = io.sort_numbered_input(*in1)
     assert result == expected
+
 
 @pytest.mark.parametrize(
     'in1,error',
@@ -122,6 +127,7 @@ def test_mk_frame_path(inputs, expected):
         ],
     )
 def test_get_ipath(in1, expected):
+    """Test get ipath private function."""
     result = io._get_ipath(in1)
     assert isinstance(result, Path)
     assert result == expected
@@ -148,7 +154,7 @@ def test_export_data_to_file_1():
     """Test export data to file."""
     xdata = list(range(10))
     ydata = list(range(0, 20, 2))
-    header="#this is an header\n"
+    header = "#this is an header\n"
     fout = Path(datap, 'exporttest.csv')
     io.export_data_to_file(
         xdata,
@@ -172,7 +178,7 @@ def test_export_data_to_file_2():
     ydata = [ydata, ydata]
     assert isinstance(ydata, list)
     assert len(ydata) == 2
-    header="#this is an header\n"
+    header = "#this is an header\n"
     fout = Path(datap, 'exporttest.csv')
     io.export_data_to_file(
         xdata,
@@ -216,11 +222,13 @@ def test_frame_list(inputs, expected):
         ]
     )
 def test_frame_list_error(lent, flist, error):
+    """Test frame list error."""
     with pytest.raises(error):
         io.frame_list(lent, flist=flist)
 
 
 def test_frame_slice():
+    """Test frame_slice."""
     result = io.frame_slice(1, 100, 2)
     assert result == slice(1, 100, 2)
 
@@ -246,6 +254,7 @@ def test_frame_slice():
         ],
     )
 def test_evaluate_to_slice(value, start, stop, step, expected):
+    """Test evaluate to slice."""
     result = io.evaluate_to_slice(
         value=value,
         start=start,
@@ -256,5 +265,6 @@ def test_evaluate_to_slice(value, start, stop, step, expected):
 
 
 def test_evaluate_to_slice_error():
+    """Test evaluate to slice ValueError."""
     with pytest.raises(ValueError):
         io.evaluate_to_slice(value={})

@@ -11,7 +11,7 @@ from taurenmd.logger import CMDFILE
 def test_load_args():
     """Test load_args func."""
     parser = argparse.ArgumentParser()
-    # this has to --cov because otherwise argparse catches the 
+    # this has to --cov because otherwise argparse catches the
     # pytest commands
     parser.add_argument('--cov', nargs=argparse.REMAINDER)
     result = lc.load_args(parser)
@@ -43,7 +43,8 @@ def test_CustomParser():
     """Test Custom Parser."""
     assert issubclass(lc.CustomParser, argparse.ArgumentParser)
     assert hasattr(lc.CustomParser, 'error')
-   
+
+
 def test_CustomParser_error():
     """Test CP error."""
     with pytest.raises(SystemExit) as error:
@@ -202,6 +203,7 @@ def test_trajectory(cmd, expected):
     v = vars(parser.parse_args(cmd.split()))
     assert v['trajectory'] == expected
 
+
 def test_trajectory_error():
     """Test error in trajectory input."""
     parser = argparse.ArgumentParser()
@@ -289,6 +291,7 @@ def test_atom_selections_error(cmd):
     lc.add_atom_selections_arg(parser)
     with pytest.raises(SystemExit):
         parser.parse_args(cmd.split())
+
 
 @pytest.mark.parametrize(
     'cmd,expected',
@@ -398,7 +401,7 @@ def test_plot_arg(cmd, expected):
     parser = argparse.ArgumentParser()
     lc.add_plot_arg(parser)
     v = vars(parser.parse_args(cmd))
-    assert v['plot'] == True
+    assert v['plot'] is True
     assert 'plotvars' in v
     assert v['plotvars'] == expected
 
@@ -435,7 +438,6 @@ def test_trajoutput_args(cmd, expected):
     lc.add_traj_output_arg(parser)
     v = vars(parser.parse_args(cmd.split()))
     assert v['traj_output'] == expected
-
 
 
 @pytest.mark.parametrize(

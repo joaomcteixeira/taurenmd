@@ -74,7 +74,6 @@ def sort_numbered_input(*inputs):
         return sorted(inputs)
 
    
-
 def report_input(topology, trajectory):
     """Report on topology and trajectory file paths used as input."""
     log.info(S('loading trajectory: {}', trajectory))
@@ -389,9 +388,19 @@ def frame_list(len_traj, start=None, stop=None, step=None, flist=None,):
                     ) from None
     else:
         return list(range(len_traj))
-    
+   
 
 def frame_slice(start=None, stop=None, step=None,):
+    """
+    Create a slice object from parameters.
+
+    Logs the created slice object.
+
+    Returns
+    -------
+    Slice Object
+        The slice object created from slice(start, stop, step)
+    """
     log.info(S('slicing: {}:{}:{}', start, stop, step))
     return slice(start, stop, step)
 
@@ -456,7 +465,6 @@ def evaluate_to_slice(*, value=None, start=None, stop=None, step=None):
     ValueError
         If slice can not be computed.
     """  # noqa: E501
-
     def convert(a):
         try:
             return int(a)

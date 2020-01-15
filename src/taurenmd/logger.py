@@ -7,6 +7,7 @@ CMDFILE = '.taurenmd.cmd'
 
 class TitleLog:
     """Format string to title."""
+
     def __init__(self, msg, *args):
         self.msg = msg.title()
         self.args = args

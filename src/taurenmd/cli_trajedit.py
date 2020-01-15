@@ -1,8 +1,5 @@
 """
-Client Edit Trajectory with MDAnalysis
-======================================
-
-**Edit a trajectory.**
+Edit a trajectory.
 
 *In short*, takes a trajectory and apply a modification:
 
@@ -51,7 +48,7 @@ alternative approach to the ``imagemol`` client, that implements from
 
 **References:**
 
-"""
+"""  # noqa: E501
 import argparse
 import functools
 
@@ -62,6 +59,7 @@ import taurenmd.core as tcore
 from taurenmd import Path, log
 from taurenmd.libs import libcli, libio, libmda
 from taurenmd.logger import S, T
+
 
 __author__ = 'Joao M.C. Teixeira'
 __email__ = 'joaomcteixeira@gmail.com'
@@ -134,6 +132,7 @@ ap.add_argument(
     type=str,
     )
 
+
 def _ap():
     return ap
 
@@ -154,7 +153,7 @@ def main(
         align=False,
         **kwargs,
         ):
-   
+    """Execute main client logic."""
     log.info(T('editing trajectory'))
     
     topology = Path(topology)
@@ -172,7 +171,6 @@ def main(
         log.info(S('compound: {}', unwrap_compound))
 
     if align:
-        u_top = mda.Universe(topology.str()).select_atoms(selection)
         log.info(T('Alignment'))
         log.info(S('trajectory selection will be aligned to subselection:'))
         log.info(S('- {}', align, indent=2))
@@ -189,7 +187,7 @@ def main(
     log.info(S('destination: {}', traj_output.resolve().str()))
 
     with mda.Writer(traj_output.str(), atom_selection.n_atoms) as W:
-        for i, ts in zip(
+        for i, _ts in zip(
                 range(len(u.trajectory))[sliceObj],
                 u.trajectory[sliceObj],
                 ):
@@ -215,7 +213,7 @@ def main(
         fout = libio.parse_top_output(top_output, traj_output)
         log.info(S('saving frame 0 to: {}', fout.resolve()))
         with mda.Writer(fout.str(), atom_selection.n_atoms) as W:
-            for ts in u.trajectory[sliceObj][0:1]:
+            for _ts in u.trajectory[sliceObj][0:1]:
                 if unwrap:
                     log.debug(S('unwrapping for topology', indent=2))
                     atom_selection.unwrap(

@@ -38,7 +38,7 @@ tests on the test_lib* corresponding file if you have developed new functions.
 Finally, go the ``docs/reference`` folder. There is a ``cli_template.xxx``
 template file there, just copy it to a ``cli_name.rst`` file and modify
 it accordingly: 1) give a title, 2) change ``NAME`` for the name of your
-client. Add that file reference to the toctree in the 
+client. Add that file reference to the toctree in the
 ``docs/reference/clients.rst`` file.
 
 You can use ``tox`` during your development to confirm code style,
@@ -47,20 +47,22 @@ three tox environments pass before you Pull Request:
 
     >>> tox -e check
     >>> tox -e docs
-    >>> tox -e py37  # or py36 depending 
+    >>> tox -e py37  # or py36 depending
 """
 import argparse
 import functools
 
+import taurenmd.core as tcore
 from taurenmd import log
 # add here additional libraries if you need them
 # libmda, libmdt, libcalc, etc...
 from taurenmd.libs import libcli, libio  # noqa: F401
 from taurenmd.logger import S, T
 
+
 __author__ = 'Your Name'
 __email__ = 'your_email@address.com'
-__maintainer__ = 'Your Name' # if you plan to give long term maintenance
+__maintainer__ = 'Your Name'  # if you plan to give long term maintenance
 # otherwise just write, 'taurenmd'.
 __credits__ = ['Your Name']
 __status__ = 'Production'
@@ -79,7 +81,7 @@ __doc__ += (
 
 # updated this variables according to your client
 _help = 'Short description sentence.'
-_name = 'name' # the actual command subroutine name
+_name = 'name'  # the actual command subroutine name
 # this will be the name to be called with
 # $ taurenmd name
 # choose wisely, has to sound :-)
@@ -113,7 +115,7 @@ libcli.add_topology_arg(ap)
 # https://docs.python.org/3/library/argparse.html
 #
 # ap.add_argument(
-#...
+# ...
 
 
 # this is used just for documentation purposes.
@@ -124,12 +126,12 @@ def _ap():
 def main(
         topology,
         trajectory,
-        #trajectories,
+        # trajectories,
         # additional args...
         # ...
         **kwargs
         ):
-    """Main client logic."""
+    """Execute main client logic."""
     log.info(T('starting'))
     
     # write your logic here.
@@ -139,6 +141,7 @@ def main(
 
     log.info(S('done'))
     return
+
 
 maincli = functools.partial(libcli.maincli, ap, main)
 

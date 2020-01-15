@@ -7,11 +7,11 @@ import sys
 
 import pytest
 
-from taurenmd import (
-    __main__ as main_module,
+# import bellow by alphabetical order the cli interfaces you are
+# implementing
+from taurenmd import __main__ as main_module
+from taurenmd import (  # noqa: E133
     cli,
-    # import here by alphabetical order the cli interfaces you are
-    # implementing
     cli_distances,
     cli_fext,
     cli_imagemol,
@@ -22,10 +22,10 @@ from taurenmd import (
     cli_rmsf,
     cli_rotations,
     cli_trajedit,
-    )
+)
 from taurenmd.libs import libcli as lc
 
-from . import *
+from . import Path, toptest, trajtest
 
 
 subclients = [
@@ -45,11 +45,13 @@ subclients = [
 
 @pytest.fixture(params=subclients)
 def client(request):
+    """Loop all individual clients."""
     return request.param
 
 
 @pytest.fixture(params=[cli] + subclients)
 def all_clients(request):
+    """Consider individual clientes plus main cli."""
     return request.param
 
 
@@ -180,7 +182,6 @@ def test_clients_maincli_partial_args(client):
     assert client.maincli.args == (client.ap, client.main)
 
 
-
 @pytest.mark.parametrize(
     'module,name',
     [
@@ -206,15 +207,15 @@ def test_cli__name(module, name):
 
 # write a test function that calls the main function for your client.
 # and add any additional modification or output confirmation that you
-# find appropriate so that test coverage is 100% and you asure the 
+# find appropriate so that test coverage is 100% and you asure the
 # correct output is generate. Read through the other client for examples.
 # there is a final test to add at the end of the file, do not miss it.
 
-#def test_cli_NAME_1():
-#    """Test cli NAME."""
-#    cli_NAME.main(
-#        #params...
-#        )
+# def test_cli_NAME_1():
+#     """Test cli NAME."""
+#     cli_NAME.main(
+#         #params...
+#         )
 
 
 def test_cli_distances_1():
@@ -339,7 +340,7 @@ def test_cli_nosol_2():
     p2.unlink()
 
 
-def test_cli_nosol_2():
+def test_cli_nosol_3():
     """Test cli nosol."""
     cli_nosol.main(
         toptest,
@@ -385,6 +386,7 @@ def test_cli_pangle_2():
         export=False,
         plot=False,
         )
+
 
 def test_cli_report_1():
     """Test cli report."""
@@ -540,27 +542,27 @@ def test_cli_trajedit_3():
     p1.unlink()
     p2.unlink()
 
-### test argparse
+# test argparse
+
 
 @pytest.mark.parametrize(
     'module,cmd',
     [
         # add command examples to this list
         (cli, 'fext top.pdb traj1.xtc traj2.xtc'),
-        (cli, 'dist top.pdb traj1.xtc traj2.xtc -l1 selA -l2 selB -s 1 -e 2 -p 3 -x --plot'),
+        (cli, 'dist top.pdb traj1.xtc traj2.xtc -l1 selA -l2 selB -s 1 -e 2 -p 3 -x --plot'),  # noqa: E501
         (cli, 'imagemol top.pdb traj.xtc -d tout.xtc -o'),
         (cli, 'imagemol top.pdb traj.xtc -d tout.xtc -o out.pdb'),
-        (cli, 'pangle top.pdb traj_1.xtc traj_2.xtc -x --plot title=title -s 1 -e 2 -p 3 -z selA selB selC -a radians'),
-        (cli, 'trajedit top.pdb traj1.xtc traj2.xtc -i -l segA -s 1 -e 10 -p 2 -d tout.xtc -o'),
+        (cli, 'pangle top.pdb traj_1.xtc traj_2.xtc -x --plot title=title -s 1 -e 2 -p 3 -z selA selB selC -a radians'),  # noqa: E501
+        (cli, 'trajedit top.pdb traj1.xtc traj2.xtc -i -l segA -s 1 -e 10 -p 2 -d tout.xtc -o'),  # noqa: E501
         (cli, 'nosol top.pdb traj.xtc -d tout.xtc -o out.pdb -m NA'),
-        (cli, 'rmsd top.pdb traj1.xtc traj2.xtc -g segA segB -s 1 -e 10 -p 2 -r 10 -x data.csv --plot'),
-        (cli, 'rmsd top.pdb traj1.xtc traj2.xtc -g segA segB -s 1 -e 10 -p 2 -r 10 -x data.csv --plot title=1'),
-        (cli, 'rmsf top.pdb traj1.xtc traj2.xtc -g segA segB -s 1 -e 10 -p 2 -x data.csv --plot title=1'),
-        (cli, 'rotations top.pdb traj1.xtc traj2.xtc -z segA segB segC -s 1 -e 10 -p 2 -a radians -x data.csv'),
+        (cli, 'rmsd top.pdb traj1.xtc traj2.xtc -g segA segB -s 1 -e 10 -p 2 -r 10 -x data.csv --plot'),  # noqa: E501
+        (cli, 'rmsd top.pdb traj1.xtc traj2.xtc -g segA segB -s 1 -e 10 -p 2 -r 10 -x data.csv --plot title=1'),  # noqa: E501
+        (cli, 'rmsf top.pdb traj1.xtc traj2.xtc -g segA segB -s 1 -e 10 -p 2 -x data.csv --plot title=1'),  # noqa: E501
+        (cli, 'rotations top.pdb traj1.xtc traj2.xtc -z segA segB segC -s 1 -e 10 -p 2 -a radians -x data.csv'),  # noqa: E501
         (cli, 'report top.pdb traj1.xtc traj2.xtc'),
         ],
     )
 def test_ap_interface(module, cmd):
-    """Test argparse interface of command lines"""
+    """Test argparse interface of command lines."""
     module.ap.parse_args(cmd.split())
-

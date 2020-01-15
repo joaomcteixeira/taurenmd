@@ -1,8 +1,5 @@
 """
-Client Distance Calculator
-==========================
-
-**Calculates distances between centers of geometry of two selections.**
+Calculates distances between centers of geometry of two selections.
 
 Distance is given in 3D XYZ coordinate space units.
 
@@ -40,17 +37,17 @@ where ``[...]`` is the previous command example.
 
 **References:**
 
-"""
+"""  # noqa: E501
 import argparse
-import copy
 import functools
 
 import numpy as np
 
 import taurenmd.core as tcore
-from taurenmd import log, Path
+from taurenmd import Path, log
 from taurenmd.libs import libcli, libio, libmda, libplot  # noqa: F401
 from taurenmd.logger import S, T
+
 
 __doc__ += (
     f'{tcore.ref_mda}'
@@ -108,6 +105,7 @@ def main(
         plotvars=None,
         **kwargs
         ):
+    """Execute main client logic."""
     log.info(T('measuring distances'))
     
     topology = Path(topology)
@@ -132,7 +130,7 @@ def main(
     log.info(T('Calculating distances'))
     # https://www.mdanalysis.org/MDAnalysisTutorial/atomgroups.html
     # https://www.mdanalysis.org/docs/documentation_pages/core/groups.html#MDAnalysis.core.groups.AtomGroup.center_of_geometry
-    for i, ts in enumerate(u.trajectory[frame_slice]):
+    for i, _ts in enumerate(u.trajectory[frame_slice]):
 
         distances[i] = np.linalg.norm(
             np.subtract(

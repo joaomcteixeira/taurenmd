@@ -1,7 +1,7 @@
-import pytest
-
+"""Test libcalc."""
 import MDAnalysis as mda
 import numpy as np
+import pytest
 from pyquaternion import Quaternion as Q
 
 from taurenmd.libs import libcalc as lc
@@ -99,6 +99,7 @@ def test_calc_planes_angle(a1, b1, c1, a2, b2, c2, aunit, expected):
 
 
 def test_gen_quaternion_rot():
+    """Test quaternion rotation."""
     result = lc.generate_quaternion_rotations(
         np.array([1.0, 0.0, 0.0]),
         np.array([0.0, 1.0, 0.0]),

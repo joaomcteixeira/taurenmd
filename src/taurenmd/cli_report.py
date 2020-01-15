@@ -1,10 +1,5 @@
 """
-Client Report
-=============
-
-**Report on trajectory characteristics.**
-
-Reports on various trajectory details.
+Report on trajectory characteristics.
 
 **Example:**
 
@@ -20,6 +15,7 @@ import taurenmd.core as tcore
 from taurenmd import log
 from taurenmd.libs import libcli, libmda
 from taurenmd.logger import S, T
+
 
 __author__ = 'Joao M.C. Teixeira'
 __email__ = 'joaomcteixeira@gmail.com'

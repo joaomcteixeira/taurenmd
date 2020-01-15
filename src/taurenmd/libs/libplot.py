@@ -1,14 +1,13 @@
-"""
-Contains plotting routines.
+"""Contains plotting routines.
 
 Plotting routines can be hardcoded or linked from thirdparty projects.
 
-References:
+References
+----------
 
 * https://python-bioplottemplates.readthedocs.io/en/latest/
-
 """
-import bioplottemplates.plots as bioplots
+from bioplottemplates.plots import plotlabeld, plotparam
 
 import taurenmd.core as tcore
 from taurenmd.libs import libcli
@@ -16,11 +15,19 @@ from taurenmd.libs import libcli
 
 @libcli.add_reference(tcore.ref_plottemplates_param)
 def param(*args, **kwargs):
-    """Reproduces bioplotemplates.plots.param."""
-    return bioplots.param.plot(*args, **kwargs)
+    """
+    Reproduce bioplotemplates.plots.param.
+    
+    Visit: https://python-bioplottemplates.readthedocs.io/en/latest/
+    """
+    return plotparam(*args, **kwargs)
 
 
 @libcli.add_reference(tcore.ref_plottemplates_labeldots)
 def label_dots(*args, **kwargs):
-    """Reproduces bioplotemplates.plots.label_dots."""
-    return bioplots.label_dots.plot(*args, **kwargs)
+    """
+    Reproduce bioplotemplates.plots.label_dots.
+
+    Visit: https://python-bioplottemplates.readthedocs.io/en/latest/
+    """
+    return plotlabeld(*args, **kwargs)

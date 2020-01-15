@@ -14,9 +14,9 @@ taurenmd and MDAnalysis.
 import MDAnalysis as mda
 
 import taurenmd.core as tcore
-from taurenmd import references, log, Path
+from taurenmd import Path, log
 from taurenmd.libs import libcli, libio
-from taurenmd.logger import CMDFILE, S, T
+from taurenmd.logger import S, T
 
 
 @libcli.add_reference(tcore.ref_mda)

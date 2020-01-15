@@ -1,8 +1,5 @@
 """
-Client Calculate RMSDs
-======================
-
-**Calculates RMSDs of a region.**
+Calculates RMSDs for a selection.
 
 **Algorithm:**
 
@@ -34,16 +31,14 @@ where ``[...]`` is the previous command example.
 **References:**
 
 
-"""
+"""  # noqa: E501
 import argparse
 import functools
 from datetime import datetime
 
-import numpy as np
-
 import taurenmd.core as tcore
 from taurenmd import Path, log
-from taurenmd.libs import libcalc, libcli, libmda, libio, libplot
+from taurenmd.libs import libcalc, libcli, libio, libmda, libplot
 from taurenmd.logger import S, T
 
 
@@ -59,7 +54,7 @@ __doc__ += (
     f'{tcore.ref_plottemplates_param}'
     )
 
-_help = 'Calculates and plots RMSDs.'
+_help = 'Calculates RMSDs for a selection and trajectory slice.'
 _name = 'rmsd'
 
 ap = libcli.CustomParser(
@@ -94,7 +89,7 @@ def main(
         plotvars=None,
         **kwargs
         ):
-    """Main client logic."""
+    """Execute main client logic."""
     log.info(T('starting'))
     
     u = libmda.load_universe(topology, *trajectories)

@@ -18,8 +18,9 @@ import mdtraj
 import simtk.openmm.app as app
 
 import taurenmd.core as tcore
-from taurenmd import Path, references
+from taurenmd import Path, log
 from taurenmd.libs import libcli, libio
+from taurenmd.logger import S, T
 
 
 @libcli.add_reference(tcore.ref_mdt)
@@ -59,3 +60,46 @@ def load_traj(topology, trajectory):
     mdtrajectory = mdtraj.load(Path(trajectory).str(), top=top)
 
     return mdtrajectory
+
+
+@libcli.add_reference(tcore.ref_mdt)
+def imagemol_protocol1(traj):
+    """Attempt to image molecules acting on the whole traj."""
+    log.info(T('running reimage protocol #1'))
+    log.info(S('finding molecules'))
+
+    mols = traj.top.find_molecules()
+    log.info(S('done'))
+    
+    log.info(T('reimaging'))
+    reimaged = traj.image_molecules(
+        inplace=False,
+        anchor_molecules=mols[:1],
+        other_molecules=mols[1:],
+        )
+    log.info(S('done'))
+    return reimaged
+
+
+@libcli.add_reference(tcore.ref_mdt)
+def imagemol_protocol2(traj):
+    """Attempt to image molecules frame by frame."""
+    reimaged = []
+    for frame in range(len(traj)):
+        log.info(S('reimaging frame: {}', frame))
+        
+        mols = traj[frame].top.find_molecules()
+    
+        reimaged.append(
+            traj[frame].image_molecules(
+                inplace=False,
+                anchor_molecules=mols[:1],
+                other_molecules=mols[1:],
+                )
+            )
+
+    log.info(S('concatenating traj frames'))
+    # http://mdtraj.org/1.9.3/api/generated/mdtraj.join.html#mdtraj.join
+    reimaged_traj = reimaged[0].join(reimaged[1:])
+
+    return reimaged_traj

@@ -1,8 +1,5 @@
 """
-Client Image Molecule with MDTraj
-=================================
-
-**Make molecules whole.**
+Make molecules whole.
 
 Attempts to "Recenter and apply periodic boundary conditions to the
 molecules in each frame of the trajectory." (MDTraj documentation)
@@ -41,14 +38,15 @@ Uses `MDTraj.Trajectory.image_molecule <http://mdtraj.org/1.9.3/api/generated/md
 
 **References:**
 
-"""
+"""  # noqa: E501
 import argparse
 import functools
 
 import taurenmd.core as tcore
-from taurenmd import Path, log
+from taurenmd import log
 from taurenmd.libs import libcli, libio, libmdt
 from taurenmd.logger import S, T
+
 
 __author__ = 'Joao M.C. Teixeira'
 __email__ = 'joaomcteixeira@gmail.com'
@@ -60,13 +58,13 @@ __doc__ += (
     f'{tcore.ref_mdt}'
     )
 
-_help = 'Attempts to image molecules.'
+_help = 'Attempt to image molecules.'
 _name = 'imagemol'
 
 ap = libcli.CustomParser(
-        description=__doc__,
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        )
+    description=__doc__,
+    formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
 
 libcli.add_version_arg(ap)
 libcli.add_topology_arg(ap)
@@ -86,47 +84,6 @@ ap.add_argument(
     )
 
 
-def protocol1(traj):
-    """Attempts to image molecules acting on the whole traj."""
-    log.info(T('running reimage protocol #1'))
-    log.info(S('finding molecules'))
-
-    mols = traj.top.find_molecules()
-    log.info(S('done'))
-    
-    log.info(T('reimaging'))
-    reimaged = traj.image_molecules(
-        inplace=False,
-        anchor_molecules=mols[:1],
-        other_molecules=mols[1:],
-        )
-    log.info(S('done'))
-    return reimaged
-
-
-def protocol2(traj):
-    """Attempts to image molecules frame by frame."""
-    reimaged = []
-    for frame in range(len(traj)):
-        log.info(S('reimaging frame: {}', frame))
-        
-        mols = traj[frame].top.find_molecules()
-    
-        reimaged.append(
-            traj[frame].image_molecules(
-                inplace=False,
-                anchor_molecules=mols[:1],
-                other_molecules=mols[1:],
-                )
-            )
-
-    log.info(S('concatenating traj frames'))
-    # http://mdtraj.org/1.9.3/api/generated/mdtraj.join.html#mdtraj.join
-    reimaged_traj = reimaged[0].join(reimaged[1:])
-
-    return reimaged_traj
-
-
 def _ap():
     return ap
 
@@ -139,14 +96,14 @@ def main(
         protocol=1,
         **kwargs
         ):
-
+    """Execute main client logic."""
     log.info('Attempting image molecules')
     
     traj = libmdt.load_traj(topology, trajectory)
     
     protocols = {
-        1: protocol1,
-        2: protocol2,
+        1: libmdt.imagemol_protocol1,
+        2: libmdt.imagemol_protocol2,
         }
 
     reimaged = protocols[protocol](traj)

@@ -1,8 +1,5 @@
 """
-Client Remove Solvent
-=====================
-
-**Removes solvent from trajectory.**
+Remove solvent from trajectory.
 
 **Algorithm:**
 
@@ -24,14 +21,15 @@ Removes solvent from trajectory using `MDTraj.remove_solvent <http://mdtraj.org/
 
 **References:**
 
-"""
+"""  # noqa: E501
 import argparse
 import functools
 
 import taurenmd.core as tcore
-from taurenmd import log, Path
+from taurenmd import log
 from taurenmd.libs import libcli, libio, libmdt
 from taurenmd.logger import S, T
+
 
 __author__ = 'Joao M.C. Teixeira'
 __email__ = 'joaomcteixeira@gmail.com'

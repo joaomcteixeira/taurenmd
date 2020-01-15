@@ -1,3 +1,4 @@
+# THIS FILE IS EXCLUDED FROM FLAKE8 IN TOX.ini WORKFLOW
 r"""
 Welcome to
 _________ _______           _______  _______  _        _______  ______  
@@ -13,15 +14,28 @@ _________ _______           _______  _______  _        _______  ______
 """
 # link to logo
 # http://patorjk.com/software/taag/#p=display&h=0&f=Epic&t=taurenmd
+import logging
+
+from taurenmd.core import Path  # noqa: F401
+from taurenmd.logger import DEBUGFILE, LOGFILE
+
+__version__ = '0.7.2'
 
 _BANNER = __doc__
 
 _DOCSTRING = """
-version: 0.7.2
+version: {}
 
 Documentation
 =============
 This project is fully documented at: https://taurenmd.readthedocs.io/
+Client documentation is provided with the ``-h`` option, for example:
+
+    >>> taurenmd -h
+
+    or
+
+    >>> taurenmd dist -h
 
 Citing
 ======
@@ -31,11 +45,7 @@ libraries when using taurenmd. Please visit our documentation page
 for complete details on how to cite properly:
 
     https://taurenmd.readthedocs.io/en/latest/citing.html
-"""
-import logging
-
-from taurenmd.core import Path
-from taurenmd.logger import CMDFILE, DEBUGFILE, LOGFILE
+""".format(__version__)
 
 __doc__ += _DOCSTRING
 
@@ -61,7 +71,5 @@ _ch.setFormatter(logging.Formatter('%(message)s'))
 log.addHandler(_db)
 log.addHandler(_info)
 log.addHandler(_ch)
-
-__version__ = '0.7.2'
 
 references = set()

@@ -8,9 +8,10 @@ experience.
 import argparse
 import sys
 from datetime import datetime
+from functools import wraps
 
 import taurenmd.core as tcore
-from taurenmd import references, __version__, _BANNER, _DOCSTRING
+from taurenmd import _BANNER, _DOCSTRING, __version__, references
 from taurenmd.logger import CMDFILE
 
 
@@ -21,6 +22,21 @@ def load_args(ap):
 
 
 def maincli(ap, main):
+    """
+    Client main function.
+
+    Operates when client is called directly outside the
+    ``taurenmd`` client interface.
+    
+    - Reads input parameters
+    - saves inpu command to log file
+    - runs client ``main`` function
+    - saves references to log file
+    
+    Returns
+    -------
+    The result value from client ``main`` function.
+    """
     cmd = load_args(ap)
     save_command(CMDFILE, *sys.argv)
     result = main(**vars(cmd))
@@ -29,7 +45,18 @@ def maincli(ap, main):
 
 
 def add_reference(ref):
+    """
+    Add reference decorator.
+
+    Example
+    -------
+
+        >>> @add_reference(str)
+        >>> def myfunct():
+        >>>     ...
+    """
     def decorator(func):
+        @wraps(func)
         def wrapper(*args, **kwargs):
             references.add(ref)
             result = func(*args, **kwargs)
@@ -106,7 +133,7 @@ class ParamsToDict(argparse.Action):
                     except (ValueError, TypeError):  # is string or list
                         param_dict[k] = bool_value.get(v.lower(), v)
             
-        setattr(namespace, 'plotvars', param_dict)
+        namespace.plotvars = param_dict
         setattr(namespace, self.dest, True)
 
 
@@ -205,7 +232,7 @@ def add_version_arg(parser):
 
 def add_angle_unit_arg(parser):
     """
-    Adds angle unit selectiona argument to parser.
+    Add angle unit selectiona argument to parser.
 
     Is defined by ``-a`` and ``--aunit``.
 
@@ -215,7 +242,7 @@ def add_angle_unit_arg(parser):
     ----------
     parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
         The argument parser to add the topology positionl argument.
-    """
+    """  # noqa: E501
     parser.add_argument(
         '-a',
         '--aunit',
@@ -227,7 +254,7 @@ def add_angle_unit_arg(parser):
 
 def add_insort_arg(parser):
     """
-    Sorts input by trail int.
+    Sort input by trail int.
 
     Applies :py:func:`taurenmd.libs.libio.sort_numbered_input`.
 
@@ -235,7 +262,7 @@ def add_insort_arg(parser):
     ----------
     parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
         The argument parser to add the insort argument.
-    """
+    """  # noqa: E501
     parser.add_argument(
         '-i',
         '--insort',
@@ -256,12 +283,13 @@ def add_topology_arg(parser):
     ----------
     parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
         The argument parser to add the topology positionl argument.
-    """
+    """  # noqa: E501
     parser.add_argument(
         'topology',
         help='Path to the topology file.',
         type=str,
         )
+
 
 def add_trajectories_arg(parser):
     """
@@ -273,7 +301,7 @@ def add_trajectories_arg(parser):
     ----------
     parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
         The argument parser to add the trajectory positionl argument.
-    """
+    """  # noqa: E501
     parser.add_argument(
         'trajectories',
         help=(
@@ -283,6 +311,7 @@ def add_trajectories_arg(parser):
             ),
         nargs='+',
         )
+
 
 def add_trajectory_arg(parser):
     """
@@ -294,7 +323,7 @@ def add_trajectory_arg(parser):
     ----------
     parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
         The argument parser to add the trajectory positionl argument.
-    """
+    """  # noqa: E501
     parser.add_argument(
         'trajectory',
         help='Path to the trajectory file.',
@@ -311,7 +340,7 @@ def add_slice_arg(parser):
     ----------
     parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
         The argument parser to add the trajectory positionl argument.
-    """
+    """  # noqa: E501
     parser.add_argument(
         '-s',
         '--start',
@@ -354,7 +383,7 @@ def add_slice_arg(parser):
 
 def add_atom_selection_arg(parser):
     """
-    Adds selection optional argument.
+    Add selection optional argument.
 
     Selection argument is a string that defines the atom selection,
     this is defined by ``-l`` and ``--selection``, and defaults to ``all``.
@@ -363,7 +392,7 @@ def add_atom_selection_arg(parser):
     ----------
     parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
         The argument parser to which add the selection argument.
-    """
+    """  # noqa: E501
     parser.add_argument(
         '-l',
         '--selection',
@@ -390,7 +419,7 @@ def add_atom_selections_arg(parser):
     ----------
     parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
         The argument parser to which add the selections argument.
-    """
+    """  # noqa: E501
     parser.add_argument(
         '-g',
         '--selections',
@@ -410,7 +439,7 @@ def add_atom_selections_arg(parser):
 
 def add_frame_list_arg(parser):
     """
-    Adds frame list argument.
+    Add frame list argument.
 
     Registers a list of frame numbers, is defined by ``-t`` and ``--flist``.
 
@@ -418,7 +447,7 @@ def add_frame_list_arg(parser):
     ----------
     parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
         The argument parser to which add the flist argument.
-    """
+    """  # noqa: E501
     parser.add_argument(
         '-t',
         '--flist',
@@ -432,9 +461,10 @@ def add_frame_list_arg(parser):
         type=int,
         )
 
+
 def add_plane_selection_arg(parser):
     """
-    Adds plane selection argument.
+    Add plane selection argument.
 
     Plane selection is a selection of three regions separated by 'or'
     operator.
@@ -445,7 +475,7 @@ def add_plane_selection_arg(parser):
     ----------
     parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
         The argument parser to which add the plane-selection argument.
-    """
+    """  # noqa: E501
     parser.add_argument(
         '-z',
         '--plane-selection',
@@ -462,7 +492,7 @@ def add_plane_selection_arg(parser):
 
 def add_reference_frame_arg(parser):
     """
-    Adds a reference frame argument.
+    Add a reference frame argument.
 
     Reference frame is the frame to compute the parameter against.
 
@@ -477,7 +507,7 @@ def add_reference_frame_arg(parser):
     ----------
     parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
         The argument parser to which add the refence-frame argument.
-    """
+    """  # noqa: E501
     parser.add_argument(
         '-r',
         '--ref-frame',
@@ -490,9 +520,10 @@ def add_reference_frame_arg(parser):
         type=int,
         )
 
+
 def add_plot_arg(parser):
     """
-    Adds plot parameters.
+    Add plot parameters.
 
     Plot kwargs that will be passed to the plotting function.
 
@@ -505,7 +536,7 @@ def add_plot_arg(parser):
     ----------
     parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
         The argument parser to which add the plot argument.
-    """
+    """  # noqa: E501
     parser.add_argument(
         '--plot',
         help=(
@@ -523,6 +554,7 @@ def add_plot_arg(parser):
         action=ParamsToDict,
         )
 
+
 def add_top_output_arg(parser):
     """
     Add argument to export first frame as topology PDB file.
@@ -533,12 +565,12 @@ def add_top_output_arg(parser):
     ----------
     parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
         The argument parser to which add the topology output argument.
-    """
+    """  # noqa: E501
     parser.add_argument(
         '-o',
         '--top-output',
         help=(
-            'Export edited trajectory first frame as topololy file. ' 
+            'Export edited trajectory first frame as topololy file. '
             'You can specify the exact file name, otherwise, defaults to '
             'input trajectory path + \'_frame0.pdb\'. '
             'Also, if name starts with \'_\', it is used as file suffix, '
@@ -560,7 +592,7 @@ def add_traj_output_arg(parser):
     ----------
     parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
         The argument parser to which add the trajectory output argument.
-    """
+    """  # noqa: E501
     parser.add_argument(
         '-d',
         '--traj-output',
@@ -571,6 +603,7 @@ def add_traj_output_arg(parser):
             ),
         default='traj_out.dcd',
         )
+
 
 def add_data_export_arg(parser):
     """
@@ -584,7 +617,7 @@ def add_data_export_arg(parser):
     ----------
     parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
         The argument parser to which add the export argument.
-    """
+    """  # noqa: E501
     parser.add_argument(
         '-x',
         '--export',
@@ -597,5 +630,3 @@ def add_data_export_arg(parser):
         const='results.csv',
         nargs='?',
         )
-
-    

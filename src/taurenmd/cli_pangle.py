@@ -1,8 +1,5 @@
 """
-Client Plane Angular Oscillations
-=================================
-
-**Calculate angular oscillation of a plane along the trajectory.**
+Calculate angular oscillation of a plane along the trajectory.
 
 A plane is defined by the centers of geometry of three atom selection
 groups. The angle between that plane in each frame and itself in the
@@ -40,9 +37,10 @@ import argparse
 import functools
 
 import taurenmd.core as tcore
-from taurenmd import log, Path
-from taurenmd.libs import libcalc, libcli, libmda, libio, libplot
+from taurenmd import Path, log
+from taurenmd.libs import libcalc, libcli, libio, libmda, libplot
 from taurenmd.logger import S, T
+
 
 __author__ = 'Joao M.C. Teixeira'
 __email__ = 'joaomcteixeira@gmail.com'
@@ -56,8 +54,8 @@ __doc__ += (
     f'{tcore.ref_plottemplates_param}'
     )
 
-_help='Calculates the angle between a plane along the trajectory.'
-_name='pangle'
+_help = 'Calculate angular oscillation of a plane along the trajectory.'
+_name = 'pangle'
 
 ap = libcli.CustomParser(
     description=__doc__,
@@ -93,6 +91,7 @@ def main(
         plotvars=None,
         **kwargs
         ):
+    """Execute main client logic."""
     log.info(T('calculating angles'))
     
     topology = Path(topology)
@@ -123,10 +122,7 @@ def main(
     
     log.info(T('Calculating angles'))
     angles = []
-    for fi, ts in zip(
-            range(len(u.trajectory))[frame_slice],
-            u.trajectory[frame_slice],
-            ):
+    for _ts in u.trajectory[frame_slice]:
 
         point1 = u.select_atoms(plane_selection[0]).center_of_geometry()
         point2 = u.select_atoms(plane_selection[1]).center_of_geometry()

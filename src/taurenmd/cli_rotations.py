@@ -1,6 +1,5 @@
 """
-Client Calculate Rotations
-==========================
+Decompose Eurler angle rotations of a selection.
 
 **Calculate the Roll, Pitch and Yaw angles along the trajectory.**
 
@@ -10,7 +9,7 @@ Read further on roll, pitch and yaw angles (Euler Angles) -
 Here we decompose these movements around the three different axis
 centered at an origin using Quaternion rotation.
 
-The axis of reference 
+The axis of reference
 
 **Algorithm:**
 
@@ -75,6 +74,7 @@ from taurenmd import Path, log
 from taurenmd.libs import libcalc, libcli, libio, libmda  # noqa: F401
 from taurenmd.logger import S, T
 
+
 __author__ = 'Joao M.C. Teixeira'
 __email__ = 'joaomcteixeira@gmail.com'
 __maintainer__ = 'Joao M.C. Teixeira'
@@ -119,6 +119,7 @@ def main(
         export=False,
         **kwargs,
         ):
+    """Execute main client logic."""
     log.info(T('starting'))
     
     topology = Path(topology)
@@ -173,7 +174,7 @@ def main(
     pitch_angles = []
     yaw_angles = []
 
-    for i, ts in enumerate(u.trajectory[fSlice]):
+    for i, _ts in enumerate(u.trajectory[fSlice]):
         print(f'.. working for frame :{i}')
 
         pABC_cog_ts = pABC_atomG.center_of_geometry()
@@ -247,7 +248,7 @@ def main(
                 file_names,
                 ):
 
-            log.info(S('saving {}', fname ))
+            log.info(S('saving {}', fname))
             libio.export_data_to_file(
                 list(range(len(u.trajectory))[fSlice]),
                 data,

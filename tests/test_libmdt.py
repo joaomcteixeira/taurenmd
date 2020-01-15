@@ -3,7 +3,7 @@ import mdtraj as md
 
 from taurenmd.libs import libmdt
 
-from . import *
+from . import toptest, toptest_cif, trajtest
 
 
 def test_load_traj_pdb():

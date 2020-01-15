@@ -1,8 +1,5 @@
 """
-Client Frame Extract
-====================
-
-**Extract trajectory frames to individual files.**
+Extract trajectory frames to individual files.
 
 Normally used to extract frames to PDB topology files so those can
 be inspected independently.
@@ -45,14 +42,15 @@ are as decribed for `MDAnalysis selection <https://www.mdanalysis.org/docs/docum
 
 **References:**
 
-"""
+"""  # noqa: E501
 import argparse
 import functools
 
 import taurenmd.core as tcore
 from taurenmd import Path, log
-from taurenmd.libs import libcli, libmda, libio
+from taurenmd.libs import libcli, libio, libmda
 from taurenmd.logger import S
+
 
 __author__ = 'Joao M.C. Teixeira'
 __email__ = 'joaomcteixeira@gmail.com'
@@ -65,7 +63,7 @@ __doc__ += (
     f'{tcore.ref_mda_selection}'
     )
 
-_help = 'Extracts frames from trajectory.'
+_help = 'Extract trajectory frames to individual files.'
 _name = 'fext'
 
 ap = libcli.CustomParser(
@@ -145,6 +143,7 @@ def main(
         log.info(S('writen frame {}, to {}', frame, file_name))
 
     return
+
 
 maincli = functools.partial(libcli.maincli, ap, main)
 

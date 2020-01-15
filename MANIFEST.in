@@ -1,6 +1,7 @@
 graft docs
 graft src
 graft tests
+graft tests/data
 
 include .bumpversion.cfg
 include .coveragerc
@@ -25,3 +26,4 @@ include tox.ini .travis.yml
 global-exclude *.py[cod] __pycache__/* *.so *.dylib
 global-exclude tags
 global-exclude *.swp
+global-exclude .taurenmd.* *.debug

@@ -37,9 +37,11 @@ If you are proposing a feature:
 Code Development
 ================
 
-To contribute to the development of *taurenmd*, set up a local environment:
+To contribute to the development of *taurenmd*, set up first a local development environment:
 
-1. Create a new :code:`taurenmddev` environment and install all its dependencies but do NOT install *taurenmd* itself, see the **Installation** page.
+1. Create a new :code:`taurenmddev` environment and install all *taurenmd Molecular Dynamics libraries dependencies* but do NOT install *taurenmd* itself; visit the `Installation <https://taurenmd.readthedocs.io/en/latest/installation.html>`_ page for further instructions.
+
+    1.1. Remember to activate the new environment before proceeding to the installation.
 
 2. *taurenmd* relies on `tox <https://tox.readthedocs.io/en/latest/>`_ to manage continuous integration (CI) and collaborative development; install it together with `tox-conda <https://github.com/tox-dev/tox-conda>`_::
 
@@ -53,7 +55,7 @@ To contribute to the development of *taurenmd*, set up a local environment:
 
 3. Fork `taurenmd <https://github.com/joaomcteixeira/taurenmd>`_ (look for the "Fork" button).
 
-4. Clone your fork locally::
+4. `Clone <https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository>`_ your forked repository to your local machine::
 
     git clone https://github.com/YOUR-USER-NAME/taurenmd.git <destination folder> 
 
@@ -61,7 +63,7 @@ To contribute to the development of *taurenmd*, set up a local environment:
 
     git checkout -b name-of-your-bugfix-or-feature
 
-6. Install a development version of your development branch, remember to active the :code:`taurenmddev` environment::
+6. Install a development version of your development branch, remember to active the ``taurenmddev`` environment::
 
     python setup.py develop
 
@@ -83,8 +85,8 @@ A New Command-line client
 -------------------------
 
 One of the most natural and straightforward ways to contribute to *taurenmd* is
-to develop a client command-line interface that provides a functionality that
-serves your needs so that it becomes available in the *taurenmd* workflow.
+to develop a new client command-line interface that provides a functionality that
+serves your needs so it becomes available in the *taurenmd* workflow.
 We provide a command-line client
 `template file <https://github.com/joaomcteixeira/taurenmd/blob/master/src/taurenmd/_cli_template.py>`_
 from which you can start developing your own command-line new client,
