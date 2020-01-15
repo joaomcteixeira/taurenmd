@@ -17,13 +17,13 @@ Installing :code:`taurenmd` does **not** install **all** its dependencies. **Why
   * cutting edge *development* versions,
   * forked versions,
   * source-compiled versions
-  So installing the deployed version of those libraries by default might be counter productive (though this could be disabled by the user using the ``--no-deps`` option)
+  * So installing the deployed version of those libraries by default might be counter productive [1]_
+  * For those who want to work with the stable-release version of these dependencies, their respective websites provide very straightforward ways to install them, you should refer to those, *please continue reading*, and just continue with taurenmd installation on top of them.
 
-3. Though, for those who want to work with the stable-release version of these dependencies, their respective websites provide very straightforward ways to install them, you should refer to those, *please continue reading*, and just continue with taurenmd installation on top of them.
-4. platform compatibility (read further)
-5. lastly and minor, not all dependencies are required for every *taurenmd command*.
+3. platform compatibility issues (read further)
+4. lastly and minor, not all dependencies are required for every *taurenmd command*,
 
-For these reasons, we have decided **not** to install these large dependencies together with *taurenmd*; other minor dependencies are automatically installed, though. Bellow a list of the dependencies you should install yourself prior to installing *taurenmd*.
+For these reasons, we have decided **not** to install these large dependencies alongside with *taurenmd* installation; other minor dependencies are automatically installed, though. Bellow a list of the dependencies you should install yourself prior to installing *taurenmd*.
 
 .. note::
     
@@ -37,7 +37,7 @@ For these reasons, we have decided **not** to install these large dependencies t
 Other dependencies installed automatically
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Other dependencies automatically installed are listed bellow:
+Other dependencies that are indeed automatically installed are listed bellow:
 
 #. `python-bioplottemplates <https://github.com/joaomcteixeira/python-bioplottemplates>`_
 #. `pyquaterion <http://kieranwynn.github.io/pyquaternion/>`_
@@ -106,5 +106,6 @@ If you are a proficient Pythonista you might want to install **taurenmd** from a
   #. pull repository updates from the upstream repository: :code:`git pull` (from within :code:`taurenmd` git folder)
   #. just in case something special was added, repeat :code:`python setup.py develop`
 
+.. [1] though this could be disabled by the user using the ``--no-deps`` option
 .. _PyPi: https://pypi.org/
 .. _Anaconda: https://www.anaconda.com/distribution/

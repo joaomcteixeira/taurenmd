@@ -1,7 +1,7 @@
 """
-Calculate RMSFS of a selection along the trajectory slice.
+# Calculate RMSFS of a selection along the trajectory slice.
 
-**Algorithm:**
+## Algorithm
 
 Calculates the RMSF values along a trajectory slice for different
 selections. If multiple selections are given creates a series data
@@ -14,27 +14,26 @@ in sequence. Result files (data tables and plots) are exported
 separately for each selection. Selections can't be overlayed easily
 in a single plot because they do not share the same labels.
 
-**Examples:**
+## Examples
 
-1. Calculate RMSF of the whole system:
+Calculate RMSF of the whole system:
 
-    >>> taurenmd rmsf top.pdb traj.dcd -e rmsf.csv
+    taurenmd rmsf top.pdb traj.dcd -e rmsf.csv
 
-2. Calculates RMSFs for different selections:
+Calculates RMSFs for different selections:
 
-    >>> taurenmd rmsf top.pdb traj.dcd -g 'segid A' 'segid B' -e
+    taurenmd rmsf top.pdb traj.dcd -g 'segid A' 'segid B' -e
 
-3. ``-x`` exports the data to a CSV file. You can also plot the data with
+``-x`` exports the data to a CSV file. You can also plot the data with
 the ``-v`` option:
 
-    >>> [...] -x rmsf.csv -v title=my-plot-title xlabel=frames ylabel=RMSFs ...
+    [...] -x rmsf.csv -v title=my-plot-title xlabel=frames ylabel=RMSFs ...
 
 where ``[...]`` is the previous command example.
 
-4. you can also use ``tmdrmsf`` instead of ``taurenmd rmsf``.
+you can also use ``tmdrmsf`` instead of ``taurenmd rmsf``.
 
-**References:**
-
+## References
 
 """  # noqa: E501
 import argparse
@@ -42,7 +41,7 @@ import functools
 from datetime import datetime
 
 import taurenmd.core as tcore
-from taurenmd import Path, log  # noqa: F401
+from taurenmd import _BANNER, Path, log  # noqa: F401
 from taurenmd.libs import libcalc, libcli, libio, libmda, libplot
 from taurenmd.logger import S, T
 
@@ -63,7 +62,7 @@ _help = 'Calculate RMSFS for a selection and trajectory slice.'
 _name = 'rmsf'
 
 ap = libcli.CustomParser(
-    description=__doc__,
+    description=_BANNER + __doc__,
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 

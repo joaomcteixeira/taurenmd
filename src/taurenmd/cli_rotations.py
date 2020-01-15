@@ -1,7 +1,7 @@
 """
-Decompose Eurler angle rotations of a selection.
+# Decompose Eurler angle rotations of a selection.
 
-**Calculate the Roll, Pitch and Yaw angles along the trajectory.**
+*Calculate the Roll, Pitch and Yaw angles along the trajectory.**
 
 Read further on roll, pitch and yaw angles (Euler Angles) -
 `wikipedia <https://en.wikipedia.org/wiki/Euler_angles>`_.
@@ -11,7 +11,7 @@ centered at an origin using Quaternion rotation.
 
 The axis of reference
 
-**Algorithm:**
+## Algorithm
 
 Given a selection of three regions, ``selection A``, ``selection B``
 and ``selection C``:
@@ -37,40 +37,43 @@ Calculating the angles:
 
 Angles represent the right hand rotation around an axis of the sistem in
 a i-frame compared to the reference frame. Quaterion distance is calculated
-by :py:func:`taurenmd.libs.libcalc.generate_quaternion_rotations` and
-:py:func:`taurenmd.libs.libcalc.sort_by_minimum_Qdistances`.
+by [libcalc.generate_quaternion_rotations](https://taurenmd.readthedocs.io/en/latest/reference/libcalc.html#generate_quaternion_rotations) and
+[libcal.sort_by_minimum_Qdistances](https://taurenmd.readthedocs.io/en/latest/reference/libcalc.html#taurenmd.libs.libcalc.sort_by_minimum_Qdistances).
 
-Roll)
-    The roll angle is calculated by rotating the unitary vector OA
-    around vector ABCn until the Quaternion distance is the minimum
-    between the vector OAi (in frame) and vector OA in reference frame.
+### Roll
 
-Pitch)
-    The pitch angle is calculated by rotating the unitary vector ABCn
-    around vector AONn until the Quaternion distance is the minimum
-    between the vector ABCni (in frame) and vector ABCn in reference frame.
+The roll angle is calculated by rotating the unitary vector OA
+around vector ABCn until the Quaternion distance is the minimum
+between the vector OAi (in frame) and vector OA in reference frame.
 
-Yaw)
-    The pitch angle is calculated by rotating the unitary vector AONn
-    around vector OA until the Quaternion distance is the minimum
-    between the vector AONni (in frame) and vector AONn in reference frame.
+### Pitch
 
-**Examples:**
+The pitch angle is calculated by rotating the unitary vector ABCn
+around vector AONn until the Quaternion distance is the minimum
+between the vector ABCni (in frame) and vector ABCn in reference frame.
 
-1. In the case of an homotrimer, define the axis and the origin on the trimers:
+### Yaw
 
-    >>> taurenmd rorations -z 'segid A' 'segid B' 'segid C' -x rotations.csv
+The pitch angle is calculated by rotating the unitary vector AONn
+around vector OA until the Quaternion distance is the minimum
+between the vector AONni (in frame) and vector AONn in reference frame.
 
-**References:**
+## Examples
 
-"""
+In the case of an homotrimer, define the axis and the origin on the trimers:
+
+    taurenmd rorations -z 'segid A' 'segid B' 'segid C' -x rotations.csv
+
+## References
+
+"""  # noqa: E501
 import argparse
 import functools
 
 import numpy as np
 
 import taurenmd.core as tcore
-from taurenmd import Path, log
+from taurenmd import _BANNER, Path, log
 from taurenmd.libs import libcalc, libcli, libio, libmda  # noqa: F401
 from taurenmd.logger import S, T
 
@@ -91,7 +94,7 @@ _help = 'Calculates angular rotations across axes.'
 _name = 'rotations'
 
 ap = libcli.CustomParser(
-    description=__doc__,
+    description=_BANNER + __doc__,
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 

@@ -1,6 +1,7 @@
 # THIS FILE IS EXCLUDED FROM FLAKE8 IN TOX.ini WORKFLOW
 r"""
 Welcome to
+```
 _________ _______           _______  _______  _        _______  ______  
 \__   __/(  ___  )|\     /|(  ____ )(  ____ \( (    /|(       )(  __  \ 
    ) (   | (   ) || )   ( || (    )|| (    \/|  \  ( || () () || (  \  )
@@ -10,7 +11,10 @@ _________ _______           _______  _______  _        _______  ______
    | |   | )   ( || (___) || ) \ \__| (____/\| )  \  || )   ( || (__/  )
    )_(   |/     \|(_______)|/   \__/(_______/|/    )_)|/     \|(______/ 
                                                                        
+```
 **A command-line interface for Molecular Dynamics Analysis routines.**
+
+version: {}
 """
 # link to logo
 # http://patorjk.com/software/taag/#p=display&h=0&f=Epic&t=taurenmd
@@ -21,11 +25,9 @@ from taurenmd.logger import DEBUGFILE, LOGFILE
 
 __version__ = '0.7.2'
 
-_BANNER = __doc__
+_BANNER = __doc__.format(__version__)
 
-_DOCSTRING = """
-version: {}
-
+_DOCUMENTATION = """
 Documentation
 =============
 This project is fully documented at: https://taurenmd.readthedocs.io/
@@ -45,9 +47,14 @@ libraries when using taurenmd. Please visit our documentation page
 for complete details on how to cite properly:
 
     https://taurenmd.readthedocs.io/en/latest/citing.html
+
+Usage
+=====
 """.format(__version__)
 
-__doc__ += _DOCSTRING
+__doc__ += _DOCUMENTATION
+
+_INTERFACE_DESCRIPTION = __doc__
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)

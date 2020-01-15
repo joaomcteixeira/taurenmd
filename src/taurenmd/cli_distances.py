@@ -1,9 +1,9 @@
 """
-Calculates distances between centers of geometry of two selections.
+# Calculates distances between centers of geometry of two selections.
 
 Distance is given in 3D XYZ coordinate space units.
 
-**Algorithm:**
+## Algorithm
 
 Distance between centers of geometry is calculated by::
 
@@ -11,31 +11,31 @@ Distance between centers of geometry is calculated by::
 
 Where, ``coord*`` are the centers of geometry of each atom selection
 ``-l1`` and ``-l2``, respectively.
-Read further on `np.linalg.norm <https://docs.scipy.org/doc/numpy/reference/generated/numpy.linalg.norm.html>`_
-and `np.subtract <https://docs.scipy.org/doc/numpy/reference/generated/numpy.subtract.html?highlight=subtract#numpy-subtract>`_.
+Read further on [np.linalg.norm](https://docs.scipy.org/doc/numpy/reference/generated/numpy.linalg.norm.html)
+and [np.subtract](https://docs.scipy.org/doc/numpy/reference/generated/numpy.subtract.html?highlight=subtract#numpy-subtract).
 
-**Examples:**
+## Examples
 
-1. Calculate the distances between two carbon alphas:
+Calculate the distances between two carbon alphas:
 
-    >>> taurenmd dist top.pdb traj.dcd -l1 'resnum 10 and name CA' -l2 'resum 20 and name CA'
+    taurenmd dist top.pdb traj.dcd -l1 'resnum 10 and name CA' -l2 'resum 20 and name CA'
 
-2. Calculate the distances between two chains:
+Calculate the distances between two chains:
 
-    >>> taurenmd dist top.pdb traj.dcd -l1 'segid A' -l2 'segid B'
+    taurenmd dist top.pdb traj.dcd -l1 'segid A' -l2 'segid B'
 
 ``-x`` exports the data to a CSV file. You can also plot the data with
 the ``-v`` option:
 
-    >>> [...] -x distances.csv -v title=my-plot-title xlabel=frames ylabel=degrees ...
+    [...] -x distances.csv -v title=my-plot-title xlabel=frames ylabel=degrees ...
 
 where ``[...]`` is the previous command example.
 
-3. ``dist`` can be run directly as main command instead of subroutine:
+``dist`` can be run directly as main command instead of subroutine:
 
-    >>> tmddist
+    tmddist
 
-**References:**
+## References
 
 """  # noqa: E501
 import argparse
@@ -44,7 +44,7 @@ import functools
 import numpy as np
 
 import taurenmd.core as tcore
-from taurenmd import Path, log
+from taurenmd import _BANNER, Path, log
 from taurenmd.libs import libcli, libio, libmda, libplot  # noqa: F401
 from taurenmd.logger import S, T
 
@@ -59,7 +59,7 @@ _help = 'Calculates distances between geometric centers of selections. '
 _name = 'dist'
 
 ap = libcli.CustomParser(
-    description=__doc__,
+    description=_BANNER + __doc__,
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 

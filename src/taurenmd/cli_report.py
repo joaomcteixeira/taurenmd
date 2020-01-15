@@ -1,18 +1,18 @@
 """
-Report on trajectory characteristics.
+# Report on trajectory characteristics.
 
-**Example:**
+## Example
 
-    >>> taurenmd report topology.pdb trajectory.dcd
+     taurenmd report topology.pdb trajectory.dcd
 
-**References:**
+## References
 
 """
 import argparse
 import functools
 
 import taurenmd.core as tcore
-from taurenmd import log
+from taurenmd import _BANNER, log
 from taurenmd.libs import libcli, libmda
 from taurenmd.logger import S, T
 
@@ -29,7 +29,7 @@ _help = 'Reports on trajectory details.'
 _name = 'report'
 
 ap = libcli.CustomParser(
-    description=__doc__,
+    description=_BANNER + __doc__,
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 

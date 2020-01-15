@@ -1,5 +1,5 @@
 """
-Edit a trajectory.
+# Edit a trajectory.
 
 *In short*, takes a trajectory and apply a modification:
 
@@ -13,40 +13,40 @@ Saves the result to a new trajectory.
 
 All operations are performed with `MDAnalysis <https://www.mdanalysis.org>`_.
 
-**Examples:**
+## Examples
 
-1. Changes trajectory file format
+Changes trajectory file format
 
-    >>> taurenmd trajedit top.pdb traj.xtd -d traj.dcd
+    taurenmd trajedit top.pdb traj.xtd -d traj.dcd
 
-2. Extracts a part of the trajectory atoms, in this example ``segid A``,
+Extracts a part of the trajectory atoms, in this example ``segid A``,
 the option ``-o`` saves the first frame of the new trajectory to a topology
 file:
 
-    >>> taurenmd trajedit top.pdb traj.xtc -d tsegidA.dcd -o -l "segid A"
+    taurenmd trajedit top.pdb traj.xtc -d tsegidA.dcd -o -l "segid A"
 
-3. You can slice the trajectory by appending the following ``-s``, ``-e`` or
+You can slice the trajectory by appending the following ``-s``, ``-e`` or
 ``-p`` options, this saves only every 100 frames:
 
-    >>> [...] -p 100
+    [...] -p 100
 
-4. You can align the trajectory to a part of the system, for example,
+You can align the trajectory to a part of the system, for example,
 align the whole system to one of its subunits:
 
-    >>> taurenmd trajedit top.pdb traj.dcd -d alignedA.dcd -a "segid A and name CA"
+    taurenmd trajedit top.pdb traj.dcd -d alignedA.dcd -a "segid A and name CA"
 
-5. further restrain the output to a specific subselection with ``-l``:
+further restrain the output to a specific subselection with ``-l``:
     
-    >>> [...] -l "segid A or segid B"
+    [...] -l "segid A or segid B"
 
-6. ``trajedit`` also implements the ``unwrap`` method from which is an
+``trajedit`` also implements the ``unwrap`` method from which is an
 alternative approach to the ``imagemol`` client, that implements from
 ``MDTraj``. See references section.
 
-    >>> taurenmd trajedit top.pdb traj.dcd -d unwrapped.dcd -w -o unwrapped_frame0.pdb
+    taurenmd trajedit top.pdb traj.dcd -d unwrapped.dcd -w -o unwrapped_frame0.pdb
 
 
-**References:**
+## References
 
 """  # noqa: E501
 import argparse
@@ -56,7 +56,7 @@ import MDAnalysis as mda
 from MDAnalysis.analysis import align as mdaalign
 
 import taurenmd.core as tcore
-from taurenmd import Path, log
+from taurenmd import _BANNER, Path, log
 from taurenmd.libs import libcli, libio, libmda
 from taurenmd.logger import S, T
 
@@ -77,9 +77,9 @@ __doc__ += (
 _help = 'Edits trajectory in many different ways.'
 _name = 'trajedit'
 
-ap = argparse.ArgumentParser(
-    description=__doc__,
-    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+ap = libcli.CustomParser(
+    description=_BANNER + __doc__,
+    formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
 libcli.add_version_arg(ap)

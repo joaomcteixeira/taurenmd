@@ -1,53 +1,55 @@
 """
-Extract trajectory frames to individual files.
+# Extract trajectory frames to individual files.
 
 Normally used to extract frames to PDB topology files so those can
 be inspected independently.
 
-.. note::
+## Note
 
     Frame number is 0-indexed.
 
-**Examples:**
+## Examples:
 
-1. Extracts frames 11 to 49 (inclusive), remember frames index start at 0:
+Extract frames 11 to 49 (inclusive), remember frames index start at 0:
 
-    >>> taurenmd fext topology.pdb trajectory.dcd -s 10 -e 50
+    taurenmd fext topology.pdb trajectory.dcd -s 10 -e 50
 
-2. Extracts the first frame:
+Extract the first frame:
 
-    >>> taurenmd fext topology.pdb trajectory.dcd -flist 0
+    taurenmd fext topology.pdb trajectory.dcd -flist 0
 
-3. Extracts a selection of frames:
+Extract a selection of frames:
 
-    >>> taurenmd fext topology.pdb trajectory.dcd -flist 0,10,23,345
+    taurenmd fext topology.pdb trajectory.dcd -flist 0,10,23,345
 
-4. Frame file types can be specified:
+Frame file types can be specified:
 
-    >>> taurenmd fext topology.pdb trajectory.dcd -p 10 -x .dcd
+    taurenmd fext topology.pdb trajectory.dcd -p 10 -x .dcd
 
-5. Atom selection can be specified as well, the following extracts
+  
+Atom selection can be specified as well, the following extracts
 only the 'segid A' atom region of the first frame. Selection rules
-are as decribed for `MDAnalysis selection <https://www.mdanalysis.org/docs/documentation_pages/selections.html>`_.
+are as decribed for [MDAnalysis selection](https://www.mdanalysis.org/docs/documentation_pages/selections.html).
 
-    >>> taurenmd fext topology.pdb trajectory.xtc -flist 0 -l 'segid A'
+    taurenmd fext topology.pdb trajectory.xtc -flist 0 -l 'segid A'
 
-6. Multiple trajectories can be given, they will be contatenated:
+Multiple trajectories can be given, they will be contatenated:
 
-    >>> taurenmd fext top.pdb traj1.xtc traj2.xtc traj3.xtc -p 10
+    taurenmd fext top.pdb traj1.xtc traj2.xtc traj3.xtc -p 10
 
-7. Can also be used as main command:
+Can also be used as main command:
 
-    >>> tmdfext topology.pdb ...
+    tmdfext topology.pdb ...
 
-**References:**
+
+## References:
 
 """  # noqa: E501
 import argparse
 import functools
 
 import taurenmd.core as tcore
-from taurenmd import Path, log
+from taurenmd import _BANNER, Path, log
 from taurenmd.libs import libcli, libio, libmda
 from taurenmd.logger import S
 
@@ -67,7 +69,7 @@ _help = 'Extract trajectory frames to individual files.'
 _name = 'fext'
 
 ap = libcli.CustomParser(
-    description=__doc__,
+    description=_BANNER + __doc__,
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 

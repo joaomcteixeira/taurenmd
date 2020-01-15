@@ -15,6 +15,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinxarg.ext',
     'sphinx.ext.autosectionlabel',
+    'recommonmark',
 ]
 source_suffix = '.rst'
 master_doc = 'index'

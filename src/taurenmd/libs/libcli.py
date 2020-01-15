@@ -11,7 +11,7 @@ from datetime import datetime
 from functools import wraps
 
 import taurenmd.core as tcore
-from taurenmd import _BANNER, _DOCSTRING, __version__, references
+from taurenmd import _BANNER, __version__, references
 from taurenmd.logger import CMDFILE
 
 
@@ -77,13 +77,10 @@ def save_references():
 # https://stackoverflow.com/questions/4042452
 class CustomParser(argparse.ArgumentParser):
     """Custom Parser class."""
-    
+
     def error(self, message):
         """Present error message."""
-        sys.stdout.write(_BANNER)
-        sys.stdout.write(_DOCSTRING)
-        sys.stdout.write('\n')
-        sys.stdout.write(self.format_help())
+        self.print_help()
         self.print_usage()
         sys.stderr.write('*** INPUT ERROR: {}\n'.format(message))
         sys.stderr.write('*** read the usage details above\n')
@@ -178,7 +175,7 @@ def add_subparser(parser, module):
     """  # noqa: E501
     new_ap = parser.add_parser(
         module._name,
-        description=module.__doc__,
+        description=module.ap.description,
         help=module._help,
         parents=[module.ap],
         add_help=False,
@@ -224,8 +221,8 @@ def add_version_arg(parser):
         version=(
             f'{_BANNER}\n'
             f'version: {__version__}\n\n'
-            'to see the list of all versions visit:'
-            'https://github.com/joaomcteixeira/taurenmd/releases\n'
+            'A record of the previous versions can be found at:\n'
+            'https://taurenmd.readthedocs.io/en/latest/changelog.html\n'
             )
         )
 

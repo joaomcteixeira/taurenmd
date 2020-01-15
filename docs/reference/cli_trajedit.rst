@@ -5,3 +5,4 @@ Client Traj Edit
    :module: taurenmd.cli_trajedit
    :func: _ap
    :prog: tmdtrajedit
+   :markdownhelp:

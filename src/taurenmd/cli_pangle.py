@@ -1,43 +1,43 @@
 """
-Calculate angular oscillation of a plane along the trajectory.
+# Calculate angular oscillation of a plane along the trajectory.
 
 A plane is defined by the centers of geometry of three atom selection
 groups. The angle between that plane in each frame and itself in the
 reference frame is computed. Angle can be reported in degrees (default)
 or radians.
 
-**Algorithm:**
+## Algorithm
 
-Plane equation is computed by :py:func:taurenmnd.libs.libcalc.calc_plane_eq.
-Angle between planes is computed by :py:func:libcalc.calc_planes_angle.
+Plane equation is computed by [libcalc.calc_plane_eq](https://taurenmd.readthedocs.io/en/latest/reference/libcalc.html#taurenmd.libs.libcalc.calc_plane_eq).
+Angle between planes is computed by [libcalc.calc_planes_angle](https://taurenmd.readthedocs.io/en/latest/reference/libcalc.html#taurenmd.libs.libcalc.calc_planes_angle).
 Refer to our documentation page for more details.
 
-**Examples:**
+## Examples
 
-1. Given a protein of 3 subunits (chains or segids) calculate the
+Given a protein of 3 subunits (chains or segids) calculate the
 angle variation of a plane that crosses the protein longitudinally:
 
-    >>> taurenmd pangle top.pdb traj.xtc -z 'segid A' 'segid B' 'segid C' -x
+    taurenmd pangle top.pdb traj.xtc -z 'segid A' 'segid B' 'segid C' -x
 
-2. ``-x`` exports the data to a CSV file. You can also plot the data with
+``-x`` exports the data to a CSV file. You can also plot the data with
 the ``-v`` option:
 
-    >>> [...] -v title=my-plot-title xlabel=frames ylabel=degrees ...
+    [...] -v title=my-plot-title xlabel=frames ylabel=degrees ...
 
 where ``[...]`` is the previous command example.
 
-3. ``pangle`` can be run directly as main command instead of subroutine:
+``pangle`` can be run directly as main command instead of subroutine:
 
-    >>> tmdpangle
+    tmdpangle
 
-**References:**
+## References
 
-"""
+"""  # noqa: E501
 import argparse
 import functools
 
 import taurenmd.core as tcore
-from taurenmd import Path, log
+from taurenmd import _BANNER, Path, log
 from taurenmd.libs import libcalc, libcli, libio, libmda, libplot
 from taurenmd.logger import S, T
 
@@ -58,7 +58,7 @@ _help = 'Calculate angular oscillation of a plane along the trajectory.'
 _name = 'pangle'
 
 ap = libcli.CustomParser(
-    description=__doc__,
+    description=_BANNER + __doc__,
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 

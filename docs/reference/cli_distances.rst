@@ -5,3 +5,4 @@ Client Distances
    :module: taurenmd.cli_distances
    :func: _ap
    :prog: tmddist 
+   :markdownhelp:

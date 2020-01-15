@@ -5,3 +5,4 @@ Client RMSD
    :module: taurenmd.cli_rmsd
    :func: _ap
    :prog: tmdrmsd
+   :markdownhelp:

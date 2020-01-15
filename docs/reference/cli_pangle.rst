@@ -5,3 +5,4 @@ Client Plane Angular Oscillations
    :module: taurenmd.cli_pangle
    :func: _ap
    :prog: tmdpangle 
+   :markdownhelp:

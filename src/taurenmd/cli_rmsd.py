@@ -1,7 +1,7 @@
 """
-Calculates RMSDs for a selection.
+# Calculates RMSDs for a selection.
 
-**Algorithm:**
+## Algorithm
 
 Calculates the RMSD values along a trajectory slice for different
 selections. If multiple selections are given creates a series data
@@ -9,27 +9,26 @@ for that selection.
 
 RMSD is calculated using :py:func:`taurenmd.libs.libcalc.mda_rmsd`.
 
-**Examples:**
+## Examples
 
-1. Calculate RMSD of the whole system:
+Calculate RMSD of the whole system:
 
-    >>> taurenmd rmsd top.pdb traj.dcd -e rmsd.csv
+    taurenmd rmsd top.pdb traj.dcd -e rmsd.csv
 
-2. Calculates RMSDs for different selections:
+Calculates RMSDs for different selections:
 
-    >>> taurenmd rmsd top.pdb traj.dcd -g 'segid A' 'segid B' -e
+    taurenmd rmsd top.pdb traj.dcd -g 'segid A' 'segid B' -e
 
-3. ``-x`` exports the data to a CSV file. You can also plot the data with
+``-x`` exports the data to a CSV file. You can also plot the data with
 the ``-v`` option:
 
-    >>> [...] -x rmsd.csv -v title=my-plot-title xlabel=frames ylabel=RMSDs ...
+    [...] -x rmsd.csv -v title=my-plot-title xlabel=frames ylabel=RMSDs ...
 
 where ``[...]`` is the previous command example.
 
-4. you can also use ``tmdrmsd`` instead of ``taurenmd rmsd``.
+You can also use ``tmdrmsd`` instead of ``taurenmd rmsd``.
 
-**References:**
-
+## References
 
 """  # noqa: E501
 import argparse
@@ -37,7 +36,7 @@ import functools
 from datetime import datetime
 
 import taurenmd.core as tcore
-from taurenmd import Path, log
+from taurenmd import _BANNER, Path, log
 from taurenmd.libs import libcalc, libcli, libio, libmda, libplot
 from taurenmd.logger import S, T
 
@@ -58,7 +57,7 @@ _help = 'Calculates RMSDs for a selection and trajectory slice.'
 _name = 'rmsd'
 
 ap = libcli.CustomParser(
-    description=__doc__,
+    description=_BANNER + __doc__,
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 

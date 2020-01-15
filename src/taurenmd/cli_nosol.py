@@ -1,32 +1,32 @@
 """
-Remove solvent from trajectory.
+# Remove solvent from trajectory.
 
-**Algorithm:**
+## Algorithm
 
-Removes solvent from trajectory using `MDTraj.remove_solvent <http://mdtraj.org/1.9.3/api/generated/mdtraj.Trajectory.html?highlight=remove%20solvent#mdtraj.Trajectory.remove_solvent>`_.
+Removes solvent from trajectory using [MDTraj.remove_solvent](http://mdtraj.org/1.9.3/api/generated/mdtraj.Trajectory.html?highlight=remove%20solvent#mdtraj.Trajectory.remove_solvent).
 
-**Examples:**
+## Examples
 
-1. Remove all solvent:
+Remove all solvent:
 
-    >>> taurenmd nosol top.pdb traj.dcd -d traj_nosol.dcd -o
+    taurenmd nosol top.pdb traj.dcd -d traj_nosol.dcd -o
 
-2. Remove all solvent except for NA atoms:
+Remove all solvent except for NA atoms:
 
-    >>> taurenmd nosol top.pdb traj.dcd -d traj_nosolNA.dcd -e Na -o
+    taurenmd nosol top.pdb traj.dcd -d traj_nosolNA.dcd -e Na -o
 
-3. ``tmdnosol`` can be used as main command:
+``tmdnosol`` can be used as main command:
 
-    >>> tmdnosol [...]
+    tmdnosol [...]
 
-**References:**
+## References
 
 """  # noqa: E501
 import argparse
 import functools
 
 import taurenmd.core as tcore
-from taurenmd import log
+from taurenmd import _BANNER, log
 from taurenmd.libs import libcli, libio, libmdt
 from taurenmd.logger import S, T
 
@@ -43,7 +43,7 @@ _help = 'Removes solvent from trajectory.'
 _name = 'nosol'
 
 ap = libcli.CustomParser(
-    description=__doc__,
+    description=_BANNER + __doc__,
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 

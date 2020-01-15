@@ -3,6 +3,7 @@ taurenmd main client interface.
 
 Usage Examples
 --------------
+
 To access to the complete list of *taurenmd commands* with a summary
 information for each, execute:
 
@@ -91,7 +92,7 @@ import taurenmd.cli_rmsd as cli_rmsd
 import taurenmd.cli_rmsf as cli_rmsf
 import taurenmd.cli_rotations as cli_rot
 import taurenmd.cli_trajedit as cli_trajedit
-from taurenmd import _BANNER, _DOCSTRING, log
+from taurenmd import _INTERFACE_DESCRIPTION, log
 from taurenmd.libs import libcli
 from taurenmd.logger import CMDFILE
 
@@ -104,7 +105,7 @@ __credits__ = ['Joao M.C. Teixeira']
 __status__ = 'Production'
 
 ap = libcli.CustomParser(
-    description=__doc__,
+    description=_INTERFACE_DESCRIPTION + __doc__,
     formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
@@ -144,16 +145,10 @@ def load_args():
 def maincli():
     """Execute main client logic."""
     if len(sys.argv) < 2:
-        sys.stdout.write(_BANNER)
-        sys.stdout.write(_DOCSTRING)
-        sys.stdout.write('\n')
-        ap.print_help()
-        ap.print_usage()
-        ap.exit()
+        ap.error('A subcommand is required.')
 
     args = load_args()
     log.debug(args)
-
     libcli.save_command(CMDFILE, *sys.argv)
     result = args.func(**vars(args))
     libcli.save_references()
