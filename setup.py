@@ -1,5 +1,22 @@
-#!/usr/bin/env python
-# -*- encoding: utf-8 -*-
+"""
+Installation setup.
+
+Read the full installation instructions at:
+
+    https://taurenmd.readthedocs.io/en/latest/installation.html
+
+To install taurenmd run:
+
+    >>> python setup.py
+
+To install taurenmd in developer mode run:
+
+    >>> python setup.py develop
+
+To install taurenmd without ANY of its dependencies:
+
+    >>> python setup.py --no-deps
+"""
 from __future__ import absolute_import, print_function
 
 import io
@@ -10,7 +27,7 @@ from os.path import basename, dirname, join, splitext
 from setuptools import find_packages, setup
 
 
-def read(*names, **kwargs):
+def _read(*names, **kwargs):
     with io.open(
             join(dirname(__file__), *names),
             encoding=kwargs.get('encoding', 'utf8')
@@ -22,10 +39,10 @@ setup(
     name='taurenmd',
     version='0.7.2',
     license='GNU GPLv2',
-    description='Command-line and library interface for analysis routines in Molecular Dynamics',
+    description='A command-line interface for analysis routines in Molecular Dynamics data.',
     long_description='%s\n%s' % (
-        re.compile('^.. start-badges.*^.. end-badges', re.M | re.S).sub('', read('README.rst')),
-        re.sub(':[a-z]+:`~?(.*?)`', r'``\1``', read('CHANGELOG.rst'))
+        re.compile('^.. start-badges.*^.. end-badges', re.M | re.S).sub('', _read('README.rst')),
+        re.sub(':[a-z]+:`~?(.*?)`', r'``\1``', _read('CHANGELOG.rst'))
         ),
     author='Joao MC Teixeira',
     author_email='joaomcteixeira@gmail.com',
@@ -37,7 +54,7 @@ setup(
     zip_safe=False,
     classifiers=[
         # complete classifier list: http://pypi.python.org/pypi?%3Aaction=list_classifiers
-        'Development Status :: 1 - Planning',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Intended Audience :: Education',
         'Intended Audience :: Science/Research',
@@ -46,7 +63,6 @@ setup(
         'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
         'Operating System :: Unix',
         'Operating System :: POSIX',
-        'Operating System :: Microsoft :: Windows',
         'Environment :: Console',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
@@ -60,12 +76,18 @@ setup(
         'Issue Tracker': 'https://github.com/joaomcteixeira/taurenmd/issues',
         },
     keywords=[
-        # eg: 'keyword1', 'keyword2', 'keyword3',
+        'Molecular Dynamics',
+        'Proteins',
+        'DNA',
+        'RNA',
+        'Structural Biology',
+        'Molecular Biology',
+        'Biochemistry',
         ],
-    python_requires='>=3, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*',
+    python_requires='>=3.6, <3.8',
     install_requires=[
         'bioplottemplates',
-        # eg: 'aspectlib==1.1.1', 'six>=1.7',
+        'pyquaternion',
         ],
     extras_require={
         # eg:
@@ -75,16 +97,20 @@ setup(
     entry_points={
         'console_scripts': [
             'taurenmd = taurenmd.cli:maincli',
-            'taurenmd_angle = taurenmd.cli_angle:maincli',
-            'taurenmd_dist = taurenmd.cli_distances:maincli',
-            'taurenmd_fext = taurenmd.cli_fext:maincli',
-            'taurenmd_imagemol = taurenmd.cli_imagemol:maincli',
-            'taurenmd_noSol = tauremd.cli_noSol:maincli',
-            'taurenmd_report = taurenmd.cli_report:maincli',
-            'taurenmd_rot = taurenmd.cli_rot:maincli',
-            'taurenmd_rmsf = taurenmd.cli_rmsf:maincli',
-            'taurenmd_rmsd = taurenmd.cli_rmsd:maincli',
-            'taurenmd_trajedit = taurenmd.cli_trajedit:maincli',
+            # add bellow, by alphabetical, order your newly developed
+            # client, following the nomenclature provided,
+            # where NAME is the command line name of your subroutine.
+            # 'tmdNAME = taurenmd.cli_NAME:maincli',
+            'tmdpangle = taurenmd.cli_pangle:maincli',
+            'tmddist = taurenmd.cli_distances:maincli',
+            'tmdfext = taurenmd.cli_fext:maincli',
+            'tmdimagemol = taurenmd.cli_imagemol:maincli',
+            'tmdnosol = tauremd.cli_nosol:maincli',
+            'tmdreport = taurenmd.cli_report:maincli',
+            'tmdrot = taurenmd.cli_rot:maincli',
+            'tmdrmsf = taurenmd.cli_rmsf:maincli',
+            'tmdrmsd = taurenmd.cli_rmsd:maincli',
+            'tmdtrajedit = taurenmd.cli_trajedit:maincli',
             ]
         },
     )

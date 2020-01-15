@@ -1,0 +1,7 @@
+Client NAME
+===========
+
+.. argparse::
+   :module: taurenmd.cli_NAME
+   :func: _ap
+   :prog: tmdNAME 

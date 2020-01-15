@@ -24,6 +24,7 @@ author = 'Joao MC Teixeira'
 copyright = '{0}, {1}'.format(year, author)
 version = release = '0.7.2'
 
+todo_include_todos = True
 pygments_style = 'trac'
 templates_path = ['.']
 extlinks = {
