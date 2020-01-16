@@ -11,6 +11,7 @@ env:
   global:
     - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
     - SEGFAULT_SIGNALS=all
+    - CC_TEST_REPORTER_ID=4e9cfa018d9b0ac4e62642a256e34f05f82942865680bc681c585c418783b267
 matrix:
   include:
     - python: '3.7'
@@ -30,6 +31,9 @@ before_install:
   - python --version
   - uname -a
   - lsb_release -a || true
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 
 install:
   #- python -mpip install --progress-bar=off tox -rci/requirements.txt
@@ -53,6 +57,9 @@ install:
 
 script:
   - tox -v
+
+after_script:
+    - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 after_failure:
   - more .tox/log/* | cat
