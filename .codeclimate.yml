@@ -1,7 +1,7 @@
 version: "2"         # required to adjust maintainability checks
 checks:
   argument-count:
-  enable: false
+      enable: false
   complex-logic:
     config:
       threshold: 4
@@ -43,13 +43,11 @@ plugins:
       tests_patterns:
         - tests/**
       minimum_critial: major
-plugins:
   editorconfig:
     enabled: false
-    channel: beta
     config:
       editorconfig: .editorconfig
 exclude_patterns:
-- "tests/"
-- ".ci/"
-- "alphas/"
+  - "tests/"
+  - ".ci/"
+  - "alphas/"
