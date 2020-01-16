@@ -19,14 +19,6 @@ taurenmd
     :target: https://codecov.io/gh/joaomcteixeira/taurenmd
     :alt: Codecov master branch
 
-.. image:: https://img.shields.io/coveralls/github/joaomcteixeira/taurenmd/master?label=COVERALLS&logo=COVERALLS
-    :target: https://coveralls.io/github/joaomcteixeira/taurenmd
-    :alt: Coveralls master
-
-.. image:: https://api.codacy.com/project/badge/Grade/147029f2635e4e62bf670efdef728c28
-    :target: https://www.codacy.com/manual/joaomcteixeira/taurenmd?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=joaomcteixeira/taurenmd&amp;utm_campaign=Badge_Grade
-    :alt: Codacy
-
 .. image:: https://api.codeclimate.com/v1/badges/d69e2e9866338d88955c/maintainability
    :target: https://codeclimate.com/github/joaomcteixeira/taurenmd
    :alt: Code Climate
@@ -34,6 +26,10 @@ taurenmd
 .. image:: https://img.shields.io/codeclimate/tech-debt/joaomcteixeira/taurenmd?label=Code%20Climate%20tech%20debt
     :target: https://codeclimate.com/github/joaomcteixeira/taurenmd
     :alt: Code Climate technical debt
+
+.. image:: https://api.codeclimate.com/v1/badges/d69e2e9866338d88955c/test_coverage
+   :target: https://codeclimate.com/github/joaomcteixeira/taurenmd/test_coverage
+   :alt: Test Coverage
 
 .. image:: https://img.shields.io/pypi/v/taurenmd.svg
     :alt: PyPI Package latest release
@@ -47,22 +43,22 @@ taurenmd
     :alt: Supported versions
     :target: https://pypi.org/project/taurenmd
 
-.. image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.7.2/master
+.. image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.8.1/master
     :alt: Commits since latest release
-    :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.7.2...master
+    :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.8.1...master
 
 
-**A command-line interface for analysis routines in Molecular Dynamics.**
+**A command-line interface for analysis routines of Molecular Dynamics data.**
 
-**Taurenmd** provides an easy, flexible and extensible, interface for the most common (and not so common) routines of analysis and representation of Molecular Dynamics (MD) data.
+**Taurenmd** provides an easy, flexible and extensible, **command-line** interface for the most common *(and not so common)* routines of analysis and representation of Molecular Dynamics (MD) data.
 
-It bridges the gap between the highly complex (and powerful) Python libraries available for analysis of MD data and the *non-developer* users that lack the programming skills to use those libraries thoroughly. But not only, **taurenmd** also facilitates high throughput operations, even to those proficient *devs*, because complex executions are reduced to a single argument-rich command line.
+It bridges the gap between the highly complex (and powerful) Python libraries available for analysis of MD data and the *non-developer* users that lack the programming skills to perform a thorough and proficient use those libraries. *But not only*, **taurenmd** also facilitates high throughput operations, even to those proficient *devs*, because complex executions are reduced to single argument-rich command-lines that can be concatenated or aliased.
 
-**Taurenmd** wraps around feature-rich and powerful MD analysis libraries such as `MDAnalysis <https://www.mdanalysis.org/>`_ and `MDTraj <http://mdtraj.org>`_ (but not only), combining them to extract the best of *those worlds*. We use these libraries to access and extract MD data and calculate observables, and we have also added our own routines of analysis when needed.
+**Taurenmd** wraps around feature-rich and powerful MD analysis libraries such as `MDAnalysis <https://www.mdanalysis.org/>`_ and `MDTraj <http://mdtraj.org>`_ *(but not only)*, combining them to extract the best of *those worlds*. We use these libraries to access and extract MD data and calculate observables, and we have also added our own routines of analysis when needed. When using this software, you **should** cite **taurenmd** together with the dependencies used, please read our **Citing** page on the documentation for a detailed explanation.
+
+Though designed to perform as a command-line user-directed interface, all **taurenmd**'s core functions are openly, distributed and documented. Currently, there are already several *commands* available, some that perform only single tasks, while others allow complex setups, all are *one-liners*. The complete list of command line clients implemented is detailed in our `documentation page <https://taurenmd.readthedocs.io/en/latest/reference/clients.html>`_.
 
 With this said, **taurenmd** aims to be a flexible and extensible peace of software, built as simple and modular as we can think of, to *agile* the incorporation of new functionalities as needed.
-
-**taurenmd** aims to be a command-line user-directed interface, but its core functions are openly available and distributed in the library architecture. Currently, there are already several *commands* available, some that perform only single tasks, while others allow complex setups, all are *one-liners*.
 
 .. end-description
 

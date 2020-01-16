@@ -1,147 +1,126 @@
 """
-Attempt image molecule with mdtraj.
-"""
+# Make molecules whole.
 
-from taurenmd import Path, log
+Attempts to "Recenter and apply periodic boundary conditions to the
+molecules in each frame of the trajectory." (MDTraj documentation)
+
+## Algorithm
+
+Uses [MDTraj.Trajectory.image_molecule](http://mdtraj.org/1.9.3/api/generated/mdtraj.Trajectory.html?highlight=image%20molecules#mdtraj.Trajectory.image_molecules) and
+[MDTraj.Topology.find_molecules](http://mdtraj.org/1.9.3/api/generated/mdtraj.Topology.html?highlight=find_molecules#mdtraj.Topology.find_molecules).
+
+### Protocol 1
+
+Performs ``mdtraj.top.find_molecules`` and ``mdtraj.traj.image_molecules``
+in the trajectory as a whole. ``anchor_molecules`` parameters
+get ``mdtraj.top.find_molecules[:1]``, and ``other_molecules``
+parameter receives ``mdtraj.top.find_molecules[1:]``.
+
+### Protocol 2
+    
+The same as protocol 1 but executes those steps for each frame
+separately. Frames are concatenated back to a whole trajectory
+at the end.
+
+## Examples
+
+Basic usage, ``-o`` saves the first frame in a separate topology file:
+
+    taurenmd imagemol top.pdb traj.dcd -d imaged.dcd -o
+
+For trajectories with *non-standard* molecules you can use a TPR file.
+
+    taurenmd imagemol top.tpr traj.xtc -d imaged.xtc
+
+Using protocol 2
+
+    taurenmd imagemol top.tpr traj.xtc -d imaged.xtc -i 2
+
+## References
+
+"""  # noqa: E501
+import argparse
+import functools
+
+import taurenmd.core as tcore
+from taurenmd import _BANNER, log
 from taurenmd.libs import libcli, libio, libmdt
 from taurenmd.logger import S, T
 
-_help = 'Attempts to image molecules.'
+
+__author__ = 'Joao M.C. Teixeira'
+__email__ = 'joaomcteixeira@gmail.com'
+__maintainer__ = 'Joao M.C. Teixeira'
+__credits__ = ['Joao M.C. Teixeira']
+__status__ = 'Production'
+
+__doc__ += (
+    f'{tcore.ref_mdt}'
+    )
+
+_help = 'Attempt to image molecules.'
 _name = 'imagemol'
 
-_TRAJOUTPUT = 'production_imaged.dcd'
-
-
-ap = libcli.CustomParser()
-
-ap.add_argument(
-    'topology',
-    help='The topology file',
+ap = libcli.CustomParser(
+    description=_BANNER + __doc__,
+    formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-ap.add_argument(
-    'trajectory',
-    help='The trajectory file.',
-    )
+libcli.add_version_arg(ap)
+libcli.add_topology_arg(ap)
+libcli.add_trajectory_arg(ap)
+libcli.add_traj_output_arg(ap)
+libcli.add_top_output_arg(ap)
 
 ap.add_argument(
-    '-d',
-    '--traj-output',
-    help='Output trajectory. Defaults to production_imaged.xtc.',
-    default=_TRAJOUTPUT,
-    )
-
-ap.add_argument(
-    '-o',
-    '--top-output',
-    help=(
-        'File name to save the first frame of the imaged trajectory.'
-        ' Defaults to the --traj-output path + \'_frame0.pdb.'
-        ),
-    default=None,
-    )
-
-ap.add_argument(
-    '-p',
+    '-i',
     '--protocol',
-    help='The protocol with which reimage.',
+    help=(
+        'The protocol with which reimage. '
+        'Read main command description for details.'
+        ),
     default=1,
     type=int,
     )
 
 
-def load_args():
-    cmd = ap.parse_args()
-    return cmd
-
-
-def maincli():
-    cmd = load_args()
-    main(**vars(cmd))
-
-
-def protocol1(traj):
-    """
-    Attempts to image molecules acting on the whole traj.
-    """
-    log.info(T('running reimage protocol #1'))
-    log.info(S('finding molecules'))
-
-    mols = traj.top.find_molecules()
-    log.info(S('done'))
-    
-    log.info(T('reimaging'))
-    reimaged = traj.image_molecules(
-        inplace=False,
-        anchor_molecules=mols[:1],
-        other_molecules=mols[1:],
-        )
-    log.info(S('done'))
-    return reimaged
-
-
-def protocol2(traj):
-    """
-    Attempts to image molecules frame by frame.
-
-    .. note::
-
-        Have not found a use for this protocol yet.
-
-    """
-    reimaged = []
-    for frame in range(len(traj)):
-        log.info(S('reimaging frame: {}', frame))
-        
-        mols = traj[frame].top.find_molecules()
-    
-        reimaged.append(
-            traj[frame].image_molecules(
-                inplace=False,
-                anchor_molecules=mols[:1],
-                other_molecules=mols[1:],
-                )
-            )
-
-    log.info(S('concatenating traj frames'))
-    # http://mdtraj.org/1.9.3/api/generated/mdtraj.join.html#mdtraj.join
-    reimaged_traj = reimaged[0].join(reimaged[1:])
-
-    return reimaged_traj
+def _ap():
+    return ap
 
 
 def main(
         topology,
         trajectory,
-        traj_output=_TRAJOUTPUT,
-        top_output=None,
+        traj_output='imaged.dcd',
+        top_output=False,
         protocol=1,
         **kwargs
         ):
-
+    """Execute main client logic."""
     log.info('Attempting image molecules')
     
-    traj = libmdt.mdtraj_load_traj(topology, trajectory)
+    traj = libmdt.load_traj(topology, trajectory)
     
     protocols = {
-        1: protocol1,
-        2: protocol2,
+        1: libmdt.imagemol_protocol1,
+        2: libmdt.imagemol_protocol2,
         }
 
     reimaged = protocols[protocol](traj)
 
     log.info(T('saving the output'))
-    reimaged.save_dcd(traj_output)
+    reimaged.save(traj_output)
     log.info(S('saved trajectory: {}', traj_output))
 
-    if top_output is None:
-        top_output = libio.mk_frame_path(traj_output)
-    else:
-        top_output = Path(top_output)
-    
-    reimaged[0].save_pdb(top_output.with_suffix('.pdb').str())
-    log.info(S('saving frame 0 to: {}', top_output.resolve()))
+    if top_output:
+        fout = libio.parse_top_output(top_output, traj_output)
+        reimaged[0].save(fout.str())
+        log.info(S('saving frame 0 to: {}', fout.resolve()))
+
     return
+
+
+maincli = functools.partial(libcli.maincli, ap, main)
 
 
 if __name__ == '__main__':

@@ -1,140 +1,139 @@
 """
-Calculate the Roll, Pitch and Yaw angles along the trajectory.
+# Decompose Eurler angle rotations of a selection.
 
-Given a selection of three regions defined as:
+*Calculate the Roll, Pitch and Yaw angles along the trajectory.**
 
-    selection A or selection B or selection C
+Read further on roll, pitch and yaw angles (Euler Angles) -
+[wikipedia](https://en.wikipedia.org/wiki/Euler_angles).
 
-calculates the roll, pitch and yaw angles of an axis of reference
-calculated around that selection.
+Here we decompose these movements around the three different axis
+centered at an origin using Quaternion rotation.
 
-The axis of reference is calculated as follows:
+## Algorithm
 
-    1) the centre of geometry of the selection defines the origin of the
-        reference frame
-       
-       1.1) all frames in the trajectory are centered to that
-            origin.
+Given a selection of three regions, ``selection A``, ``selection B``
+and ``selection C``:
 
-    2) one of the axis of the reference frame is defined by the unitary
-        vectir of 'selection A'.
+1. Centers the system to the three selections center of geometry for
+every frame, this is called the *origin*,
 
-    3) the second axis is defined by the normal vector of the plane
-        defined by the centre of geometry of the three selections
-        separately.
-    
-    4) the last axis, is defined by the cross product of the two previous
-        axis.
+2. Calculates a plane given by the center of geometries of the three
+selections, plane ABC,
 
-The above procedure is performed for each frame and the reference frame
-of the first frame is stored as main reference.
+3. Defines the vector OA that goes from the origin to the center of
+geometry of ``selection A``, this represents the Yaw axis.
+
+4. Defines the normal vector to the plane ABC (ABCn), this represents the
+Roll axis,
+
+5. Defines the cross product betwee vectors OA and ABCn (AONn), this is the
+Pitch axis,
+
+6. Calculates this axis of reference for every frame
 
 Calculating the angles:
 
-Roll)
-    The roll angle is calculated by rotating the 'selection A' unitary
-    vector around the 'reference normal vector' until the Quaternion
-    distance is the minimum between the 'reference selection A' vector
-    and the 'frame i selection A' vector.
+Angles represent the right hand rotation around an axis of the sistem in
+a i-frame compared to the reference frame. Quaterion distance is calculated
+by [libcalc.generate_quaternion_rotations](https://taurenmd.readthedocs.io/en/latest/reference/libcalc.html#generate_quaternion_rotations) and
+[libcal.sort_by_minimum_Qdistances](https://taurenmd.readthedocs.io/en/latest/reference/libcalc.html#taurenmd.libs.libcalc.sort_by_minimum_Qdistances).
 
-Pitch)
-    The same procedure as for Roll but the
-"""
+### Roll
+
+The roll angle is calculated by rotating the unitary vector OA
+around vector ABCn until the Quaternion distance is the minimum
+between the vector OAi (in frame) and vector OA in reference frame.
+
+### Pitch
+
+The pitch angle is calculated by rotating the unitary vector ABCn
+around vector AONn until the Quaternion distance is the minimum
+between the vector ABCni (in frame) and vector ABCn in reference frame.
+
+### Yaw
+
+The pitch angle is calculated by rotating the unitary vector AONn
+around vector OA until the Quaternion distance is the minimum
+between the vector AONni (in frame) and vector AONn in reference frame.
+
+## Examples
+
+In the case of an homotrimer, define the axis and the origin on the trimers:
+
+    taurenmd rorations -z 'segid A' 'segid B' 'segid C' -x rotations.csv
+
+## References
+
+"""  # noqa: E501
 import argparse
+import functools
 
 import numpy as np
 
-from taurenmd import log
-from taurenmd.libs import libcalc, libcli, libio, libmda, libutil  # noqa: F401
+import taurenmd.core as tcore
+from taurenmd import _BANNER, Path, log
+from taurenmd.libs import libcalc, libcli, libio, libmda  # noqa: F401
 from taurenmd.logger import S, T
+
+
+__author__ = 'Joao M.C. Teixeira'
+__email__ = 'joaomcteixeira@gmail.com'
+__maintainer__ = 'Joao M.C. Teixeira'
+__credits__ = ['Joao M.C. Teixeira']
+__status__ = 'Production'
+
+__doc__ += (
+    f'{tcore.ref_mda}'
+    f'{tcore.ref_mda_selection}'
+    f'{tcore.ref_pyquaternion}'
+    )
 
 _help = 'Calculates angular rotations across axes.'
 _name = 'rotations'
 
-
 ap = libcli.CustomParser(
-    description=__doc__,
-    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-    # formatter_class=argparse.RawDescriptionHelpFormatter,
+    description=_BANNER + __doc__,
+    formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-ap.add_argument(
-    'topology',
-    help='Topology file.',
-    type=str,
-    )
-
-ap.add_argument(
-    'trajectory',
-    help=(
-        'Trajectory files. If given, multiple trajectories will be'
-        'contactenated by order.'
-        ),
-    nargs='+',
-    )
-
-ap.add_argument(
-    '--origin-selection',
-    help='The selection to define the plane',
-    required=True,
-    )
+libcli.add_version_arg(ap)
+libcli.add_topology_arg(ap)
+libcli.add_trajectories_arg(ap)
+libcli.add_plane_selection_arg(ap)
+libcli.add_angle_unit_arg(ap)
+libcli.add_slice_arg(ap)
+libcli.add_data_export_arg(ap)
 
 
-ap.add_argument(
-    '-s',
-    '--start',
-    help='Start frame for slicing.',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-e',
-    '--stop',
-    help='Stop frame for slicing: exclusive',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-p',
-    '--step',
-    help='Step value for slicing',
-    default=None,
-    type=int,
-    )
-
-
-def load_args():
-    """Load user arguments."""
-    cmd = ap.parse_args()
-    return cmd
-
-
-def maincli():
-    cmd = load_args()
-    main(**vars(cmd))
-    return
+def _ap():
+    return ap
 
 
 def main(
         topology,
-        trajectory,
-        origin_selection,
+        trajectories,
+        plane_selection,
+        aunit='degrees',
         start=None,
         stop=None,
         step=None,
+        export=False,
         **kwargs,
         ):
+    """Execute main client logic."""
     log.info(T('starting'))
     
-    u = libmda.mda_load_universe(topology, *list(trajectory))
+    topology = Path(topology)
+    trajectories = [Path(t) for t in trajectories]
+
+    u = libmda.load_universe(topology, *trajectories)
 
     log.info(T('transformation'))
-    fSlice = libutil.frame_slice(start=start, stop=stop, step=step)
+    fSlice = libio.frame_slice(start=start, stop=stop, step=step)
     
+    origin_selection = ' or '.join(plane_selection)
     pABC_atomG = u.select_atoms(origin_selection)
-    ABC_selections = [sel.strip() for sel in origin_selection.split('or')]
+    ABC_selections = plane_selection
     # p stands for point
     pA_atomG = u.select_atoms(ABC_selections[0])
     pB_atomG = u.select_atoms(ABC_selections[1])
@@ -176,7 +175,7 @@ def main(
     pitch_angles = []
     yaw_angles = []
 
-    for i, ts in enumerate(u.trajectory[fSlice]):
+    for i, _ts in enumerate(u.trajectory[fSlice]):
         print(f'.. working for frame :{i}')
 
         pABC_cog_ts = pABC_atomG.center_of_geometry()
@@ -210,37 +209,69 @@ def main(
             ts_plane_cross,
             )
 
-        roll_minimum = libcalc.calc_minimum_Qdistances(roll_Qs_tuples, pA_cog)
-        pitch_minimum = \
-            libcalc.calc_minimum_Qdistances(pitch_Qs_tuples, ref_plane_normal)
-        yaw_minimum = \
-            libcalc.calc_minimum_Qdistances(yaw_Qs_tuples, ref_plane_cross)
+        roll_minimum = libcalc.sort_by_minimum_Qdistances(
+            roll_Qs_tuples,
+            pA_cog,
+            )[0][0]
+
+        pitch_minimum = libcalc.sort_by_minimum_Qdistances(
+            pitch_Qs_tuples,
+            ref_plane_normal,
+            )[0][0]
+
+        yaw_minimum = libcalc.sort_by_minimum_Qdistances(
+            yaw_Qs_tuples,
+            ref_plane_cross,
+            )[0][0]
         
-        roll_angles.append(round(roll_minimum.degrees, 3))
-        pitch_angles.append(round(pitch_minimum.degrees, 3))
-        yaw_angles.append(round(yaw_minimum.degrees, 3))
+        if aunit == 'degrees':
+            roll_angles.append(round(roll_minimum.degrees, 3))
+            pitch_angles.append(round(pitch_minimum.degrees, 3))
+            yaw_angles.append(round(yaw_minimum.degrees, 3))
+        else:
+            roll_angles.append(round(roll_minimum.radians, 3))
+            pitch_angles.append(round(pitch_minimum.radians, 3))
+            yaw_angles.append(round(yaw_minimum.radians, 3))
+    
+    if export:
+        file_names = []
+        for _fname in ['roll', 'pitch', 'yaw']:
+            file_names.append(
+                libio.add_prefix_to_path(
+                    export,
+                    f"{_fname}_angles_",
+                    )
+                )
 
-    print('... saving roll_angles.csv ...')
-    libio.save_to_file(
-        list(range(1, len(u.trajectory) + 1)),
-        [roll_angles],
-        fname='roll_angles.csv',
-        )
+        log.info(T('Saving data to files'))
+        for data, fname in zip(
+                [roll_angles, pitch_angles, yaw_angles],
+                file_names,
+                ):
 
-    print('... saving pitch_angles.csv ...')
-    libio.save_to_file(
-        list(range(1, len(u.trajectory) + 1)),
-        [pitch_angles],
-        fname='pitch_angles.csv',
-        )
-    print('... saving yaw_angles.csv ...')
-    libio.save_to_file(
-        list(range(1, len(u.trajectory) + 1)),
-        [yaw_angles],
-        fname='yaw_angles.csv',
-        )
-    log.info(S('done'))
+            log.info(S('saving {}', fname))
+            libio.export_data_to_file(
+                list(range(len(u.trajectory))[fSlice]),
+                data,
+                fname=fname,
+                header=(
+                    '# Topology: {}\n'
+                    '# Trajectories: {}\n'
+                    '# Plane Selection: {}\n'
+                    '# frame,ange{}\n'
+                    ).format(
+                        topology,
+                        ', '.join(t.resolve().str() for t in trajectories),
+                        origin_selection,
+                        aunit,
+                        ),
+                )
+        log.info(S('done'))
+
     return
+
+
+maincli = functools.partial(libcli.maincli, ap, main)
 
 
 if __name__ == '__main__':

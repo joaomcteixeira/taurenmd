@@ -1,132 +1,104 @@
 """
-Edit a trajectory.
+# Edit a trajectory.
 
-File format, length (that is, frames) and selection can be edited.
+*In short*, takes a trajectory and apply a modification:
 
-Uses MDAnalsysis.
-"""
+1. frame slicing
+2. atom selection
+3. unwrap
+4. align
+5. file format change
+
+Saves the result to a new trajectory.
+
+All operations are performed with `MDAnalysis <https://www.mdanalysis.org>`_.
+
+## Examples
+
+Changes trajectory file format
+
+    taurenmd trajedit top.pdb traj.xtd -d traj.dcd
+
+Extracts a part of the trajectory atoms, in this example ``segid A``,
+the option ``-o`` saves the first frame of the new trajectory to a topology
+file:
+
+    taurenmd trajedit top.pdb traj.xtc -d tsegidA.dcd -o -l "segid A"
+
+You can slice the trajectory by appending the following ``-s``, ``-e`` or
+``-p`` options, this saves only every 100 frames:
+
+    [...] -p 100
+
+You can align the trajectory to a part of the system, for example,
+align the whole system to one of its subunits:
+
+    taurenmd trajedit top.pdb traj.dcd -d alignedA.dcd -a "segid A and name CA"
+
+further restrain the output to a specific subselection with ``-l``:
+    
+    [...] -l "segid A or segid B"
+
+``trajedit`` also implements the ``unwrap`` method from which is an
+alternative approach to the ``imagemol`` client, that implements from
+``MDTraj``. See references section.
+
+    taurenmd trajedit top.pdb traj.dcd -d unwrapped.dcd -w -o unwrapped_frame0.pdb
+
+
+## References
+
+"""  # noqa: E501
 import argparse
+import functools
 
 import MDAnalysis as mda
 from MDAnalysis.analysis import align as mdaalign
 
-from taurenmd import Path, log
-from taurenmd.libs import libio, libmda
+import taurenmd.core as tcore
+from taurenmd import _BANNER, Path, log
+from taurenmd.libs import libcli, libio, libmda
 from taurenmd.logger import S, T
+
+
+__author__ = 'Joao M.C. Teixeira'
+__email__ = 'joaomcteixeira@gmail.com'
+__maintainer__ = 'Joao M.C. Teixeira'
+__credits__ = ['Joao M.C. Teixeira']
+__status__ = 'Production'
+
+__doc__ += (
+    f'{tcore.ref_mda}'
+    f'{tcore.ref_mda_selection}'
+    f'{tcore.ref_mda_unwrap}'
+    f'{tcore.ref_mda_alignto}'
+    )
 
 _help = 'Edits trajectory in many different ways.'
 _name = 'trajedit'
 
-ap = argparse.ArgumentParser(
-    description=__doc__,
-    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+ap = libcli.CustomParser(
+    description=_BANNER + __doc__,
+    formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-ap.add_argument(
-    'topology',
-    help='Topology file.',
-    type=str,
-    )
+libcli.add_version_arg(ap)
+libcli.add_topology_arg(ap)
+libcli.add_trajectories_arg(ap)
+libcli.add_insort_arg(ap)
+libcli.add_atom_selection_arg(ap)
+libcli.add_slice_arg(ap)
+libcli.add_traj_output_arg(ap)
+libcli.add_top_output_arg(ap)
 
-ap.add_argument(
-    'trajectory',
-    help=(
-        'Trajectory files. If given, multiple trajectories will be'
-        'contactenated by order.'
-        ),
-    nargs='+',
-    )
-
-ap.add_argument(
-    '-i',
-    '--insort',
-    help=(
-        'Sorts input trajectory paths according to their tail numbers, '
-        'if paths are formatted: my_trajectory_#.dcd, '
-        'where # is a number.'
-        ),
-    action='store_true',
-    )
-
-ap.add_argument(
-    '-s',
-    '--start',
-    help='Start frame for slicing.',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-e',
-    '--stop',
-    help='Stop frame for slicing: exclusive',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-p',
-    '--step',
-    help='Step value for slicing',
-    default=None,
-    type=int,
-    )
-
-ap.add_argument(
-    '-l',
-    '--selection',
-    help=(
-        'Atom selection for the output trajectory. '
-        'Read: https://www.mdanalysis.org/docs/documentation_pages/selections.html'  # noqa: E501
-        ),
-    default='all',
-    type=str,
-    )
-
-ap.add_argument(
-    '-d',
-    '--traj-output',
-    help='Edited trajectory. Defaults to traj_output.xtc.',
-    default='traj_output.xtc',
-    type=Path,
-    )
-
-ap.add_argument(
-    '-o',
-    '--top-output',
-    help=(
-        'Topology output first frame.'
-        'Defaults to --traj-output file name + _frame0.'
-        ),
-    default=None,
-    )
-
-ap.add_argument(
-    '-O',
-    '--save-frame0-topology',
-    help=(
-        'Oposite of -o. '
-        'Do NOT save frame0 as topology. '
-        'Defaults to False, that is, saves topology. '
-        ),
-    action='store_false',
-    )
 
 ap.add_argument(
     '-a',
     '--align',
-    help='Align selection (l) to a atom subselection',
-    action='store_true',
-    )
-
-ap.add_argument(
-    '--align-selection',
-    help=(
-        'The reference atom group to which align the trajectory to. '
-        'Must be subselection of --selection.'
-        ),
-    type=str,
-    default='all',
+    help='Align system to a atom group.',
+    default=False,
+    const='all',
+    nargs='?',
     )
 
 ap.add_argument(
@@ -160,48 +132,37 @@ ap.add_argument(
     type=str,
     )
 
+
 def _ap():
     return ap
 
 
-def load_args():
-    cmd = ap.parse_args()
-    return cmd
-
-
-def maincli():
-    cmd = load_args()
-    main(**vars(cmd))
-    return
-
-
 def main(
         topology,
-        trajectory,
+        trajectories,
         insort=None,
         start=None,
         stop=None,
         step=None,
         selection='all',
-        traj_output='traj_output.xtc',
+        traj_output='traj_out.dcd',
         top_output=None,
-        save_frame0_topology=True,
         unwrap=False,
         unwrap_reference=None,
         unwrap_compound='fragments',
         align=False,
-        align_selection='all',
         **kwargs,
         ):
-   
+    """Execute main client logic."""
     log.info(T('editing trajectory'))
     
-    if insort:
-        trajectories = libio.sort_numbered_input(*list(trajectory))
-    else:
-        trajectories = list(trajectory)
+    topology = Path(topology)
+    trajectories = [Path(t) for t in trajectories]
 
-    u = libmda.mda_load_universe(topology, trajectories)
+    if insort:
+        trajectories = libio.sort_numbered_input(*trajectories)
+
+    u = libmda.load_universe(topology, *trajectories)
     
     if unwrap:
         log.info(T('unwrapping'))
@@ -210,25 +171,23 @@ def main(
         log.info(S('compound: {}', unwrap_compound))
 
     if align:
-        u_top = mda.Universe(topology).select_atoms(selection)
         log.info(T('Alignment'))
         log.info(S('trajectory selection will be aligned to subselection:'))
-        log.info(S('- {}', align_selection, indent=2))
+        log.info(S('- {}', align, indent=2))
     
     log.info(T('transformation'))
-    log.info(S('slicing: {}::{}::{}', start, stop, step))
-    sliceObj = slice(start, stop, step)
+    sliceObj = libio.frame_slice(start, stop, step)
 
     log.info(S('selecting: {}', selection))
-    selection = u.select_atoms(selection)
-    log.info(S('with {} atoms', selection.n_atoms, indent=2))
+    atom_selection = u.select_atoms(selection)
+    log.info(S('with {} atoms', atom_selection.n_atoms, indent=2))
 
     log.info(T('saving trajectory'))
     traj_output = Path(traj_output)
     log.info(S('destination: {}', traj_output.resolve().str()))
 
-    with mda.Writer(traj_output.str(), selection.n_atoms) as W:
-        for i, ts in zip(
+    with mda.Writer(traj_output.str(), atom_selection.n_atoms) as W:
+        for i, _ts in zip(
                 range(len(u.trajectory))[sliceObj],
                 u.trajectory[sliceObj],
                 ):
@@ -237,45 +196,37 @@ def main(
             
             if unwrap:
                 log.debug(S('unwrapping', indent=2))
-                selection.unwrap(
+                atom_selection.unwrap(
                     reference=unwrap_reference,
                     compound=unwrap_compound,
                     )
 
             if align:
-                mdaalign.alignto(
-                    selection,
-                    u_top,
-                    select=align_selection,
-                    )
+                mdaalign.alignto(u, u, select=align,)
 
-            W.write(selection)
+            W.write(atom_selection)
     
     log.info(S('trajectory saved'))
 
-    if save_frame0_topology:
-        
+    if top_output:
         log.info(T('saving topology'))
-
-        if top_output is None:
-            top_output = libio.mk_frame_path(traj_output)
-        else:
-            top_output = Path(top_output)
-        
-        log.info(S('saving frame 0 to: {}', top_output.resolve()))
-        with mda.Writer(Path(top_output).str(), selection.n_atoms) as W:
-            for ts in u.trajectory[sliceObj][0:1]:
+        fout = libio.parse_top_output(top_output, traj_output)
+        log.info(S('saving frame 0 to: {}', fout.resolve()))
+        with mda.Writer(fout.str(), atom_selection.n_atoms) as W:
+            for _ts in u.trajectory[sliceObj][0:1]:
                 if unwrap:
                     log.debug(S('unwrapping for topology', indent=2))
-                    selection.unwrap(
+                    atom_selection.unwrap(
                         reference=unwrap_reference,
                         compound=unwrap_compound,
                         )
-                W.write(selection)
+                W.write(atom_selection)
     
     log.info(S('Done'))
     return
 
+
+maincli = functools.partial(libcli.maincli, ap, main)
 
 if __name__ == '__main__':
     maincli()

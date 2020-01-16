@@ -7,6 +7,7 @@ Welcome to taurenmd Documentation!
 
 You can read now through the **contents** bellow.
 
+
 Contents
 ========
 
@@ -19,10 +20,11 @@ Contents
    contributing
    citing
    authors
-   changelog
    acknowledgments
    license
+   versioning
    reference/index
+
 
 Indices and tables
 ==================
