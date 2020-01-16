@@ -8,6 +8,7 @@ include .coveragerc
 include .cookiecutterrc
 include .editorconfig
 include .readthedocs.yml
+include .codeclimate.yml
 
 include AUTHORS.rst
 include CHANGELOG.rst
@@ -15,8 +16,6 @@ include CONTRIBUTING.rst
 include LICENSE
 include README.rst
 include pyproject.toml
-include requirements.yml
-include requirements-dev.yml
 
 prune alphas
 prune .ci

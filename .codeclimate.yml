@@ -1,9 +1,7 @@
 version: "2"         # required to adjust maintainability checks
 checks:
   argument-count:
-    enable: false
-    config:
-      threshold: 4
+  enable: false
   complex-logic:
     config:
       threshold: 4
@@ -47,7 +45,7 @@ plugins:
       minimum_critial: major
 plugins:
   editorconfig:
-    enabled: true
+    enabled: false
     channel: beta
     config:
       editorconfig: .editorconfig

@@ -9,5 +9,14 @@ indent_style = space
 indent_size = 4
 charset = utf-8
 
+[*.py]
+indent_style = space
+indent_size = 4
+insert_final_newline = false
+
 [*.{bat,cmd,ps1}]
 end_of_line = crlf
+
+[*.yml]
+indent_style = 2
+indent_style = space

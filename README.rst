@@ -19,14 +19,6 @@ taurenmd
     :target: https://codecov.io/gh/joaomcteixeira/taurenmd
     :alt: Codecov master branch
 
-.. image:: https://img.shields.io/coveralls/github/joaomcteixeira/taurenmd/master?label=COVERALLS&logo=COVERALLS
-    :target: https://coveralls.io/github/joaomcteixeira/taurenmd
-    :alt: Coveralls master
-
-.. image:: https://api.codacy.com/project/badge/Grade/147029f2635e4e62bf670efdef728c28
-    :target: https://www.codacy.com/manual/joaomcteixeira/taurenmd?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=joaomcteixeira/taurenmd&amp;utm_campaign=Badge_Grade
-    :alt: Codacy
-
 .. image:: https://api.codeclimate.com/v1/badges/d69e2e9866338d88955c/maintainability
    :target: https://codeclimate.com/github/joaomcteixeira/taurenmd
    :alt: Code Climate
@@ -34,6 +26,10 @@ taurenmd
 .. image:: https://img.shields.io/codeclimate/tech-debt/joaomcteixeira/taurenmd?label=Code%20Climate%20tech%20debt
     :target: https://codeclimate.com/github/joaomcteixeira/taurenmd
     :alt: Code Climate technical debt
+
+.. image:: https://api.codeclimate.com/v1/badges/d69e2e9866338d88955c/test_coverage
+   :target: https://codeclimate.com/github/joaomcteixeira/taurenmd/test_coverage
+   :alt: Test Coverage
 
 .. image:: https://img.shields.io/pypi/v/taurenmd.svg
     :alt: PyPI Package latest release
