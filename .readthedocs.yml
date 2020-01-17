@@ -6,7 +6,7 @@
 version: 2
 
 conda:
-    environment: .ci/requirements.yml
+    environment: requirements.yml
 
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
