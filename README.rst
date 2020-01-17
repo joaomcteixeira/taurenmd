@@ -3,6 +3,10 @@ taurenmd
 
 .. start-description
 
+.. image:: https://img.shields.io/pypi/v/taurenmd.svg
+    :alt: PyPI Package latest release
+    :target: https://pypi.org/project/taurenmd
+
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3551990.svg
     :target: https://doi.org/10.5281/zenodo.3551990
     :alt: Zenodo
@@ -19,6 +23,10 @@ taurenmd
     :target: https://codecov.io/gh/joaomcteixeira/taurenmd
     :alt: Codecov master branch
 
+.. image:: https://api.codeclimate.com/v1/badges/d69e2e9866338d88955c/test_coverage
+   :target: https://codeclimate.com/github/joaomcteixeira/taurenmd/test_coverage
+   :alt: Test Coverage
+
 .. image:: https://api.codeclimate.com/v1/badges/d69e2e9866338d88955c/maintainability
    :target: https://codeclimate.com/github/joaomcteixeira/taurenmd
    :alt: Code Climate
@@ -26,14 +34,6 @@ taurenmd
 .. image:: https://img.shields.io/codeclimate/tech-debt/joaomcteixeira/taurenmd?label=Code%20Climate%20tech%20debt
     :target: https://codeclimate.com/github/joaomcteixeira/taurenmd
     :alt: Code Climate technical debt
-
-.. image:: https://api.codeclimate.com/v1/badges/d69e2e9866338d88955c/test_coverage
-   :target: https://codeclimate.com/github/joaomcteixeira/taurenmd/test_coverage
-   :alt: Test Coverage
-
-.. image:: https://img.shields.io/pypi/v/taurenmd.svg
-    :alt: PyPI Package latest release
-    :target: https://pypi.org/project/taurenmd
 
 .. image:: https://img.shields.io/pypi/wheel/taurenmd.svg
     :alt: PyPI Wheel
