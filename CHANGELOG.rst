@@ -10,6 +10,16 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+0.8.2 (2020-01-17)
+------------------
+
+* Improved CI workflow
+  * Dropped COVERALLS
+  * Dropped Codacy
+  * Setup test-coverage in CodeClimate
+  * created `.codeclimate.yml` with explicit configuration
+* updated badges
+
 0.8.1 (2020-01-15)
 ------------------
 
