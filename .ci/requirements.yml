@@ -1,4 +1,4 @@
-name: taurenmdxxx
+name: taurenmd
 channels:
     - conda-forge
     - omnia
@@ -12,4 +12,3 @@ dependencies:
     - pip:
         - bioplottemplates
         - pyquaternion
-        - taurenmd

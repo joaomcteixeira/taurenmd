@@ -17,12 +17,6 @@ extensions = [
     'sphinx.ext.autosectionlabel',
 ]
 
-automodule_mock_imports = [
-    'MDAnalysis',
-    'mdtraj',
-    'simtk.openmm.app',
-    ]
-
 source_suffix = '.rst'
 master_doc = 'index'
 project = 'taurenmd'
