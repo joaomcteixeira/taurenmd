@@ -22,7 +22,7 @@ project = 'taurenmd'
 year = '2019'
 author = 'Joao MC Teixeira'
 copyright = '{0}, {1}'.format(year, author)
-version = release = '0.8.1'
+version = release = '0.8.2'
 
 todo_include_todos = True
 pygments_style = 'trac'

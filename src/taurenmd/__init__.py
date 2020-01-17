@@ -23,7 +23,7 @@ import logging
 from taurenmd.core import Path  # noqa: F401
 from taurenmd.logger import DEBUGFILE, LOGFILE
 
-__version__ = '0.8.1'
+__version__ = '0.8.2'
 
 _BANNER = __doc__.format(__version__)
 
