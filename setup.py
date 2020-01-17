@@ -86,8 +86,12 @@ setup(
         ],
     python_requires='>=3.6, <3.8',
     install_requires=[
+        'matplotlib>=3, <4',
+        'numpy',
         'bioplottemplates',
         'pyquaternion',
+        'MDAnalysis',
+        'mdtraj',
         ],
     extras_require={
         # eg:
