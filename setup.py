@@ -20,9 +20,10 @@ To install taurenmd without ANY of its dependencies:
 from __future__ import absolute_import, print_function
 
 import io
+import os
 import re
 from glob import glob
-from os.path import basename, dirname, getenv, join, splitext
+from os.path import basename, dirname, join, splitext
 
 from setuptools import find_packages, setup
 
