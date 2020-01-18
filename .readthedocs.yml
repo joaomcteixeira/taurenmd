@@ -5,8 +5,8 @@
 # Required
 version: 2
 
-conda:
-    environment: requirements.yml
+#conda:
+#    environment: requirements.yml
 
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
@@ -19,11 +19,11 @@ formats: all
 python:
    version: 3.7
    install:
-      #- requirements: docs/requirements.txt
-      #- method: pip
-      #  path: .
-      #  extra_requirements:
-      #      - docs
+      - requirements: docs/requirements.txt
+      - method: pip
+        path: .
+        extra_requirements:
+            - docs
       - method: setuptools
         path: . 
    system_packages: true

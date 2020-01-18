@@ -3,6 +3,9 @@ from __future__ import unicode_literals
 
 import os
 
+autodoc_mock_imports = ['MDAnalysis', 'mdtraj', 'simtk.openmm.app', 'bioplottemplates', 'pyquaternion']
+
+
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
