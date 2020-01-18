@@ -9,7 +9,8 @@ dependencies:
     - mdanalysis
     - mdtraj
     - openmm
+    - matplotlib=3
+    - numpy=1
     - pip:
         - bioplottemplates
         - pyquaternion
-        - -rdocs/requirements.txt

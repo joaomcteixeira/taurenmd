@@ -1,21 +1,27 @@
 # -*- coding: utf-8 -*-
+"""Sphinx config file."""
 from __future__ import unicode_literals
 
 import os
 import mock
+import sys
 
-mock_imports = [
+
+mock_modules = [
     'MDAnalysis',
+    'MDAnalysis.analysis',
     'MDAnalysis.analysis.rms',
     'mdtraj',
     'simtk.openmm.app',
+    'simtk.openmm',
+    'simtk',
     'bioplottemplates',
+    'bioplottemplates.plots',
     'pyquaternion',
     ]
 
 for modulename in mock_modules:
     sys.modules[modulename] = mock.Mock()
-
 
 extensions = [
     'sphinx.ext.autodoc',
@@ -29,7 +35,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinxarg.ext',
     'sphinx.ext.autosectionlabel',
-]
+    ]
 
 source_suffix = '.rst'
 master_doc = 'index'
@@ -48,7 +54,7 @@ extlinks = {
     'mda': ('https://www.mdanalysis.org', 'MDAnalysis'),
     'mdtraj': ('http://mdtraj.org/1.9.3', 'MDTraj'),
     'openmm': ('https://openmmtools.readthedocs.io/en/0.18.1', 'OpenMM'),
-}
+    }
 # on_rtd is whether we are on readthedocs.org
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
@@ -62,7 +68,7 @@ html_last_updated_fmt = '%b %d, %Y'
 html_split_index = False
 html_sidebars = {
     '**': ['searchbox.html', 'globaltoc.html', 'sourcelink.html'],
-}
+    }
 html_short_title = '%s-%s' % (project, version)
 
 napoleon_use_ivar = True

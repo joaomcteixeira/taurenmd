@@ -28,11 +28,11 @@ from os.path import basename, dirname, join, splitext
 from setuptools import find_packages, setup
 
 
-if not getenv('READTHEDOCS'):
+if not os.getenv('READTHEDOCS'):
     install_requires = [
-            'bioplottemplates',
-            'pyquaternion',
-            ]
+        'bioplottemplates',
+        'pyquaternion',
+        ]
 else:
     install_requires = []
 
