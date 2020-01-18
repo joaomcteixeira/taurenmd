@@ -22,9 +22,18 @@ from __future__ import absolute_import, print_function
 import io
 import re
 from glob import glob
-from os.path import basename, dirname, join, splitext
+from os.path import basename, dirname, getenv, join, splitext
 
 from setuptools import find_packages, setup
+
+
+if not getenv('READTHEDOCS'):
+    install_requires = [
+            'bioplottemplates',
+            'pyquaternion',
+            ]
+else:
+    install_requires = []
 
 
 def _read(*names, **kwargs):
@@ -85,10 +94,7 @@ setup(
         'Biochemistry',
         ],
     python_requires='>=3.6, <3.8',
-    install_requires=[
-        'bioplottemplates',
-        'pyquaternion',
-        ],
+    install_requires=install_requires,
     extras_require={
         # eg:
         #   'rst': ['docutils>=0.11'],

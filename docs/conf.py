@@ -2,8 +2,19 @@
 from __future__ import unicode_literals
 
 import os
+import mock
 
-autodoc_mock_imports = ['MDAnalysis', 'mdtraj', 'simtk.openmm.app', 'bioplottemplates', 'pyquaternion']
+mock_imports = [
+    'MDAnalysis',
+    'MDAnalysis.analysis.rms',
+    'mdtraj',
+    'simtk.openmm.app',
+    'bioplottemplates',
+    'pyquaternion',
+    ]
+
+for modulename in mock_modules:
+    sys.modules[modulename] = mock.Mock()
 
 
 extensions = [
