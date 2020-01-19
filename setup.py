@@ -20,11 +20,21 @@ To install taurenmd without ANY of its dependencies:
 from __future__ import absolute_import, print_function
 
 import io
+import os
 import re
 from glob import glob
 from os.path import basename, dirname, join, splitext
 
 from setuptools import find_packages, setup
+
+
+if not os.getenv('READTHEDOCS'):
+    install_requires = [
+        'bioplottemplates',
+        'pyquaternion',
+        ]
+else:
+    install_requires = []
 
 
 def _read(*names, **kwargs):
@@ -85,20 +95,13 @@ setup(
         'Biochemistry',
         ],
     python_requires='>=3.6, <3.8',
-    install_requires=[
-        #'matplotlib>=3, <4',
-        #'numpy',
-        'bioplottemplates',
-        'pyquaternion',
-        #'MDAnalysis',
-        #'mdtraj',
-        ],
+    install_requires=install_requires,
     extras_require={
         'all': [
-            'matplotlib>=3, <4',
-            'numpy',
-            'MDAnalysis',
-            'mdtraj',
+            'matplotlib>=3,<4',
+            'numpy>=1,<2',
+            'MDAnalysis>=0.2,<1',
+            'mdtraj>=1,<2',
             ]
         # eg:
         #   'rst': ['docutils>=0.11'],
