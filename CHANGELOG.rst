@@ -22,7 +22,6 @@ Changelog
 * corrected argparse autodoc in ReadTheDocs (mock strategy)
 * improved tox configuration with better env separation
 * #19 reports a communication error between TravisCI and coverage servers
->>>>>>> master
 
 0.8.2 (2020-01-17)
 ------------------
