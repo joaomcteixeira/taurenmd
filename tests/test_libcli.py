@@ -26,7 +26,10 @@ def test_maincli():
     parser.add_argument('--cov', nargs=argparse.REMAINDER)
     result = lc.maincli(parser, myfunc)
     # since we have it, lets play it with and close the circle
-    assert result == '--cov-report=term-missing -vv tests'.split()
+    assert result == (
+        '--cov-report=term-missing '
+        '--cov-append --cov-config=.coveragerc -vv tests'
+        ).split()
 
 
 def test_save_refs():
