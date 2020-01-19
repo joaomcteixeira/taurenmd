@@ -10,6 +10,21 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+0.8.4 (2020-01-19)
+------------------
+
+* PR #15
+* Added simtk lib import check for controlled failure 
+* added error message output for user
+
+0.8.3 (2020-01-19)
+------------------
+
+* PR #16 and #19
+* corrected argparse autodoc in ReadTheDocs (mock strategy)
+* improved tox configuration with better env separation
+* #19 reports a communication error between TravisCI and coverage servers
+
 0.8.2 (2020-01-17)
 ------------------
 
