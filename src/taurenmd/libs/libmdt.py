@@ -14,13 +14,33 @@ libraries.
 .. _citing documentation: https://taurenmd.readthedocs.io/en/latest/citing.html
 .. _Simtk OpenMM: http://openmm.org/
 """
+import sys
+
 import mdtraj
-import simtk.openmm.app as app
 
 import taurenmd.core as tcore
 from taurenmd import Path, log
 from taurenmd.libs import libcli, libio
 from taurenmd.logger import S, T
+
+
+try:
+    import simtk.openmm.app as app
+    SIMTK = True
+except ImportError:
+    SIMTK = False
+
+
+def _log_simtkimport_error():
+    msg = (
+        "To use .cif files as Topologies taurenmd requires OpenMM, "
+        "which is currently not installed. "
+        "Please visit our Installation instruction at "
+        "https://taurenmd.readthedocs.io/"
+        )
+    log.error(T('Dependency Error'))
+    log.error(S(msg))
+    sys.exit(0)
 
 
 @libcli.add_reference(tcore.ref_mdt)
@@ -51,9 +71,11 @@ def load_traj(topology, trajectory):
     libio.report_input(topology, trajectory)
 
     topp = Path(topology)
-    if topp.suffix == '.cif':
+    if topp.suffix == '.cif' and SIMTK:
         mol = app.PDBxFile(topp.str())
         top = mdtraj.Topology.from_openmm(mol.topology)
+    elif topp.suffix == '.cif' and not SIMTK:
+        _log_simtkimport_error()
     else:
         top = topp.str()
 

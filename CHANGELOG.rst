@@ -10,6 +10,11 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+0.8.4 (2020-xx-xx)
+------------------
+
+* Added simtk import control and error message output
+
 0.8.3 (2020-01-19)
 ------------------
 
