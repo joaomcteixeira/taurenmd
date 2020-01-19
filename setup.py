@@ -28,12 +28,14 @@ from os.path import basename, dirname, join, splitext
 from setuptools import find_packages, setup
 
 
-if not os.getenv('READTHEDOCS'):
-    install_requires = [
-        'bioplottemplates',
-        'pyquaternion',
-        ]
-else:
+install_requires = [
+    'matplotlib>=3,<4',
+    'numpy>=1,<2',
+    'bioplottemplates>0.1',
+    'pyquaternion',
+    ]
+
+if os.getenv('READTHEDOCS'):
     install_requires = []
 
 
@@ -98,14 +100,9 @@ setup(
     install_requires=install_requires,
     extras_require={
         'all': [
-            'matplotlib>=3,<4',
-            'numpy>=1,<2',
             'MDAnalysis>=0.2,<1',
             'mdtraj>=1,<2',
             ]
-        # eg:
-        #   'rst': ['docutils>=0.11'],
-        #   ':python_version=="2.6"': ['argparse'],
         },
     entry_points={
         'console_scripts': [
