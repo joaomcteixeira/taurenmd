@@ -1,9 +1,9 @@
 taurenmd
 ========
 
-.. image:: docs/taurenmdlogo_rtd.png
-
 .. start-description
+
+.. image:: docs/taurenmdlogo_readme.png
 
 .. image:: https://img.shields.io/pypi/v/taurenmd.svg
     :alt: PyPI Package latest release
