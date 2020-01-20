@@ -43,9 +43,9 @@ taurenmd
     :alt: Supported versions
     :target: https://pypi.org/project/taurenmd
 
-.. image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.8.4/master
+.. image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.8.5/master
     :alt: Commits since latest release
-    :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.8.4...master
+    :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.8.5...master
 
 
 **A command-line interface for analysis routines of Molecular Dynamics data.**
