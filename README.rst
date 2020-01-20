@@ -1,6 +1,8 @@
 taurenmd
 ========
 
+.. image:: docs/taurenmdlogo_readme.png
+
 .. start-description
 
 .. image:: https://img.shields.io/pypi/v/taurenmd.svg
