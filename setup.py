@@ -29,14 +29,26 @@ from setuptools import find_packages, setup
 
 
 install_requires = [
-    'matplotlib>=3,<4',
-    'numpy>=1,<2',
     'bioplottemplates>0.1',
     'pyquaternion',
     ]
 
 if os.getenv('READTHEDOCS'):
     install_requires = []
+
+# support deps
+supdeps = [
+    'matplotlib>=3,<4',
+    'numpy>=1,<2',
+    ]
+
+# Molecular Dynamics deps
+mddeps = [
+    'MDAnalysis>=0.2,<1',
+    'mdtraj>=1,<2',
+    ]
+
+alldeps = mddeps + supdeps
 
 
 def _read(*names, **kwargs):
@@ -99,10 +111,9 @@ setup(
     python_requires='>=3.6, <3.8',
     install_requires=install_requires,
     extras_require={
-        'all': [
-            'MDAnalysis>=0.2,<1',
-            'mdtraj>=1,<2',
-            ]
+        'all': alldeps,
+        'md': mddeps,
+        'sup': supdeps,
         },
     entry_points={
         'console_scripts': [
