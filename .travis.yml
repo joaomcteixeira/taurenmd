@@ -53,7 +53,7 @@ install:
   #- conda env update -n test-environment --file requirements-dev.yml
   #- conda activate test-environment
   #- conda install tox tox-conda -c conda-forge
-  - pip install tox
+  - pip install tox tox-conda
   - tox --version
 
 script:
