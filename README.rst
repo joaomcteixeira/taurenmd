@@ -1,8 +1,9 @@
 taurenmd
 ========
 
-.. start-description
+.. image:: docs/taurenmdlogo_readme.png
 
+.. start-description
 
 .. image:: https://img.shields.io/pypi/v/taurenmd.svg
     :alt: PyPI Package latest release
@@ -48,12 +49,8 @@ taurenmd
     :alt: Commits since latest release
     :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.8.4...master
 
-
 **A command-line interface for analysis routines of Molecular Dynamics data.**
-
-.. image:: docs/taurenmdlogo_readme.png
-   :align: right
-
+  
 **Taurenmd** provides an easy, flexible and extensible, **command-line** interface for the most common *(and not so common)* routines of analysis and representation of Molecular Dynamics (MD) data.
 
 It bridges the gap between the highly complex (and powerful) Python libraries available for analysis of MD data and the *non-developer* users that lack the programming skills to perform a thorough and proficient use those libraries. *But not only*, **taurenmd** also facilitates high throughput operations, even to those proficient *devs*, because complex executions are reduced to single argument-rich command-lines that can be concatenated or aliased.
@@ -75,4 +72,3 @@ Documentation
 #. usage
 #. citing
 #. *etc...*
-
