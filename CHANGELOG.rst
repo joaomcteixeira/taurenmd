@@ -10,6 +10,14 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+0.x.x (2020-xx-xx)
+------------------
+
+* organized dependencies for PyPI
+* PyPI only dependencies are referred as install_requires
+* MDAnalysis and MDTraj referred in extras_require
+* OpenMM left out from pip, only available in Anaconda
+
 0.8.4 (2020-01-19)
 ------------------
 
