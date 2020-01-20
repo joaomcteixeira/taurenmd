@@ -10,9 +10,10 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
-0.x.x (2020-xx-xx)
+0.8.5 (2020-01-20)
 ------------------
 
+* PR #22
 * organized dependencies for PyPI
 * PyPI only dependencies are referred as install_requires
 * MDAnalysis and MDTraj referred in extras_require
