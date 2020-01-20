@@ -55,6 +55,7 @@ install:
   #- conda install tox tox-conda -c conda-forge
   - pip install tox tox-conda
   - tox --version
+  - printenv
 
 script:
   - tox -v
