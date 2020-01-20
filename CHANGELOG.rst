@@ -10,7 +10,7 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
-0.8.x (2020-01-xx)
+0.8.6 (2020-01-20)
 ------------------
 
 * Restructured pip deps: install_requires only takes bioplottemplates and pyquaternion
