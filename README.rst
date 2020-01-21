@@ -47,6 +47,10 @@ taurenmd
     :alt: Commits since latest release
     :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.8.6...master
 
+.. image:: https://img.shields.io/pypi/dm/taurenmd?label=PyPI%20Downloads
+    :alt: PyPI - Downloads
+    :target: https://pypistats.org/packages/taurenmd
+
 
 **A command-line interface for analysis routines of Molecular Dynamics data.**
 
