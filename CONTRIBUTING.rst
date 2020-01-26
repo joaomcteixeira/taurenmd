@@ -19,9 +19,9 @@ Documentation improvements
 
 taurenmd could always use more documentation, whether as part of the
 official taurenmd docs, in docstrings, or even on the web in blog posts,
-articles, and such. Write as a *feature* `issue <https://github.com/joaomcteixeira/taurenmd/issues>`_ describing what you
+articles, and such. Write us a *documentation* `issue <https://github.com/joaomcteixeira/taurenmd/issues>`_ describing what you
 would like to see improved in the documentation, and if you can do
-it just `Pull Request <https://github.com/joaomcteixeira/taurenmd/pulls>`_ you proposed updates. 
+it just `Pull Request <https://github.com/joaomcteixeira/taurenmd/pulls>`_ your proposed updates. 
 
 Feature requests and feedback
 -----------------------------
