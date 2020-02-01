@@ -14,6 +14,8 @@ Changelog
 ------------------
 
 * Added PyPI downloads badge
+* Improved installation instructions
+* Improved and clarified contributing instructions
 
 0.8.6 (2020-01-20)
 ------------------
