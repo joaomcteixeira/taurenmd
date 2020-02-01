@@ -11,7 +11,7 @@ Supported Platforms
 
 **taurenmd** is designed to run natively under any `platform compatible with Python <https://pythondev.readthedocs.io/platforms.html>`_ (paths are not hard coded ``;-)``). However, **the libraries taurenmd depends on may or may not be compatible with all OS platforms**, and we are **not** responsible for providing compatibility or support for such libraries. To be able to exploit all its features, you should choose a platform compatible with all the required Molecular Dynamics analysis libraries used by *taurenmd*. :ref:`At the bottom of this page we have a section that describes taurenmd's dependencies <How taurenmd manages its dependencies>`.
 
-We can guarantee **taurenmd** works fully with all its dependencies under Ubuntu 18.04 LTS.
+We can **guarantee** *taurenmd* works fully with all its dependencies using Anaconda on Ubuntu 18.04 LTS, and we are *positive* (not sure) it will be the same for any system supporting Anaconda.
 
 Installation steps
 ------------------
@@ -19,7 +19,7 @@ Installation steps
 From a previous defined environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you use Molecular Dynamics for your research, odds are you have already the :ref:`required dependencies <How taurenmd manages its dependencies>`; if this is the case, you can just install *taurenmd* on top of them, run: ``pip install taurenmd`` in your MD analysis Python environment.
+If you use Molecular Dynamics for your research, odds are you have already installed the :ref:`required dependencies <How taurenmd manages its dependencies>`; if this is the case, you can just install *taurenmd* on top of them, run: ``pip install taurenmd`` in your MD analysis Python environment.
 
 From scratch
 ~~~~~~~~~~~~
@@ -35,9 +35,9 @@ If you use `Anaconda`_ as your Python package manager just do the following on y
 
     curl https://raw.githubusercontent.com/joaomcteixeira/taurenmd/master/requirements.yml -o taurenmdenv.yml 
 
-If for some reason the above does not work just open the link on your WebBrowser and save the text to a file (or save the file)
+If for some reason the above does not work just open the link on your WebBrowser and save the text to a file (or save the file).
 
-2. Create a new Anaconda Environment::
+2. Create a new Anaconda Python environment to host *taurenmd*::
 
     conda env create -f taurenmdenv.yml
 
@@ -65,7 +65,7 @@ If you do not use `Anaconda`_ and you actually rely on `PyPI`_ as your package m
 
 3. What is the problem with the pure PyPI installation?
 
-*taurenmd* relies on OpenMM to read ``.cif`` topology files, and OpenMM is not deployed on PyPI, you need to install it through its conda channel. Therefore, unless you need to load ``.cif`` files you can use *taurenmd* from a pure PyPI installation. Otherwise, you should follow the :ref:`With Anaconda` instructions. :ref:`May be you want to help us out solving this problem :-) <Contributing>`.
+*taurenmd* relies on OpenMM to read ``.cif`` topology files, and OpenMM is not deployed on PyPI, you need to `install it through its conda channel <https://anaconda.org/omnia/openmm>`_. Therefore, unless you need to load ``.cif`` files you can use *taurenmd* from a pure PyPI installation. Otherwise, you should follow the :ref:`With Anaconda` instructions. :ref:`May be you want to help us out solving this problem :-) <Contributing>`.
 
 4. You should be good to go
 
@@ -101,7 +101,7 @@ After installation you can run *taurenmd* with the following command ``:-)``::
 
     taurenmd
 
-Please read our :ref:`Usage` page for, what else, usage instructions.
+Please read our :ref:`Usage` page for, *whatelse*, usage instructions and examples.
 
 Upgrade
 -------
@@ -119,7 +119,7 @@ In case something is failing during installation, execution or upgrade, please w
 How taurenmd manages its dependencies
 -------------------------------------
 
-By default, installing ``taurenmd`` does **not** install **all** its dependencies. **Why?** Because taurenmd relies on large and complex libraries required to manage the Molecular Dynamics (MD) data, such as `MDAnalysis <https://www.mdanalysis.org>`_ and `MDTraj <https://mdtraj.org/>`_, and that there are several ways to manage the installation of such libraries, for example:
+By default, installing ``taurenmd`` does **not** install **all** its dependencies. **Why?** Because *taurenmd* relies on large and complex libraries required to manage the Molecular Dynamics (MD) data, such as `MDAnalysis <https://www.mdanalysis.org>`_ and `MDTraj <https://mdtraj.org/>`_, and installing them automatically might not be the optimal solution for every case, for example:
 
 1. Many MD researchers may actually work on:
 
@@ -127,14 +127,14 @@ By default, installing ``taurenmd`` does **not** install **all** its dependencie
   * forked versions,
   * source-compiled versions
 
-2. platform compatibility issues (read further)
-3. lastly and minor, not all dependencies are required for every *taurenmd command*,
+2. There may be platform compatibility issues (read further),
+3. Lastly and minor, not all dependencies are required for every *taurenmd command*,
 
-So installing the deployed version of those libraries by default together with *taurenmd* might be counter productive [1]_.
+So installing those libraries by default together with *taurenmd* might be counter productive [1]_.
 
-**Nonetheless**, *taurenmd* does provide an easy way to install this dependencies whenever possible (though there are exceptions). These details are explained in the :ref:`Installation steps` section above.
+**Nonetheless**, *taurenmd* does provide an easy way to install this dependencies whenever possible and needed. These details are explained in the :ref:`Installation steps` section above.
 
-The dependencies that are kept separate from the default installation process are listed bellow, where links point to their respective official installation instructions.
+The dependencies that are kept separate from the default installation process are listed bellow; here, links point to their respective official installation instructions.
 
 #. `MDAnalysis Installation instructions <https://www.mdanalysis.org/pages/installation_quick_start/>`_
 #. `MDTraj installation instructions <http://mdtraj.org/1.9.3/installation.html>`_
@@ -149,6 +149,6 @@ Other dependencies that are indeed automatically installed alongside with *taure
 #. `python-bioplottemplates <https://github.com/joaomcteixeira/python-bioplottemplates>`_
 #. `pyquaterion <http://kieranwynn.github.io/pyquaternion/>`_
 
-.. [1] though this could be disabled by the user using the ``--no-deps`` option
+.. [1] Dependency installation could be disabled using the ``--no-deps`` flag of ``pip``, but we decided for the other strategy.
 .. _PyPi: https://pypi.org/
 .. _Anaconda: https://www.anaconda.com/distribution/
