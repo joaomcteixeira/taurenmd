@@ -17,16 +17,16 @@ When `reporting a bug <https://github.com/joaomcteixeira/taurenmd/issues>`_ plea
 Documentation improvements
 --------------------------
 
-taurenmd could always use more documentation, whether as part of the
-official taurenmd docs, in docstrings, or even on the web in blog posts,
-articles, and such. Write as a *feature* `issue <https://github.com/joaomcteixeira/taurenmd/issues>`_ describing what you
-would like to see improved in the documentation, and if you can do
-it just `Pull Request <https://github.com/joaomcteixeira/taurenmd/pulls>`_ you proposed updates. 
+**taurenmd** could always use more documentation, whether as part of the
+official docs, in docstrings, or even on the web in blog posts,
+articles, and such. Write us a `documentation issue <https://github.com/joaomcteixeira/taurenmd/issues/new?assignees=joaomcteixeira&labels=documentation&template=documentation.md&title=%5BDOCUMENTATION%5D>`_ describing what you
+would like to see improved in here, and, if you can do
+it, just `Pull Request <https://github.com/joaomcteixeira/taurenmd/pulls>`_ your proposed updates ``:-)``.
 
 Feature requests and feedback
 -----------------------------
 
-The best way to send feedback is to file an issue at https://github.com/joaomcteixeira/taurenmd/issues using the *feature* template.
+The best way to send feedback is to file an issue using the `feature template <https://github.com/joaomcteixeira/taurenmd/issues/new?assignees=joaomcteixeira&labels=enhancement&template=feature_request.md&title=%5BFEATURE%5D>`_.
 
 If you are proposing a feature:
 
@@ -37,23 +37,34 @@ If you are proposing a feature:
 Code Development
 ================
 
-To contribute to the development of *taurenmd*, set up first a local development environment:
+Though *taurenmd* can be used without relying on Anaconda to manage its dependencies,
+there are actually some dependencies that are only available in the Anaconda ecosystem.
+Therefore, the full development of *taurenmd* is bound to Anaconda until this situation is solved,
+you can read further on this in our :ref:`installation page <Installation>`.
 
-1. Create a new :code:`taurenmddev` environment and install all *taurenmd Molecular Dynamics libraries dependencies* but do NOT install *taurenmd* itself; visit the `Installation <https://taurenmd.readthedocs.io/en/latest/installation.html>`_ page for further instructions.
+Also, by using Conda, our CI integration is much faster because the heavy dependencies
+are handled just faster in Anaconda than in pure PyPI.
+
+For these reasons, the development of *taurenmd* is bound to Anaconda. Though it is
+possible to make some gymnastics and avoid using Conda and still contribute
+to the develop *taurenmd*, if this is your case, please write us an issue and
+we will help you out.
+
+From this moment on we will assume you are using Anaconda as your Python package manager.
+
+1. Create a new environment and install *taurenmd* dependencies, **only its dependencies**, following the instructions
+for :ref:`Anaconda in our Installation <With Anaconda>` page. **Important**, change the name of the
+environment in the ``yml`` file before actually creating the environment, for example,
+name it ``taurenmddev``.
 
     1.1. Remember to activate the new environment before proceeding to the installation.
 
 2. *taurenmd* relies on `tox <https://tox.readthedocs.io/en/latest/>`_ to manage continuous integration (CI) and collaborative development; install it together with `tox-conda <https://github.com/tox-dev/tox-conda>`_::
 
-    # with Anaconda
     conda install -c conda-forge tox
     conda install -c conda-forge tox-conda
-    
-    # with PyPI
-    pip install tox
-    pip install tox-conda
 
-3. Fork `taurenmd <https://github.com/joaomcteixeira/taurenmd>`_ (look for the "Fork" button).
+3. Fork `taurenmd <https://github.com/joaomcteixeira/taurenmd>`_ (look for the "Fork" button on the top right of your screen).
 
 4. `Clone <https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository>`_ your forked repository to your local machine::
 
@@ -63,7 +74,7 @@ To contribute to the development of *taurenmd*, set up first a local development
 
     git checkout -b name-of-your-bugfix-or-feature
 
-6. Install a development version of your development branch, remember to active the ``taurenmddev`` environment::
+6. Install a development version of your development branch, remember to active the ``taurenmddev`` environment beforehand::
 
     python setup.py develop
 
@@ -72,6 +83,8 @@ To contribute to the development of *taurenmd*, set up first a local development
 7. When you're done making changes run all the checks and docs builder with **tox** one command::
 
     tox
+
+And correct the errors reported.
 
 8. Commit your changes and push your branch to your *taurenmd fork* on GitHub::
 
@@ -85,8 +98,8 @@ A New Command-line client
 -------------------------
 
 One of the most natural and straightforward ways to contribute to *taurenmd* is
-to develop a new client command-line interface that provides a functionality that
-serves your needs so it becomes available in the *taurenmd* workflow.
+to develop a new command-line interface, which provides a functionality that
+serves your needs, so it becomes available in the *taurenmd* workflow.
 We provide a command-line client
 `template file <https://github.com/joaomcteixeira/taurenmd/blob/master/src/taurenmd/_cli_template.py>`_
 from which you can start developing your own command-line new client,
@@ -114,7 +127,7 @@ For merging, you should:
 Tips
 ----
 
-You can run individual test environment with tox, for example, to test lint::
+You can run individual test environment with *tox*, for example, to test lint::
 
     tox -e check 
 
@@ -129,6 +142,6 @@ to perform coverage-reported tests::
 Continuous Integration
 ======================
 
-This project follows Continuous Integration (CI) good practices (let us know if something can be improved). As referred in the previous section, CI environment is provided by `tox <https://tox.readthedocs.io/en/latest/>`_ in combination with `tox-conda <https://github.com/tox-dev/tox-conda>`_. All *tox* testing environments run on `Travis-CI <https://travis-ci.org/joaomcteixeira/taurenmd>`_; there, we check for code style integrity, documentation, tests and test coverage, **all** dependencies are installed. CI configuration is defined in the `tox.ini <https://github.com/joaomcteixeira/taurenmd/blob/master/tox.ini>`_ file.
+This project follows Continuous Integration (CI) good practices (let us know if something can be improved). As referred in the previous section, CI environment is provided by `tox <https://tox.readthedocs.io/en/latest/>`_ in combination with `tox-conda <https://github.com/tox-dev/tox-conda>`_. All *tox* testing environments run on `Travis-CI <https://travis-ci.org/joaomcteixeira/taurenmd>`_; there, we check for code style integrity, documentation, tests and test coverage, **all** dependencies are installed. CI configuration is defined in the `tox.ini <https://github.com/joaomcteixeira/taurenmd/blob/master/tox.ini>`_ and in the `.travis.yml <https://github.com/joaomcteixeira/taurenmd/blob/master/.travis.yml>`_ files.
 
-Currently, we do not provide thorough testing for Windows platforms. *taurenmd* depends on several research libraries and we cannot, and should not, attempt to guarantee proper installation of those libraries on all platforms. Therefore we decided to provide full test coverage just for Linux systems where we know those libraries operate fully. You may wish to read our **Installation** page.
+Currently, we do not provide thorough testing for Windows platforms. *taurenmd* depends on several research libraries and we cannot, and should not, attempt to guarantee proper installation of those libraries on all platforms. Therefore we decided to provide full test coverage just for Linux systems where we know those libraries operate fully. You may wish to read our **Installation** page for more comments on this matter.

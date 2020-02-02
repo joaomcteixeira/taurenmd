@@ -10,6 +10,28 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+0.8.7 (2020-02-02)
+------------------
+
+* Added PyPI downloads badge
+* Improved installation instructions
+* Improved and clarified contributing instructions
+
+0.8.6 (2020-01-20)
+------------------
+
+* Restructured pip deps: install_requires only takes bioplottemplates and pyquaternion
+* two extras_require: `sup` and `md` and `all` which consider both
+
+0.8.5 (2020-01-20)
+------------------
+
+* PR #22
+* organized dependencies for PyPI
+* PyPI only dependencies are referred as install_requires
+* MDAnalysis and MDTraj referred in extras_require
+* OpenMM left out from pip, only available in Anaconda
+
 0.8.4 (2020-01-19)
 ------------------
 

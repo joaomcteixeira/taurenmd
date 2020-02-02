@@ -28,13 +28,27 @@ from os.path import basename, dirname, join, splitext
 from setuptools import find_packages, setup
 
 
-if not os.getenv('READTHEDOCS'):
-    install_requires = [
-        'bioplottemplates',
-        'pyquaternion',
-        ]
-else:
+install_requires = [
+    'bioplottemplates>0.1',
+    'pyquaternion',
+    ]
+
+if os.getenv('READTHEDOCS'):
     install_requires = []
+
+# support deps
+supdeps = [
+    'matplotlib>=3,<4',
+    'numpy>=1,<2',
+    ]
+
+# Molecular Dynamics deps
+mddeps = [
+    'MDAnalysis>=0.2,<1',
+    'mdtraj>=1,<2',
+    ]
+
+alldeps = mddeps + supdeps
 
 
 def _read(*names, **kwargs):
@@ -47,7 +61,7 @@ def _read(*names, **kwargs):
 
 setup(
     name='taurenmd',
-    version='0.8.4',
+    version='0.8.7',
     license='GNU GPLv2',
     description='A command-line interface for analysis routines in Molecular Dynamics data.',
     long_description='%s\n%s' % (
@@ -97,9 +111,9 @@ setup(
     python_requires='>=3.6, <3.8',
     install_requires=install_requires,
     extras_require={
-        # eg:
-        #   'rst': ['docutils>=0.11'],
-        #   ':python_version=="2.6"': ['argparse'],
+        'all': alldeps,
+        'md': mddeps,
+        'sup': supdeps,
         },
     entry_points={
         'console_scripts': [
