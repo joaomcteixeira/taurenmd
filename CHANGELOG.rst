@@ -10,7 +10,7 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
-0.x.x (2020-xx-xx)
+0.8.7 (2020-02-02)
 ------------------
 
 * Added PyPI downloads badge
