@@ -10,9 +10,16 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+0.8.8 (2020-xx-xx)
+------------------
+
+* Added taurenmd logo
+* improved details in the documentation
+
 0.8.7 (2020-02-02)
 ------------------
 
+* PR #24
 * Added PyPI downloads badge
 * Improved installation instructions
 * Improved and clarified contributing instructions
