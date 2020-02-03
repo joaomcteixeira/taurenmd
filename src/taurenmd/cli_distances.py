@@ -18,7 +18,7 @@ and [np.subtract](https://docs.scipy.org/doc/numpy/reference/generated/numpy.sub
 
 Calculate the distances between two carbon alphas:
 
-    taurenmd dist top.pdb traj.dcd -l1 'resnum 10 and name CA' -l2 'resum 20 and name CA'
+    taurenmd dist top.pdb traj.dcd -l1 'resnum 10 and name CA' -l2 'resnum 20 and name CA'
 
 Calculate the distances between two chains:
 
