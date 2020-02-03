@@ -63,7 +63,7 @@ routine by prefixing a ``tmd`` to its name, for example:
 Logging
 -------
 
-taurenmd logs all its running activity as follows:
+*taurenmd* logs all its running activity as follows:
 
 1. ``.taurenmd.cmd``, keeps an historic register of the taurenmd commands
 run on a given folder together with a list of the research projects

@@ -1,7 +1,9 @@
 """
 # Decompose Eurler angle rotations of a selection.
 
-*Calculate the Roll, Pitch and Yaw angles along the trajectory.**
+**EXPERIMENTAL PROTOCOL, RESULTS MAY NOT BE RELIABLE**
+
+*Calculate the Roll, Pitch and Yaw angles along the trajectory.*
 
 Read further on roll, pitch and yaw angles (Euler Angles) -
 [wikipedia](https://en.wikipedia.org/wiki/Euler_angles).
