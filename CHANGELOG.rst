@@ -10,11 +10,15 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
-0.8.8 (2020-xx-xx)
+0.8.8 (2020-02-03)
 ------------------
 
-* Added taurenmd logo
-* improved details in the documentation
+* PRs: #25 #26 #27
+* Added taurenmd logo for readthedocs
+* Added tauranmd logo in README
+* Added taurenmd repository banner
+* Improved details in the documentation
+* Removed ``.ci`` folder, unnecessary
 
 0.8.7 (2020-02-02)
 ------------------
