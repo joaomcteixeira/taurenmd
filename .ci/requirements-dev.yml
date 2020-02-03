@@ -1,7 +1,0 @@
-name: tauren-dev
-channels:
-    - conda-forge
-    - defaults
-dependencies:
-    - tox
-    - bumpversion
