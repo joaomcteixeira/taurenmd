@@ -10,8 +10,8 @@ tags:
   - Biochemistry
 authors:
   - name: João M.C. Teixeira
-  - orcid: 0000-0002-9113-0622
-  - affiliation: 1
+    orcid: 0000-0002-9113-0622
+    affiliation: 1
 affiliations:
   - name: Program in Molecular Medicine, Hospital for Sick Children, Toronto, Ontario M5G 0A4, Canada
   - index: 1
