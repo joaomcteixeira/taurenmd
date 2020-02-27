@@ -14,7 +14,7 @@ authors:
     affiliation: 1
 affiliations:
   - name: Program in Molecular Medicine, Hospital for Sick Children, Toronto, Ontario M5G 0A4, Canada
-  - index: 1
+    index: 1
 date: 27 February 2020
 bibliography: paper.bib
 ---
