@@ -1,5 +1,5 @@
 ---
-title: 'taurenmd: A command-line interfaced hub for analysis routines in Molecular Dynamics.'
+title: 'taurenmd: A command-line interface for analysis of Molecular Dynamics simulations.'
 tags:
   - Python
   - Molecular Dynamics
@@ -11,29 +11,30 @@ tags:
 authors:
   - name: João M.C. Teixeira
     orcid: 0000-0002-9113-0622
-    affiliation: 1
+    affiliation: "1, 2"
 affiliations:
-  - name: Program in Molecular Medicine, Hospital for Sick Children, Toronto, Ontario M5G 0A4, Canada
-    index: 1
-date: 27 February 2020
+  - name: Previous: Biomolecular NMR Laboratory, Organic Chemistry Section, Inorganic and Organic Chemistry Department, University of Barcelona, Baldiri Reixac 10-12, Barcelona 08028, Spain
+  - name: Current: Program in Molecular Medicine, Hospital for Sick Children, Toronto, Ontario M5G 0A4, Canada
+    index: 2
+date: 28 February 2020
 bibliography: paper.bib
 ---
 
 # Summary
 
-Molecular dynamics (MD) simulations of biological molecules have evolved drastically since its application was firstly demonstrated four decades ago [@Karplus1977]; simulation of systems which account for millions of atoms is now possible thanks to the latest advances in computation and data storage capacity -- and community's interest is growing [@Hospital2019]. Academic groups development most of the MD methods and software for data handling and analysis which, specially the latter, are key to the adoption of the MD techniques by the general research community. While the MD analysis libraries developed solely for the manipulation of raw data and generation of structural parameters nicely address these needs [@mda1; @mda2; @mdt; @Romo2014; @Roe2013], each of these have its advantages and drawbacks, inherit to their implementation strategies. Yet, one has to appreciate this diversity enriches the field with a panoply of strategies that the community can take profit of.
+Molecular dynamics (MD) simulations of biological molecules have evolved drastically since its application was firstly demonstrated four decades ago [@Karplus1977], simulation of systems comprising millions of atoms is now possible due to the latest advances in computation and data storage capacity -- and the scientific community's interest is growing [@Hospital2019]. Academic groups develop most of the MD methods and software for MD data handling and analysis. The MD analysis libraries developed solely for the latter scope nicely address the needs of manipulating raw data and calculating structural parameters [@mda1; @mda2; @mdt; @Romo2014; @Roe2013], each with its advantages and drawbacks inherent to their implementation strategies. This diversity enriches the field with a panoply of strategies that the community can utilize.
 
-The MD analysis software libraries widely distributed and adopted by the community share two main characteristics: 1) they are written in pure Python [@CS-R9526], or provide a Python interface and 2) they are *libraries*: highly versatile and powerful pieces of software that, as a counterpart, require advanced scripting and understanding to be operated, even for their basic functionalities. While this is the correct approach to develop computational libraries, it marks a breach between these software packages and the *non-developer* researcher and/or high throughput practices, specially for daily data handling routines. Emerges, therefore, the need to create a platform that efficiently combines the MD libraries available in the Python universe, taking the most out of each, and implements a quick-draw interface for daily usage by both experts and non-experts in the field. Here is presented **taurenmd** (\autoref{fig:logo}), an easy-to-use and extensible command-line interface ecosystem that routinizes complex Molecular Dynamics analysis operations by building on top of powerful Python-based MD analysis libraries.
+The MD analysis software libraries widely distributed and adopted by the community share two main characteristics: 1) they are written in pure Python [@CS-R9526], or provide a Python interface and 2) they are *libraries*: highly versatile and powerful pieces of software that, however, require advanced scripting and understanding to be operated, even for their basic functionalities. While this is the correct approach to develop flexible computational libraries, it creates a barrier between these software packages and the *non-developer* researcher and/or high throughput practices, particularly for routine data handling. Therefore, the need has emerged to create a platform that efficiently combines the MD libraries available in the Python universe, taking the most out of each, and implements rapid interfaces for routine usage by both experts and non-experts in the field. In response to that, here is presented **taurenmd** (\autoref{fig:logo}), an easy-to-use and extensible ecosystem of command-line interfaces that facilitates complex operations in Molecular Dynamics data analysis by building on top of powerful Python-based MD analysis libraries.
 
 ![taurenmd logo.\label{fig:logo}](../docs/logo/taurenmdlogo_readme.png)
 
 # Implementation
 
-**taurenmd** provides highly parametrizable command-line interfaces that automatize complex operations of Molecular Dynamics (MD) data handling and analysis in unitary executions, which, *per se*, represent conceptual ideas; for example, the manipulation of raw MD data or the calculation of structural parameters (*RMSDs, RMSFs, etc...*). Command-line operations are workflows defined by orchestrated single-operation functions. These single-logic functions are coded in the core of *taurenmd*'s library which facilitates their unit-testing and sharing among all interfaces. *taurenmd*'s architecture design is, therefore, simple, yet highly modular, flat, easy to read, and extensible. *taurenmd* serves as a hub of routines in continuous growth, where new operations can be implemented and shared among the community in a defined and documented manner. *taurenmd* project is hosted at GitHub (https://github.com/joaomcteixeira/taurenmd) and is extensively documented at ReadTheDocs (https://taurenmd.readthedocs.io).
+**taurenmd** provides highly parametrizable command-line interfaces that automate complex operations of Molecular Dynamics (MD) data handling and analysis in unitary executions that represent conceptual ideas, such as, the manipulation of raw MD data or the calculation of structural parameters (*RMSDs, RMSFs, etc...*). Command-line operations are workflows defined by orchestrated single-operation functions. These single-logic functions are coded in the core of *taurenmd*'s library which facilitates their unit-testing and sharing among all interfaces. Therefore, the design of *taurenmd*'s architecture is simple, yet highly modular, flat, easy to read, and extensible. *taurenmd* serves as a hub of routines in continuous growth, where new operations can be implemented and shared among the community in a defined and documented manner. The *taurenmd* project is hosted at GitHub (https://github.com/joaomcteixeira/taurenmd) and is extensively documented at ReadTheDocs (https://taurenmd.readthedocs.io).
 
-To operate MD data, *taurenmd* uses third-party MD analysis libraries; currently, it imports MDAnalysis [@mda1; @mda2], MDTraj [@mdt], and OpenMM [@OpenMM], and they are used depending on the requirements of each command-line client. But, as stated, the careful. yet simple, design of the program allows facile incorporation of new dependencies to extend or implement new workflows. Finally, though *taurenmd* focus on enhanced combination of third party libraries, its design leaves room for the implementation of original analysis routines when needed.
+To operate on MD data, *taurenmd* uses third-party MD analysis libraries; currently, it imports MDAnalysis [@mda1; @mda2], MDTraj [@mdt], and OpenMM [@OpenMM], and they are used depending on the requirements of each command-line client. But, the design of the program allows facile incorporation of new dependencies to extend or implement new workflows. Finally, though *taurenmd* focuses on enhanced combination of third party libraries, its design leaves room for the implementation of original analysis routines when needed.
 
-The command-line interface of *taurenmd* is *hierarchic*, where `taurenmd` is the main entry point and the different interfaces exist as *subroutines*, for example:
+The command-line interface of *taurenmd* is hierarchic, where `taurenmd` is the main entry point and the different interfaces exist as subroutines, for example:
 
 ```bash
 # help instructions for the main taurenmd entry point
@@ -44,9 +45,9 @@ $ taurenmd [SUBROUTINE] [OPTIONS]
 $ taurenmd report -h
 ```
 
-At the date of publication, *taurenmd* provides ten different command-line interfaces; all of them, their arguments, and functionalities, are thoroughly described in the project's documentation under *Command-line interfaces*. Likewise, all individual functional operations provided are open, fully documented, and can be imported and used by other projects if desired.
+At the date of publication, *taurenmd* provides ten different command-line interfaces; all of which, their arguments, and functionalities, are thoroughly described in the project's documentation under the "Command-line interfaces" section. Similarly, all individual functional operations provided are open, fully documented, and can be imported and used by other projects if desired.
 
-To invite community contributions, a client template file is provided with detailed instructions to guide the implementation of new command-line workflows. The building blocks required to build command-line clients are also extensively documented in the `libs/libcli.py` module, they are reusable and new blocks can also be added if needed. New logical operations can be implemented in the library core and used in clients. Complete instructions on how to contribute to the project are provided in the documentation. The project provides extensive Continuous Integration tests and explicit instructions for code style and format to guide developers. *taurenmd* follows Semantic Versioning 2.0 and we favor agile develop/deployment instead of periodical releases.
+To invite community contributions, a client template file is provided with detailed instructions to guide the implementation of new command-line workflows. The building blocks required to build command-line clients are also extensively documented in the `libs/libcli.py` module, they are reusable and new blocks can also be added if needed. New logical operations can be implemented in the library core and used in clients. Complete instructions on how to contribute to the project are provided in the documentation. The project provides extensive Continuous Integration tests and explicit instructions for code style and format to guide developers. *taurenmd* follows Semantic Versioning 2.0 and we favor agile development/deployment instead of periodic releases.
 
 # Installation
 
@@ -56,17 +57,17 @@ To invite community contributions, a client template file is provided with detai
 $ pip3 install taurenmd[all]
 ```
 
-*taurenmd* code uses only Python provided interfaces and is, therefore, compatible with any platform able to execute Python. However, the different Molecular Dynamics analysis libraries imported have very different deployment strategies and this project cannot guarantee those will function in all OSes; it is, however, guaranteed *taurenmd* works fully on Ubuntu 18.04 LTS running Anaconda as Python package manager. We advise reading the detailed installation instructions provided in the project's documentation.
+*taurenmd* code uses only Python provided interfaces and is, therefore, compatible with any platform able to execute Python. However, the different Molecular Dynamics analysis libraries imported have very different deployment strategies and this project cannot guarantee those will function in all operating systems; it is, however, guaranteed that *taurenmd* works fully on Ubuntu 18.04 LTS running Anaconda as Python package manager. We advise reading the detailed installation instructions provided in the project's documentation.
 
 # Use cases
 
-*taurenmd* current version has ten command-line interfaces that execute different analysis or data manipulation routines. Extensive usage examples are provided in the documentation website or by the command:
+The *taurenmd* current version has ten command-line interfaces that execute different analysis or data manipulation routines. Extensive usage examples are provided in the documentation website or by the command:
 
 ```bash
 $ taurenmd -h
 ```
 
-Here we show a very common case where `trajedit` interface is used for data manipulation and transformation:
+Here we show how the `trajedit` interface is used for data manipulation and transformation:
 
 ```bash
 $ taurenmd trajedit topology.pdb trajectory.xtc -d traj_s50_e500_p10.xtc \
@@ -77,6 +78,6 @@ The latter extracts a subtrajectory spanning frames 50 to 500 (exclusive) with a
 
 # Acknowledgments
 
-The initial concept of this project was largely inspired in the pdb-tools project "one script one action" idea [@pdbtools]. The author deeply thanks João P.G.L.M. Rodrigues (ORCID: 0000-0001-9796-3193) for mentoring on MD simulations and data analysis and to Susana Barrera-Vilarmau (ORCID: 0000-0003-4868-6593) for her intensive usage of the program since the very first versions and all the discussions, feedback and suggestions on building a user-friendly interface. The project's repository layout and Continuous Integration setup was based on `cookiecutter-pylibrary` repository [@cc] with final personal modifications by J.M.C.T..
+The initial concept of this project was largely inspired in the pdb-tools project "one script one action" idea [@pdbtools]. The author deeply thanks João P.G.L.M. Rodrigues (ORCID: 0000-0001-9796-3193) for mentoring regarding MD simulations and data analysis and to Susana Barrera-Vilarmau (ORCID: 0000-0003-4868-6593) for her intensive usage of the program since the very first versions and all the discussions, feedback and suggestions on building a user-friendly interface. The project's repository layout and Continuous Integration setup was based on `cookiecutter-pylibrary` repository [@cc] with final personal modifications by J.M.C.T..
 
 # References
