@@ -46,17 +46,17 @@ $ taurenmd report -h
 
 At the date of publication, *taurenmd* provides ten different command-line interfaces; all of them, their arguments, and functionalities, are thoroughly described in the project's documentation under *Command-line interfaces*. Likewise, all individual functional operations provided are open, fully documented, and can be imported and used by other projects if desired.
 
-To invite community contributions, a client template file is provided with detailed instructions to guide the implement of new command-line workflows. The building blocks required to build command-line clients are also extensively documented in the `libs/libcli.py` module, where new blocks can also be added if needed. New logical operations can simply be implemented in the library core and used in clients. Complete instructions on how to contribute to the project are provided in the documentation. This project is hosted at GitHub and we provide extensive Continuous Integration tests and explicit style and format configurations to guide developers. *taurenmd* follows Semantic Versioning 2.0 [@version] and we favor agile develop/deployment.
+To invite community contributions, a client template file is provided with detailed instructions to guide the implement of new command-line workflows. The building blocks required to build command-line clients are also extensively documented in the `libs/libcli.py` module, where new blocks can also be added if needed. New logical operations can simply be implemented in the library core and used in clients. Complete instructions on how to contribute to the project are provided in the documentation. This project is hosted at GitHub and we provide extensive Continuous Integration tests and explicit style and format configurations to guide developers. *taurenmd* follows Semantic Versioning 2.0 and we favor agile develop/deployment.
 
 # Installation
 
-**taurenmd** is deployed in the Python ecosystem and is available for direct down at PyPI [@pypitaurenmd]:
+**taurenmd** is deployed in the Python ecosystem and is available for direct down at PyPI (https://pypi.org/project/taurenmd/):
 
 ```bash
 $ pip3 install taurenmd[all]
 ```
 
-*taurenmd* code uses only Python provided interfaces and is, therefore, compatible with any platform able to execute Python itself [@pythondev]. However, the different Molecular Dynamics analysis libraries imported have very different deployment strategies and we cannot guarantee those will function in all OSes; we do guarantee *taurenmd* works fully on Ubuntu 18.04 LTS running Anaconda as Python package manager. We advise reading the detailed installation instructions provided in the project's documentation.
+*taurenmd* code uses only Python provided interfaces and is, therefore, compatible with any platform compatible with Python. However, the different Molecular Dynamics analysis libraries imported have very different deployment strategies and we cannot guarantee those will function in all OSes; we do guarantee *taurenmd* works fully on Ubuntu 18.04 LTS running Anaconda as Python package manager. We advise reading the detailed installation instructions provided in the project's documentation.
 
 # Use cases
 
