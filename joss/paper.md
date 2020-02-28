@@ -56,7 +56,7 @@ To invite community contributions, a client template file is provided with detai
 $ pip3 install taurenmd[all]
 ```
 
-*taurenmd* code uses only Python provided interfaces and is, therefore, compatible with any platform compatible with Python. However, the different Molecular Dynamics analysis libraries imported have very different deployment strategies and we cannot guarantee those will function in all OSes; we do guarantee *taurenmd* works fully on Ubuntu 18.04 LTS running Anaconda as Python package manager (https://www.anaconda.com/). We advise reading the detailed installation instructions provided in the project's documentation.
+*taurenmd* code uses only Python provided interfaces and is, therefore, compatible with any platform able to execute Python. However, the different Molecular Dynamics analysis libraries imported have very different deployment strategies and this project cannot guarantee those will function in all OSes; it is, however, guaranteed *taurenmd* works fully on Ubuntu 18.04 LTS running Anaconda as Python package manager. We advise reading the detailed installation instructions provided in the project's documentation.
 
 # Use cases
 
