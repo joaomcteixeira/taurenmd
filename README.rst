@@ -1,7 +1,7 @@
 taurenmd
 ========
 
-.. image:: docs/logo/taurenmdlogo_readme.png
+.. image:: https://raw.githubusercontent.com/joaomcteixeira/taurenmd/master/docs/logo/taurenmd_logo_black_readme.png
 
 .. start-description
 
