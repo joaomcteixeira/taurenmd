@@ -45,9 +45,9 @@ taurenmd
     :alt: Supported versions
     :target: https://pypi.org/project/taurenmd
 
-.. image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.8.8/master
+.. image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.8.9/master
     :alt: Commits since latest release
-    :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.8.8...master
+    :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.8.9...master
 
 .. image:: https://img.shields.io/pypi/dm/taurenmd?label=PyPI%20Downloads
     :alt: PyPI - Downloads

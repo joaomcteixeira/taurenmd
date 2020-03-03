@@ -10,6 +10,11 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+0.8.9 (2020-03-03)
+------------------
+
+* Changed logos, PR #28
+
 0.8.8 (2020-02-03)
 ------------------
 
