@@ -26,7 +26,7 @@ Molecular dynamics (MD) simulations of biological molecules have evolved drastic
 
 The MD analysis software libraries widely distributed and adopted by the community share two main characteristics: 1) they are written in pure Python [@CS-R9526], or provide a Python interface and 2) they are *libraries*: highly versatile and powerful pieces of software that, however, require advanced scripting and understanding to be operated, even for their basic functionalities. While this is the correct approach to develop flexible computational libraries, it creates a barrier between these software packages and the *non-developer* researcher and/or high throughput practices, particularly for routine data handling. Therefore, the need has emerged to create a platform that efficiently combines the MD libraries available in the Python universe, taking the most out of each, and implements rapid interfaces for routine usage by both experts and non-experts in the field. In response to that, here is presented **taurenmd** (\autoref{fig:logo}), an easy-to-use and extensible ecosystem of command-line interfaces that facilitates complex operations in Molecular Dynamics data analysis by building on top of powerful Python-based MD analysis libraries.
 
-![taurenmd logo.\label{fig:logo}](../docs/logo/taurenmdlogo_readme.png)
+![taurenmd logo.\label{fig:logo}](../docs/logo/taurenmd_logo_black_readme.png)
 
 # Implementation
 
