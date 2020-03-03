@@ -13,8 +13,8 @@ authors:
     orcid: 0000-0002-9113-0622
     affiliation: "1, 2"
 affiliations:
-  - name: Previous, Biomolecular NMR Laboratory, Organic Chemistry Section, Inorganic and Organic Chemistry Department, University of Barcelona, Baldiri Reixac 10-12, Barcelona 08028, Spain
-  - name: Current, Program in Molecular Medicine, Hospital for Sick Children, Toronto, Ontario M5G 0A4, Canada
+  - name: "Previous, Biomolecular NMR Laboratory, Organic Chemistry Section, Inorganic and Organic Chemistry Department, University of Barcelona, Baldiri Reixac 10-12, Barcelona 08028, Spain"
+  - name: "Current, Program in Molecular Medicine, Hospital for Sick Children, Toronto, Ontario M5G 0A4, Canada"
     index: 2
 date: 04 March 2020
 bibliography: paper.bib
