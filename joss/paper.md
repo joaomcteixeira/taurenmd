@@ -14,6 +14,7 @@ authors:
     affiliation: "1, 2"
 affiliations:
   - name: "Previous, Biomolecular NMR Laboratory, Organic Chemistry Section, Inorganic and Organic Chemistry Department, University of Barcelona, Baldiri Reixac 10-12, Barcelona 08028, Spain"
+    index: 1
   - name: "Current, Program in Molecular Medicine, Hospital for Sick Children, Toronto, Ontario M5G 0A4, Canada"
     index: 2
 date: 04 March 2020
