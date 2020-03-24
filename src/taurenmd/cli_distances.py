@@ -51,7 +51,7 @@ from MDAnalysis.lib.distances import distance_array
 
 import taurenmd.core as tcore
 from taurenmd import _BANNER, Path, log
-from taurenmd.libs import libcalc, libcli, libio, libmda, libplot  # noqa: F401
+from taurenmd.libs import libcli, libio, libmda, libplot
 from taurenmd.logger import S, T
 
 
