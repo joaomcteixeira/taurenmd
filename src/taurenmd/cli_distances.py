@@ -14,10 +14,18 @@ The result is a distance value for each frame.
 
 ### Note on Periodic Boxes
 
-The distances calculated with this client do not account for artifacts
-originated from splits across the periodic box boundaries. To correct
-for this, you whould ``unwrap`` or ``image`` the molecules first. See
-``trajedit`` and ``imagemol`` interfaces for this.
+The distances calculated in this CLI consider the trajectorie's
+periodic box dimensions for each time frame as described in
+`MDAnalysis.lib.distances.distance_array` `box` parameter.
+
+However, this client calculates the distances between the
+`center_of_geometry` of the two selections, and the real position of
+the center of geometry can itself contain measurement artifacts derived
+from splits of the molecules across the periodic box boundaries. In
+case your trajectories are split, and to avoid such errors in distance
+measurements, you should consider making molecules whole beforehand
+using this CLI. For this, see ``trajedit`` and ``imagemol`` CLI
+interfaces.
 
 ## Examples
 
