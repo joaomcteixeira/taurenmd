@@ -10,6 +10,12 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+0.8.10 (2020-04-02)
+-------------------
+
+* PR: #32
+* Corrects incorrect usage of MDAnalysis.analysis.alignto function in ``trajedit``.
+
 0.8.9 (2020-03-03)
 ------------------
 
