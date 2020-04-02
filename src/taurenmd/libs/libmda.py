@@ -12,6 +12,7 @@ taurenmd and MDAnalysis.
 .. _cite both: https://taurenmd.readthedocs.io/en/latest/citing.html
 """
 import MDAnalysis as mda
+from MDAnalysis.analysis import align as mdaalign
 
 import taurenmd.core as tcore
 from taurenmd import Path, log
@@ -89,6 +90,37 @@ def report(universe):
     log.info(T('Reporting'))
     log.info(S('number of frames: {}', len(universe.trajectory)))
     log.info(S('number of atoms: {}', len(universe.atoms)))
+
+
+@libcli.add_reference(tcore.ref_mda)
+def mdaalignto(universe, reference, selection='all'):
+    """
+    Align universe to reference.
+
+    Uses `MDAnalysis.analysis.align.alignto <https://www.mdanalysis.org/docs/documentation_pages/analysis/align.html?highlight=alignto#MDAnalysis.analysis.align.alignto>`_.
+    
+    Parameters
+    ----------
+    universe, reference, selection
+        Same as in ``MDAnalysis.analysis.align.alignto`` function.
+
+    Raises
+    ------
+    ZeroDivisionError
+        If selection gives empty selection.
+    """  # noqa: E501
+    try:
+        mdaalign.alignto(universe, reference, select=selection)
+    except ZeroDivisionError as err:
+        log.debug(err, exc_info=True)
+        errmsg = (
+            f'Could not perform alignment due to {err}, '
+            'most likely the alignment selection does not match '
+            'any possible selection in the system. You selection : '
+            f'\'{selection}\'.'
+            )
+        log.info(errmsg)
+        raise err
 
 
 @libcli.add_reference(tcore.ref_mda)

@@ -517,6 +517,18 @@ def test_cli_trajedit_1():
     p2.unlink()
 
 
+def test_cli_trajedit_SystemExit_align():
+    """Test trajedit 1."""
+    with pytest.raises(SystemExit) as exit:
+        cli_trajedit.main(
+            toptest,
+            [trajtest],
+            align='name ZZZ',
+            )
+    assert exit.type == SystemExit
+    assert exit.value.code == 126
+
+
 def test_cli_trajedit_2():
     """Test trajedit 2."""
     cli_trajedit.main(

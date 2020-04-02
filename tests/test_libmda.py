@@ -1,5 +1,9 @@
 """Test libmda."""
+import copy
+
 import MDAnalysis as mda
+import numpy as np
+import pytest
 
 from taurenmd.libs import libmda as la
 
@@ -39,6 +43,27 @@ def test_report_universe():
         trajtest.str(),
         )
     la.report(universe)
+
+
+def test_mdaalignto():
+    """Test MDA alignto."""
+    universe = mda.Universe(toptest.str(), trajtest.str())
+    reference = mda.Universe(toptest.str())
+    ugroup = universe.select_atoms('all')
+     
+    for _ts in universe.trajectory[1:]:
+        prev = copy.copy(ugroup.positions)
+        assert np.all(np.equal(prev, ugroup.positions))
+        la.mdaalignto(universe, reference, 'name CA')
+        assert np.all(np.not_equal(prev, ugroup.positions))
+
+
+def test_mdaalignto_exit():
+    """Test exit on ZeroDivision."""
+    universe = mda.Universe(toptest.str(), trajtest.str())
+    reference = mda.Universe(toptest.str())
+    with pytest.raises(ZeroDivisionError):
+        la.mdaalignto(universe, reference, 'name ZZZZZ')
 
 
 def test_draw_atom_label():

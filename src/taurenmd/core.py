@@ -3,6 +3,12 @@ import os
 from pathlib import Path as _Path
 
 
+issues = 'https://taurenmd.readthedocs.io/en/latest/contributing.html#reporting-and-requesting'  # noqa: E501
+
+controlled_exit = 'Your run could not finish.'
+CONTACTUS = f'Write us an issue explaining your problem at: {issues}'
+
+
 class Path(type(_Path())):
     """
     Extends Python's `Path object`_ interface.

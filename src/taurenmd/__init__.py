@@ -19,8 +19,9 @@ version: {}
 # link to logo
 # http://patorjk.com/software/taag/#p=display&h=0&f=Epic&t=taurenmd
 import logging
+import sys
 
-from taurenmd.core import Path  # noqa: F401
+from taurenmd.core import CONTACTUS, Path  # noqa: F401
 from taurenmd.logger import DEBUGFILE, LOGFILE
 
 __version__ = '0.8.9'
@@ -77,3 +78,11 @@ log.addHandler(_info)
 log.addHandler(_ch)
 
 references = set()
+
+
+def _controlled_exit():
+    log.info(core.controlled_exit)
+    log.info(core.CONTACTUS)
+    # https://shapeshed.com/unix-exit-codes/
+    # http://www.tldp.org/LDP/abs/html/exitcodes.html
+    sys.exit(126)

@@ -53,10 +53,9 @@ import argparse
 import functools
 
 import MDAnalysis as mda
-from MDAnalysis.analysis import align as mdaalign
 
 import taurenmd.core as tcore
-from taurenmd import _BANNER, Path, log
+from taurenmd import _BANNER, Path, _controlled_exit, log
 from taurenmd.libs import libcli, libio, libmda
 from taurenmd.logger import S, T
 
@@ -95,7 +94,13 @@ libcli.add_top_output_arg(ap)
 ap.add_argument(
     '-a',
     '--align',
-    help='Align system to a atom group.',
+    help=(
+        'Align system to a atom group. '
+        'Alignmed RMSD is compared to the Topology coordinates. '
+        'Uses MDAnalysis.analysis.align.alignto. '
+        'If given without argument defaults to \'all\'. '
+        'Defaults to ``False``.'
+        ),
     default=False,
     const='all',
     nargs='?',
@@ -174,6 +179,7 @@ def main(
         log.info(T('Alignment'))
         log.info(S('trajectory selection will be aligned to subselection:'))
         log.info(S('- {}', align, indent=2))
+        align_reference = mda.Universe(Path(topology).str())
     
     log.info(T('transformation'))
     sliceObj = libio.frame_slice(start, stop, step)
@@ -202,7 +208,10 @@ def main(
                     )
 
             if align:
-                mdaalign.alignto(u, u, select=align,)
+                try:
+                    libmda.mdaalignto(u, align_reference, selection=align)
+                except ZeroDivisionError:
+                    _controlled_exit()
 
             W.write(atom_selection)
     
