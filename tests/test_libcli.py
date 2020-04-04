@@ -474,3 +474,17 @@ def test_data_export_arg(cmd, expected):
     lc.add_data_export_arg(parser)
     v = vars(parser.parse_args(cmd.split()))
     assert v['export'] == expected
+
+
+@pytest.mark.parametrize(
+    'arg,expected',
+    [
+        (1, '1'),
+        ('-a', '-a'),
+        ('segid A or resnum 10', "'segid A or resnum 10'"),
+        ]
+    )
+def test_represent_argument(arg, expected):
+    """Test argument representation."""
+    result = lc.represent_argument(arg)
+    assert result == expected

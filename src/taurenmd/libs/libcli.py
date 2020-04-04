@@ -150,9 +150,22 @@ def save_command(fname, *args):
         fh.write(
             '[{}] {}\n'.format(
                 datetime.now().strftime("%d/%m/%Y, %H:%M:%S"),
-                ' '.join(str(a) for a in args),
+                ' '.join(represent_argument(a) for a in args),
                 )
             )
+
+
+def represent_argument(arg):
+    """
+    Represent argument in a string.
+
+    If argument has spaces represents string with quotation marks ".
+    """
+    sarg = str(arg)
+    if sarg.count(' ') > 0:
+        return '{!r}'.format(sarg)
+    else:
+        return sarg
 
 
 def add_subparser(parser, module):
