@@ -10,6 +10,12 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+0.8.11 (2020-04-03)
+-------------------
+
+* PR: #33
+* Corrected command representation in .taurenmd.cwd adding quotes when needed
+
 0.8.10 (2020-04-02)
 -------------------
 
