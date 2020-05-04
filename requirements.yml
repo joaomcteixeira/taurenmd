@@ -4,10 +4,12 @@ channels:
     - omnia
     - defaults
 dependencies:
-    - pip
     - python=3.7
     - mdanalysis
     - mdtraj
     - openmm
     - matplotlib=3
     - numpy=1
+    - pip
+    - pip:
+        - taurenmd
