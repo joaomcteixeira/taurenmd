@@ -10,6 +10,12 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+0.8.12 (2020-05-04)
+------------------
+
+* PR: #37
+* Installs taurenmd directly with Conda env
+
 0.8.11 (2020-04-03)
 -------------------
 
