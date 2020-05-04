@@ -11,7 +11,7 @@ Changelog
 =========
 
 0.8.12 (2020-05-04)
-------------------
+-------------------
 
 * PR: #37
 * Installs taurenmd directly with Conda env
