@@ -80,8 +80,8 @@ We do not provide support for other distribution platforms such as `HomeBrew <ht
 
 **User installation suggestions for particular systems:**
 
-#. `pyenv in Arch Linux <https://github.com/joaomcteixeira/taurenmd/issues/34>`_
-#. `on zsh <https://github.com/joaomcteixeira/taurenmd/issues/35>`_
+#. :issue:`pyenv in Arch Linux <34>`
+#. :issue:`on zsh <35>`
 
 
 From GitHub
