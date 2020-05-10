@@ -48,8 +48,8 @@ ap = libcli.CustomParser(
     )
 
 libcli.add_version_arg(ap)
-libcli.add_trajectories_arg(ap)
 libcli.add_topology_arg(ap)
+libcli.add_trajectories_arg(ap)
 libcli.add_traj_output_arg(ap)
 libcli.add_top_output_arg(ap)
 
