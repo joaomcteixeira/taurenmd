@@ -124,7 +124,7 @@ def main(
         ):
     """Execute main client logic."""
     log.info(T('starting'))
-    
+
     topology = Path(topology)
     trajectories = [Path(t) for t in trajectories]
 
@@ -132,7 +132,7 @@ def main(
 
     log.info(T('transformation'))
     fSlice = libio.frame_slice(start=start, stop=stop, step=step)
-    
+
     origin_selection = ' or '.join(plane_selection)
     pABC_atomG = u.select_atoms(origin_selection)
     ABC_selections = plane_selection
@@ -142,18 +142,26 @@ def main(
     pC_atomG = u.select_atoms(ABC_selections[2])
 
     u.trajectory[0]
-    
+
     # defining the center of reference
-    pABC_cog = pABC_atomG.center_of_geometry()
+    opABC_cog = pABC_atomG.center_of_geometry()
     log.info(T('Original Center of Geometry'))
     log.info(S('for frame: 0'))
     log.info(S('for selection: {}', origin_selection))
-    log.info(S('pABC_cog: {}', pABC_cog))
-    
+    log.info(S('pABC_cog: {}', opABC_cog))
+
     log.info(T('Transfering'))
     log.info(S('all coordinates of reference frame to the origin 0, 0, 0'))
-    pABC_atomG.positions = pABC_atomG.positions - pABC_cog
+    pABC_atomG.positions = pABC_atomG.positions - opABC_cog
     log.info(S('COG in origin: {}', pABC_atomG.center_of_geometry()))
+
+    # defining the new center of reference
+    pABC_cog = pABC_atomG.center_of_geometry()
+    log.info(T('Origin Center of Geometry'))
+    log.info(S('for frame: 0'))
+    log.info(S('for selection: {}', origin_selection))
+    log.info(S('pABC_cog: {}', pABC_cog))
+   
 
     log.info(T('defining the reference axes'))
     pA_cog = pA_atomG.center_of_geometry()
@@ -165,14 +173,14 @@ def main(
     log.info(S('pC: {}', pC_cog))
 
     log.info(T('defining the normal vector to reference plane'))
-    ref_plane_normal = libcalc.calc_plane_normal(pA_cog, pB_cog, pC_cog)
+    ref_plane_normal = libcalc.calc_plane_normal(pA_cog, pB_cog, pABC_cog)
     log.info(S('plane normal: {}', ref_plane_normal))
     log.info(S('done'))
 
     log.info(T('defining the cross product vector'))
     ref_plane_cross = np.cross(pA_cog, ref_plane_normal)
     log.info(S('np cross: {}', ref_plane_cross))
-    
+
     roll_angles = []
     pitch_angles = []
     yaw_angles = []
@@ -180,95 +188,121 @@ def main(
     for i, _ts in enumerate(u.trajectory[fSlice]):
         print(f'.. working for frame :{i}')
 
+        # displaces all ts positions to the centre 0,0,0
+        # where the reference frame already is
         pABC_cog_ts = pABC_atomG.center_of_geometry()
-        pABC_atomG.positions = pABC_atomG.positions - pABC_cog_ts
+        pABC_atomG.positions = \
+            pABC_atomG.positions - pABC_cog_ts + ref_plane_normal
+        pABC_cog_ts = pABC_atomG.center_of_geometry()
 
         pA_cog_ts = pA_atomG.center_of_geometry()
-        pB_cog_ts = pB_atomG.center_of_geometry()
-        pC_cog_ts = pC_atomG.center_of_geometry()
 
-        ts_plane_normal = libcalc.calc_plane_normal(
-            pA_cog_ts,
-            pB_cog_ts,
-            pC_cog_ts,
-            )
+        p1 = pA_cog
+        p2 = pABC_cog
+        p3 = pABC_cog_ts
+        p4 = pA_cog_ts
+        coords = np.array([p1, p2, p3, p4])
 
-        ts_plane_cross = np.cross(pA_cog_ts, ts_plane_normal)
+        torsion = libcalc.calculate_torsion_angles(coords)
+        assert torsion.size == 1
+
+
+        roll_angles.append(torsion[0])
+    
+    print(roll_angles)
+
+        # recalculates CoG
+        #pABC_cog_ts = pABC_atomG.center_of_geometry()
+
+        #pA_cog_ts = pA_atomG.center_of_geometry()
+        #pB_cog_ts = pB_atomG.center_of_geometry()
+        #pC_cog_ts = pC_atomG.center_of_geometry()
+
+        #ts_plane_normal = libcalc.calc_plane_normal(
+        #    pA_cog_ts,
+        #    pB_cog_ts,
+        #    pABC_cog_ts,
+        #    )
+
+        #ts_plane_cross = np.cross(pA_cog_ts, ts_plane_normal)
+        
+        
+
 
         # Calculating Quaternion Rotations
-        roll_Qs_tuples = libcalc.generate_quaternion_rotations(
-            ref_plane_normal,
-            pA_cog_ts,
-            )
+        #roll_Qs_tuples = libcalc.generate_quaternion_rotations(
+        #    ref_plane_normal,
+        #    pA_cog_ts,
+        #    )
 
-        pitch_Qs_tuples = libcalc.generate_quaternion_rotations(
-            ref_plane_cross,
-            ts_plane_normal,
-            )
+        #pitch_Qs_tuples = libcalc.generate_quaternion_rotations(
+        #    ref_plane_cross,
+        #    ts_plane_normal,
+        #    )
 
-        yaw_Qs_tuples = libcalc.generate_quaternion_rotations(
-            pA_cog,
-            ts_plane_cross,
-            )
+        #yaw_Qs_tuples = libcalc.generate_quaternion_rotations(
+        #    pA_cog,
+        #    ts_plane_cross,
+        #    )
 
-        roll_minimum = libcalc.sort_by_minimum_Qdistances(
-            roll_Qs_tuples,
-            pA_cog,
-            )[0][0]
+        #roll_minimum = libcalc.sort_by_minimum_Qdistances(
+        #    roll_Qs_tuples,
+        #    pA_cog,
+        #    )[0][0]
 
-        pitch_minimum = libcalc.sort_by_minimum_Qdistances(
-            pitch_Qs_tuples,
-            ref_plane_normal,
-            )[0][0]
+        #pitch_minimum = libcalc.sort_by_minimum_Qdistances(
+        #    pitch_Qs_tuples,
+        #    ref_plane_normal,
+        #    )[0][0]
 
-        yaw_minimum = libcalc.sort_by_minimum_Qdistances(
-            yaw_Qs_tuples,
-            ref_plane_cross,
-            )[0][0]
-        
-        if aunit == 'degrees':
-            roll_angles.append(round(roll_minimum.degrees, 3))
-            pitch_angles.append(round(pitch_minimum.degrees, 3))
-            yaw_angles.append(round(yaw_minimum.degrees, 3))
-        else:
-            roll_angles.append(round(roll_minimum.radians, 3))
-            pitch_angles.append(round(pitch_minimum.radians, 3))
-            yaw_angles.append(round(yaw_minimum.radians, 3))
-    
-    if export:
-        file_names = []
-        for _fname in ['roll', 'pitch', 'yaw']:
-            file_names.append(
-                libio.add_prefix_to_path(
-                    export,
-                    f"{_fname}_angles_",
-                    )
-                )
+        #yaw_minimum = libcalc.sort_by_minimum_Qdistances(
+        #    yaw_Qs_tuples,
+        #    ref_plane_cross,
+        #    )[0][0]
 
-        log.info(T('Saving data to files'))
-        for data, fname in zip(
-                [roll_angles, pitch_angles, yaw_angles],
-                file_names,
-                ):
+        #if aunit == 'degrees':
+        #    roll_angles.append(round(roll_minimum.degrees, 3))
+        #    pitch_angles.append(round(pitch_minimum.degrees, 3))
+        #    yaw_angles.append(round(yaw_minimum.degrees, 3))
+        #else:
+        #    roll_angles.append(round(roll_minimum.radians, 3))
+        #    pitch_angles.append(round(pitch_minimum.radians, 3))
+        #    yaw_angles.append(round(yaw_minimum.radians, 3))
 
-            log.info(S('saving {}', fname))
-            libio.export_data_to_file(
-                list(range(len(u.trajectory))[fSlice]),
-                data,
-                fname=fname,
-                header=(
-                    '# Topology: {}\n'
-                    '# Trajectories: {}\n'
-                    '# Plane Selection: {}\n'
-                    '# frame,ange{}\n'
-                    ).format(
-                        topology,
-                        ', '.join(t.resolve().str() for t in trajectories),
-                        origin_selection,
-                        aunit,
-                        ),
-                )
-        log.info(S('done'))
+    #if export:
+    #    file_names = []
+    #    for _fname in ['roll', 'pitch', 'yaw']:
+    #        file_names.append(
+    #            libio.add_prefix_to_path(
+    #                export,
+    #                f"{_fname}_angles_",
+    #                )
+    #            )
+
+    #    log.info(T('Saving data to files'))
+    #    for data, fname in zip(
+    #            [roll_angles, pitch_angles, yaw_angles],
+    #            file_names,
+    #            ):
+
+    #        log.info(S('saving {}', fname))
+    #        libio.export_data_to_file(
+    #            list(range(len(u.trajectory))[fSlice]),
+    #            data,
+    #            fname=fname,
+    #            header=(
+    #                '# Topology: {}\n'
+    #                '# Trajectories: {}\n'
+    #                '# Plane Selection: {}\n'
+    #                '# frame,ange{}\n'
+    #                ).format(
+    #                    topology,
+    #                    ', '.join(t.resolve().str() for t in trajectories),
+    #                    origin_selection,
+    #                    aunit,
+    #                    ),
+    #            )
+    #    log.info(S('done'))
 
     return
 
