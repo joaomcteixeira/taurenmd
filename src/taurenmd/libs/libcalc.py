@@ -43,12 +43,12 @@ def mda_rmsd(
         ):
     """
     Calculate RMSDs observed for a selection.
-    
+
     Uses `MDAnalysis RMSD <https://www.mdanalysis.org/docs/documentation_pages/analysis/rms.html?highlight=rmsd#MDAnalysis.analysis.rms.RMSD>`_.
 
     Example
     -------
-    
+
     * Calculate RMSDs observed for the whole system along the whole trajectory.
 
         >>> mda_rmsd(universe)
@@ -76,7 +76,7 @@ def mda_rmsd(
     ref_frames : int, optional
         The reference frame against which calculate the RMSDs.
         Defaults to ``0``.
-    
+
     Returns
     -------
     Numpy Array
@@ -92,12 +92,12 @@ def mda_rmsd(
         Any exceptions that could come from MDAnalysis RMSF computation.
     """  # noqa: E501
     log.info(T('Calculating RMSDs'))
-    
+
     frame_slice = libio.evaluate_to_slice(value=frame_slice)
 
     log.info(S('for selection: {}', selection))
     log.info(S('for trajectory slice: {}', frame_slice))
-    
+
     R = mdaRMSD(
         universe,
         universe,
@@ -106,11 +106,11 @@ def mda_rmsd(
         ref_frame=ref_frame,
         verbose=False,
         )
-    
+
     R.run(verbose=False)
-    
+
     # rmsds[:, ii] = R.rmsd[:, 2][self._fslicer]
-    
+
     return R.rmsd[frame_slice, 2]
 
 
@@ -132,7 +132,7 @@ def mda_rmsf(
     frame_slice : any, optional
         Any argument that :py:func:`taurenmd.libs.libio.evaluate_to_slice` can receive.
         Defaults to ``None``, considers all frames.
-    
+
     Returns
     -------
     Numpy Array
@@ -145,11 +145,11 @@ def mda_rmsf(
         Any exceptions that could come from MDAnalysis RMSF computation.
     """  # noqa: E501
     log.info(T('Calculating RMSFs'))
-   
+
     frame_slice = libio.evaluate_to_slice(value=frame_slice)
-     
+
     log.info(S('for trajectory slice: {}', frame_slice))
-   
+
     R = mdaRMSF(
         atom_group,
         start=frame_slice.start,
@@ -157,9 +157,9 @@ def mda_rmsf(
         step=frame_slice.step,
         verbose=False,
         )
-   
+
     R.run()
-   
+
     return R.rmsf
 
 
@@ -201,9 +201,9 @@ def calc_plane_eq(p1, p2, p3):
     -------
     tuple of length 4
         The four parameters (a, b, c, d) that defined the plane equation:
-        
+
         .. math::
-        
+
             ax + by + cz = d
     """  # noqa: E501
     cp = calc_plane_normal(p1, p2, p3)
@@ -222,7 +222,7 @@ def calc_planes_angle(a1, b1, c1, a2, b2, c2, aunit='radians'):
     .. math::
 
         a1*x + b1*y + c1*z + d = 0
-        
+
         a2*x + b2*y + c2*z + d = 0
 
     `Read further <from: https://www.geeksforgeeks.org/angle-between-two-planes-in-3d/>`_.
@@ -231,7 +231,7 @@ def calc_planes_angle(a1, b1, c1, a2, b2, c2, aunit='radians'):
     ----------
     a1, b1, c1, a2, b2, c2 : float
         Plane parameters
-    
+
     angle : str, optional
         ``degrees`` returns angle quantity in degrees, else returns
         in radians.
@@ -267,7 +267,7 @@ def generate_quaternion_rotations(
     Rotates a `vector` around an `axis` for a series of angles.
     Rotation is performed using `Quaternion rotation <https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation>`_;
     namely, `pyquaterion.rotate <http://kieranwynn.github.io/pyquaternion/#rotation>`_.
-    
+
     If you use this function you should cite
     `PyQuaternion package <http://kieranwynn.github.io/pyquaternion/>`_.
 
@@ -333,16 +333,106 @@ def sort_by_minimum_Qdistances(rotation_tuples, reference_vector):
         The XYZ 3D coordinates of the reference vector. The quaternion
         distance between vectors in ``rotation_tuples`` and this
         vector will be computed.
-    
+
     Returns
     -------
     list
         The list sorted according to the creterion.
     """
     ref_u = Q(vector=reference_vector).unit
-    
+
     minimum = sorted(
         rotation_tuples,
         key=lambda x: math.degrees(Q.distance(x[1], ref_u)) % 360,
         )
     return minimum
+
+
+def calc_torsion_angles(coords):
+    """
+    Calculates torsion angles from sequential coordinates.
+
+    Uses ``NumPy`` to compute angles in a vectorized fashion.
+    Sign of the torsion angle is also calculated.
+
+    Uses Prof. Azevedo implementation:
+    https://azevedolab.net/resources/dihedral_angle.pdf
+
+    Example
+    -------
+    Given the sequential coords that represent a dummy molecule of
+    four atoms:
+
+    >>> xyz = numpy.array([
+    >>>     [0.06360, -0.79573, 1.21644],
+    >>>     [-0.47370, -0.10913, 0.77737],
+    >>>     [-1.75288, -0.51877, 1.33236],
+    >>>     [-2.29018, 0.16783, 0.89329],
+    >>>     ])
+
+    A1---A2
+           \
+            \
+            A3---A4
+
+    Calculates the torsion angle in A2-A3 that would place A4 in respect
+    to the plane (A1, A2, A3).
+
+    Likewise, for a chain of N atoms A1, ..., An, calculates the torsion
+    angles in (A2, A3) to (An-2, An-1). (A1, A2) and (An-1, An) do not
+    have torsion angles.
+
+    If coords represent a protein backbone consisting of N, CA, and C
+    atoms and starting at the N-terminal, the torsion angles are given
+    by the following slices to the resulting array:
+
+    - phi (N-CA), [2::3]
+    - psi (CA-N), [::3]
+    - omega (N-C), [1::3]
+
+    Parameters
+    ----------
+    coords : numpy.ndarray of shape (N>=4, 3)
+        Where `N` is the number of atoms, must be equal or above 4.
+
+    Returns
+    -------
+    numpy.ndarray of shape (N - 3,)
+        The torsion angles in radians.
+        If you want to convert those to degrees just apply
+        ``np.degrees`` to the returned result.
+    """
+    # requires
+    assert coords.shape[0] > 3
+    assert coords.shape[1] == 3
+
+    # Yes, I always write explicit array indices! :-)
+    q_vecs = coords[1:, :] - coords[:-1, :]
+    cross = np.cross(q_vecs[:-1, :], q_vecs[1:, :])
+    unitary = cross / np.linalg.norm(cross)
+
+    # components
+    # u0 comes handy to define because it fits u1
+    u0 = unitary[:-1, :]
+
+    # u1 is the unitary cross products of the second plane
+    # that is the unitary q2xq3, obviously applied to the whole chain
+    u1 = unitary[1:, :]
+
+    # u3 is the unitary of the bonds that have a torsion representation,
+    # those are all but the first and the last
+    u3 = q_vecs[1:-1] / np.linalg.norm(q_vecs[1:-1])
+
+    # u2
+    # there is no need to further select dimensions for u2, those have
+    # been already sliced in u1 and u3.
+    u2 = np.cross(u3, u1)
+
+    # calculating cos and sin of the torsion angle
+    # here we need to use the .T and np.diagonal trick to achieve
+    # broadcasting along the whole coords chain
+    cos_theta = np.diagonal(np.dot(u0, u1.T))
+    sin_theta = np.diagonal(np.dot(u0, u2.T))
+
+    # torsion angles
+    return -np.arctan2(sin_theta, cos_theta)

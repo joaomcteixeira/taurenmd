@@ -69,6 +69,7 @@ In the case of an homotrimer, define the axis and the origin on the trimers:
 """  # noqa: E501
 import argparse
 import functools
+import pprint
 
 import numpy as np
 
@@ -161,7 +162,7 @@ def main(
     log.info(S('for frame: 0'))
     log.info(S('for selection: {}', origin_selection))
     log.info(S('pABC_cog: {}', pABC_cog))
-   
+
 
     log.info(T('defining the reference axes'))
     pA_cog = pA_atomG.center_of_geometry()
@@ -200,16 +201,17 @@ def main(
         p1 = pA_cog
         p2 = pABC_cog
         p3 = pABC_cog_ts
-        p4 = pA_cog_ts
+        #p4 = pA_cog_ts
+        p4 = pA_cog
         coords = np.array([p1, p2, p3, p4])
 
-        torsion = libcalc.calculate_torsion_angles(coords)
+        torsion = libcalc.calc_torsion_angles(coords)
         assert torsion.size == 1
 
 
-        roll_angles.append(torsion[0])
-    
-    print(roll_angles)
+        roll_angles.append(np.degrees(torsion[0]))
+    pprint.pprint(roll_angles)
+
 
         # recalculates CoG
         #pABC_cog_ts = pABC_atomG.center_of_geometry()
@@ -225,8 +227,8 @@ def main(
         #    )
 
         #ts_plane_cross = np.cross(pA_cog_ts, ts_plane_normal)
-        
-        
+
+
 
 
         # Calculating Quaternion Rotations
