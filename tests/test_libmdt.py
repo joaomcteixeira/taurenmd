@@ -14,6 +14,13 @@ def test_load_traj_pdb():
     assert len(traj) == 10
 
 
+def test_load_traj_pdb_2():
+    """Test loading traj."""
+    traj = libmdt.load_traj(toptest, [trajtest, trajtest])
+    assert isinstance(traj, md.Trajectory)
+    assert len(traj) == 20
+
+
 def test_load_traj_cif():
     """Test loading traj."""
     traj = libmdt.load_traj(toptest_cif, trajtest)

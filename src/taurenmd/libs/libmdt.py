@@ -14,6 +14,7 @@ libraries.
 .. _citing documentation: https://taurenmd.readthedocs.io/en/latest/citing.html
 .. _Simtk OpenMM: http://openmm.org/
 """
+import os
 import sys
 
 import mdtraj
@@ -63,12 +64,17 @@ def load_traj(topology, trajectories):
     trajectory : str or Path
         Path to the trajectory file. Accepts MDTraj compatible `files <http://mdtraj.org/1.9.3/load_functions.html#trajectory-reference>`_
 
-    Returns
-    -------
+    Returns -------
     MDTraj trajectory
         `Trajectory object <http://mdtraj.org/1.9.3/api/generated/mdtraj.Trajectory.html#mdtraj-trajectory>`_.
     """  # noqa: E501
-    libio.report_input(topology, trajectories)
+    try:
+        # just in case Paths arrive
+        trajs = [os.fspath(t) for t in trajectories]
+    except TypeError:
+        trajs = os.fspath(trajectories)
+
+    libio.report_input(topology, trajs)
 
     topp = Path(topology)
     if topp.suffix == '.cif' and SIMTK:
@@ -79,7 +85,7 @@ def load_traj(topology, trajectories):
     else:
         top = topp.str()
 
-    mdtrajectory = mdtraj.load(trajectories, top=top)
+    mdtrajectory = mdtraj.load(trajs, top=top)
 
     return mdtrajectory
 
