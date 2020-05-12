@@ -1,6 +1,5 @@
 """Test logger module."""
-
-import taurenmd.logger as tl
+from taurenmd import logger as tl
 
 
 def test_has_T():

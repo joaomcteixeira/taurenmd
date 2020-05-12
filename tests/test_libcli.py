@@ -28,7 +28,7 @@ def test_maincli():
     # since we have it, lets play it with and close the circle
     assert result == (
         '--cov-report=term-missing '
-        '--cov-append --cov-config=.coveragerc -vv tests'
+        '--cov-append --cov-config=.coveragerc -vv'
         ).split()
 
 

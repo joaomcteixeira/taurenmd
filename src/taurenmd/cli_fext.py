@@ -48,8 +48,9 @@ Can also be used as main command:
 import argparse
 import functools
 
-import taurenmd.core as tcore
-from taurenmd import _BANNER, Path, log
+from taurenmd import _BANNER, Path
+from taurenmd import core as tcore
+from taurenmd import log
 from taurenmd.libs import libcli, libio, libmda
 from taurenmd.logger import S
 

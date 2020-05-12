@@ -10,8 +10,9 @@ import sys
 from datetime import datetime
 from functools import wraps
 
-import taurenmd.core as tcore
-from taurenmd import _BANNER, references
+from taurenmd import _BANNER
+from taurenmd import core as tcore
+from taurenmd import references
 from taurenmd.logger import CMDFILE
 
 

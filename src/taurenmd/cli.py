@@ -82,17 +82,18 @@ import sys
 
 # add bellow, by alphabetical order your newly developed cli
 # import taurenmd.cli_NAME as cli_NAME
-import taurenmd.cli_distances as cli_dist
-import taurenmd.cli_fext as cli_fext
-import taurenmd.cli_imagemol as cli_imagemol
-import taurenmd.cli_nosol as cli_nosol
-import taurenmd.cli_pangle as cli_pangle
-import taurenmd.cli_report as cli_report
-import taurenmd.cli_rmsd as cli_rmsd
-import taurenmd.cli_rmsf as cli_rmsf
-import taurenmd.cli_rotations as cli_rot
-import taurenmd.cli_trajedit as cli_trajedit
-from taurenmd import _INTERFACE_DESCRIPTION, log
+from taurenmd import _INTERFACE_DESCRIPTION
+from taurenmd import cli_distances as cli_dist
+from taurenmd import cli_fext as cli_fext
+from taurenmd import cli_imagemol as cli_imagemol
+from taurenmd import cli_nosol as cli_nosol
+from taurenmd import cli_pangle as cli_pangle
+from taurenmd import cli_report as cli_report
+from taurenmd import cli_rmsd as cli_rmsd
+from taurenmd import cli_rmsf as cli_rmsf
+from taurenmd import cli_rotations as cli_rot
+from taurenmd import cli_trajedit as cli_trajedit
+from taurenmd import log
 from taurenmd.libs import libcli
 from taurenmd.logger import CMDFILE
 

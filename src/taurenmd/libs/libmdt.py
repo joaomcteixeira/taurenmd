@@ -19,14 +19,15 @@ import sys
 
 import mdtraj
 
-import taurenmd.core as tcore
-from taurenmd import Path, log
+from taurenmd import Path
+from taurenmd import core as tcore
+from taurenmd import log
 from taurenmd.libs import libcli, libio
 from taurenmd.logger import S, T
 
 
 try:
-    import simtk.openmm.app as app
+    from simtk.openmm import app as app
     SIMTK = True
 except ImportError:
     SIMTK = False
