@@ -11,8 +11,9 @@
 import argparse
 import functools
 
-import taurenmd.core as tcore
-from taurenmd import _BANNER, log
+from taurenmd import _BANNER
+from taurenmd import core as tcore
+from taurenmd import log
 from taurenmd.libs import libcli, libmda
 from taurenmd.logger import S, T
 

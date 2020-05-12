@@ -10,8 +10,9 @@ import sys
 from datetime import datetime
 from functools import wraps
 
-import taurenmd.core as tcore
-from taurenmd import _BANNER, references
+from taurenmd import _BANNER
+from taurenmd import core as tcore
+from taurenmd import references
 from taurenmd.logger import CMDFILE
 
 
@@ -27,12 +28,12 @@ def maincli(ap, main):
 
     Operates when client is called directly outside the
     ``taurenmd`` client interface.
-    
+
     - Reads input parameters
     - saves inpu command to log file
     - runs client ``main`` function
     - saves references to log file
-    
+
     Returns
     -------
     The result value from client ``main`` function.
@@ -93,7 +94,7 @@ class ParamsToDict(argparse.Action):
 
     Example
     -------
-    
+
     Where ``-x`` is an optional argument of the command-line client
     interface.
 
@@ -129,7 +130,7 @@ class ParamsToDict(argparse.Action):
                         param_dict[k] = float(v)
                     except (ValueError, TypeError):  # is string or list
                         param_dict[k] = bool_value.get(v.lower(), v)
-            
+
         namespace.plotvars = param_dict
         setattr(namespace, self.dest, True)
 
@@ -218,7 +219,7 @@ def add_subparser(parser, module):
 def add_version_arg(parser):
     """
     Add version ``-v`` option to parser.
-    
+
     Displays a message informing the current version.
     Also accessible via ``--version``.
 
@@ -304,7 +305,7 @@ def add_topology_arg(parser):
 def add_trajectories_arg(parser):
     """
     Add trajectory positional argument to parser.
-    
+
     Accepts multiple trajectory files.
 
     Parameters
@@ -326,9 +327,9 @@ def add_trajectories_arg(parser):
 def add_trajectory_arg(parser):
     """
     Add trajectory positional argument to parser.
-    
+
     Accepts a single trajectory file.
-    
+
     Parameters
     ----------
     parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
@@ -343,7 +344,7 @@ def add_trajectory_arg(parser):
 def add_slice_arg(parser):
     """
     Add start, stop and step slicing arguments.
-    
+
     Slicing arguments are according to `Python Slice object <https://docs.python.org/3/library/functions.html#slice>`_
 
     Parameters
@@ -478,7 +479,7 @@ def add_plane_selection_arg(parser):
 
     Plane selection is a selection of three regions separated by 'or'
     operator.
-    
+
     Is defined by ``-z`` and ``--plane-selection``.
 
     Parameters

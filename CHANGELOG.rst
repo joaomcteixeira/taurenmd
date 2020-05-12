@@ -10,6 +10,16 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+0.8.14 (2020-05-12)
+-------------------
+
+* Updates `tox.ini` file for Continuous Integration (PR #40)
+
+0.8.13 (2020-05-12)
+-------------------
+
+* Added support for sequence of trajectories in CLIs that use `MDTraj` (PR #39)
+
 0.8.12 (2020-05-04)
 -------------------
 

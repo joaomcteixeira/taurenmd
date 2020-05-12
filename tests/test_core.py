@@ -1,5 +1,5 @@
 """Test core definitions."""
-import taurenmd.core as tcore
+from taurenmd import core as tcore
 
 
 def test_references():

@@ -22,7 +22,7 @@ from taurenmd import (  # noqa: E133
     cli_rmsf,
     cli_rotations,
     cli_trajedit,
-)
+    )
 from taurenmd.libs import libcli as lc
 
 from . import Path, toptest, trajtest
@@ -309,6 +309,24 @@ def test_cli_nosol_1():
     cli_nosol.main(
         toptest,
         trajtest,
+        selection='name CA',
+        maintain=None,
+        top_output='_f0.pdb',
+        traj_output='nosol.dcd',
+        )
+    p1 = Path('nosol.dcd')
+    p2 = Path('nosol_f0.pdb')
+    assert p1.exists()
+    assert p2.exists()
+    p1.unlink()
+    p2.unlink()
+
+
+def test_cli_nosol_1_multiple():
+    """Test cli nosol multiple trajs."""
+    cli_nosol.main(
+        toptest,
+        [trajtest] * 2,
         selection='name CA',
         maintain=None,
         top_output='_f0.pdb',

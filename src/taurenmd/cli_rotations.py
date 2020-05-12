@@ -73,8 +73,9 @@ import pprint
 
 import numpy as np
 
-import taurenmd.core as tcore
-from taurenmd import _BANNER, Path, log
+from taurenmd import _BANNER, Path
+from taurenmd import core as tcore
+from taurenmd import log
 from taurenmd.libs import libcalc, libcli, libio, libmda  # noqa: F401
 from taurenmd.logger import S, T
 

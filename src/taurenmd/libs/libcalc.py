@@ -28,7 +28,7 @@ from MDAnalysis.analysis.rms import RMSD as mdaRMSD
 from MDAnalysis.analysis.rms import RMSF as mdaRMSF
 from pyquaternion import Quaternion as Q
 
-import taurenmd.core as tcore
+from taurenmd import core as tcore
 from taurenmd import log
 from taurenmd.libs import libcli, libio
 from taurenmd.logger import S, T
