@@ -49,7 +49,7 @@ ap = libcli.CustomParser(
 
 libcli.add_version_arg(ap)
 libcli.add_topology_arg(ap)
-libcli.add_trajectory_arg(ap)
+libcli.add_trajectories_arg(ap)
 libcli.add_traj_output_arg(ap)
 libcli.add_top_output_arg(ap)
 
@@ -71,7 +71,7 @@ def _ap():
 
 def main(
         topology,
-        trajectory,
+        trajectories,
         selection=None,
         maintain=None,
         top_output='_frame0.pdb',
@@ -81,20 +81,20 @@ def main(
     """Execute main client logic."""
     log.info(T('Removing solvent'))
 
-    trj = libmdt.load_traj(topology, trajectory)
-    
+    trj = libmdt.load_traj(topology, trajectories)
+
     if selection:
         log.info(S('selecting {}', selection))
         atom_sel = trj.top.select(selection)
         trj.atom_slice(atom_sel, inplace=True)
 
     trj.remove_solvent(inplace=True, exclude=maintain)
-    
+
     if top_output:
         fout = libio.parse_top_output(top_output, traj_output)
         trj[0].save(fout.str())
         log.info(S('first frame topology saved: {}', fout))
-   
+
     log.info(T('saving trajectory'))
     log.info(S('destination: {}', traj_output))
     trj.save(traj_output)

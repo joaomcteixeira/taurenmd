@@ -1,5 +1,6 @@
 """Handle input and output general operations."""
 import re
+from pprint import PrettyPrinter
 
 from taurenmd import Path, log
 from taurenmd.logger import S, T  # noqa: F401
@@ -8,25 +9,25 @@ from taurenmd.logger import S, T  # noqa: F401
 def get_number(path):
     """
     Extract tail number from path.
-    
+
     Examples
     --------
 
         >>> get_number('traj_1.dcd')
         >>> 1
-        
+
         >>> get_number('traj_3.dcd')
         >>> 3
-        
+
         >>> get_number('traj_1231.dcd')
         >>> 1231
-        
+
         >>> get_number('traj_0011.dcd')
         >>> 11
-        
+
         >>> get_number('traj_1_.dcd')
         >>> 1
-        
+
         >>> get_number('traj_20200101_1.dcd')
         >>> 1
 
@@ -73,10 +74,12 @@ def sort_numbered_input(*inputs):
         log.info(S('sorting done by string type'))
         return sorted(inputs)
 
-   
-def report_input(topology, trajectory):
+
+def report_input(topology, trajectories):
     """Report on topology and trajectory file paths used as input."""
-    log.info(S('loading trajectory: {}', trajectory))
+    pp = PrettyPrinter()
+    trajs = pp.pformat(trajectories)
+    log.info(S('loading trajectory(ies): {}', trajs))
     log.info(S('with topology: {}', topology))
     return
 
@@ -84,7 +87,7 @@ def report_input(topology, trajectory):
 def add_prefix_to_path(ipath, prefix):
     """
     Add prefix to file path.
-    
+
     Example
     -------
 
@@ -119,10 +122,10 @@ def add_prefix_to_path(ipath, prefix):
 def add_suffix_to_path(ipath, suffix):
     """
     Add suffix to file path.
-    
+
     If suffix has extention, updates the path extension, otherwise
     keeps the original extension.
-    
+
     Examples
     --------
 
@@ -133,7 +136,7 @@ def add_suffix_to_path(ipath, suffix):
 
         >>> mk_frame_path('traj_output.xtc', suffix='_my_suffix')
         >>> traj_output_my_suffix.xtc
-   
+
     Updating extensions:
 
         >>> mk_frame_path('traj_output.xtc', suffix='_my_suffix.pdb')
@@ -159,7 +162,7 @@ def add_suffix_to_path(ipath, suffix):
         ipath_.myparents(),
         '{}{}'.format(ipath_.stem, suffix),
         )
-    
+
     extension = Path(suffix).suffix or ipath_.suffix
     return result.with_suffix(extension)
 
@@ -176,10 +179,10 @@ def mk_frame_path(ipath, frame=0, ext='.pdb', leading=0, suffix=None):
 
         >>> mk_frame_path('traj_output.xtc')
         >>> traj_output_frame0.pdb
-       
+
         >>> mk_frame_path('traj_output.xtc', frame=4, leading=4)
         >>> traj_output_frame0004.pdb
-   
+
     Parameters
     ----------
     ipath : str or Path
@@ -196,7 +199,7 @@ def mk_frame_path(ipath, frame=0, ext='.pdb', leading=0, suffix=None):
     leading : int
         The leading zeros to left append to the frame number.
         Defaults to ``0``.
-    
+
     suffix : str
         Complete specifications of the desired suffix.
         If ``suffix`` is given, ``frame`` and ``ext`` and ``leading``
@@ -228,7 +231,7 @@ def _get_ipath(ipath):
 def parse_top_output(top_output, traj_output=None):
     """
     Parse different output definitions for topology output file name.
-   
+
     If ``top_output`` startswith ``_`` uses :py:func:add_suffix_to_path.
     If ``top_output`` endswith ``_`` uses :py:func:add_prefix_to_path.
     Else: Return Path object of ``top_output``.
@@ -318,7 +321,7 @@ def export_data_to_file(
 def frame_list(len_traj, start=None, stop=None, step=None, flist=None,):
     """
     Create frame integer list from a length and slice parameters.
-    
+
     Examples
     --------
 
@@ -342,7 +345,7 @@ def frame_list(len_traj, start=None, stop=None, step=None, flist=None,):
 
         >>> frame_list(10, flist=['1', '2', '45', '65'])
         >>> [1, 2, 45, 65]
-        
+
         >>> frame_list(None, flist=['1', '2', '45', '65'])
         >>> [1, 2, 45, 65]
 
@@ -355,7 +358,7 @@ def frame_list(len_traj, start=None, stop=None, step=None, flist=None,):
     start : int or None, optional
         The start index for the frame list after length evaluation.
         Defaults to ``None``.
-    
+
     stop : int or None, optional
         The stop index for the frame list after length evaluation.
         Defaults to ``None``.
@@ -388,7 +391,7 @@ def frame_list(len_traj, start=None, stop=None, step=None, flist=None,):
                     ) from None
     else:
         return list(range(len_traj))
-   
+
 
 def frame_slice(start=None, stop=None, step=None,):
     """
@@ -408,7 +411,7 @@ def frame_slice(start=None, stop=None, step=None,):
 def evaluate_to_slice(*, value=None, start=None, stop=None, step=None):
     """
     Evaluate to slice.
-    
+
     If any of ``start``, ``stop`` or ``step`` is given returns
     ``slice(start, stop, step)``. Otherwise tries to evaluate ``value``
     to its representative slice form.
@@ -418,7 +421,7 @@ def evaluate_to_slice(*, value=None, start=None, stop=None, step=None):
 
         >>> evaluate_to_slice(value='1,100,2')
         >>> slice(1, 100, 2)
-        
+
         >>> evaluate_to_slice(start=10)
         >>> slice(10, None, None)
 
@@ -454,7 +457,7 @@ def evaluate_to_slice(*, value=None, start=None, stop=None, step=None):
     step : None or int
         Slice periodicity.
         Defaults to ``None``.
-    
+
     Returns
     -------
     slice
@@ -470,7 +473,7 @@ def evaluate_to_slice(*, value=None, start=None, stop=None, step=None):
             return int(a)
         except (ValueError, TypeError):
             return None
-    
+
     def eval_types(list_):
         types = (int, str, type(None))
         return all(isinstance(i, types) for i in list_)
@@ -496,13 +499,13 @@ def evaluate_to_slice(*, value=None, start=None, stop=None, step=None):
             values = value.split(',')
         else:
             values = value.split()
-        
+
         indexes = [start, stop, step]
         for i, v in enumerate(values):
             indexes[i] = convert(v)
-            
+
         return slice(*indexes)
-    
+
     elif isinstance(value, int):
         return slice(value)
 

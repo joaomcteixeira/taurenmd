@@ -14,6 +14,7 @@ libraries.
 .. _citing documentation: https://taurenmd.readthedocs.io/en/latest/citing.html
 .. _Simtk OpenMM: http://openmm.org/
 """
+import os
 import sys
 
 import mdtraj
@@ -44,31 +45,36 @@ def _log_simtkimport_error():
 
 
 @libcli.add_reference(tcore.ref_mdt)
-def load_traj(topology, trajectory):
+def load_traj(topology, trajectories):
     """
     Load trajectory with `MDTraj <http://mdtraj.org/1.9.3/index.html>`_.
-    
+
     Uses `mdtraj.load <http://mdtraj.org/1.9.3/api/generated/mdtraj.load.html?highlight=load#mdtraj.load>`_.
-    
+
     Example
     -------
-        
+
         >>> libmdt.load_traj('bigtopology.cif', 'trajectory.dcd')
 
     Parameters
     ----------
-    topology : str or Path
+    topology : str or Path or list
         Path to the topology file. Accepts MDTraj compatible `topology files <http://mdtraj.org/1.9.3/load_functions.html#trajectory-reference>`_. mmCIF format is loaded using `OpenMM <http://mdtraj.org/1.9.3/api/generated/mdtraj.Topology.html?highlight=from_openmm#mdtraj.Topology.from_openmm>`_.
 
     trajectory : str or Path
         Path to the trajectory file. Accepts MDTraj compatible `files <http://mdtraj.org/1.9.3/load_functions.html#trajectory-reference>`_
 
-    Returns
-    -------
+    Returns -------
     MDTraj trajectory
         `Trajectory object <http://mdtraj.org/1.9.3/api/generated/mdtraj.Trajectory.html#mdtraj-trajectory>`_.
     """  # noqa: E501
-    libio.report_input(topology, trajectory)
+    try:
+        # just in case Paths arrive
+        trajs = [os.fspath(t) for t in trajectories]
+    except TypeError:
+        trajs = os.fspath(trajectories)
+
+    libio.report_input(topology, trajs)
 
     topp = Path(topology)
     if topp.suffix == '.cif' and SIMTK:
@@ -79,7 +85,7 @@ def load_traj(topology, trajectory):
     else:
         top = topp.str()
 
-    mdtrajectory = mdtraj.load(Path(trajectory).str(), top=top)
+    mdtrajectory = mdtraj.load(trajs, top=top)
 
     return mdtrajectory
 
@@ -92,7 +98,7 @@ def imagemol_protocol1(traj):
 
     mols = traj.top.find_molecules()
     log.info(S('done'))
-    
+
     log.info(T('reimaging'))
     reimaged = traj.image_molecules(
         inplace=False,
@@ -109,9 +115,9 @@ def imagemol_protocol2(traj):
     reimaged = []
     for frame in range(len(traj)):
         log.info(S('reimaging frame: {}', frame))
-        
+
         mols = traj[frame].top.find_molecules()
-    
+
         reimaged.append(
             traj[frame].image_molecules(
                 inplace=False,
