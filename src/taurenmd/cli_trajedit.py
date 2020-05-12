@@ -54,8 +54,9 @@ import functools
 
 import MDAnalysis as mda
 
-import taurenmd.core as tcore
-from taurenmd import _BANNER, Path, _controlled_exit, log
+from taurenmd import _BANNER, Path, _controlled_exit
+from taurenmd import core as tcore
+from taurenmd import log
 from taurenmd.libs import libcli, libio, libmda
 from taurenmd.logger import S, T
 

@@ -14,8 +14,9 @@ taurenmd and MDAnalysis.
 import MDAnalysis as mda
 from MDAnalysis.analysis import align as mdaalign
 
-import taurenmd.core as tcore
-from taurenmd import Path, log
+from taurenmd import Path
+from taurenmd import core as tcore
+from taurenmd import log
 from taurenmd.libs import libcli, libio
 from taurenmd.logger import S, T
 

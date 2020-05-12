@@ -35,8 +35,9 @@ import argparse
 import functools
 from datetime import datetime
 
-import taurenmd.core as tcore
-from taurenmd import _BANNER, Path, log
+from taurenmd import _BANNER, Path
+from taurenmd import core as tcore
+from taurenmd import log
 from taurenmd.libs import libcalc, libcli, libio, libmda, libplot
 from taurenmd.logger import S, T
 
