@@ -436,3 +436,37 @@ def calc_torsion_angles(coords):
 
     # torsion angles
     return -np.arctan2(sin_theta, cos_theta)
+
+
+def torsion_set(p1, p2, p3, p4_vecs):
+    """
+    """
+    assert p4_vecs.shape[1] == 3
+    q1 = p2 - p1
+    q2 = p3 - p2
+    q3s = p4_vecs - p3
+    assert q3s.shape == p4_vecs.shape
+
+    q1x2 = np.cross(q1, q2)
+    assert q1x2.shape == (3,)
+    q2x3s = np.cross(q2, q3s)
+    assert q2x3s.shape == q3s.shape
+
+    n1 = q1x2 / np.linalg.norm(q1x2)
+    assert n1.shape == (3,)
+    n2 = q2x3s / np.linalg.norm(q2x3s)
+    assert n2.shape == p4_vecs.shape, f'{n2.shape}, {p4_vecs.shape}'
+
+    u1 = n2
+    u3 = q2 / np.linalg.norm(q2)
+    u2 = np.cross(u3, u1)
+    assert u2.shape == p4_vecs.shape
+
+    cos_theta = np.dot(n1, u1.T)
+    sen_theta = np.dot(n1, u2.T)
+
+    theta = -np.arctan2(sen_theta, cos_theta)
+    print(theta)
+    print(theta.size, p4_vecs.shape)
+    assert theta.size == p4_vecs.shape[0]
+    return theta
