@@ -22,7 +22,7 @@ from taurenmd import (  # noqa: E133
     cli_rmsf,
     cli_rotations,
     cli_trajedit,
-)
+    )
 from taurenmd.libs import libcli as lc
 
 from . import Path, toptest, trajtest
