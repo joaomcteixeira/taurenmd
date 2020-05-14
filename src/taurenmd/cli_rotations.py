@@ -128,7 +128,7 @@ def main(
     log.info(T('starting'))
 
     topology = Path(topology)
-    trajectories = [Path(t) for t in trajectories]
+    trajectories = map(Path, trajectories)
 
     u = libmda.load_universe(topology, *trajectories)
 
@@ -137,8 +137,10 @@ def main(
 
     origin_selection = ' or '.join(plane_selection)
     pABC_atomG = u.select_atoms(origin_selection)
-    ABC_selections = plane_selection
+    ABC_selections = plane_selection  # variable renaming
+
     # p stands for point
+    # atomG stands for MDAnalysis AtomGroup
     pA_atomG = u.select_atoms(ABC_selections[0])
     pB_atomG = u.select_atoms(ABC_selections[1])
     pC_atomG = u.select_atoms(ABC_selections[2])
@@ -149,8 +151,8 @@ def main(
     opABC_cog = pABC_atomG.center_of_geometry()
     log.info(T('Original Center of Geometry'))
     log.info(S('for frame: 0'))
-    log.info(S('for selection: {}', origin_selection))
-    log.info(S('pABC_cog: {}', opABC_cog))
+    log.info(S('for selection: {!r}', origin_selection))
+    log.info(S('pABC center of geometry: {}', opABC_cog))
 
     log.info(T('Transfering'))
     log.info(S('all coordinates of reference frame to the origin 0, 0, 0'))
@@ -158,13 +160,10 @@ def main(
 
     # defining the new center of reference
     pABC_cog = pABC_atomG.center_of_geometry().copy()
-    log.info(S('COG in origin: {}', pABC_cog))
-
     log.info(T('Origin Center of Geometry'))
     log.info(S('for frame: 0'))
     log.info(S('for selection: {}', origin_selection))
     log.info(S('pABC_cog: {}', pABC_cog))
-
 
     log.info(T('defining the reference axes'))
     pA_cog = pA_atomG.center_of_geometry().copy()
@@ -173,20 +172,16 @@ def main(
     log.info(S('plane points definition:'))
     log.info(S('pA: {}', pA_cog))
     log.info(S('pB: {}', pB_cog))
-    #log.info(S('pC: {}', pC_cog))
+    log.info(S('pC: {}', pC_cog))
 
     log.info(T('defining the normal vector to reference plane'))
-    ref_plane_normal = libcalc.calc_plane_normal(pA_cog, pB_cog, pABC_cog)
+    ref_plane_normal = libcalc.calc_plane_normal(pABC_cog, pA_cog, pB_cog)
     log.info(S('plane normal: {}', ref_plane_normal))
     log.info(S('done'))
 
     log.info(T('defining the cross product vector'))
     ref_plane_cross = np.cross(pA_cog, ref_plane_normal)
     log.info(S('np cross: {}', ref_plane_cross))
-
-    #roll_angles = []
-    #pitch_angles = []
-    #yaw_angles = []
 
     total_frames = len(u.trajectory[fSlice])
     sizet = (total_frames, 3)
@@ -211,9 +206,9 @@ def main(
         # get pitch
         pABC_atomG.positions = ts_positions + ref_plane_cross
         pitch_vectors[i, :] = libcalc.calc_plane_normal(
+            ref_plane_cross,
             pA_atomG.center_of_geometry(),
             pB_atomG.center_of_geometry(),
-            ref_plane_cross,
             )
         pABC_atomG.positions = ts_positions
 
@@ -221,9 +216,9 @@ def main(
         pABC_atomG.positions = ts_positions + pA_cog
         pA_cog_yaw_ts = pA_atomG.center_of_geometry().copy()
         normalv = libcalc.calc_plane_normal(
+            pA_cog,
             pA_cog_yaw_ts,
             pB_atomG.center_of_geometry(),
-            pA_cog,
             )
         yaw_vectors[i, :] = np.cross(pA_cog_yaw_ts, normalv)
         pABC_atomG.positions = ts_positions
@@ -233,8 +228,7 @@ def main(
         pA_cog,
         pABC_cog,
         ref_plane_normal,
-        np.array([list(pC_cog)]),
-        #roll_vectors,
+        roll_vectors,
         ))
 
     pitch_torsion = np.degrees(libcalc.torsion_set(

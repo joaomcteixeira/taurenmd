@@ -181,8 +181,8 @@ def calc_plane_normal(p1, p2, p3):
         The normal vector to the (p1, p2, p3) plane. This vector
         is **NOT** an unitary vector.
     """
-    v1 = p3 - p1
-    v2 = p2 - p1
+    v1 = p2 - p1
+    v2 = p3 - p1
     return np.cross(v1, v2)  # normal to the plane
 
 
@@ -466,7 +466,5 @@ def torsion_set(p1, p2, p3, p4_vecs):
     sen_theta = np.dot(n1, u2.T)
 
     theta = -np.arctan2(sen_theta, cos_theta)
-    print(theta)
-    print(theta.size, p4_vecs.shape)
     assert theta.size == p4_vecs.shape[0]
     return theta
