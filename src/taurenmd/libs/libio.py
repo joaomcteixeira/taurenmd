@@ -303,6 +303,8 @@ def export_data_to_file(
     delimiter : str
         The string delimiter between columns. Defaults to ``,``.
     """
+    log.info(T('Saving data'))
+    log.info(S('to: {}', fname))
     with open(fname, 'w') as fh:
         fh.write(header)
         for label, ydataseries in zip(
@@ -315,6 +317,7 @@ def export_data_to_file(
                 delimiter,
                 delimiter.join(fmt.format(float(i)) for i in ydataseries),
                 ))
+    log.info(S('done'))
     return
 
 

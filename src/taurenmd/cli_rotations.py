@@ -69,14 +69,13 @@ In the case of an homotrimer, define the axis and the origin on the trimers:
 """  # noqa: E501
 import argparse
 import functools
-import pprint
 
 import numpy as np
 
 from taurenmd import _BANNER, Path
 from taurenmd import core as tcore
 from taurenmd import log
-from taurenmd.libs import libcalc, libcli, libio, libmda  # noqa: F401
+from taurenmd.libs import libcalc, libcli, libio, libmda, libplot  # noqa: F401
 from taurenmd.logger import S, T
 
 
@@ -105,8 +104,10 @@ libcli.add_topology_arg(ap)
 libcli.add_trajectories_arg(ap)
 libcli.add_plane_selection_arg(ap)
 libcli.add_angle_unit_arg(ap)
+libcli.add_reference_frame_arg(ap)
 libcli.add_slice_arg(ap)
 libcli.add_data_export_arg(ap)
+libcli.add_plot_arg(ap)
 
 
 def _ap():
@@ -118,10 +119,13 @@ def main(
         trajectories,
         plane_selection,
         aunit='degrees',
+        ref_frame=0,
         start=None,
         stop=None,
         step=None,
         export=False,
+        plot=False,
+        plotvars=None,
         **kwargs,
         ):
     """Execute main client logic."""
@@ -129,40 +133,38 @@ def main(
 
     topology = Path(topology)
     trajectories = map(Path, trajectories)
-
     u = libmda.load_universe(topology, *trajectories)
 
-    log.info(T('transformation'))
+    log.info(T('slicing'))
     fSlice = libio.frame_slice(start=start, stop=stop, step=step)
 
-    origin_selection = ' or '.join(plane_selection)
-    pABC_atomG = u.select_atoms(origin_selection)
+    log.info(T('computing planes'))
+    log.info(S('for reference frame: {}', ref_frame))
+
     ABC_selections = plane_selection  # variable renaming
+    origin_selection = ' or '.join(ABC_selections)
+    log.info(S('for selection: {!r}', origin_selection))
 
     # p stands for point
     # atomG stands for MDAnalysis AtomGroup
+    pABC_atomG = u.select_atoms(origin_selection)
     pA_atomG = u.select_atoms(ABC_selections[0])
     pB_atomG = u.select_atoms(ABC_selections[1])
     pC_atomG = u.select_atoms(ABC_selections[2])
 
-    u.trajectory[0]
+    u.trajectory[ref_frame]
 
     # defining the center of reference
     opABC_cog = pABC_atomG.center_of_geometry()
-    log.info(T('Original Center of Geometry'))
-    log.info(S('for frame: 0'))
-    log.info(S('for selection: {!r}', origin_selection))
-    log.info(S('pABC center of geometry: {}', opABC_cog))
+    log.info(S('Original pABC center of geometry: {}', opABC_cog))
 
-    log.info(T('Transfering'))
-    log.info(S('all coordinates of reference frame to the origin 0, 0, 0'))
+    log.info(S(
+        'transferring all coordinates of '
+        'reference frame to the origin (0, 0, 0)'
+        ))
     pABC_atomG.positions = pABC_atomG.positions - opABC_cog
-
-    # defining the new center of reference
     pABC_cog = pABC_atomG.center_of_geometry().copy()
-    log.info(T('Origin Center of Geometry'))
-    log.info(S('for frame: 0'))
-    log.info(S('for selection: {}', origin_selection))
+    log.info(S('New origin Center of Geometry'))
     log.info(S('pABC_cog: {}', pABC_cog))
 
     log.info(T('defining the reference axes'))
@@ -174,27 +176,24 @@ def main(
     log.info(S('pB: {}', pB_cog))
     log.info(S('pC: {}', pC_cog))
 
-    log.info(T('defining the normal vector to reference plane'))
     ref_plane_normal = libcalc.calc_plane_normal(pABC_cog, pA_cog, pB_cog)
-    log.info(S('plane normal: {}', ref_plane_normal))
-    log.info(S('done'))
+    log.info(S('Normal vector to the reference plane: {}', ref_plane_normal))
 
-    log.info(T('defining the cross product vector'))
     ref_plane_cross = np.cross(pA_cog, ref_plane_normal)
-    log.info(S('np cross: {}', ref_plane_cross))
+    log.info(S('Cross vector to pA and Normal vector: {}', ref_plane_cross))
 
+    log.info(T('Calculating tilt angles'))
     total_frames = len(u.trajectory[fSlice])
+    log.info(S('for {} frames', total_frames))
     sizet = (total_frames, 3)
     roll_vectors = np.empty(sizet, dtype=np.float64)
     pitch_vectors = np.empty(sizet, dtype=np.float64)
     yaw_vectors = np.empty(sizet, dtype=np.float64)
 
     for i, _ts in enumerate(u.trajectory[fSlice]):
-        print(f'.. working for frame :{i}')
 
         pABC_cog_ts = pABC_atomG.center_of_geometry().copy()
         pABC_atomG.positions = pABC_atomG.positions - pABC_cog_ts
-        #pABC_cog_ts = pABC_atomG.center_of_geometry().copy()
 
         ts_positions = pABC_atomG.positions.copy()
 
@@ -223,63 +222,61 @@ def main(
         yaw_vectors[i, :] = np.cross(pA_cog_yaw_ts, normalv)
         pABC_atomG.positions = ts_positions
 
+    log.info(S('done'))
 
-    roll_torsion = np.degrees(libcalc.torsion_set(
+
+    roll_torsion = libcalc.torsion_set(
         pA_cog,
         pABC_cog,
         ref_plane_normal,
         roll_vectors,
-        ))
+        )
 
-    pitch_torsion = np.degrees(libcalc.torsion_set(
+    pitch_torsion = libcalc.torsion_set(
         ref_plane_normal,
         pABC_cog,
         ref_plane_cross,
         pitch_vectors,
-        ))
+        )
 
-    yaw_torsion = np.degrees(libcalc.torsion_set(
+    yaw_torsion = libcalc.torsion_set(
         ref_plane_cross,
         pABC_cog,
         pA_cog,
         yaw_vectors,
-        ))
+        )
 
+    if aunit == 'degrees':
+        roll_torsion, pitch_torsion, yaw_torsion = \
+            [np.degrees(a) for a in [roll_torsion, pitch_torsion, yaw_torsion]]
 
     if export:
-        file_names = []
-        for _fname in ['roll', 'pitch', 'yaw']:
-            file_names.append(
-                libio.add_prefix_to_path(
-                    export,
-                    f"{_fname}_angles_",
-                    )
-                )
+        libio.export_data_to_file(
+            list(range(len(u.trajectory))[fSlice]),
+            roll_torsion, pitch_torsion, yaw_torsion,
+            fname=export,
+            header=(
+                '# Topology: {}\n'
+                '# Trajectories: {}\n'
+                '# Plane Selection: {}\n'
+                '# frame,roll,pitch,yaw [in {}]\n'
+                ).format(
+                    topology,
+                    ', '.join(t.resolve().str() for t in trajectories),
+                    origin_selection,
+                    aunit,
+                    ),
+            )
 
-        log.info(T('Saving data to files'))
-        for data, fname in zip(
-                [roll_torsion, pitch_torsion, yaw_torsion],
-                file_names,
-                ):
+    if plot:
+        plotvars = plotvars or dict()
+        plotvars.setdefault('labels', ['roll', 'pitch', 'yaw'])
 
-            log.info(S('saving {}', fname))
-            libio.export_data_to_file(
-                list(range(len(u.trajectory))[fSlice]),
-                data,
-                fname=fname,
-                header=(
-                    '# Topology: {}\n'
-                    '# Trajectories: {}\n'
-                    '# Plane Selection: {}\n'
-                    '# frame,ange{}\n'
-                    ).format(
-                        topology,
-                        ', '.join(t.resolve().str() for t in trajectories),
-                        origin_selection,
-                        aunit,
-                        ),
-                )
-        log.info(S('done'))
+        libplot.param(
+            list(range(len(u.trajectory))[fSlice]),
+            [roll_torsion, pitch_torsion, yaw_torsion],
+            **plotvars,
+            )
 
     return
 
