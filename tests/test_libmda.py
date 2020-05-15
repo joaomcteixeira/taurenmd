@@ -31,7 +31,20 @@ def test_load_universe_2():
     assert isinstance(universe, mda.Universe)
     assert len(universe.trajectory) == 30
 
-   
+
+def test_load_universe_3():
+    """Test load MDA Universe multiple trajs."""
+    universe = la.load_universe(
+        toptest,
+        trajtest,
+        trajtest,
+        trajtest,
+        insort=True,
+        )
+    assert isinstance(universe, mda.Universe)
+    assert len(universe.trajectory) == 30
+
+
 def test_report_universe():
     """
     Test universe report.
@@ -50,7 +63,7 @@ def test_mdaalignto():
     universe = mda.Universe(toptest.str(), trajtest.str())
     reference = mda.Universe(toptest.str())
     ugroup = universe.select_atoms('all')
-     
+
     for _ts in universe.trajectory[1:]:
         prev = copy.copy(ugroup.positions)
         assert np.all(np.equal(prev, ugroup.positions))
@@ -72,7 +85,7 @@ def test_draw_atom_label():
         toptest.str(),
         trajtest.str(),
         )
-    
+
     atom_group = universe.select_atoms('resnum 10-12 and name CA')
 
     labels = la.draw_atom_label_from_atom_group(atom_group)

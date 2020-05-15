@@ -46,6 +46,9 @@ class Path(type(_Path())):
 ref_taurenmd = "* Cite taurenmd according to: https://taurenmd.readthedocs.io/en/latest/citing.html\n"  # noqa: E501
 """How to cite taurenmd project."""
 
+ref_openmm = "* Data loaded with [OpenMM](http://openmm.org/)"  # noqa: E501
+"""Command-line docstring to reference OpenMM package."""
+
 ref_mdt = "* MD data is accessed and/or processed using [MDTraj](https://mdtraj.org/)\n."  # noqa: E501
 """Command-line docstring to reference MDTraj package."""
 
