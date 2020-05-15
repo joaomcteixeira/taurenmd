@@ -102,6 +102,7 @@ ap = libcli.CustomParser(
 libcli.add_version_arg(ap)
 libcli.add_topology_arg(ap)
 libcli.add_trajectories_arg(ap)
+libcli.add_insort_arg(ap)
 libcli.add_plane_selection_arg(ap)
 libcli.add_angle_unit_arg(ap)
 libcli.add_slice_arg(ap)
@@ -116,6 +117,7 @@ def main(
         topology,
         trajectories,
         plane_selection,
+        insort=False,
         aunit='degrees',
         start=None,
         stop=None,
@@ -125,15 +127,15 @@ def main(
         ):
     """Execute main client logic."""
     log.info(T('starting'))
-    
+
     topology = Path(topology)
     trajectories = [Path(t) for t in trajectories]
 
-    u = libmda.load_universe(topology, *trajectories)
+    u = libmda.load_universe(topology, *trajectories, insort=False)
 
     log.info(T('transformation'))
     fSlice = libio.frame_slice(start=start, stop=stop, step=step)
-    
+
     origin_selection = ' or '.join(plane_selection)
     pABC_atomG = u.select_atoms(origin_selection)
     ABC_selections = plane_selection
@@ -143,14 +145,14 @@ def main(
     pC_atomG = u.select_atoms(ABC_selections[2])
 
     u.trajectory[0]
-    
+
     # defining the center of reference
     pABC_cog = pABC_atomG.center_of_geometry()
     log.info(T('Original Center of Geometry'))
     log.info(S('for frame: 0'))
     log.info(S('for selection: {}', origin_selection))
     log.info(S('pABC_cog: {}', pABC_cog))
-    
+
     log.info(T('Transfering'))
     log.info(S('all coordinates of reference frame to the origin 0, 0, 0'))
     pABC_atomG.positions = pABC_atomG.positions - pABC_cog
@@ -173,7 +175,7 @@ def main(
     log.info(T('defining the cross product vector'))
     ref_plane_cross = np.cross(pA_cog, ref_plane_normal)
     log.info(S('np cross: {}', ref_plane_cross))
-    
+
     roll_angles = []
     pitch_angles = []
     yaw_angles = []
@@ -226,7 +228,7 @@ def main(
             yaw_Qs_tuples,
             ref_plane_cross,
             )[0][0]
-        
+
         if aunit == 'degrees':
             roll_angles.append(round(roll_minimum.degrees, 3))
             pitch_angles.append(round(pitch_minimum.degrees, 3))
@@ -235,7 +237,7 @@ def main(
             roll_angles.append(round(roll_minimum.radians, 3))
             pitch_angles.append(round(pitch_minimum.radians, 3))
             yaw_angles.append(round(yaw_minimum.radians, 3))
-    
+
     if export:
         file_names = []
         for _fname in ['roll', 'pitch', 'yaw']:

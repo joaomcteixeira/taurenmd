@@ -66,6 +66,7 @@ ap = libcli.CustomParser(
 libcli.add_version_arg(ap)
 libcli.add_topology_arg(ap)
 libcli.add_trajectories_arg(ap)
+libcli.add_insort_arg(ap)
 libcli.add_plane_selection_arg(ap)
 libcli.add_angle_unit_arg(ap)
 libcli.add_reference_frame_arg(ap)
@@ -82,6 +83,7 @@ def main(
         topology,
         trajectories,
         plane_selection,
+        insort=False,
         aunit='degrees',
         ref_frame=0,
         start=None,
@@ -98,7 +100,7 @@ def main(
     topology = Path(topology)
     trajectories = [Path(t) for t in trajectories]
 
-    u = libmda.load_universe(topology, *trajectories)
+    u = libmda.load_universe(topology, *trajectories, insort=False)
 
     frame_slice = libio.frame_slice(
         start=start,

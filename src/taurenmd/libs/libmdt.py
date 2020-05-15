@@ -46,7 +46,7 @@ def _log_simtkimport_error():
 
 
 @libcli.add_reference(tcore.ref_mdt)
-def load_traj(topology, trajectories):
+def load_traj(topology, trajectories, insort=False):
     """
     Load trajectory with `MDTraj <http://mdtraj.org/1.9.3/index.html>`_.
 
@@ -69,6 +69,9 @@ def load_traj(topology, trajectories):
     MDTraj trajectory
         `Trajectory object <http://mdtraj.org/1.9.3/api/generated/mdtraj.Trajectory.html#mdtraj-trajectory>`_.
     """  # noqa: E501
+    if insort:
+        trajectories = libio.sort_numbered_input(*trajectories)
+
     try:
         # just in case Paths arrive
         trajs = [os.fspath(t) for t in trajectories]
