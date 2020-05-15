@@ -51,6 +51,7 @@ ap = libcli.CustomParser(
 libcli.add_version_arg(ap)
 libcli.add_topology_arg(ap)
 libcli.add_trajectories_arg(ap)
+libcli.add_insort_arg(ap)
 libcli.add_traj_output_arg(ap)
 libcli.add_top_output_arg(ap)
 
@@ -73,6 +74,7 @@ def _ap():
 def main(
         topology,
         trajectories,
+        insort=False,
         selection=None,
         maintain=None,
         top_output='_frame0.pdb',
@@ -82,7 +84,7 @@ def main(
     """Execute main client logic."""
     log.info(T('Removing solvent'))
 
-    trj = libmdt.load_traj(topology, trajectories)
+    trj = libmdt.load_traj(topology, trajectories, insort=insort)
 
     if selection:
         log.info(S('selecting {}', selection))

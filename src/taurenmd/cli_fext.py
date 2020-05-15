@@ -77,6 +77,7 @@ ap = libcli.CustomParser(
 libcli.add_version_arg(ap)
 libcli.add_topology_arg(ap)
 libcli.add_trajectories_arg(ap)
+libcli.add_insort_arg(ap)
 libcli.add_atom_selection_arg(ap)
 libcli.add_frame_list_arg(ap)
 libcli.add_slice_arg(ap)
@@ -103,6 +104,7 @@ def _ap():
 def main(
         topology,
         trajectories,
+        insort=False,
         start=None,
         stop=None,
         step=None,
@@ -114,7 +116,7 @@ def main(
     """Execute main client logic."""
     log.info('Starting...')
     
-    u = libmda.load_universe(topology, *trajectories)
+    u = libmda.load_universe(topology, *trajectories, insort=insort)
     
     frames_to_extract = libio.frame_list(
         len(u.trajectory),

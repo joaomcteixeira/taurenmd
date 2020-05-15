@@ -165,9 +165,6 @@ def main(
     topology = Path(topology)
     trajectories = [Path(t) for t in trajectories]
 
-    if insort:
-        trajectories = libio.sort_numbered_input(*trajectories)
-
     u = libmda.load_universe(topology, *trajectories)
     
     if unwrap:

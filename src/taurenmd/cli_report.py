@@ -37,16 +37,17 @@ ap = libcli.CustomParser(
 libcli.add_version_arg(ap)
 libcli.add_topology_arg(ap)
 libcli.add_trajectories_arg(ap)
+libcli.add_insort_arg(ap)
 
 
 def _ap():
     return ap
 
 
-def main(topology, trajectories, **kwargs):
+def main(topology, trajectories, insort=False, **kwargs):
     """Execute main client logic."""
     log.info(T('reporting'))
-    libmda.load_universe(topology, *trajectories)
+    libmda.load_universe(topology, *trajectories, insort=insort)
     log.info(S('done'))
     return
 
