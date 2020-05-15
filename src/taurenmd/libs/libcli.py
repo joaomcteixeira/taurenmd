@@ -71,7 +71,7 @@ def save_references():
     with open(CMDFILE, 'a') as fh:
         fh.write('References:\n')
         fh.write(tcore.ref_taurenmd)
-        fh.write('\n'.join(references))
+        fh.write('\n'.join(sorted(list(references))))
         fh.write('\n\n')
 
 
