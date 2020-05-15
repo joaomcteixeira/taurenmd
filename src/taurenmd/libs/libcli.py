@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 from functools import wraps
 
-from taurenmd import _BANNER
+from taurenmd import _BANNER, __version__
 from taurenmd import core as tcore
 from taurenmd import references
 from taurenmd.logger import CMDFILE
@@ -68,11 +68,11 @@ def add_reference(ref):
 
 def save_references():
     """Save used references to log file."""
-    out = [f'{i}: {ref}' for i, ref in enumerate(sorted(references), start=2)]
     with open(CMDFILE, 'a') as fh:
         fh.write('References:\n')
-        fh.write(f'1: {tcore.ref_taurenmd}')
-        fh.write(''.join(out))
+        fh.write(tcore.ref_taurenmd)
+        fh.write('\n'.join(sorted(list(references))))
+        fh.write('\n\n')
 
 
 # https://stackoverflow.com/questions/4042452
@@ -149,8 +149,9 @@ def save_command(fname, *args):
     """
     with open(fname, 'a') as fh:
         fh.write(
-            '[{}] {}\n'.format(
-                datetime.now().strftime("%d/%m/%Y, %H:%M:%S"),
+            '[{}][taurenmd {}] {}\n'.format(
+                datetime.now().strftime("%d/%B/%Y, %H:%M:%S"),
+                __version__,
                 ' '.join(represent_argument(a) for a in args),
                 )
             )
