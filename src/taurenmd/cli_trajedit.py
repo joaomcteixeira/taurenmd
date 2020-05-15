@@ -36,7 +36,7 @@ align the whole system to one of its subunits:
     taurenmd trajedit top.pdb traj.dcd -d alignedA.dcd -a "segid A and name CA"
 
 further restrain the output to a specific subselection with ``-l``:
-    
+
     [...] -l "segid A or segid B"
 
 ``trajedit`` also implements the ``unwrap`` method from which is an
@@ -161,12 +161,12 @@ def main(
         ):
     """Execute main client logic."""
     log.info(T('editing trajectory'))
-    
+
     topology = Path(topology)
     trajectories = [Path(t) for t in trajectories]
 
     u = libmda.load_universe(topology, *trajectories)
-    
+
     if unwrap:
         log.info(T('unwrapping'))
         log.info(S('set to: {}', unwrap))
@@ -178,7 +178,7 @@ def main(
         log.info(S('trajectory selection will be aligned to subselection:'))
         log.info(S('- {}', align, indent=2))
         align_reference = mda.Universe(Path(topology).str())
-    
+
     log.info(T('transformation'))
     sliceObj = libio.frame_slice(start, stop, step)
 
@@ -189,15 +189,17 @@ def main(
     log.info(T('saving trajectory'))
     traj_output = Path(traj_output)
     log.info(S('destination: {}', traj_output.resolve().str()))
+    total_frames = len(u.trajectory[sliceObj])
 
     with mda.Writer(traj_output.str(), atom_selection.n_atoms) as W:
         for i, _ts in zip(
                 range(len(u.trajectory))[sliceObj],
                 u.trajectory[sliceObj],
                 ):
-            
-            log.info(S('working on frame: {}', i))
-            
+
+            #log.info(S('working on frame: {}', i))
+            libcli.print_progress(i, total_frames)
+
             if unwrap:
                 log.debug(S('unwrapping', indent=2))
                 atom_selection.unwrap(
@@ -212,7 +214,7 @@ def main(
                     _controlled_exit()
 
             W.write(atom_selection)
-    
+
     log.info(S('trajectory saved'))
 
     if top_output:
@@ -228,7 +230,7 @@ def main(
                         compound=unwrap_compound,
                         )
                 W.write(atom_selection)
-    
+
     log.info(S('Done'))
     return
 
