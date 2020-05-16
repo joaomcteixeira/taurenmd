@@ -49,7 +49,7 @@ ref_taurenmd = "* Cite taurenmd according to: https://taurenmd.readthedocs.io/en
 ref_openmm = "* Data loaded with [OpenMM](http://openmm.org/)"  # noqa: E501
 """Command-line docstring to reference OpenMM package."""
 
-ref_mdt = "* MD data accessed and/or processed using [MDTraj](https://mdtraj.org/)\n."  # noqa: E501
+ref_mdt = "* MD data accessed and/or processed using [MDTraj](https://mdtraj.org/)\n"  # noqa: E501
 """Command-line docstring to reference MDTraj package."""
 
 ref_mda = "* MD data accessed using [MDAnalysis](https://www.mdanalysis.org).\n"  # noqa: E501
