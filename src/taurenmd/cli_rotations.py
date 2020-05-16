@@ -193,37 +193,40 @@ def main(
     pitch_vectors = np.empty(sizet, dtype=np.float64)
     yaw_vectors = np.empty(sizet, dtype=np.float64)
 
-    for i, _ts in enumerate(u.trajectory[fSlice]):
+    with libcli.ProgressBar(total_frames, suffix='frames') as PB:
+        for i, _ts in enumerate(u.trajectory[fSlice]):
 
-        pABC_cog_ts = pABC_atomG.center_of_geometry().copy()
-        pABC_atomG.positions = pABC_atomG.positions - pABC_cog_ts
+            pABC_cog_ts = pABC_atomG.center_of_geometry().copy()
+            pABC_atomG.positions = pABC_atomG.positions - pABC_cog_ts
 
-        ts_positions = pABC_atomG.positions.copy()
+            ts_positions = pABC_atomG.positions.copy()
 
-        # get roll
-        pABC_atomG.positions = ts_positions + ref_plane_normal
-        roll_vectors[i, :] = pA_atomG.center_of_geometry().copy()
-        pABC_atomG.positions = ts_positions
+            # get roll
+            pABC_atomG.positions = ts_positions + ref_plane_normal
+            roll_vectors[i, :] = pA_atomG.center_of_geometry().copy()
+            pABC_atomG.positions = ts_positions
 
-        # get pitch
-        pABC_atomG.positions = ts_positions + ref_plane_cross
-        pitch_vectors[i, :] = libcalc.calc_plane_normal(
-            ref_plane_cross,
-            pA_atomG.center_of_geometry(),
-            pB_atomG.center_of_geometry(),
-            )
-        pABC_atomG.positions = ts_positions
+            # get pitch
+            pABC_atomG.positions = ts_positions + ref_plane_cross
+            pitch_vectors[i, :] = libcalc.calc_plane_normal(
+                ref_plane_cross,
+                pA_atomG.center_of_geometry(),
+                pB_atomG.center_of_geometry(),
+                )
+            pABC_atomG.positions = ts_positions
 
-        # get yaw
-        pABC_atomG.positions = ts_positions + pA_cog
-        pA_cog_yaw_ts = pA_atomG.center_of_geometry().copy()
-        normalv = libcalc.calc_plane_normal(
-            pA_cog,
-            pA_cog_yaw_ts,
-            pB_atomG.center_of_geometry(),
-            )
-        yaw_vectors[i, :] = np.cross(pA_cog_yaw_ts, normalv)
-        pABC_atomG.positions = ts_positions
+            # get yaw
+            pABC_atomG.positions = ts_positions + pA_cog
+            pA_cog_yaw_ts = pA_atomG.center_of_geometry().copy()
+            normalv = libcalc.calc_plane_normal(
+                pA_cog,
+                pA_cog_yaw_ts,
+                pB_atomG.center_of_geometry(),
+                )
+            yaw_vectors[i, :] = np.cross(pA_cog_yaw_ts, normalv)
+            pABC_atomG.positions = ts_positions
+
+            PB.increment()
 
     log.info(S('done'))
 
