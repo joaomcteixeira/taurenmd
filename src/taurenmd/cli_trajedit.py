@@ -191,14 +191,9 @@ def main(
     log.info(S('destination: {}', traj_output.resolve().str()))
     total_frames = len(u.trajectory[sliceObj])
 
-    with mda.Writer(traj_output.str(), atom_selection.n_atoms) as W:
-        for i, _ts in zip(
-                range(len(u.trajectory))[sliceObj],
-                u.trajectory[sliceObj],
-                ):
-
-            #log.info(S('working on frame: {}', i))
-            libcli.print_progress(i, total_frames)
+    with mda.Writer(traj_output.str(), atom_selection.n_atoms) as W, \
+            libcli.ProgressBar(total_frames, suffix='frames') as PB:
+        for _ts in u.trajectory[sliceObj]:
 
             if unwrap:
                 log.debug(S('unwrapping', indent=2))
@@ -214,6 +209,8 @@ def main(
                     _controlled_exit()
 
             W.write(atom_selection)
+
+            PB.increment()
 
     log.info(S('trajectory saved'))
 

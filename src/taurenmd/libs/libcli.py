@@ -10,6 +10,8 @@ import sys
 from datetime import datetime
 from functools import wraps
 
+import numpy as np
+
 from taurenmd import _BANNER, __version__
 from taurenmd import core as tcore
 from taurenmd import references
@@ -644,29 +646,45 @@ def add_data_export_arg(parser):
         )
 
 
-def print_progress(iteration, total, prefix='', suffix='', decimals=1, bar_length=100):
+class ProgressBar:
     """
-    Call in a loop to create terminal progress bar
-
-    Function taken from:
+    Thanks to for the initial template function:
     https://dev.to/natamacm/progressbar-in-python-a3n
-
-    @params:
-        iteration   - Required  : current iteration (Int)
-        total       - Required  : total iterations (Int)
-        prefix      - Optional  : prefix string (Str)
-        suffix      - Optional  : suffix string (Str)
-        decimals    - Optional  : positive number of decimals in percent complete (Int)
-        bar_length  - Optional  : character length of bar (Int)
     """
-    str_format = "{0:." + str(decimals) + "f}"
-    percents = str_format.format(100 * (iteration / float(total)))
-    filled_length = int(round(bar_length * iteration / float(total)))
-    bar = '█' * filled_length + '-' * (bar_length - filled_length)
+    def __init__(self, total, prefix='', suffix='', decimals=1, bar_length=100):
+        total = int(total)
+        self.prefix = prefix
+        self.suffix = suffix
+        self.str_format = "{0:." + str(decimals) + "f}"
+        self.percentages = np.linspace(0, 100, total + 1, endpoint=True)
+        self.filled_length = \
+            np.round(bar_length * self.percentages / 100).astype(int)
+        self.counter = 0
+        self.total = total
+        self.bar_length = bar_length
 
-    sys.stdout.write('\r%s |%s| %s%s %s' % (prefix, bar, percents, '%', suffix)),
+    def __enter__(self):
+        bar = '-' * self.bar_length
+        percents = self.str_format.format(self.percentages[0])
+        sys.stdout.write(
+            f'\r{self.prefix} |{bar}| '
+            f'{percents}% {self.counter}/{self.total} {self.suffix}'
+            )
+        self.counter += 1
+        return self
 
-    if iteration == total:
+    def __exit__(self, *args):
         sys.stdout.write('\n')
-    sys.stdout.flush()
+        sys.stdout.flush()
 
+    def increment(self):
+        t = self.total
+        c = self.counter
+        prefix = self.prefix
+        suffix = self.suffix
+        bl = self.bar_length
+        percents = self.str_format.format(self.percentages[c])
+        fl = self.filled_length[c]
+        bar = f"{'█' * fl}{'-' * (bl - fl)}"
+        sys.stdout.write(f'\r{prefix} |{bar}| {percents}% {c}/{t} {suffix}')
+        self.counter += 1
