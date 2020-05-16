@@ -10,6 +10,17 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+0.9.1 (2020-05-15)
+------------------
+
+* Improves log in `.taurenmd.cmd` (PR #43)
+
+0.9.0 (2020-05-15)
+------------------
+
+* Adds `-i` to every `CLI` interface (PR #42)
+* `major` version change because `cli_imagemol` lost backwards compatibility
+
 0.8.14 (2020-05-12)
 -------------------
 

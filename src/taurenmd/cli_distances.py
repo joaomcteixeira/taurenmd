@@ -67,6 +67,7 @@ ap = libcli.CustomParser(
 libcli.add_version_arg(ap)
 libcli.add_topology_arg(ap)
 libcli.add_trajectories_arg(ap)
+libcli.add_insort_arg(ap)
 
 ap.add_argument(
     '-l1',
@@ -96,6 +97,7 @@ def _ap():
 def main(
         topology,
         trajectories,
+        insort=False,
         sel1='all',
         sel2='all',
         start=None,
@@ -108,18 +110,18 @@ def main(
         ):
     """Execute main client logic."""
     log.info(T('measuring distances'))
-    
+
     topology = Path(topology)
     trajectories = [Path(t) for t in trajectories]
 
-    u = libmda.load_universe(topology, *trajectories)
-    
+    u = libmda.load_universe(topology, *trajectories, insort=insort)
+
     frame_slice = libio.frame_slice(
         start=start,
         stop=stop,
         step=step,
         )
-   
+
     log.info(T('defining atom seletions'))
     log.info(S('atom selection #1: {}', sel1))
     log.info(S('atom selection #2: {}', sel2))
@@ -127,7 +129,7 @@ def main(
     atom_sel2 = u.select_atoms(sel2)
 
     distances = np.ones(len(u.trajectory[frame_slice]), dtype=np.float32)
-    
+
     log.info(T('Calculating distances'))
     # https://www.mdanalysis.org/MDAnalysisTutorial/atomgroups.html
     # https://www.mdanalysis.org/docs/documentation_pages/core/groups.html#MDAnalysis.core.groups.AtomGroup.center_of_geometry
@@ -139,9 +141,9 @@ def main(
                 atom_sel2.center_of_geometry(),
                 )
             )
-    
+
     log.info(S('calculated a total of {} distances.', len(distances)))
-    
+
     if export:
         libio.export_data_to_file(
             list(range(len(u.trajectory))[frame_slice]),

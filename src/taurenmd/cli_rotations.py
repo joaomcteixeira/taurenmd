@@ -102,6 +102,7 @@ ap = libcli.CustomParser(
 libcli.add_version_arg(ap)
 libcli.add_topology_arg(ap)
 libcli.add_trajectories_arg(ap)
+libcli.add_insort_arg(ap)
 libcli.add_plane_selection_arg(ap)
 libcli.add_angle_unit_arg(ap)
 libcli.add_reference_frame_arg(ap)
@@ -118,6 +119,7 @@ def main(
         topology,
         trajectories,
         plane_selection,
+        insort=False,
         aunit='degrees',
         ref_frame=0,
         start=None,
@@ -133,7 +135,7 @@ def main(
 
     topology = Path(topology)
     trajectories = map(Path, trajectories)
-    u = libmda.load_universe(topology, *trajectories)
+    u = libmda.load_universe(topology, *trajectories, insort=False)
 
     log.info(T('slicing'))
     fSlice = libio.frame_slice(start=start, stop=stop, step=step)
@@ -180,6 +182,7 @@ def main(
     log.info(S('Normal vector to the reference plane: {}', ref_plane_normal))
 
     ref_plane_cross = np.cross(pA_cog, ref_plane_normal)
+
     log.info(S('Cross vector to pA and Normal vector: {}', ref_plane_cross))
 
     log.info(T('Calculating tilt angles'))
@@ -223,7 +226,6 @@ def main(
         pABC_atomG.positions = ts_positions
 
     log.info(S('done'))
-
 
     roll_torsion = libcalc.torsion_set(
         pA_cog,

@@ -22,7 +22,7 @@ from taurenmd.logger import S, T
 
 
 @libcli.add_reference(tcore.ref_mda)
-def load_universe(topology, *trajectories):
+def load_universe(topology, *trajectories, insort=False):
     """
     Load MDAnalysis universe.
 
@@ -35,7 +35,7 @@ def load_universe(topology, *trajectories):
 
     Examples
     --------
-        
+
         >>> libmda.load_universe('topology.pdb', 'trajectory.dcd')
 
         >>> libmda.load_universe(
@@ -53,11 +53,14 @@ def load_universe(topology, *trajectories):
     trajectories* : str of Path objects
         Paths to trajectory file(s). Trajectory files will be used
         sequentially to create the Universe.
-    
+
     Return
     ------
     MDAnalysis Universe
     """  # noqa: E501 D412
+    if insort:
+        trajectories = libio.sort_numbered_input(*trajectories)
+
     libio.report_input(topology, trajectories)
     universe = mda.Universe(
         Path(topology).str(),
@@ -71,13 +74,13 @@ def load_universe(topology, *trajectories):
 def report(universe):
     """
     Report information about the Universe.
-    
+
     Example
     -------
 
         >>> u = libmda.load_universe('topology.pdb', 'trajectory.xtc')
         >>> libmda.report(u)
-       
+
     Parameters
     ----------
     universe : MDAnalysis Universe
@@ -99,7 +102,7 @@ def mdaalignto(universe, reference, selection='all'):
     Align universe to reference.
 
     Uses `MDAnalysis.analysis.align.alignto <https://www.mdanalysis.org/docs/documentation_pages/analysis/align.html?highlight=alignto#MDAnalysis.analysis.align.alignto>`_.
-    
+
     Parameters
     ----------
     universe, reference, selection
@@ -131,7 +134,7 @@ def draw_atom_label_from_atom_group(atom_group):
 
     Strings represent each atom by SEGID.RESNUM|RESNAME.NAME,
     for example carbon alpha of Cys 18 of chain A would:
-        
+
         >>> A.18Cys.CA
 
     This function is used by taurenmd for data representation

@@ -36,7 +36,7 @@ align the whole system to one of its subunits:
     taurenmd trajedit top.pdb traj.dcd -d alignedA.dcd -a "segid A and name CA"
 
 further restrain the output to a specific subselection with ``-l``:
-    
+
     [...] -l "segid A or segid B"
 
 ``trajedit`` also implements the ``unwrap`` method from which is an
@@ -161,15 +161,12 @@ def main(
         ):
     """Execute main client logic."""
     log.info(T('editing trajectory'))
-    
+
     topology = Path(topology)
     trajectories = [Path(t) for t in trajectories]
 
-    if insort:
-        trajectories = libio.sort_numbered_input(*trajectories)
-
     u = libmda.load_universe(topology, *trajectories)
-    
+
     if unwrap:
         log.info(T('unwrapping'))
         log.info(S('set to: {}', unwrap))
@@ -181,7 +178,7 @@ def main(
         log.info(S('trajectory selection will be aligned to subselection:'))
         log.info(S('- {}', align, indent=2))
         align_reference = mda.Universe(Path(topology).str())
-    
+
     log.info(T('transformation'))
     sliceObj = libio.frame_slice(start, stop, step)
 
@@ -198,9 +195,9 @@ def main(
                 range(len(u.trajectory))[sliceObj],
                 u.trajectory[sliceObj],
                 ):
-            
+
             log.info(S('working on frame: {}', i))
-            
+
             if unwrap:
                 log.debug(S('unwrapping', indent=2))
                 atom_selection.unwrap(
@@ -215,7 +212,7 @@ def main(
                     _controlled_exit()
 
             W.write(atom_selection)
-    
+
     log.info(S('trajectory saved'))
 
     if top_output:
@@ -231,7 +228,7 @@ def main(
                         compound=unwrap_compound,
                         )
                 W.write(atom_selection)
-    
+
     log.info(S('Done'))
     return
 

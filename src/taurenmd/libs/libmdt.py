@@ -46,7 +46,7 @@ def _log_simtkimport_error():
 
 
 @libcli.add_reference(tcore.ref_mdt)
-def load_traj(topology, trajectories):
+def load_traj(topology, trajectories, insort=False):
     """
     Load trajectory with `MDTraj <http://mdtraj.org/1.9.3/index.html>`_.
 
@@ -69,6 +69,9 @@ def load_traj(topology, trajectories):
     MDTraj trajectory
         `Trajectory object <http://mdtraj.org/1.9.3/api/generated/mdtraj.Trajectory.html#mdtraj-trajectory>`_.
     """  # noqa: E501
+    if insort:
+        trajectories = libio.sort_numbered_input(*trajectories)
+
     try:
         # just in case Paths arrive
         trajs = [os.fspath(t) for t in trajectories]
@@ -76,19 +79,41 @@ def load_traj(topology, trajectories):
         trajs = os.fspath(trajectories)
 
     libio.report_input(topology, trajs)
-
-    topp = Path(topology)
-    if topp.suffix == '.cif' and SIMTK:
-        mol = app.PDBxFile(topp.str())
-        top = mdtraj.Topology.from_openmm(mol.topology)
-    elif topp.suffix == '.cif' and not SIMTK:
-        _log_simtkimport_error()
-    else:
-        top = topp.str()
-
+    top = attempt_to_load_top_from_simtk(topology)
     mdtrajectory = mdtraj.load(trajs, top=top)
 
     return mdtrajectory
+
+
+@libcli.add_reference(tcore.ref_openmm)
+def attempt_to_load_top_from_simtk(topology):
+    """
+    Load topology from SIMTK.
+
+    Parameters
+    ----------
+    topology : str or Path
+
+    Returns
+    -------
+    topology from mdtraj.Topology.from_openmm`
+
+    Raises
+    ------
+    Dependency error from :func:`_log_simtkimport_error`, program
+    halts.
+    """
+    topp = Path(topology)
+
+    if topp.suffix == '.cif' and SIMTK:
+        mol = app.PDBxFile(topp.str())
+        return mdtraj.Topology.from_openmm(mol.topology)
+
+    elif topp.suffix == '.cif' and not SIMTK:
+        _log_simtkimport_error()
+
+    else:
+        return topp.str()
 
 
 @libcli.add_reference(tcore.ref_mdt)

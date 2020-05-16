@@ -70,11 +70,11 @@ ap = libcli.CustomParser(
 libcli.add_version_arg(ap)
 libcli.add_topology_arg(ap)
 libcli.add_trajectories_arg(ap)
+libcli.add_insort_arg(ap)
 libcli.add_traj_output_arg(ap)
 libcli.add_top_output_arg(ap)
 
 ap.add_argument(
-    '-i',
     '--protocol',
     help=(
         'The protocol with which reimage. '
@@ -92,6 +92,7 @@ def _ap():
 def main(
         topology,
         trajectories,
+        insort=False,
         traj_output='imaged.dcd',
         top_output=False,
         protocol=1,
@@ -101,7 +102,7 @@ def main(
     log.info(T('Attempting image molecules'))
 
     log.info(T('loading input'))
-    traj = libmdt.load_traj(topology, trajectories)
+    traj = libmdt.load_traj(topology, trajectories, insort=insort)
 
     protocols = {
         1: libmdt.imagemol_protocol1,

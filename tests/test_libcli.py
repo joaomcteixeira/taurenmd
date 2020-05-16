@@ -37,8 +37,9 @@ def test_save_refs():
     references.add("zello world")
     lc.save_references()
     p1 = Path(CMDFILE)
-    s = p1.open().readlines()
-    assert s[-1].split(':')[1][1:] == 'zello world'
+    s = p1.read_text().strip().split('\n')
+    s = [i for i in s]
+    assert s[-1] == 'zello world'
     p1.unlink()
 
 
