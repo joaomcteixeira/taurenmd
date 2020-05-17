@@ -500,6 +500,9 @@ def test_ProgressBar_1():
             PB.increment()
             assert PB.counter == i + 2
 
+    with pytest.raises(IndexError):
+        PB.increment()
+
 
 def test_ProgressBar_2():
     """Test progress bar."""
@@ -514,3 +517,6 @@ def test_ProgressBar_2():
         for i in range(30):
             PB.increment()
             assert PB.counter == i + 2
+
+    with pytest.raises(IndexError):
+        PB.increment()

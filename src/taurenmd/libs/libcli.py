@@ -694,14 +694,15 @@ class ProgressBar:
         if bar_length is None:
             try:
                 _columns, _rows = os.get_terminal_size()
-                bar_length = _columns // 2
             except OSError:
                 log.error(
                     'ERROR: Could not retrive size of ProgressBar '
                     'from terminal window. Using the default of `50`. '
                     'Everything else is normal.'
                     )
-                bar_length = 50
+                # this trick is used to guarantee 100% test coverage
+                _columns = 100
+            bar_length = _columns // 2
 
         total = int(total)
         self.prefix = prefix
