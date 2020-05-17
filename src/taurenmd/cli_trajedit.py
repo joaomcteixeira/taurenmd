@@ -192,7 +192,7 @@ def main(
     total_frames = len(u.trajectory[sliceObj])
 
     with mda.Writer(traj_output.str(), atom_selection.n_atoms) as W, \
-            libcli.ProgressBar(total_frames, suffix='frames') as PB:
+            libcli.ProgressBar(total_frames, suffix='frames') as pb:
         for _ts in u.trajectory[sliceObj]:
 
             if unwrap:
@@ -210,7 +210,7 @@ def main(
 
             W.write(atom_selection)
 
-            PB.increment()
+            pb.increment()
 
     log.info(S('trajectory saved'))
 

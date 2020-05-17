@@ -180,63 +180,66 @@ def main(
     pitch_angles = []
     yaw_angles = []
 
-    for i, _ts in enumerate(u.trajectory[fSlice]):
-        print(f'.. working for frame :{i}')
+    with libcli.ProgressBar(len(u.trajectory[fSlice]), suffix='frames') as pb:
+        for i, _ts in enumerate(u.trajectory[fSlice]):
+            print(f'.. working for frame :{i}')
 
-        pABC_cog_ts = pABC_atomG.center_of_geometry()
-        pABC_atomG.positions = pABC_atomG.positions - pABC_cog_ts
+            pABC_cog_ts = pABC_atomG.center_of_geometry()
+            pABC_atomG.positions = pABC_atomG.positions - pABC_cog_ts
 
-        pA_cog_ts = pA_atomG.center_of_geometry()
-        pB_cog_ts = pB_atomG.center_of_geometry()
-        pC_cog_ts = pC_atomG.center_of_geometry()
+            pA_cog_ts = pA_atomG.center_of_geometry()
+            pB_cog_ts = pB_atomG.center_of_geometry()
+            pC_cog_ts = pC_atomG.center_of_geometry()
 
-        ts_plane_normal = libcalc.calc_plane_normal(
-            pA_cog_ts,
-            pB_cog_ts,
-            pC_cog_ts,
-            )
+            ts_plane_normal = libcalc.calc_plane_normal(
+                pA_cog_ts,
+                pB_cog_ts,
+                pC_cog_ts,
+                )
 
-        ts_plane_cross = np.cross(pA_cog_ts, ts_plane_normal)
+            ts_plane_cross = np.cross(pA_cog_ts, ts_plane_normal)
 
-        # Calculating Quaternion Rotations
-        roll_Qs_tuples = libcalc.generate_quaternion_rotations(
-            ref_plane_normal,
-            pA_cog_ts,
-            )
+            # Calculating Quaternion Rotations
+            roll_Qs_tuples = libcalc.generate_quaternion_rotations(
+                ref_plane_normal,
+                pA_cog_ts,
+                )
 
-        pitch_Qs_tuples = libcalc.generate_quaternion_rotations(
-            ref_plane_cross,
-            ts_plane_normal,
-            )
+            pitch_Qs_tuples = libcalc.generate_quaternion_rotations(
+                ref_plane_cross,
+                ts_plane_normal,
+                )
 
-        yaw_Qs_tuples = libcalc.generate_quaternion_rotations(
-            pA_cog,
-            ts_plane_cross,
-            )
+            yaw_Qs_tuples = libcalc.generate_quaternion_rotations(
+                pA_cog,
+                ts_plane_cross,
+                )
 
-        roll_minimum = libcalc.sort_by_minimum_Qdistances(
-            roll_Qs_tuples,
-            pA_cog,
-            )[0][0]
+            roll_minimum = libcalc.sort_by_minimum_Qdistances(
+                roll_Qs_tuples,
+                pA_cog,
+                )[0][0]
 
-        pitch_minimum = libcalc.sort_by_minimum_Qdistances(
-            pitch_Qs_tuples,
-            ref_plane_normal,
-            )[0][0]
+            pitch_minimum = libcalc.sort_by_minimum_Qdistances(
+                pitch_Qs_tuples,
+                ref_plane_normal,
+                )[0][0]
 
-        yaw_minimum = libcalc.sort_by_minimum_Qdistances(
-            yaw_Qs_tuples,
-            ref_plane_cross,
-            )[0][0]
+            yaw_minimum = libcalc.sort_by_minimum_Qdistances(
+                yaw_Qs_tuples,
+                ref_plane_cross,
+                )[0][0]
 
-        if aunit == 'degrees':
-            roll_angles.append(round(roll_minimum.degrees, 3))
-            pitch_angles.append(round(pitch_minimum.degrees, 3))
-            yaw_angles.append(round(yaw_minimum.degrees, 3))
-        else:
-            roll_angles.append(round(roll_minimum.radians, 3))
-            pitch_angles.append(round(pitch_minimum.radians, 3))
-            yaw_angles.append(round(yaw_minimum.radians, 3))
+            if aunit == 'degrees':
+                roll_angles.append(round(roll_minimum.degrees, 3))
+                pitch_angles.append(round(pitch_minimum.degrees, 3))
+                yaw_angles.append(round(yaw_minimum.degrees, 3))
+            else:
+                roll_angles.append(round(roll_minimum.radians, 3))
+                pitch_angles.append(round(pitch_minimum.radians, 3))
+                yaw_angles.append(round(yaw_minimum.radians, 3))
+
+            pb.increment()
 
     if export:
         file_names = []

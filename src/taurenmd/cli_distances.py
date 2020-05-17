@@ -133,14 +133,17 @@ def main(
     log.info(T('Calculating distances'))
     # https://www.mdanalysis.org/MDAnalysisTutorial/atomgroups.html
     # https://www.mdanalysis.org/docs/documentation_pages/core/groups.html#MDAnalysis.core.groups.AtomGroup.center_of_geometry
-    for i, _ts in enumerate(u.trajectory[frame_slice]):
 
-        distances[i] = np.linalg.norm(
-            np.subtract(
-                atom_sel1.center_of_geometry(),
-                atom_sel2.center_of_geometry(),
+    with libcli.ProgressBar(distances.size, suffix='frames') as pb:
+        for i, _ts in enumerate(u.trajectory[frame_slice]):
+
+            distances[i] = np.linalg.norm(
+                np.subtract(
+                    atom_sel1.center_of_geometry(),
+                    atom_sel2.center_of_geometry(),
+                    )
                 )
-            )
+            pb.increment()
 
     log.info(S('calculated a total of {} distances.', len(distances)))
 

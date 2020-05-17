@@ -26,7 +26,7 @@ Frame file types can be specified:
 
     taurenmd fext topology.pdb trajectory.dcd -p 10 -x .dcd
 
-  
+
 Atom selection can be specified as well, the following extracts
 only the 'segid A' atom region of the first frame. Selection rules
 are as decribed for [MDAnalysis selection](https://www.mdanalysis.org/docs/documentation_pages/selections.html).
@@ -115,9 +115,9 @@ def main(
         **kwargs):
     """Execute main client logic."""
     log.info('Starting...')
-    
+
     u = libmda.load_universe(topology, *trajectories, insort=insort)
-    
+
     frames_to_extract = libio.frame_list(
         len(u.trajectory),
         start=start,
@@ -127,25 +127,27 @@ def main(
         )
 
     log.info(S('extracting {} frames', len(frames_to_extract)))
-    
+
     zeros = len(str(len(u.trajectory)))
     ext = ext.lstrip('.').strip()
-    
+
     atom_group = u.select_atoms(selection)
 
-    for frame in frames_to_extract:
-        file_name = '{}{}.{}'.format(
-            prefix,
-            str(frame).zfill(zeros),
-            ext,
-            )
+    with libcli.ProgressBar(len(frames_to_extract), suffix='frames') as pb:
+        for frame in frames_to_extract:
+            file_name = '{}{}.{}'.format(
+                prefix,
+                str(frame).zfill(zeros),
+                ext,
+                )
 
-        atom_group.write(
-            filename=Path(file_name),
-            frames=[frame],
-            )
+            atom_group.write(
+                filename=Path(file_name),
+                frames=[frame],
+                )
 
         log.info(S('writen frame {}, to {}', frame, file_name))
+        pb.increment()
 
     return
 
