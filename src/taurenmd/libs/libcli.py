@@ -6,6 +6,7 @@ client interfaces. It contains also others used to enhance the user
 experience.
 """
 import argparse
+import os
 import sys
 from datetime import datetime
 from functools import wraps
@@ -648,14 +649,56 @@ def add_data_export_arg(parser):
 
 class ProgressBar:
     """
+    Contextualizes a Progress Bar.
+
+    Parameters
+    ----------
+    total : int convertable
+        The total number o iteractions expected.
+
+    prefix : str
+        Some prefix to enhance readability.
+
+    suffix : str
+        Some suffix to enhance readability.
+
+    decimals : int-convertable
+        The demicals to show in percentage.
+        Defaults to `1`.
+
+    bar_length : int, float, -convertable
+        The length of the bar.
+        If not provided (``None``), uses half of the terminal window.
+
     Thanks to for the initial template function:
     https://dev.to/natamacm/progressbar-in-python-a3n
+
+    Examples
+    --------
+
+    >>> with ProgressBar(5000, suffix='frames') as PB:
+    >>>     for i in trajectory:
+    >>>         # do something
+    >>>         PB.increment()
     """
-    def __init__(self, total, prefix='', suffix='', decimals=1, bar_length=100):
+
+    def __init__(
+            self,
+            total,
+            prefix='',
+            suffix='',
+            decimals=1,
+            bar_length=None,
+            ):
+
+        if not bar_length:
+            _columns, _rows = os.get_terminal_size()
+            bar_length = _columns // 2
+
         total = int(total)
         self.prefix = prefix
         self.suffix = suffix
-        self.str_format = "{0:." + str(decimals) + "f}"
+        self.str_format = "{0:." + str(int(decimals)) + "f}"
         self.percentages = np.linspace(0, 100, total + 1, endpoint=True)
         self.filled_length = \
             np.round(bar_length * self.percentages / 100).astype(int)
@@ -678,6 +721,7 @@ class ProgressBar:
         sys.stdout.flush()
 
     def increment(self):
+        """Print next progress bar increment."""
         t = self.total
         c = self.counter
         prefix = self.prefix
