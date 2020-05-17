@@ -10,6 +10,11 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+0.9.2 (2020-05-17)
+------------------
+
+* Client progression is now represented by a progress bar (PR #44)
+
 0.9.1 (2020-05-15)
 ------------------
 
