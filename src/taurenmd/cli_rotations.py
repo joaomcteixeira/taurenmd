@@ -193,7 +193,7 @@ def main(
     pitch_vectors = np.empty(sizet, dtype=np.float64)
     yaw_vectors = np.empty(sizet, dtype=np.float64)
 
-    with libcli.ProgressBar(total_frames, suffix='frames') as PB:
+    with libcli.ProgressBar(total_frames, suffix='frames') as pb:
         for i, _ts in enumerate(u.trajectory[fSlice]):
 
             pABC_cog_ts = pABC_atomG.center_of_geometry().copy()
@@ -226,7 +226,7 @@ def main(
             yaw_vectors[i, :] = np.cross(pA_cog_yaw_ts, normalv)
             pABC_atomG.positions = ts_positions
 
-            PB.increment()
+            pb.increment()
 
     log.info(S('done'))
 

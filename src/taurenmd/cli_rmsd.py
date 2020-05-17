@@ -93,15 +93,15 @@ def main(
         ):
     """Execute main client logic."""
     log.info(T('starting'))
-    
+
     u = libmda.load_universe(topology, *trajectories, insort=insort)
-    
+
     frame_slice = libio.frame_slice(
         start=start,
         stop=stop,
         step=step,
         )
-    
+
     if selections is None:
         selections = ['all']
 
@@ -135,7 +135,7 @@ def main(
                     ','.join(selections),
                     ),
             )
-    
+
     if plot:
         plotvars = plotvars or dict()
         plotvars.setdefault('labels', selections)
@@ -143,7 +143,7 @@ def main(
         log.info(T('plot params:'))
         for k, v in plotvars.items():
             log.info(S('{} = {!r}', k, v))
-        
+
         libplot.param(
             list(range(len(u.trajectory))[frame_slice]),
             rmsds,
