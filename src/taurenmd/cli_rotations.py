@@ -134,7 +134,7 @@ def main(
     log.info(T('starting'))
 
     topology = Path(topology)
-    trajectories = map(Path, trajectories)
+    trajectories = list(map(Path, trajectories))
     u = libmda.load_universe(topology, *trajectories, insort=False)
 
     log.info(T('slicing'))
@@ -266,7 +266,7 @@ def main(
                 '# Plane Selection: {}\n'
                 '# frame,roll,pitch,yaw [in {}]\n'
                 ).format(
-                    topology,
+                    topology.resolve().str(),
                     ', '.join(t.resolve().str() for t in trajectories),
                     origin_selection,
                     aunit,
