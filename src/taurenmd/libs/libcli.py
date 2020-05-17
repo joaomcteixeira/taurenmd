@@ -15,7 +15,7 @@ import numpy as np
 
 from taurenmd import _BANNER, __version__
 from taurenmd import core as tcore
-from taurenmd import references
+from taurenmd import log, references
 from taurenmd.logger import CMDFILE
 
 
@@ -691,20 +691,38 @@ class ProgressBar:
             bar_length=None,
             ):
 
-        if not bar_length:
-            _columns, _rows = os.get_terminal_size()
-            bar_length = _columns // 2
+        if bar_length is None:
+            try:
+                _columns, _rows = os.get_terminal_size()
+                bar_length = _columns // 2
+            except OSError:
+                log.error(
+                    'ERROR: Could not retrive size of ProgressBar '
+                    'from terminal window. Using the default of `50`. '
+                    'Everything else is normal.'
+                    )
+                bar_length = 50
 
         total = int(total)
         self.prefix = prefix
         self.suffix = suffix
         self.str_format = "{0:." + str(int(decimals)) + "f}"
+
+        # using Numpy
         self.percentages = np.linspace(0, 100, total + 1, endpoint=True)
+        # 49.7 µs ± 5.34 µs per loop (7 runs, 10000 loops each)
+        # Not using Numpy
+        # self.percentages =  [i / total * 100 for i in range(total + 1)]
+        # 974 µs ± 38.8 µs per loop (7 runs, 1000 loops each)
+
         self.filled_length = \
             np.round(bar_length * self.percentages / 100).astype(int)
         self.counter = 0
         self.total = total
         self.bar_length = bar_length
+
+        assert len(self.percentages) == total + 1
+        assert len(self.percentages) == len(self.filled_length)
 
     def __enter__(self):
         bar = '-' * self.bar_length

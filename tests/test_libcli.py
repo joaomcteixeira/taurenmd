@@ -489,3 +489,28 @@ def test_represent_argument(arg, expected):
     """Test argument representation."""
     result = lc.represent_argument(arg)
     assert result == expected
+
+
+def test_ProgressBar_1():
+    """Test progress bar."""
+    kw = {'prefix': 'hello', 'suffix': 'frames', 'decimals': 2}
+    with lc.ProgressBar(40, **kw) as PB:
+        assert PB.counter == 1
+        for i in range(40):
+            PB.increment()
+            assert PB.counter == i + 2
+
+
+def test_ProgressBar_2():
+    """Test progress bar."""
+    kw = {
+        'prefix': 'hello',
+        'suffix': 'frames',
+        'decimals': 2,
+        'bar_length': 70,
+        }
+    with lc.ProgressBar(30, **kw) as PB:
+        assert PB.counter == 1
+        for i in range(30):
+            PB.increment()
+            assert PB.counter == i + 2
