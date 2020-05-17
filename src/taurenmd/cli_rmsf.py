@@ -96,24 +96,24 @@ def main(
         ):
     """Execute client main logic."""
     log.info(T('starting RMSFs calculation'))
-    
+
     topology = Path(topology)
     trajectories = [Path(t) for t in trajectories]
 
     u = libmda.load_universe(topology, *trajectories, insort=insort)
-   
+
     frame_slice = libio.frame_slice(
         start=start,
         stop=stop,
         step=step,
         )
-  
+
     if selections is None:
         selections = ['all']
-    
+
     if not isinstance(selections, list) or len(selections) == 0:
         raise TypeError('selections must be LIST with at least one element')
-    
+
     log.info(T('calculating'))
     for sel in selections:
         labels = []
@@ -121,7 +121,7 @@ def main(
         log.info(S('for selection: {}', sel))
         atom_group = u.select_atoms(sel)
         labels = libmda.draw_atom_label_from_atom_group(atom_group)
-       
+
         rmsfs = libcalc.mda_rmsf(
             atom_group,
             frame_slice=frame_slice,
@@ -143,7 +143,7 @@ def main(
                         ', '.join(f.resolve().str() for f in trajectories),
                         ),
                 )
-    
+
         if plot:
             plotvars = plotvars or dict()
             plotvars.setdefault('series_labels', selections)
@@ -151,7 +151,7 @@ def main(
             log.info(T('plot params:'))
             for k, v in plotvars.items():
                 log.info(S('{} = {!r}', k, v))
-            
+
             libplot.label_dots(
                 labels,
                 rmsfs,
