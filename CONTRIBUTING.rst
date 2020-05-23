@@ -41,58 +41,52 @@ General instructions
 --------------------
 
 Though *taurenmd* can be used without relying on Anaconda to manage its dependencies,
-there are actually some dependencies that are only available in the Anaconda ecosystem.
-Therefore, the full development of *taurenmd* is bound to Anaconda until this situation is solved,
-you can read further on this in our :ref:`installation page <Installation>`.
+some dependencies are only available in the Anaconda ecosystem. Therefore,
+although *taurenmd* can be used almost entirely without relying on Anaconda,
+its development is bound, currently, to Anaconda.
+You can read further on this on our installation page.
 
-Also, by using Conda, our CI integration is much faster because the heavy dependencies
-are handled just faster in Anaconda than in pure PyPI.
+Also, by using Conda, our CI integration is much faster because the heavy
+dependencies are handled just faster in Anaconda than in pure PyPI. However,
+it is possible to do some gymnastics and avoid using Conda and
+still contribute to the development *taurenmd*; if this is your case,
+please write us an issue, and we will help you out.
 
-For these reasons, the development of *taurenmd* is bound to Anaconda. However, it is
-possible to make some gymnastics and avoid using Conda and still contribute
-to the develop *taurenmd*; if this is your case, please write us an issue and
-we will help you out.
+From this moment on, we will assume you are using Anaconda as your Python package manager.
+Also, we are assuming you have `Git <https://git-scm.com/>`_ installed, and you are running a Linux machine
+– we are not aware of the possible divergences of these instructions in other OSes.
 
-From this moment on we will assume you are using Anaconda as your Python package manager.
+1. Create a new environment with the *taurenmd* dependencies, **only its dependencies**, running the following 3 commands::
 
-1. Create a new environment and install *taurenmd* dependencies, **only its dependencies**, following the instructions
-for :ref:`Anaconda in our Installation <With Anaconda>` page. **Important**, change the name of the
-environment in the ``yml`` file before actually creating the environment, for example,
-name it ``taurenmddev``.
+    curl https://raw.githubusercontent.com/joaomcteixeira/taurenmd/master/requirements-dev.yml -o taurenmddev.yml
+    conda env create -f taurenmdenv.yml
+    # Activate the conda taurenmddev environment
+    conda activate taurenmddev
 
-    1.1. Remember to activate the new environment before proceeding to the installation.
+2. Fork `taurenmd <https://github.com/joaomcteixeira/taurenmd>`_ (look for the "Fork" button on the top right corner of `our repository <https://github.com/joaomcteixeira/taurenmd>`_).
 
-2. *taurenmd* relies on `tox <https://tox.readthedocs.io/en/latest/>`_ to manage continuous integration (CI) and collaborative development; install it together with `tox-conda <https://github.com/tox-dev/tox-conda>`_::
+3. `Clone <https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository>`_ your forked repository to your local machine::
 
-    conda install -c conda-forge tox
-    conda install -c conda-forge tox-conda
+    git clone https://github.com/YOUR-USER-NAME/taurenmd.git <destination folder>
 
-3. Fork `taurenmd <https://github.com/joaomcteixeira/taurenmd>`_ (look for the "Fork" button on the top right corner of `our repository <https://github.com/joaomcteixeira/taurenmd>`_).
-
-
-4. `Clone <https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository>`_ your forked repository to your local machine::
-
-    git clone https://github.com/YOUR-USER-NAME/taurenmd.git <destination folder> 
-
-5. Navigate to the fork folder and create a branch for local development::
+4. Navigate to the fork folder and create a branch for local development::
 
     git checkout -b name-of-your-bugfix-or-feature
 
-6. Install a development version of your development branch, remember to active the ``taurenmddev`` environment beforehand::
+5. Install a development version of your development branch, remember to active the ``taurenmddev`` environment beforehand::
 
     python setup.py develop
 
 Now you can make your changes locally.
 
-
-7. When you're done making changes run all the checks and docs builder with **tox** one command::
+6. When you're done making changes run all the checks and docs builder with **tox** one command::
 
     tox
 
 And correct the errors reported. You can run individual test environment with *tox*, for example,
 to test syntax and code style and building related tasks::
 
-    tox -e check 
+    tox -e check
 
 to test documentation::
 
@@ -108,17 +102,19 @@ altogether, for example::
 
     tox -e check,docs
 
-The ``tox`` command  will run testing environments for both ``py36`` and ``py37``,
-it will fail if you don't have both interpreters installed. If that is the case,
-just ignore the errors for that env.
+.. note::
 
-8. Commit your changes and push your branch to your *taurenmd fork* on GitHub::
+    The ``tox`` command  will run testing environments for both ``py36`` and ``py37``,
+    it will fail if you don't have both interpreters installed. If that is the case,
+    just ignore the errors for that env.
+
+7. Commit your changes and push your branch to your *taurenmd fork* on GitHub::
 
     git add .
     git commit -m "Your detailed description of your changes."
     git push origin name-of-your-bugfix-or-feature
 
-9. `Submit a pull request through the GitHub website <https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request>`_.
+8. `Submit a pull request through the GitHub website <https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request>`_.
 
 A New Command-line client
 -------------------------
@@ -154,6 +150,19 @@ For merging, you should:
 Continuous Integration
 ======================
 
-This project follows Continuous Integration (CI) good practices (let us know if something can be improved). As referred in the previous section, CI environment is provided by `tox <https://tox.readthedocs.io/en/latest/>`_ in combination with `tox-conda <https://github.com/tox-dev/tox-conda>`_. All *tox* testing environments run on `Travis-CI <https://travis-ci.org/joaomcteixeira/taurenmd>`_; there, we check for code style integrity, documentation, tests and test coverage. CI configuration is defined in the `tox.ini <https://github.com/joaomcteixeira/taurenmd/blob/master/tox.ini>`_ and in the `.travis.yml <https://github.com/joaomcteixeira/taurenmd/blob/master/.travis.yml>`_ files.
+This project follows Continuous Integration (CI) good practices
+(let us know if something can be improved). As referred to in the previous section,
+CI environment is provided by `tox <https://tox.readthedocs.io/en/latest/>`_ in
+combination with `tox-conda <https://github.com/tox-dev/tox-conda>`_.
+All *tox* testing environments run on `Travis-CI <https://travis-ci.org/joaomcteixeira/taurenmd>`_;
+there, we check for code style integrity, documentation, tests, and test coverage.
+CI configuration is defined in the `tox.ini <https://github.com/joaomcteixeira/taurenmd/blob/master/tox.ini>`_
+and in the `.travis.yml <https://github.com/joaomcteixeira/taurenmd/blob/master/.travis.yml>`_ files.
 
-Currently, we do not provide testing for Windows and MacOSX platforms. *taurenmd* depends on several research libraries and we cannot, and should not, attempt to guarantee proper installation of those libraries on all platforms. Therefore we decided to provide full test coverage just for Linux systems where we know those libraries operate fully. You may wish to read our `Installation page for more comments on this matter <https://taurenmd.readthedocs.io/en/latest/installation.html#supported-platforms>`_.
+Currently, we do not provide testing for Windows and MacOSX platforms.
+*taurenmd* depends on several research libraries, and we cannot, and should not,
+attempt to guarantee proper installation of those libraries on all platforms.
+Therefore we decided to provide full test coverage just for Linux systems where
+we know those libraries operate entirely, **however**, ``taurenmd`` code is written
+using only Python interfaces, which should make it cross-platform compatible.
+You may wish to read our `Installation page for more comments on this matter <https://taurenmd.readthedocs.io/en/latest/installation.html#supported-platforms>`_.
