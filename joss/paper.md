@@ -71,7 +71,7 @@ $ taurenmd trajedit topology.pdb trajectory.xtc -d traj_s50_e500_p10.xtc \
 > -s 50 -e 500 -p 10 -l 'segid A'
 ```
 
-The latter extracts a subtrajectory spanning frames 50 to 500 (exclusive) with a step interval of 10 frames, and only for atoms for the `'segid A'` atom group; in this particular case, we make use of MDAnalysis library [@mda1; @mda2] to handle the data. *taurenmd* documentation provides additional usage examples in "Usage" page. Also, each client (command) documentation presents explanations on and examples of how to use it - see "Command-line interfaces" documentation page.
+The latter extracts a subtrajectory spanning frames 50 to 500 (exclusive) with a step interval of 10 frames, and only for atoms for the `'segid A'` atom group; in this particular case, we make use of MDAnalysis library [@mda1; @mda2] to handle the data. *taurenmd* documentation provides additional usage examples in "Usage" page. Also, each client (command) documentation presents explanations on, and examples of, how to use it - see "Command-line interfaces" documentation page.
 
 # Acknowledgements
 
