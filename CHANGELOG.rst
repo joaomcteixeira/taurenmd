@@ -10,6 +10,11 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+0.9.3 (2020-05-25)
+------------------
+
+* Improves CONTRIBUTION.rst guidelines (PR #46)
+
 0.9.2 (2020-05-17)
 ------------------
 
