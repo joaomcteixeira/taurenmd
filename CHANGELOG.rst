@@ -10,6 +10,11 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+0.9.4 (2020-06-02)
+------------------
+
+* Updates documentation with JOSS citation (PR #49)
+
 0.9.3 (2020-05-25)
 ------------------
 
