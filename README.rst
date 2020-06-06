@@ -9,6 +9,10 @@ taurenmd
     :alt: PyPI Package latest release
     :target: https://pypi.org/project/taurenmd
 
+.. image:: https://joss.theoj.org/papers/10.21105/joss.02175/status.svg
+    :target: https://doi.org/10.21105/joss.02175
+    :alt: joss
+
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3551990.svg
     :target: https://doi.org/10.5281/zenodo.3551990
     :alt: Zenodo
@@ -45,9 +49,9 @@ taurenmd
     :alt: Supported versions
     :target: https://pypi.org/project/taurenmd
 
-.. image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.9.2/master
+.. image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.9.4/master
     :alt: Commits since latest release
-    :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.9.2...master
+    :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.9.4...master
 
 .. image:: https://img.shields.io/pypi/dm/taurenmd?label=PyPI%20Downloads
     :alt: PyPI - Downloads
@@ -70,9 +74,9 @@ With this said, **taurenmd** aims to be a flexible and extensible peace of softw
 Documentation
 =============
 
-**taurenmd** full documentation is available at: https://taurenmd.readthedocs.io, read there:
+**taurenmd**'s full documentation is available at: https://taurenmd.readthedocs.io, read there:
 
 #. how to install
-#. usage
+#. usage examples
 #. citing
 #. *etc...*

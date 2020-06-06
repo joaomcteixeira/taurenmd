@@ -33,9 +33,9 @@ If you use `Anaconda`_ as your Python package manager just do the following on y
 
 1. Download the *taurenmd* Anaconda environment file from our repository::
 
-    curl https://raw.githubusercontent.com/joaomcteixeira/taurenmd/master/requirements.yml -o taurenmdenv.yml 
+    curl https://raw.githubusercontent.com/joaomcteixeira/taurenmd/master/requirements.yml -o taurenmdenv.yml
 
-If for some reason the above does not work just open the link on your WebBrowser and save the text to a file (or save the file).
+If for some reason the above does not work, just open the link on your WebBrowser and save the text to a file (or save the file).
 
 2. Create a new Anaconda Python environment to host *taurenmd*::
 

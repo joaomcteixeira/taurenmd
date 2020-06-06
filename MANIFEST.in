@@ -17,6 +17,7 @@ include CHANGELOG.rst
 include CONTRIBUTING.rst
 include LICENSE
 include requirements.yml
+include requirements-dev.yml
 
 prune alphas
 prune .ci
