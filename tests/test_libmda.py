@@ -75,7 +75,7 @@ def test_mdaalignto_exit():
     """Test exit on ZeroDivision."""
     universe = mda.Universe(toptest.str(), trajtest.str())
     reference = mda.Universe(toptest.str())
-    with pytest.raises(ZeroDivisionError):
+    with pytest.raises((ValueError, ZeroDivisionError)):
         la.mdaalignto(universe, reference, 'name ZZZZZ')
 
 
