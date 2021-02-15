@@ -30,7 +30,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        conda install pip setuptools wheel tox tox-conda coverage[toml]
+        conda install pip setuptools wheel tox coverage[toml]
         pip install tox-gh-actions
         #python -m pip install --upgrade pip setuptools wheel
         #pip install coverage[toml] virtualenv tox tox-gh-actions tox-conda
