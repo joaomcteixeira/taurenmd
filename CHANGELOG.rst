@@ -10,6 +10,8 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+* Upgraded CI to Github Actions according to: https://github.com/joaomcteixeira/python-project-skeleton
+
 0.9.4 (2020-06-02)
 ------------------
 
