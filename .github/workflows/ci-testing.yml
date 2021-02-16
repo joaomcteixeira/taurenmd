@@ -1,7 +1,7 @@
 # tox git actions integration was taken from:
 # https://github.com/ymyzk/tox-gh-actions/tree/e11a29e2e5c73b6e48f5d4ee379f903476d013c0
 # Tests unittest pass, documentation builds, and package builds
-name: Tests
+name: test_py37
 
 on:
   push:
@@ -11,30 +11,28 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.platform }}
-    strategy:
-      matrix:
-        platform: [ubuntu-latest]
-        python-version: [3.6, 3.7]
-
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
     steps:
     - uses: actions/checkout@v2
     - uses: conda-incubator/setup-miniconda@v2
       with:
+        activate-environment: test
+        python-version: 3.7
         channels: conda-forge
-        python-version: ${{ matrix.python-version }}
 
     - name: Install dependencies
       run: |
         conda install pip setuptools wheel tox coverage[toml]
-        pip install tox-gh-actions
         #python -m pip install --upgrade pip setuptools wheel
         #pip install coverage[toml] virtualenv tox tox-gh-actions tox-conda
         # if you use tox-conda you can also add
         # tox-conda to the above list of dependencies
 
     - name: Test with tox
-      run: tox
+      run: tox -e py37
       #env:
       #  PLATFORM: ${{ matrix.platform }}
 
