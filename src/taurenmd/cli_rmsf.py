@@ -40,7 +40,7 @@ import argparse
 import functools
 from datetime import datetime
 
-from taurenmd import _BANNER, Path  # noqa: F401
+from taurenmd import _BANNER, Path
 from taurenmd import core as tcore
 from taurenmd import log
 from taurenmd.libs import libcalc, libcli, libio, libmda, libplot
