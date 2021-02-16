@@ -1,5 +1,3 @@
-# taken and upgraded from:
-# https://github.com/joaomcteixeira/python-project-skeleton/blob/master/.github/workflows/version-bump-and-package.yml
 name: Package Build
 
 on:
