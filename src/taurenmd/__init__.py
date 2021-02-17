@@ -24,7 +24,7 @@ import sys
 from taurenmd.core import CONTACTUS, Path  # noqa: F401
 from taurenmd.logger import DEBUGFILE, LOGFILE
 
-__version__ = '0.9.4'
+__version__ = '0.9.5'
 
 _BANNER = __doc__.format(__version__)
 

@@ -10,6 +10,9 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+v0.9.5 (2021-02-17)
+------------------------------------------------------------
+
 * Upgraded CI to Github Actions according to: https://github.com/joaomcteixeira/python-project-skeleton
 * Updated README badges
 
