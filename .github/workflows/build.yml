@@ -1,4 +1,5 @@
-name: build
+# this action must be synchronized with version-bump-and-package.yml
+name: test_build
 
 on:
   pull_request:

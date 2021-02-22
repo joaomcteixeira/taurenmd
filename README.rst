@@ -17,13 +17,9 @@ taurenmd
     :target: https://doi.org/10.5281/zenodo.3551990
     :alt: Zenodo
 
-.. image:: https://github.com/joaomcteixeira/taurenmd/workflows/test_py37/badge.svg?branch=master
+.. image:: https://github.com/joaomcteixeira/taurenmd/workflows/Tests/badge.svg?branch=master
     :target: https://github.com/joaomcteixeira/taurenmd/actions?workflow=test_py37
     :alt: Test Status
-
-.. image:: https://github.com/joaomcteixeira/taurenmd/workflows/build/badge.svg?branch=master
-    :target: https://github.com/joaomcteixeira/taurenmd/actions?workflow=build
-    :alt: Package Build
 
 .. image:: https://img.shields.io/readthedocs/taurenmd/latest?label=Read%20the%20Docs
     :target: https://taurenmd.readthedocs.io/en/latest/index.html
