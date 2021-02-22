@@ -10,6 +10,9 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+v0.9.6 (2021-02-22)
+------------------------------------------------------------
+
 * Remove README badge for build: not needed.
 * Added some comments in the workflow files.
 * no changes in code, only CI.
