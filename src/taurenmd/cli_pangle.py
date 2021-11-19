@@ -36,8 +36,9 @@ where ``[...]`` is the previous command example.
 import argparse
 import functools
 
-import taurenmd.core as tcore
-from taurenmd import _BANNER, Path, log
+from taurenmd import _BANNER, Path
+from taurenmd import core as tcore
+from taurenmd import log
 from taurenmd.libs import libcalc, libcli, libio, libmda, libplot
 from taurenmd.logger import S, T
 
@@ -65,6 +66,7 @@ ap = libcli.CustomParser(
 libcli.add_version_arg(ap)
 libcli.add_topology_arg(ap)
 libcli.add_trajectories_arg(ap)
+libcli.add_insort_arg(ap)
 libcli.add_plane_selection_arg(ap)
 libcli.add_angle_unit_arg(ap)
 libcli.add_reference_frame_arg(ap)
@@ -81,6 +83,7 @@ def main(
         topology,
         trajectories,
         plane_selection,
+        insort=False,
         aunit='degrees',
         ref_frame=0,
         start=None,
@@ -93,11 +96,11 @@ def main(
         ):
     """Execute main client logic."""
     log.info(T('calculating angles'))
-    
+
     topology = Path(topology)
     trajectories = [Path(t) for t in trajectories]
 
-    u = libmda.load_universe(topology, *trajectories)
+    u = libmda.load_universe(topology, *trajectories, insort=False)
 
     frame_slice = libio.frame_slice(
         start=start,
@@ -119,26 +122,31 @@ def main(
         reference_point_3,
         )
     log.info(S('the equation is {}x + {}y + {}z = {}', ra, rb, rc, rd))
-    
+
     log.info(T('Calculating angles'))
     angles = []
-    for _ts in u.trajectory[frame_slice]:
 
-        point1 = u.select_atoms(plane_selection[0]).center_of_geometry()
-        point2 = u.select_atoms(plane_selection[1]).center_of_geometry()
-        point3 = u.select_atoms(plane_selection[2]).center_of_geometry()
-        
-        a, b, c, d = libcalc.calc_plane_eq(point1, point2, point3)
+    trajlen = len(u.trajectory[frame_slice])
+    with libcli.ProgressBar(trajlen, suffix='frames') as pb:
+        for _ts in u.trajectory[frame_slice]:
 
-        angles.append(
-            libcalc.calc_planes_angle(
-                ra, rb, rc, a, b, c,
-                aunit=aunit,
+            point1 = u.select_atoms(plane_selection[0]).center_of_geometry()
+            point2 = u.select_atoms(plane_selection[1]).center_of_geometry()
+            point3 = u.select_atoms(plane_selection[2]).center_of_geometry()
+
+            a, b, c, d = libcalc.calc_plane_eq(point1, point2, point3)
+
+            angles.append(
+                libcalc.calc_planes_angle(
+                    ra, rb, rc, a, b, c,
+                    aunit=aunit,
+                    )
                 )
-            )
-    
+
+            pb.increment()
+
     log.info(S('calculated a total of {} angles.', len(angles)))
-   
+
     if export:
         libio.export_data_to_file(
             list(range(len(u.trajectory))[frame_slice]),

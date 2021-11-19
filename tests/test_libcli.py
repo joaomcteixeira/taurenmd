@@ -28,7 +28,7 @@ def test_maincli():
     # since we have it, lets play it with and close the circle
     assert result == (
         '--cov-report=term-missing '
-        '--cov-append --cov-config=.coveragerc -vv tests'
+        '--cov-append --cov-config=.coveragerc -vv'
         ).split()
 
 
@@ -37,8 +37,9 @@ def test_save_refs():
     references.add("zello world")
     lc.save_references()
     p1 = Path(CMDFILE)
-    s = p1.open().readlines()
-    assert s[-1].split(':')[1][1:] == 'zello world'
+    s = p1.read_text().strip().split('\n')
+    s = [i for i in s]
+    assert s[-1] == 'zello world'
     p1.unlink()
 
 
@@ -474,3 +475,48 @@ def test_data_export_arg(cmd, expected):
     lc.add_data_export_arg(parser)
     v = vars(parser.parse_args(cmd.split()))
     assert v['export'] == expected
+
+
+@pytest.mark.parametrize(
+    'arg,expected',
+    [
+        (1, '1'),
+        ('-a', '-a'),
+        ('segid A or resnum 10', "'segid A or resnum 10'"),
+        ]
+    )
+def test_represent_argument(arg, expected):
+    """Test argument representation."""
+    result = lc.represent_argument(arg)
+    assert result == expected
+
+
+def test_ProgressBar_1():
+    """Test progress bar."""
+    kw = {'prefix': 'hello', 'suffix': 'frames', 'decimals': 2}
+    with lc.ProgressBar(40, **kw) as PB:
+        assert PB.counter == 1
+        for i in range(40):
+            PB.increment()
+            assert PB.counter == i + 2
+
+    with pytest.raises(IndexError):
+        PB.increment()
+
+
+def test_ProgressBar_2():
+    """Test progress bar."""
+    kw = {
+        'prefix': 'hello',
+        'suffix': 'frames',
+        'decimals': 2,
+        'bar_length': 70,
+        }
+    with lc.ProgressBar(30, **kw) as PB:
+        assert PB.counter == 1
+        for i in range(30):
+            PB.increment()
+            assert PB.counter == i + 2
+
+    with pytest.raises(IndexError):
+        PB.increment()

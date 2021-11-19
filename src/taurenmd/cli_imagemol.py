@@ -17,7 +17,7 @@ get ``mdtraj.top.find_molecules[:1]``, and ``other_molecules``
 parameter receives ``mdtraj.top.find_molecules[1:]``.
 
 ### Protocol 2
-    
+
 The same as protocol 1 but executes those steps for each frame
 separately. Frames are concatenated back to a whole trajectory
 at the end.
@@ -42,8 +42,9 @@ Using protocol 2
 import argparse
 import functools
 
-import taurenmd.core as tcore
-from taurenmd import _BANNER, log
+from taurenmd import _BANNER
+from taurenmd import core as tcore
+from taurenmd import log
 from taurenmd.libs import libcli, libio, libmdt
 from taurenmd.logger import S, T
 
@@ -68,12 +69,12 @@ ap = libcli.CustomParser(
 
 libcli.add_version_arg(ap)
 libcli.add_topology_arg(ap)
-libcli.add_trajectory_arg(ap)
+libcli.add_trajectories_arg(ap)
+libcli.add_insort_arg(ap)
 libcli.add_traj_output_arg(ap)
 libcli.add_top_output_arg(ap)
 
 ap.add_argument(
-    '-i',
     '--protocol',
     help=(
         'The protocol with which reimage. '
@@ -90,17 +91,19 @@ def _ap():
 
 def main(
         topology,
-        trajectory,
+        trajectories,
+        insort=False,
         traj_output='imaged.dcd',
         top_output=False,
         protocol=1,
         **kwargs
         ):
     """Execute main client logic."""
-    log.info('Attempting image molecules')
-    
-    traj = libmdt.load_traj(topology, trajectory)
-    
+    log.info(T('Attempting image molecules'))
+
+    log.info(T('loading input'))
+    traj = libmdt.load_traj(topology, trajectories, insort=insort)
+
     protocols = {
         1: libmdt.imagemol_protocol1,
         2: libmdt.imagemol_protocol2,
@@ -115,7 +118,7 @@ def main(
     if top_output:
         fout = libio.parse_top_output(top_output, traj_output)
         reimaged[0].save(fout.str())
-        log.info(S('saving frame 0 to: {}', fout.resolve()))
+        log.info(S('saved frame 0 to: {}', fout.resolve()))
 
     return
 

@@ -9,25 +9,25 @@ taurenmd
     :alt: PyPI Package latest release
     :target: https://pypi.org/project/taurenmd
 
+.. image:: https://joss.theoj.org/papers/10.21105/joss.02175/status.svg
+    :target: https://doi.org/10.21105/joss.02175
+    :alt: joss
+
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3551990.svg
     :target: https://doi.org/10.5281/zenodo.3551990
     :alt: Zenodo
+
+.. image:: https://github.com/joaomcteixeira/taurenmd/workflows/Tests/badge.svg?branch=master
+    :target: https://github.com/joaomcteixeira/taurenmd/actions?workflow=test_py37
+    :alt: Test Status
 
 .. image:: https://img.shields.io/readthedocs/taurenmd/latest?label=Read%20the%20Docs
     :target: https://taurenmd.readthedocs.io/en/latest/index.html
     :alt: Read the Docs (latest)
 
-.. image:: https://img.shields.io/travis/joaomcteixeira/taurenmd/master?label=TravisCI
-    :target: https://travis-ci.org/joaomcteixeira/taurenmd
-    :alt: Travis master branch
-
 .. image:: https://codecov.io/gh/joaomcteixeira/taurenmd/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/joaomcteixeira/taurenmd
     :alt: Codecov master branch
-
-.. image:: https://api.codeclimate.com/v1/badges/d69e2e9866338d88955c/test_coverage
-   :target: https://codeclimate.com/github/joaomcteixeira/taurenmd/test_coverage
-   :alt: Test Coverage
 
 .. image:: https://api.codeclimate.com/v1/badges/d69e2e9866338d88955c/maintainability
    :target: https://codeclimate.com/github/joaomcteixeira/taurenmd
@@ -44,10 +44,6 @@ taurenmd
 .. image:: https://img.shields.io/pypi/pyversions/taurenmd.svg
     :alt: Supported versions
     :target: https://pypi.org/project/taurenmd
-
-.. image:: https://img.shields.io/github/commits-since/joaomcteixeira/taurenmd/v0.8.9/master
-    :alt: Commits since latest release
-    :target: https://github.com/joaomcteixeira/taurenmd/compare/v0.8.9...master
 
 .. image:: https://img.shields.io/pypi/dm/taurenmd?label=PyPI%20Downloads
     :alt: PyPI - Downloads
@@ -70,9 +66,9 @@ With this said, **taurenmd** aims to be a flexible and extensible peace of softw
 Documentation
 =============
 
-**taurenmd** full documentation is available at: https://taurenmd.readthedocs.io, read there:
+**taurenmd**'s full documentation is available at: https://taurenmd.readthedocs.io, read there:
 
 #. how to install
-#. usage
+#. usage examples
 #. citing
 #. *etc...*

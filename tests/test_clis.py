@@ -22,7 +22,7 @@ from taurenmd import (  # noqa: E133
     cli_rmsf,
     cli_rotations,
     cli_trajedit,
-)
+    )
 from taurenmd.libs import libcli as lc
 
 from . import Path, toptest, trajtest
@@ -322,6 +322,24 @@ def test_cli_nosol_1():
     p2.unlink()
 
 
+def test_cli_nosol_1_multiple():
+    """Test cli nosol multiple trajs."""
+    cli_nosol.main(
+        toptest,
+        [trajtest] * 2,
+        selection='name CA',
+        maintain=None,
+        top_output='_f0.pdb',
+        traj_output='nosol.dcd',
+        )
+    p1 = Path('nosol.dcd')
+    p2 = Path('nosol_f0.pdb')
+    assert p1.exists()
+    assert p2.exists()
+    p1.unlink()
+    p2.unlink()
+
+
 def test_cli_nosol_2():
     """Test cli nosol."""
     cli_nosol.main(
@@ -517,6 +535,18 @@ def test_cli_trajedit_1():
     p2.unlink()
 
 
+def test_cli_trajedit_SystemExit_align():
+    """Test trajedit 1."""
+    with pytest.raises(SystemExit) as exit:
+        cli_trajedit.main(
+            toptest,
+            [trajtest],
+            align='name ZZZ',
+            )
+    assert exit.type == SystemExit
+    assert exit.value.code == 126
+
+
 def test_cli_trajedit_2():
     """Test trajedit 2."""
     cli_trajedit.main(
@@ -553,6 +583,7 @@ def test_cli_trajedit_3():
         (cli, 'dist top.pdb traj1.xtc traj2.xtc -l1 selA -l2 selB -s 1 -e 2 -p 3 -x --plot'),  # noqa: E501
         (cli, 'imagemol top.pdb traj.xtc -d tout.xtc -o'),
         (cli, 'imagemol top.pdb traj.xtc -d tout.xtc -o out.pdb'),
+        (cli, 'imagemol top.pdb traj.xtc -d tout.xtc -o out.pdb --protocol 1'),
         (cli, 'pangle top.pdb traj_1.xtc traj_2.xtc -x --plot title=title -s 1 -e 2 -p 3 -z selA selB selC -a radians'),  # noqa: E501
         (cli, 'trajedit top.pdb traj1.xtc traj2.xtc -i -l segA -s 1 -e 10 -p 2 -d tout.xtc -o'),  # noqa: E501
         (cli, 'nosol top.pdb traj.xtc -d tout.xtc -o out.pdb -m NA'),
@@ -560,9 +591,10 @@ def test_cli_trajedit_3():
         (cli, 'rmsd top.pdb traj1.xtc traj2.xtc -g segA segB -s 1 -e 10 -p 2 -r 10 -x data.csv --plot title=1'),  # noqa: E501
         (cli, 'rmsf top.pdb traj1.xtc traj2.xtc -g segA segB -s 1 -e 10 -p 2 -x data.csv --plot title=1'),  # noqa: E501
         (cli, 'rotations top.pdb traj1.xtc traj2.xtc -z segA segB segC -s 1 -e 10 -p 2 -a radians -x data.csv'),  # noqa: E501
+        (cli, 'rotations top.pdb traj1.xtc traj2.xtc -z segA segB segC -s 1 -e 10 -p 2 -a radians -x data.csv'),  # noqa: E501
         (cli, 'report top.pdb traj1.xtc traj2.xtc'),
         ],
     )
 def test_ap_interface(module, cmd):
     """Test argparse interface of command lines."""
-    module.ap.parse_args(cmd.split())
+    module.ap.parse_args(f'{cmd} -i'.split())

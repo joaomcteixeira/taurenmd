@@ -6,12 +6,16 @@ client interfaces. It contains also others used to enhance the user
 experience.
 """
 import argparse
+import os
 import sys
 from datetime import datetime
 from functools import wraps
 
-import taurenmd.core as tcore
-from taurenmd import _BANNER, references
+import numpy as np
+
+from taurenmd import _BANNER, __version__
+from taurenmd import core as tcore
+from taurenmd import log, references
 from taurenmd.logger import CMDFILE
 
 
@@ -27,12 +31,12 @@ def maincli(ap, main):
 
     Operates when client is called directly outside the
     ``taurenmd`` client interface.
-    
+
     - Reads input parameters
     - saves inpu command to log file
     - runs client ``main`` function
     - saves references to log file
-    
+
     Returns
     -------
     The result value from client ``main`` function.
@@ -67,11 +71,11 @@ def add_reference(ref):
 
 def save_references():
     """Save used references to log file."""
-    out = [f'{i}: {ref}' for i, ref in enumerate(sorted(references), start=2)]
     with open(CMDFILE, 'a') as fh:
         fh.write('References:\n')
-        fh.write(f'1: {tcore.ref_taurenmd}')
-        fh.write(''.join(out))
+        fh.write(tcore.ref_taurenmd)
+        fh.write('\n'.join(sorted(list(references))))
+        fh.write('\n\n')
 
 
 # https://stackoverflow.com/questions/4042452
@@ -93,7 +97,7 @@ class ParamsToDict(argparse.Action):
 
     Example
     -------
-    
+
     Where ``-x`` is an optional argument of the command-line client
     interface.
 
@@ -129,7 +133,7 @@ class ParamsToDict(argparse.Action):
                         param_dict[k] = float(v)
                     except (ValueError, TypeError):  # is string or list
                         param_dict[k] = bool_value.get(v.lower(), v)
-            
+
         namespace.plotvars = param_dict
         setattr(namespace, self.dest, True)
 
@@ -148,11 +152,25 @@ def save_command(fname, *args):
     """
     with open(fname, 'a') as fh:
         fh.write(
-            '[{}] {}\n'.format(
-                datetime.now().strftime("%d/%m/%Y, %H:%M:%S"),
-                ' '.join(str(a) for a in args),
+            '[{}][taurenmd {}] {}\n'.format(
+                datetime.now().strftime("%d/%B/%Y, %H:%M:%S"),
+                __version__,
+                ' '.join(represent_argument(a) for a in args),
                 )
             )
+
+
+def represent_argument(arg):
+    """
+    Represent argument in a string.
+
+    If argument has spaces represents string with quotation marks ".
+    """
+    sarg = str(arg)
+    if sarg.count(' ') > 0:
+        return '{!r}'.format(sarg)
+    else:
+        return sarg
 
 
 def add_subparser(parser, module):
@@ -205,7 +223,7 @@ def add_subparser(parser, module):
 def add_version_arg(parser):
     """
     Add version ``-v`` option to parser.
-    
+
     Displays a message informing the current version.
     Also accessible via ``--version``.
 
@@ -291,7 +309,7 @@ def add_topology_arg(parser):
 def add_trajectories_arg(parser):
     """
     Add trajectory positional argument to parser.
-    
+
     Accepts multiple trajectory files.
 
     Parameters
@@ -313,9 +331,9 @@ def add_trajectories_arg(parser):
 def add_trajectory_arg(parser):
     """
     Add trajectory positional argument to parser.
-    
+
     Accepts a single trajectory file.
-    
+
     Parameters
     ----------
     parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
@@ -330,7 +348,7 @@ def add_trajectory_arg(parser):
 def add_slice_arg(parser):
     """
     Add start, stop and step slicing arguments.
-    
+
     Slicing arguments are according to `Python Slice object <https://docs.python.org/3/library/functions.html#slice>`_
 
     Parameters
@@ -465,7 +483,7 @@ def add_plane_selection_arg(parser):
 
     Plane selection is a selection of three regions separated by 'or'
     operator.
-    
+
     Is defined by ``-z`` and ``--plane-selection``.
 
     Parameters
@@ -627,3 +645,109 @@ def add_data_export_arg(parser):
         const='results.csv',
         nargs='?',
         )
+
+
+class ProgressBar:
+    """
+    Contextualizes a Progress Bar.
+
+    Parameters
+    ----------
+    total : int convertable
+        The total number o iteractions expected.
+
+    prefix : str
+        Some prefix to enhance readability.
+
+    suffix : str
+        Some suffix to enhance readability.
+
+    decimals : int-convertable
+        The demicals to show in percentage.
+        Defaults to `1`.
+
+    bar_length : int, float, -convertable
+        The length of the bar.
+        If not provided (``None``), uses half of the terminal window.
+
+    Thanks to for the initial template function:
+    https://dev.to/natamacm/progressbar-in-python-a3n
+
+    Examples
+    --------
+
+    >>> with ProgressBar(5000, suffix='frames') as PB:
+    >>>     for i in trajectory:
+    >>>         # do something
+    >>>         PB.increment()
+    """
+
+    def __init__(
+            self,
+            total,
+            prefix='',
+            suffix='',
+            decimals=1,
+            bar_length=None,
+            ):
+
+        if bar_length is None:
+            try:
+                _columns, _rows = os.get_terminal_size()
+            except OSError:
+                log.error(
+                    'ERROR: Could not retrive size of ProgressBar '
+                    'from terminal window. Using the default of `50`. '
+                    'Everything else is normal.'
+                    )
+                # this trick is used to guarantee 100% test coverage
+                _columns = 100
+            bar_length = _columns // 2
+
+        total = int(total)
+        self.prefix = prefix
+        self.suffix = suffix
+        self.str_format = "{0:." + str(int(decimals)) + "f}"
+
+        # using Numpy
+        self.percentages = np.linspace(0, 100, total + 1, endpoint=True)
+        # 49.7 µs ± 5.34 µs per loop (7 runs, 10000 loops each)
+        # Not using Numpy
+        # self.percentages =  [i / total * 100 for i in range(total + 1)]
+        # 974 µs ± 38.8 µs per loop (7 runs, 1000 loops each)
+
+        self.filled_length = \
+            np.round(bar_length * self.percentages / 100).astype(int)
+        self.counter = 0
+        self.total = total
+        self.bar_length = bar_length
+
+        assert len(self.percentages) == total + 1
+        assert len(self.percentages) == len(self.filled_length)
+
+    def __enter__(self):
+        bar = '-' * self.bar_length
+        percents = self.str_format.format(self.percentages[0])
+        sys.stdout.write(
+            f'\r{self.prefix} |{bar}| '
+            f'{percents}% {self.counter}/{self.total} {self.suffix}'
+            )
+        self.counter += 1
+        return self
+
+    def __exit__(self, *args):
+        sys.stdout.write('\n')
+        sys.stdout.flush()
+
+    def increment(self):
+        """Print next progress bar increment."""
+        t = self.total
+        c = self.counter
+        prefix = self.prefix
+        suffix = self.suffix
+        bl = self.bar_length
+        percents = self.str_format.format(self.percentages[c])
+        fl = self.filled_length[c]
+        bar = f"{'█' * fl}{'-' * (bl - fl)}"
+        sys.stdout.write(f'\r{prefix} |{bar}| {percents}% {c}/{t} {suffix}')
+        self.counter += 1

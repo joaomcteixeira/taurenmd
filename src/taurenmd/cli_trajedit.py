@@ -36,7 +36,7 @@ align the whole system to one of its subunits:
     taurenmd trajedit top.pdb traj.dcd -d alignedA.dcd -a "segid A and name CA"
 
 further restrain the output to a specific subselection with ``-l``:
-    
+
     [...] -l "segid A or segid B"
 
 ``trajedit`` also implements the ``unwrap`` method from which is an
@@ -53,10 +53,10 @@ import argparse
 import functools
 
 import MDAnalysis as mda
-from MDAnalysis.analysis import align as mdaalign
 
-import taurenmd.core as tcore
-from taurenmd import _BANNER, Path, log
+from taurenmd import _BANNER, Path, _controlled_exit
+from taurenmd import core as tcore
+from taurenmd import log
 from taurenmd.libs import libcli, libio, libmda
 from taurenmd.logger import S, T
 
@@ -95,7 +95,13 @@ libcli.add_top_output_arg(ap)
 ap.add_argument(
     '-a',
     '--align',
-    help='Align system to a atom group.',
+    help=(
+        'Align system to a atom group. '
+        'Alignmed RMSD is compared to the Topology coordinates. '
+        'Uses MDAnalysis.analysis.align.alignto. '
+        'If given without argument defaults to \'all\'. '
+        'Defaults to ``False``.'
+        ),
     default=False,
     const='all',
     nargs='?',
@@ -155,15 +161,12 @@ def main(
         ):
     """Execute main client logic."""
     log.info(T('editing trajectory'))
-    
+
     topology = Path(topology)
     trajectories = [Path(t) for t in trajectories]
 
-    if insort:
-        trajectories = libio.sort_numbered_input(*trajectories)
-
     u = libmda.load_universe(topology, *trajectories)
-    
+
     if unwrap:
         log.info(T('unwrapping'))
         log.info(S('set to: {}', unwrap))
@@ -174,7 +177,8 @@ def main(
         log.info(T('Alignment'))
         log.info(S('trajectory selection will be aligned to subselection:'))
         log.info(S('- {}', align, indent=2))
-    
+        align_reference = mda.Universe(Path(topology).str())
+
     log.info(T('transformation'))
     sliceObj = libio.frame_slice(start, stop, step)
 
@@ -185,15 +189,12 @@ def main(
     log.info(T('saving trajectory'))
     traj_output = Path(traj_output)
     log.info(S('destination: {}', traj_output.resolve().str()))
+    total_frames = len(u.trajectory[sliceObj])
 
-    with mda.Writer(traj_output.str(), atom_selection.n_atoms) as W:
-        for i, _ts in zip(
-                range(len(u.trajectory))[sliceObj],
-                u.trajectory[sliceObj],
-                ):
-            
-            log.info(S('working on frame: {}', i))
-            
+    with mda.Writer(traj_output.str(), atom_selection.n_atoms) as W, \
+            libcli.ProgressBar(total_frames, suffix='frames') as pb:
+        for _ts in u.trajectory[sliceObj]:
+
             if unwrap:
                 log.debug(S('unwrapping', indent=2))
                 atom_selection.unwrap(
@@ -202,10 +203,15 @@ def main(
                     )
 
             if align:
-                mdaalign.alignto(u, u, select=align,)
+                try:
+                    libmda.mdaalignto(u, align_reference, selection=align)
+                except (ValueError, ZeroDivisionError):
+                    _controlled_exit()
 
             W.write(atom_selection)
-    
+
+            pb.increment()
+
     log.info(S('trajectory saved'))
 
     if top_output:
@@ -221,7 +227,7 @@ def main(
                         compound=unwrap_compound,
                         )
                 W.write(atom_selection)
-    
+
     log.info(S('Done'))
     return
 

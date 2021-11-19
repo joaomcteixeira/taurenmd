@@ -10,10 +10,74 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
-0.8.10 (2020-xx-xx)
+* cli ``dist`` now uses ``MDA.distance_array`` function. ISSUE #30
+
+v0.9.6 (2021-02-22)
+------------------------------------------------------------
+
+* Remove README badge for build: not needed.
+* Added some comments in the workflow files.
+* no changes in code, only CI.
+
+v0.9.5 (2021-02-17)
+------------------------------------------------------------
+
+* Upgraded CI to Github Actions according to: https://github.com/joaomcteixeira/python-project-skeleton
+* Updated README badges
+
+0.9.4 (2020-06-02)
+------------------
+
+* Updates documentation with JOSS citation (PR #49)
+
+0.9.3 (2020-05-25)
+------------------
+
+* Improves CONTRIBUTION.rst guidelines (PR #46)
+
+0.9.2 (2020-05-17)
+------------------
+
+* Client progression is now represented by a progress bar (PR #44)
+
+0.9.1 (2020-05-15)
+------------------
+
+* Improves log in `.taurenmd.cmd` (PR #43)
+
+0.9.0 (2020-05-15)
+------------------
+
+* Adds `-i` to every `CLI` interface (PR #42)
+* `major` version change because `cli_imagemol` lost backwards compatibility
+
+0.8.14 (2020-05-12)
 -------------------
 
-* cli ``dist`` now uses ``MDA.distance_array`` function. ISSUE #30
+* Updates `tox.ini` file for Continuous Integration (PR #40)
+
+0.8.13 (2020-05-12)
+-------------------
+
+* Added support for sequence of trajectories in CLIs that use `MDTraj` (PR #39)
+
+0.8.12 (2020-05-04)
+-------------------
+
+* PR: #37
+* Installs taurenmd directly with Conda env
+
+0.8.11 (2020-04-03)
+-------------------
+
+* PR: #33
+* Corrected command representation in .taurenmd.cwd adding quotes when needed
+
+0.8.10 (2020-04-02)
+-------------------
+
+* PR: #32
+* Corrects incorrect usage of MDAnalysis.analysis.alignto function in ``trajedit``.
 
 0.8.9 (2020-03-03)
 ------------------

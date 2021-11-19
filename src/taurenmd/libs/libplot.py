@@ -9,7 +9,7 @@ References
 """
 from bioplottemplates.plots import plotlabeld, plotparam
 
-import taurenmd.core as tcore
+from taurenmd import core as tcore
 from taurenmd.libs import libcli
 
 

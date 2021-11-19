@@ -52,7 +52,7 @@ three tox environments pass before you Pull Request:
 import argparse
 import functools
 
-import taurenmd.core as tcore
+from taurenmd import core as tcore
 from taurenmd import log
 # add here additional libraries if you need them
 # libmda, libmdt, libcalc, etc...

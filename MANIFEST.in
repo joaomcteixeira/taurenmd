@@ -1,3 +1,4 @@
+graft devtools
 graft docs
 graft src
 graft tests
@@ -10,6 +11,7 @@ include .editorconfig
 include .readthedocs.yml
 include .codeclimate.yml
 include pyproject.toml
+include tox.ini
 
 include README.rst
 include AUTHORS.rst
@@ -17,12 +19,11 @@ include CHANGELOG.rst
 include CONTRIBUTING.rst
 include LICENSE
 include requirements.yml
+include requirements-dev.yml
 
 prune alphas
 prune .ci
 prune joss
-
-include tox.ini .travis.yml
 
 global-exclude *.py[cod] __pycache__/* *.so *.dylib
 global-exclude tags

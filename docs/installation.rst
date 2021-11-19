@@ -33,9 +33,9 @@ If you use `Anaconda`_ as your Python package manager just do the following on y
 
 1. Download the *taurenmd* Anaconda environment file from our repository::
 
-    curl https://raw.githubusercontent.com/joaomcteixeira/taurenmd/master/requirements.yml -o taurenmdenv.yml 
+    curl https://raw.githubusercontent.com/joaomcteixeira/taurenmd/master/requirements.yml -o taurenmdenv.yml
 
-If for some reason the above does not work just open the link on your WebBrowser and save the text to a file (or save the file).
+If for some reason the above does not work, just open the link on your WebBrowser and save the text to a file (or save the file).
 
 2. Create a new Anaconda Python environment to host *taurenmd*::
 
@@ -47,10 +47,13 @@ Where ``taurenmdenv.yml`` is the file downloaded in the previous step.
 
     conda activate taurenmd
 
-4. Install *taurenmd* itself::
+4. You are ready, type::
 
-    pip install taurenmd
-    
+    taurenmd
+
+to start using ``taurenmd``.
+
+
 With PyPI
 `````````
 
@@ -63,16 +66,22 @@ If you do not use `Anaconda`_ and you actually rely on `PyPI`_ as your package m
     python -m pip install --upgrade pip wheel
     pip3 install taurenmd[all]
 
-3. What is the problem with the pure PyPI installation?
+3. You should be good to go
 
-*taurenmd* relies on OpenMM to read ``.cif`` topology files, and OpenMM is not deployed on PyPI, you need to `install it through its conda channel <https://anaconda.org/omnia/openmm>`_. Therefore, unless you need to load ``.cif`` files you can use *taurenmd* from a pure PyPI installation. Otherwise, you should follow the :ref:`With Anaconda` instructions. :ref:`May be you want to help us out solving this problem :-) <Contributing>`.
+Note. What is the problem with the pure PyPI installation?
 
-4. You should be good to go
+*taurenmd* relies on OpenMM to read ``.cif`` topology files when using routines based on ``MDTraj``, and OpenMM is not deployed on PyPI and requires `installation through its conda channel <https://anaconda.org/omnia/openmm>`_. Therefore, unless you need to load ``.cif`` files you can use *taurenmd* from a pure PyPI installation. Otherwise, you should follow the :ref:`With Anaconda` instructions. :ref:`May be you want to help us out solving this problem :-) <Contributing>`.
+
 
 Other Platforms
 ```````````````
 
 We do not provide support for other distribution platforms such as `HomeBrew <https://brew.sh/>`_ or `Chocolatey <https://chocolatey.org/>`_, but may be you can emulate the steps described above for these systems. Feel welcomed to :ref:`improve this documentation with your insights <Contributing>`!
+
+**User installation suggestions for particular systems:**
+
+#. :issue:`pyenv in Arch Linux <34>`
+#. :issue:`on zsh <35>`
 
 
 From GitHub

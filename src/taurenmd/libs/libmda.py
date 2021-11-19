@@ -12,15 +12,17 @@ taurenmd and MDAnalysis.
 .. _cite both: https://taurenmd.readthedocs.io/en/latest/citing.html
 """
 import MDAnalysis as mda
+from MDAnalysis.analysis import align as mdaalign
 
-import taurenmd.core as tcore
-from taurenmd import Path, log
+from taurenmd import Path
+from taurenmd import core as tcore
+from taurenmd import log
 from taurenmd.libs import libcli, libio
 from taurenmd.logger import S, T
 
 
 @libcli.add_reference(tcore.ref_mda)
-def load_universe(topology, *trajectories):
+def load_universe(topology, *trajectories, insort=False):
     """
     Load MDAnalysis universe.
 
@@ -33,7 +35,7 @@ def load_universe(topology, *trajectories):
 
     Examples
     --------
-        
+
         >>> libmda.load_universe('topology.pdb', 'trajectory.dcd')
 
         >>> libmda.load_universe(
@@ -51,11 +53,14 @@ def load_universe(topology, *trajectories):
     trajectories* : str of Path objects
         Paths to trajectory file(s). Trajectory files will be used
         sequentially to create the Universe.
-    
+
     Return
     ------
     MDAnalysis Universe
     """  # noqa: E501 D412
+    if insort:
+        trajectories = libio.sort_numbered_input(*trajectories)
+
     libio.report_input(topology, trajectories)
     universe = mda.Universe(
         Path(topology).str(),
@@ -69,13 +74,13 @@ def load_universe(topology, *trajectories):
 def report(universe):
     """
     Report information about the Universe.
-    
+
     Example
     -------
 
         >>> u = libmda.load_universe('topology.pdb', 'trajectory.xtc')
         >>> libmda.report(u)
-       
+
     Parameters
     ----------
     universe : MDAnalysis Universe
@@ -92,13 +97,44 @@ def report(universe):
 
 
 @libcli.add_reference(tcore.ref_mda)
+def mdaalignto(universe, reference, selection='all'):
+    """
+    Align universe to reference.
+
+    Uses `MDAnalysis.analysis.align.alignto <https://www.mdanalysis.org/docs/documentation_pages/analysis/align.html?highlight=alignto#MDAnalysis.analysis.align.alignto>`_.
+
+    Parameters
+    ----------
+    universe, reference, selection
+        Same as in ``MDAnalysis.analysis.align.alignto`` function.
+
+    Raises
+    ------
+    ZeroDivisionError
+        If selection gives empty selection.
+    """  # noqa: E501
+    try:
+        mdaalign.alignto(universe, reference, select=selection)
+    except (ValueError, ZeroDivisionError) as err:
+        log.debug(err, exc_info=True)
+        errmsg = (
+            f'Could not perform alignment due to {err}, '
+            'most likely the alignment selection does not match '
+            'any possible selection in the system. You selection : '
+            f'\'{selection}\'.'
+            )
+        log.info(errmsg)
+        raise err
+
+
+@libcli.add_reference(tcore.ref_mda)
 def draw_atom_label_from_atom_group(atom_group):
     """
     Translate MDAnalysis Atom Group to list of strings for each atom.
 
     Strings represent each atom by SEGID.RESNUM|RESNAME.NAME,
     for example carbon alpha of Cys 18 of chain A would:
-        
+
         >>> A.18Cys.CA
 
     This function is used by taurenmd for data representation

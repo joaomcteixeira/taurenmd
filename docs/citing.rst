@@ -1,17 +1,40 @@
 Citing
 ======
 
+.. image:: https://joss.theoj.org/papers/10.21105/joss.02175/status.svg
+    :target: https://doi.org/10.21105/joss.02175
+    :alt: joss
+
 .. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.3551990.svg
     :target: https://doi.org/10.5281/zenodo.3551990
     :alt: Zenodo
 
-Please cite **taurenmd** in your publications and research/work environment. This project is indexed at `Zenodo <https://doi.org/10.5281/zenodo.3551990>`_ and you can cite it in two different ways:
+If you use **taurenmd**, please cite it in your publications and research/work environment, referring always to the main publication:
+
+* Teixeira, J. M., (2020). taurenmd: A command-line interface for analysis of Molecular Dynamics simulations. Journal of Open Source Software, 5(50), 2175. https://doi.org/10.21105/joss.02175
+
+**BibText**::
+
+    @article{Teixeira2020,
+      doi = {10.21105/joss.02175},
+      url = {https://doi.org/10.21105/joss.02175},
+      year = {2020},
+      publisher = {The Open Journal},
+      volume = {5},
+      number = {50},
+      pages = {2175},
+      author = {João M.C. Teixeira},
+      title = {taurenmd: A command-line interface for analysis of Molecular Dynamics simulations.},
+      journal = {Journal of Open Source Software}
+    }
+
+This project is also indexed at `Zenodo <https://doi.org/10.5281/zenodo.3551990>`_ and, if needed, you can complement the above citation in two by:
 
 #. Referring to the whole project::
-    
+
     João M.C. Teixeira. joaomcteixeira/taurenmd: Zenodo. http://doi.org/10.5281/zenodo.3551990
 
-#. Referring the exact version used, for example::
+#. **or** referring the exact version used, for example::
 
     João M.C. Teixeira. (2019, December 26). joaomcteixeira/taurenmd: v0.7.2 (Version v0.7.2). Zenodo. http://doi.org/10.5281/zenodo.3593004
 
