@@ -205,7 +205,7 @@ def main(
             if align:
                 try:
                     libmda.mdaalignto(u, align_reference, selection=align)
-                except ZeroDivisionError:
+                except (ValueError, ZeroDivisionError):
                     _controlled_exit()
 
             W.write(atom_selection)

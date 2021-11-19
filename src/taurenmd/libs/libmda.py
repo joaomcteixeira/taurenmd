@@ -133,7 +133,7 @@ def mdaalignto(universe, reference, selection='all'):
     """  # noqa: E501
     try:
         mdaalign.alignto(universe, reference, select=selection)
-    except ZeroDivisionError as err:
+    except (ValueError, ZeroDivisionError) as err:
         log.debug(err, exc_info=True)
         errmsg = (
             f'Could not perform alignment due to {err}, '

@@ -10,6 +10,19 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+v0.9.6 (2021-02-22)
+------------------------------------------------------------
+
+* Remove README badge for build: not needed.
+* Added some comments in the workflow files.
+* no changes in code, only CI.
+
+v0.9.5 (2021-02-17)
+------------------------------------------------------------
+
+* Upgraded CI to Github Actions according to: https://github.com/joaomcteixeira/python-project-skeleton
+* Updated README badges
+
 0.9.4 (2020-06-02)
 ------------------
 
