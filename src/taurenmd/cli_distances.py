@@ -1,18 +1,31 @@
 """
 # Calculates distances between centers of geometry of two selections.
 
-Distance is given in 3D XYZ coordinate space units.
+Distance is given in XYZ coordinate space units.
 
 ## Algorithm
 
-Distance between centers of geometry is calculated by::
+Calculates the distance between the centers of geometry of
+two different selections, and for each frame in the trajectory, using::
 
-    np.linalg.norm(np.subtract(coord1, coord2))
+    [MDAnalysis.lib.distances.distance_array function](https://www.mdanalysis.org/docs/documentation_pages/lib/distances.html#MDAnalysis.lib.distances.distance_array)
 
-Where, ``coord*`` are the centers of geometry of each atom selection
-``-l1`` and ``-l2``, respectively.
-Read further on [np.linalg.norm](https://docs.scipy.org/doc/numpy/reference/generated/numpy.linalg.norm.html)
-and [np.subtract](https://docs.scipy.org/doc/numpy/reference/generated/numpy.subtract.html?highlight=subtract#numpy-subtract).
+The result is a distance value for each frame.
+
+### Note on Periodic Boxes
+
+The distances calculated in this CLI consider the trajectorie's
+periodic box dimensions for each time frame as described in
+`MDAnalysis.lib.distances.distance_array` `box` parameter.
+
+However, this client calculates the distances between the
+`center_of_geometry` of the two selections, and the real position of
+the center of geometry can itself contain measurement artifacts derived
+from splits of the molecules across the periodic box boundaries. In
+case your trajectories are split, and to avoid such errors in distance
+measurements, you should consider making molecules whole beforehand
+using this CLI. For this, see ``trajedit`` and ``imagemol`` CLI
+interfaces.
 
 ## Examples
 
@@ -42,6 +55,7 @@ import argparse
 import functools
 
 import numpy as np
+from MDAnalysis.lib.distances import distance_array
 
 from taurenmd import _BANNER, Path
 from taurenmd import core as tcore
@@ -128,21 +142,24 @@ def main(
     atom_sel1 = u.select_atoms(sel1)
     atom_sel2 = u.select_atoms(sel2)
 
-    distances = np.ones(len(u.trajectory[frame_slice]), dtype=np.float32)
+    distances = np.ones((len(u.trajectory[frame_slice]), 1), dtype=np.float64)
 
     log.info(T('Calculating distances'))
     # https://www.mdanalysis.org/MDAnalysisTutorial/atomgroups.html
     # https://www.mdanalysis.org/docs/documentation_pages/core/groups.html#MDAnalysis.core.groups.AtomGroup.center_of_geometry
-
     with libcli.ProgressBar(distances.size, suffix='frames') as pb:
-        for i, _ts in enumerate(u.trajectory[frame_slice]):
+        for i, ts in enumerate(u.trajectory[frame_slice]):
 
-            distances[i] = np.linalg.norm(
-                np.subtract(
-                    atom_sel1.center_of_geometry(),
-                    atom_sel2.center_of_geometry(),
-                    )
+            sel1_coords = atom_sel1.center_of_geometry()
+            sel2_coords = atom_sel2.center_of_geometry()
+
+            distance_array(
+                sel1_coords,
+                sel2_coords,
+                box=ts.dimensions,
+                result=distances[i:i + 1, :],
                 )
+
             pb.increment()
 
     log.info(S('calculated a total of {} distances.', len(distances)))
@@ -177,7 +194,7 @@ def main(
 
         libplot.param(
             list(range(len(u.trajectory))[frame_slice]),
-            distances,
+            distances[:, 0],
             **plotvars,
             )
 

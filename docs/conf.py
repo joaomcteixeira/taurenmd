@@ -11,6 +11,8 @@ mock_modules = [
     'MDAnalysis',
     'MDAnalysis.analysis',
     'MDAnalysis.analysis.rms',
+    'MDAnalysis.lib',
+    'MDAnalysis.lib.distances',
     'mdtraj',
     'simtk.openmm.app',
     'simtk.openmm',

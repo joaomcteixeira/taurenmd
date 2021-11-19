@@ -10,6 +10,8 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+* cli ``dist`` now uses ``MDA.distance_array`` function. ISSUE #30
+
 v0.9.6 (2021-02-22)
 ------------------------------------------------------------
 
