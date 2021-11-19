@@ -252,100 +252,100 @@ def calc_planes_angle(a1, b1, c1, a2, b2, c2, aunit='radians'):
         return angle
 
 
-@libcli.add_reference(tcore.ref_pyquaternion)
-def generate_quaternion_rotations(
-        rotation_axis,
-        rotating_vector,
-        start=0,
-        end=360,
-        num=360 * 3,
-        endpoint=True,
-        ):
-    """
-    Generate quaternion rotations of a vector around and axis.
-
-    Rotates a `vector` around an `axis` for a series of angles.
-    Rotation is performed using `Quaternion rotation <https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation>`_;
-    namely, `pyquaterion.rotate <http://kieranwynn.github.io/pyquaternion/#rotation>`_.
-
-    If you use this function you should cite
-    `PyQuaternion package <http://kieranwynn.github.io/pyquaternion/>`_.
-
-    Parameters
-    ----------
-    rotation_axis : tuple, list or array-like
-        The XYZ coordinates of the rotation axis. This is the axis
-        around which the vector will be rotated.
-
-    rotation_vector : tuple, list or array-like
-        The XYZ coordinates of the vector to rotate.
-
-    start : int
-        The starting rotation angle in degrees in the series.
-        Defaults to ``0``.
-
-    end : int
-        The final rotation angle in degrees in the series.
-        Defaults to ``360``.
-
-    num : int
-        The number of rotation steps in the angle rotation series.
-        This is provided by ``np.linspace(start, end, num=num)``.
-
-    Returns
-    -------
-    list of 2 unit tuples
-        Where the list indexes follow the progression along
-        ``np.linspace(start, end, num=num)`` and tuple elements
-        are the rotation quatertion used to rotate ``rotation_vector``
-        and the resulting rotated vector in its unitary form.
-    """  # noqa: E501
-    vec_u = Q(vector=rotating_vector).unit
-    rot_u = Q(vector=rotation_axis).unit
-
-    Q_rotated_tuples = []
-    for angle in np.linspace(start, end, num=num, endpoint=endpoint):
-        qq = Q(axis=rot_u.vector, degrees=angle)
-        Q_rotated_tuples.append((qq, qq.rotate(vec_u)))
-
-    return Q_rotated_tuples
-
-
-@libcli.add_reference(tcore.ref_pyquaternion)
-def sort_by_minimum_Qdistances(rotation_tuples, reference_vector):
-    """
-    Sort a list of quaternion rotation tuples.
-
-    By its distance to a ``reference_vector``. Designed to receive
-    the output of :py:func:`generate_quaternion_rotations`.
-
-    If you use this function you should cite
-    `PyQuaternion package <http://kieranwynn.github.io/pyquaternion/>`_.
-
-    Parameters
-    ----------
-    rotation_tuples : list of tuples
-        List of tuples containing Rotation quaternions and resulting
-        rotated vector. In other words, the output from
-        :py:func:`generate_quaternion_rotations`.
-
-    reference_vector : tuple, list or array-like
-        The XYZ 3D coordinates of the reference vector. The quaternion
-        distance between vectors in ``rotation_tuples`` and this
-        vector will be computed.
-
-    Returns
-    -------
-    list
-        The list sorted according to the creterion.
-    """
-    ref_u = Q(vector=reference_vector).unit
-
-    minimum = sorted(
-        rotation_tuples,
-        key=lambda x: math.degrees(Q.distance(x[1], ref_u)) % 360,
-        )
-    return minimum
+#@libcli.add_reference(tcore.ref_pyquaternion)
+#def generate_quaternion_rotations(
+#        rotation_axis,
+#        rotating_vector,
+#        start=0,
+#        end=360,
+#        num=360 * 3,
+#        endpoint=True,
+#        ):
+#    """
+#    Generate quaternion rotations of a vector around and axis.
+#
+#    Rotates a `vector` around an `axis` for a series of angles.
+#    Rotation is performed using `Quaternion rotation <https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation>`_;
+#    namely, `pyquaterion.rotate <http://kieranwynn.github.io/pyquaternion/#rotation>`_.
+#
+#    If you use this function you should cite
+#    `PyQuaternion package <http://kieranwynn.github.io/pyquaternion/>`_.
+#
+#    Parameters
+#    ----------
+#    rotation_axis : tuple, list or array-like
+#        The XYZ coordinates of the rotation axis. This is the axis
+#        around which the vector will be rotated.
+#
+#    rotation_vector : tuple, list or array-like
+#        The XYZ coordinates of the vector to rotate.
+#
+#    start : int
+#        The starting rotation angle in degrees in the series.
+#        Defaults to ``0``.
+#
+#    end : int
+#        The final rotation angle in degrees in the series.
+#        Defaults to ``360``.
+#
+#    num : int
+#        The number of rotation steps in the angle rotation series.
+#        This is provided by ``np.linspace(start, end, num=num)``.
+#
+#    Returns
+#    -------
+#    list of 2 unit tuples
+#        Where the list indexes follow the progression along
+#        ``np.linspace(start, end, num=num)`` and tuple elements
+#        are the rotation quatertion used to rotate ``rotation_vector``
+#        and the resulting rotated vector in its unitary form.
+#    """  # noqa: E501
+#    vec_u = Q(vector=rotating_vector).unit
+#    rot_u = Q(vector=rotation_axis).unit
+#
+#    Q_rotated_tuples = []
+#    for angle in np.linspace(start, end, num=num, endpoint=endpoint):
+#        qq = Q(axis=rot_u.vector, degrees=angle)
+#        Q_rotated_tuples.append((qq, qq.rotate(vec_u)))
+#
+#    return Q_rotated_tuples
+#
+#
+#@libcli.add_reference(tcore.ref_pyquaternion)
+#def sort_by_minimum_Qdistances(rotation_tuples, reference_vector):
+#    """
+#    Sort a list of quaternion rotation tuples.
+#
+#    By its distance to a ``reference_vector``. Designed to receive
+#    the output of :py:func:`generate_quaternion_rotations`.
+#
+#    If you use this function you should cite
+#    `PyQuaternion package <http://kieranwynn.github.io/pyquaternion/>`_.
+#
+#    Parameters
+#    ----------
+#    rotation_tuples : list of tuples
+#        List of tuples containing Rotation quaternions and resulting
+#        rotated vector. In other words, the output from
+#        :py:func:`generate_quaternion_rotations`.
+#
+#    reference_vector : tuple, list or array-like
+#        The XYZ 3D coordinates of the reference vector. The quaternion
+#        distance between vectors in ``rotation_tuples`` and this
+#        vector will be computed.
+#
+#    Returns
+#    -------
+#    list
+#        The list sorted according to the creterion.
+#    """
+#    ref_u = Q(vector=reference_vector).unit
+#
+#    minimum = sorted(
+#        rotation_tuples,
+#        key=lambda x: math.degrees(Q.distance(x[1], ref_u)) % 360,
+#        )
+#    return minimum
 
 
 def calc_torsion_angles(coords):
@@ -440,6 +440,31 @@ def calc_torsion_angles(coords):
 
 def torsion_set(p1, p2, p3, p4_vecs):
     """
+    Calculate torsion angles of set torwards three initial vectors.
+
+    Same implementation as `calc_torsion_angles` but A1, A2, and A3 are
+    fixed and A4 is an array of vectors. The torsion angles are
+    calculated for A4s with respect to the fixed A1, A2, and A3.
+
+    Example
+    -------
+    >>> torsion_set(
+        [x1, y1, z1],
+        [x2, y2, z2],
+        [x3, y3, z3],
+        [
+            [x4_1, y4_1, z4_1],
+            [x4_2, y4_2, z4_2],
+            [x4_3, y4_3, z4_3],
+            [x4_4, y4_4, z4_4],
+            ...
+            ],
+        )
+
+    Returns
+    -------
+    numpy.ndarray of shape (N,)
+        The anges in radians. Where N is the length of A4.
     """
     assert p4_vecs.shape[1] == 3
     q1 = p2 - p1

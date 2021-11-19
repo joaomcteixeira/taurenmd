@@ -1,15 +1,13 @@
 """
 # Decompose Eurler angle rotations of a selection.
 
-**EXPERIMENTAL PROTOCOL, RESULTS MAY NOT BE RELIABLE**
-
 *Calculate the Roll, Pitch and Yaw angles along the trajectory.*
 
 Read further on roll, pitch and yaw angles (Euler Angles) -
 [wikipedia](https://en.wikipedia.org/wiki/Euler_angles).
 
 Here we decompose these movements around the three different axis
-centered at an origin using Quaternion rotation.
+centered at an origin.
 
 ## Algorithm
 
@@ -36,27 +34,22 @@ Pitch axis,
 Calculating the angles:
 
 Angles represent the right hand rotation around an axis of the sistem in
-a i-frame compared to the reference frame. Quaterion distance is calculated
-by [libcalc.generate_quaternion_rotations](https://taurenmd.readthedocs.io/en/latest/reference/libcalc.html#generate_quaternion_rotations) and
-[libcal.sort_by_minimum_Qdistances](https://taurenmd.readthedocs.io/en/latest/reference/libcalc.html#taurenmd.libs.libcalc.sort_by_minimum_Qdistances).
+a i-frame compared to the reference frame.
 
 ### Roll
 
-The roll angle is calculated by rotating the unitary vector OA
-around vector ABCn until the Quaternion distance is the minimum
-between the vector OAi (in frame) and vector OA in reference frame.
+The roll angle is given by the torsion angle between OA, origin, ABCn,
+and OAi (in frame), displaced along ABCn.
 
 ### Pitch
 
-The pitch angle is calculated by rotating the unitary vector ABCn
-around vector AONn until the Quaternion distance is the minimum
-between the vector ABCni (in frame) and vector ABCn in reference frame.
+The pitch angle is by the torsion angle between ABCn, origin, AONn, and
+ABCni (in frame), displaced along AONn.
 
 ### Yaw
 
-The pitch angle is calculated by rotating the unitary vector AONn
-around vector OA until the Quaternion distance is the minimum
-between the vector AONni (in frame) and vector AONn in reference frame.
+The yaw angle is given by the torsion angle between the AONn, origin,
+OA, and AONni (in frame), displaced along OA.
 
 ## Examples
 
@@ -88,7 +81,7 @@ __status__ = 'Production'
 __doc__ += (
     f'{tcore.ref_mda}'
     f'{tcore.ref_mda_selection}'
-    f'{tcore.ref_pyquaternion}'
+    #f'{tcore.ref_pyquaternion}'
     )
 
 _help = 'Calculates angular rotations across axes.'
@@ -165,11 +158,12 @@ def main(
         'reference frame to the origin (0, 0, 0)'
         ))
     pABC_atomG.positions = pABC_atomG.positions - opABC_cog
-    pABC_cog = pABC_atomG.center_of_geometry().copy()
+    pABC_cog = pABC_atomG.center_of_geometry().copy()  # this should be zero
     log.info(S('New origin Center of Geometry'))
     log.info(S('pABC_cog: {}', pABC_cog))
 
     log.info(T('defining the reference axes'))
+    # vector from the origin (0, 0, 0) to cog of each selection
     pA_cog = pA_atomG.center_of_geometry().copy()
     pB_cog = pB_atomG.center_of_geometry().copy()
     pC_cog = pC_atomG.center_of_geometry().copy()
@@ -204,7 +198,6 @@ def main(
             # get roll
             pABC_atomG.positions = ts_positions + ref_plane_normal
             roll_vectors[i, :] = pA_atomG.center_of_geometry().copy()
-            pABC_atomG.positions = ts_positions
 
             # get pitch
             pABC_atomG.positions = ts_positions + ref_plane_cross
@@ -213,7 +206,6 @@ def main(
                 pA_atomG.center_of_geometry(),
                 pB_atomG.center_of_geometry(),
                 )
-            pABC_atomG.positions = ts_positions
 
             # get yaw
             pABC_atomG.positions = ts_positions + pA_cog
