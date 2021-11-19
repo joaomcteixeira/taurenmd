@@ -5,7 +5,7 @@ channels:
     - defaults
 dependencies:
     - python=3.7
-    - mdanalysis
+    - mdanalysis=2
     - mdtraj
     - openmm
     - matplotlib=3
