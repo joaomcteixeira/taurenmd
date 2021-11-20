@@ -81,7 +81,6 @@ __status__ = 'Production'
 __doc__ += (
     f'{tcore.ref_mda}'
     f'{tcore.ref_mda_selection}'
-    #f'{tcore.ref_pyquaternion}'
     )
 
 _help = 'Calculates angular rotations across axes.'

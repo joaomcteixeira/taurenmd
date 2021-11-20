@@ -30,7 +30,6 @@ from setuptools import find_packages, setup
 
 install_requires = [
     'bioplottemplates>0.1',
-    'pyquaternion',
     ]
 
 if os.getenv('READTHEDOCS'):

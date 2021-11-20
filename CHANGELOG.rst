@@ -10,6 +10,9 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+* Upgraded roll, pitch, and yaw angle calculations with torsion angle strategy
+* Removed usage of PyQuaternion
+
 v0.9.6 (2021-02-22)
 ------------------------------------------------------------
 
