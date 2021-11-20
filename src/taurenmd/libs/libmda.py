@@ -11,8 +11,6 @@ taurenmd and MDAnalysis.
 .. _MDAnalysis library: https://www.mdanalysis.org
 .. _cite both: https://taurenmd.readthedocs.io/en/latest/citing.html
 """
-from collections import defaultdict
-
 import MDAnalysis as mda
 from MDAnalysis.analysis import align as mdaalign
 
@@ -93,7 +91,6 @@ def report(universe):
     None
 
     """  # noqa: E501
-
     segids = sorted(list(set(universe.atoms.segids)))
     info = {}
     for segid in segids:
@@ -111,7 +108,6 @@ def report(universe):
     log.info(S('number of frames: {}', len(universe.trajectory)))
     log.info(S('number of atoms: {}', len(universe.atoms)))
     log.info(S('components:\n{}', '\n'.join(info_)))
-
 
 
 @libcli.add_reference(tcore.ref_mda)
