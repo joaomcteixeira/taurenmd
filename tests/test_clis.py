@@ -509,6 +509,18 @@ def test_cli_rotations_2():
         )
 
 
+def test_cli_rotations_3():
+    """Test cli rotations."""
+    cli_rotations.main(
+        toptest,
+        [trajtest],
+        plane_selection=['resnum 10', 'resnum 20', 'resnum 30'],
+        plot=True,
+        )
+
+    Path('plot_param.pdf').unlink()
+
+
 def test_cli_trajedit_1():
     """Test trajedit 1."""
     cli_trajedit.main(
