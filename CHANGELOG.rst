@@ -13,7 +13,6 @@ Changelog
 * Upgraded roll, pitch, and yaw angle calculations with torsion angle strategy
 * Removed usage of PyQuaternion
 
-=======
 v0.9.7 (2021-11-20)
 ------------------------------------------------------------
 

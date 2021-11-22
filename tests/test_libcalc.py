@@ -1,8 +1,9 @@
 """Test libcalc."""
+from math import sqrt
+
 import MDAnalysis as mda
 import numpy as np
 import pytest
-from math import sqrt
 
 from taurenmd.libs import libcalc as lc
 
