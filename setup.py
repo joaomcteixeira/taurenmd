@@ -60,7 +60,7 @@ def _read(*names, **kwargs):
 
 setup(
     name='taurenmd',
-    version='0.9.7',
+    version='0.9.8',
     license='GNU GPLv2',
     description='A command-line interface for analysis routines in Molecular Dynamics data.',
     long_description='%s\n%s' % (
