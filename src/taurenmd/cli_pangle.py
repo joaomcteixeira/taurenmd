@@ -100,7 +100,7 @@ def main(
     topology = Path(topology)
     trajectories = [Path(t) for t in trajectories]
 
-    u = libmda.load_universe(topology, *trajectories, insort=False)
+    u = libmda.load_universe(topology, *trajectories, insort=insort)
 
     frame_slice = libio.frame_slice(
         start=start,
