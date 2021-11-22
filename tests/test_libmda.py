@@ -34,13 +34,8 @@ def test_load_universe_2():
 
 def test_load_universe_3():
     """Test load MDA Universe multiple trajs."""
-    universe = la.load_universe(
-        toptest,
-        trajtest,
-        trajtest,
-        trajtest,
-        insort=True,
-        )
+    mapp = map(str, [trajtest] * 3)
+    universe = la.load_universe(toptest, *mapp)
     assert isinstance(universe, mda.Universe)
     assert len(universe.trajectory) == 30
 

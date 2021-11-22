@@ -495,15 +495,9 @@ def test_cli_rotations_1():
         export='rots.csv',
         )
 
-    p1 = Path('roll_angles_rots.csv')
-    p2 = Path('pitch_angles_rots.csv')
-    p3 = Path('yaw_angles_rots.csv')
+    p1 = Path('rots.csv')
     assert p1.exists()
-    assert p2.exists()
-    assert p3.exists()
     p1.unlink()
-    p2.unlink()
-    p3.unlink()
 
 
 def test_cli_rotations_2():
@@ -513,6 +507,18 @@ def test_cli_rotations_2():
         [trajtest],
         plane_selection=['resnum 10', 'resnum 20', 'resnum 30'],
         )
+
+
+def test_cli_rotations_3():
+    """Test cli rotations."""
+    cli_rotations.main(
+        toptest,
+        [trajtest],
+        plane_selection=['resnum 10', 'resnum 20', 'resnum 30'],
+        plot=True,
+        )
+
+    Path('plot_param.pdf').unlink()
 
 
 def test_cli_trajedit_1():

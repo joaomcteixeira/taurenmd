@@ -1,8 +1,9 @@
 """Test libcalc."""
+from math import sqrt
+
 import MDAnalysis as mda
 import numpy as np
 import pytest
-from pyquaternion import Quaternion as Q
 
 from taurenmd.libs import libcalc as lc
 
@@ -42,13 +43,13 @@ def test_mda_rmsf():
             np.array([0.0, 0.0, 0.0]),
             np.array([1.0, 0.0, 0.0]),
             np.array([0.0, 1.0, 0.0]),
-            np.array([0.0, 0.0, -1.0])
+            np.array([0.0, 0.0, 1.0])
             ),
         (
             np.array([0.0, 0.0, 0.0]),
             np.array([0.0, -1.0, 0.0]),
             np.array([0.0, 0.0, 1.0]),
-            np.array([1.0, 0.0, 0.0])
+            np.array([-1.0, 0.0, 0.0])
             ),
         ],
     )
@@ -65,13 +66,13 @@ def test_calc_plane_normal(p1, p2, p3, expected):
             np.array([0.0, 0.0, 0.0]),
             np.array([1.0, 0.0, 0.0]),
             np.array([0.0, 1.0, 0.0]),
-            (0.0, 0.0, -1.0, 0.0),
+            (0.0, 0.0, 1.0, 0.0),
             ),
         (
             np.array([0.0, 0.0, 0.0]),
             np.array([0.0, -1.0, 0.0]),
             np.array([0.0, 0.0, 1.0]),
-            (1.0, 0.0, 0.0, 0.0)
+            (-1.0, 0.0, 0.0, 0.0)
             ),
         ],
     )
@@ -98,43 +99,58 @@ def test_calc_planes_angle(a1, b1, c1, a2, b2, c2, aunit, expected):
     assert abs(result - expected) < 0.00001
 
 
-def test_gen_quaternion_rot():
-    """Test quaternion rotation."""
-    result = lc.generate_quaternion_rotations(
-        np.array([1.0, 0.0, 0.0]),
-        np.array([0.0, 1.0, 0.0]),
-        num=360
-        )
-    assert isinstance(result, list)
-    assert len(result) == 360
-    assert isinstance(result[0], tuple)
-    assert len(result[0]) == 2
-    assert isinstance(result[0][0], Q)
-    assert isinstance(result[0][1], Q)
+@pytest.mark.parametrize(
+    'coords, expected',
+    [
+        (np.array([[1, 0, 0], [0, 0, 0], [0, 0, 1], [0, 1, 1]]), np.array([90], dtype=float)),  # noqa: E501
+        (np.array([[1, 0, 0], [0, 0, 0], [0, 0, 1], [0, 1, 1], [1, 1, 1]]), np.array([90, -90], dtype=float)),  # noqa: E501
+        (
+            np.array((
+                (1, 0, 0.000),
+                (0, 0, 0.000),
+                (0, 1, 0.000),
+                (-1, 1, 0.000),
+                (-1, 1, 1),
+                (0, 1, 1),
+                (0, 0, 0)
+                )),
+            np.array([-180, 90, -0, -45], dtype=float),
+            ),
+        (
+            np.array((
+                (1, 0, 0.000),
+                (0, 0, 0.000),
+                (0, 1, 0.000),
+                (-1, 1, 0.000),
+                (-1, 1, 1),
+                )),
+            np.array([-180, 90], dtype=float),
+            ),
+        ]
+    )
+def test_calculate_torsions(coords, expected):
+    """Tests torsion calculation."""
+    result = np.degrees(lc.calc_torsion_angles(coords))
+    assert np.all(np.equal(result, expected))
 
 
-def test_sort_by_minimum():
-    """Test sort quaternion rotations."""
-    rotations = lc.generate_quaternion_rotations(
-        np.array([1.0, 0.0, 0.0]),
-        np.array([0.0, 1.0, 0.0]),
-        num=10,
-        endpoint=False,
-        )
-    for i in range(len(rotations)):
-        print(rotations[i][0].degrees)
-    result = lc.sort_by_minimum_Qdistances(
-        rotations,
-        np.array([1.0, 0.0, 0.0]),
-        )
-
-    for i in range(len(result)):
-        print(result[i][0].degrees)
-
-    assert isinstance(result, list)
-    assert isinstance(result[0], tuple)
-    assert len(result[0]) == 2
-    assert isinstance(result[0][0], Q)
-    assert isinstance(result[0][1], Q)
-    assert result[0][0].degrees < 0.001
-    assert abs(result[0][-1].degrees - 180) < 0.001
+@pytest.mark.parametrize(
+    'p1,p2,p3,p4,expected',
+    [
+        (
+            np.array([1, 0, 0]),
+            np.array([0, 0, 0]),
+            np.array([0, 1, 0]),
+            np.array([
+                [1, 1, 0],  # 0
+                [0, 1, 1],
+                [sqrt(1), 1, sqrt(1)],
+                ]),
+            np.array([0, -90, -45]),
+            )
+        ]
+    )
+def test_calculate_torsions_set(p1, p2, p3, p4, expected):
+    """Tests torsion calculation."""
+    result = np.degrees(lc.torsion_set(p1, p2, p3, p4))
+    assert np.all(np.equal(result, expected))
