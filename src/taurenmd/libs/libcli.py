@@ -284,7 +284,7 @@ def add_insort_arg(parser):
         help=(
             'Sorts input trajectories paths according to their tail numbers, '
             'if paths are formatted as follows: my_trajectory_#.dcd, '
-            'where # is a number.'
+            'where # is a number. Defaults to `False`.'
             ),
         action='store_true',
         )

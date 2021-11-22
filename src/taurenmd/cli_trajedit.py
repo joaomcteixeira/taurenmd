@@ -146,7 +146,7 @@ def _ap():
 def main(
         topology,
         trajectories,
-        insort=None,
+        insort=False,
         start=None,
         stop=None,
         step=None,
@@ -165,7 +165,7 @@ def main(
     topology = Path(topology)
     trajectories = [Path(t) for t in trajectories]
 
-    u = libmda.load_universe(topology, *trajectories)
+    u = libmda.load_universe(topology, *trajectories, insort=insort)
 
     if unwrap:
         log.info(T('unwrapping'))

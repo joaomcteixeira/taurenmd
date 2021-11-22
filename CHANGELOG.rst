@@ -10,6 +10,8 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+* Corrects taking/passing of `insort` argument in some clients.
+
 v0.9.8 (2021-11-22)
 ------------------------------------------------------------
 
