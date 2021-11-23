@@ -38,8 +38,10 @@ def test_load_traj_cif():
 
 def test_load_traj_cif_import_error():
     """Test loading traj."""
+    _tmp = libopenmm.SIMTK
     libopenmm.SIMTK = False
     with pytest.raises(SystemExit) as err:
         libmdt.load_traj(toptest_cif, trajtest)
     assert err.type == SystemExit
     assert err.value.code == 0
+    libopenmm.SIMTK = _tmp

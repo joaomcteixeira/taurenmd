@@ -7,6 +7,11 @@ from taurenmd.libs import libopenmm
 from . import toptest, toptest_cif
 
 
+def test_simtk():
+    """Test simtk is installed."""
+    assert libopenmm.SIMTK
+
+
 def test_attempt_load_cif_SIMTK_1():
     """Test attempt load CIF."""
     mol = libopenmm.attempt_to_load_top_from_simtk(toptest_cif)
