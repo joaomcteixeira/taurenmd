@@ -1,13 +1,11 @@
 """Test libmda."""
 import copy
-import subprocess
 
 import MDAnalysis as mda
 import numpy as np
 import pytest
 
 from taurenmd.libs import libmda as la
-from taurenmd import cli_report
 
 from . import toptest, toptest_cif, trajtest
 
