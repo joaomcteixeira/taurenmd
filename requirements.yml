@@ -1,13 +1,12 @@
 name: taurenmd
 channels:
     - conda-forge
-    - omnia
     - defaults
 dependencies:
     - python=3.7
-    - mdanalysis
-    - mdtraj
-    - openmm
+    - mdanalysis=2
+    - mdtraj=1
+    - openmm=7.6
     - matplotlib=3
     - numpy=1
     - pip
