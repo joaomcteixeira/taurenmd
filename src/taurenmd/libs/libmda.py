@@ -64,14 +64,14 @@ def load_universe(topology, *trajectories, insort=False):
     libio.report_input(topology, trajectories)
 
     topo_path = Path(topology).str()
-    topo_trajs = [Path(i).str() for i in trajectories],
+    traj_path = [Path(i).str() for i in trajectories],
 
     try:
-        universe = mda.Universe(topo_path, topo_trajs)
+        universe = mda.Universe(topo_path, traj_path)
 
     except ValueError:
         pdbx = libopenmm.attempt_to_load_top_from_simtk(topo_path)
-        universe = mda.Universe(pdbx, topo_trajs)
+        universe = mda.Universe(pdbx, traj_path)
 
     report(universe)
     return universe
