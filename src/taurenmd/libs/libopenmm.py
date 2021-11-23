@@ -9,14 +9,17 @@ libraries.
 """
 import sys
 
+
 try:
     from openmm.app import pdbxfile
     SIMTK = True
 except ImportError:
     SIMTK = False
 
-from taurenmd import Path, log
+
+from taurenmd import Path
 from taurenmd import core as tcore
+from taurenmd import log
 from taurenmd.libs import libcli
 from taurenmd.logger import S, T
 

@@ -15,7 +15,6 @@ libraries.
 .. _Simtk OpenMM: http://openmm.org/
 """
 import os
-import sys
 
 import mdtraj
 
@@ -71,8 +70,6 @@ def load_traj(topology, trajectories, insort=False):
     mdtrajectory = mdtraj.load(trajs, top=top)
 
     return mdtrajectory
-
-
 
 
 @libcli.add_reference(tcore.ref_mdt)
