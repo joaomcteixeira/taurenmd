@@ -1,19 +1,32 @@
 """Test libmda."""
 import copy
+import subprocess
 
 import MDAnalysis as mda
 import numpy as np
 import pytest
 
 from taurenmd.libs import libmda as la
+from taurenmd import cli_report
 
-from . import toptest, trajtest
+from . import toptest, toptest_cif, trajtest
 
 
 def test_load_universe_1():
     """Test load MDA Universe."""
     universe = la.load_universe(
         toptest,
+        trajtest,
+        )
+    assert isinstance(universe, mda.Universe)
+    assert len(universe.trajectory) == 10
+
+
+@pytest.mark.skip(reason="It works in the CLI, can't make it work here")
+def test_load_universe_1_cif():
+    """Test load MDA Universe."""
+    universe = la.load_universe(
+        toptest_cif,
         trajtest,
         )
     assert isinstance(universe, mda.Universe)
