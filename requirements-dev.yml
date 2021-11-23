@@ -5,9 +5,9 @@ channels:
 dependencies:
     - python=3.7
     - tox=3
-    - mdanalysis=2
-    - mdtraj=1
-    - openmm=7.6
+    - mdanalysis=2.0.0
+    - mdtraj=1.9.7
+    - openmm=7.6.0
     - matplotlib=3
     - numpy=1
     - pip

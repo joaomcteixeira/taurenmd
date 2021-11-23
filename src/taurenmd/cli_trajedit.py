@@ -154,7 +154,7 @@ def main(
         traj_output='traj_out.dcd',
         top_output=None,
         unwrap=False,
-        unwrap_reference=None,
+        unwrap_reference='com',
         unwrap_compound='fragments',
         align=False,
         **kwargs,
