@@ -13,12 +13,11 @@ taurenmd and MDAnalysis.
 """
 import MDAnalysis as mda
 from MDAnalysis.analysis import align as mdaalign
-from simtk.openmm.app import pdbxfile
 
 from taurenmd import Path
 from taurenmd import core as tcore
 from taurenmd import log
-from taurenmd.libs import libcli, libio
+from taurenmd.libs import libcli, libio, libopenmm
 from taurenmd.logger import S, T
 
 
@@ -71,7 +70,7 @@ def load_universe(topology, *trajectories, insort=False):
         universe = mda.Universe(topo_path, topo_trajs)
 
     except ValueError:
-        pdbx = pdbxfile.PDBxFile(topo_path)
+        pdbx = libopenmm.attempt_to_load_top_from_simtk(topo_path)
         universe = mda.Universe(pdbx, topo_trajs)
 
     report(universe)
