@@ -13,6 +13,7 @@ taurenmd and MDAnalysis.
 """
 import MDAnalysis as mda
 from MDAnalysis.analysis import align as mdaalign
+from simtk.openmm.app import pdbxfile
 
 from taurenmd import Path
 from taurenmd import core as tcore
@@ -62,10 +63,17 @@ def load_universe(topology, *trajectories, insort=False):
         trajectories = libio.sort_numbered_input(*trajectories)
 
     libio.report_input(topology, trajectories)
-    universe = mda.Universe(
-        Path(topology).str(),
-        [Path(i).str() for i in trajectories],
-        )
+
+    topo_path = Path(topology).str()
+    topo_trajs = [Path(i).str() for i in trajectories],
+
+    try:
+        universe = mda.Universe(topo_path, topo_trajs)
+
+    except ValueError:
+        pdbx = pdbxfile.PDBxFile(topo_path)
+        universe = mda.Universe(pdbx, topo_trajs)
+
     report(universe)
     return universe
 
