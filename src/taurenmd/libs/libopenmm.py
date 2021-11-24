@@ -11,7 +11,7 @@ import sys
 
 
 try:
-    from openmm.app import pdbxfile
+    from openmm.app.pdbxfile import PDBxFile
     SIMTK = True
 except ImportError:
     SIMTK = False
@@ -45,7 +45,7 @@ def attempt_to_load_top_from_simtk(topology):
     topp = Path(topology)
 
     if topp.suffix == '.cif' and SIMTK:
-        mol = pdbxfile.PDBxFile(topp.str())
+        mol = PDBxFile(topp.str())
         return mol
 
     elif topp.suffix == '.cif' and not SIMTK:

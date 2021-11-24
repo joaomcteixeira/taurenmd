@@ -43,8 +43,8 @@ supdeps = [
 
 # Molecular Dynamics deps
 mddeps = [
-    'MDAnalysis>=0.2,<1',
-    'mdtraj>=1,<2',
+    'MDAnalysis==2',
+    'mdtraj>=1.9,<2',
     ]
 
 alldeps = mddeps + supdeps
@@ -60,7 +60,7 @@ def _read(*names, **kwargs):
 
 setup(
     name='taurenmd',
-    version='0.9.9',
+    version='0.10.0',
     license='GNU GPLv2',
     description='A command-line interface for analysis routines in Molecular Dynamics data.',
     long_description='%s\n%s' % (
@@ -91,6 +91,8 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'Topic :: Utilities',
         ],
     project_urls={
@@ -107,7 +109,7 @@ setup(
         'Molecular Biology',
         'Biochemistry',
         ],
-    python_requires='>=3.6, <3.8',
+    python_requires='>=3.6, <3.10',
     install_requires=install_requires,
     extras_require={
         'all': alldeps,

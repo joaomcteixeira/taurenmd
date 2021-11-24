@@ -1,8 +1,11 @@
 """Test libmdt."""
+import importlib
+import sys
+
 import mdtraj as md
 import pytest
 
-from taurenmd.libs import libmdt, libopenmm
+from taurenmd.libs import libmdt
 
 from . import toptest, toptest_cif, trajtest
 
@@ -37,11 +40,19 @@ def test_load_traj_cif():
 
 
 def test_load_traj_cif_import_error():
-    """Test loading traj."""
-    _tmp = libopenmm.SIMTK
-    libopenmm.SIMTK = False
+    """Test loadtraj_cif import error as if simtk was not installed."""
+    sys.modules['openmm.app.pdbxfile'] = None
+    importlib.reload(libmdt)
     with pytest.raises(SystemExit) as err:
         libmdt.load_traj(toptest_cif, trajtest)
     assert err.type == SystemExit
     assert err.value.code == 0
-    libopenmm.SIMTK = _tmp
+
+
+def test_simtk_import_error():
+    """Test import error message."""
+    with pytest.raises(SystemExit) as err:
+        libmdt._log_simtkimport_error()
+
+    assert err.type == SystemExit
+    assert err.value.code == 0
