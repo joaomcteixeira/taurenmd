@@ -541,7 +541,6 @@ def test_cli_trajedit_1():
     p2.unlink()
 
 
-@pytest.mark.skip(reason='Looking for a solution, broke with unwrap_compound')
 def test_cli_trajedit_1_unwrap():
     """Test trajedit 1."""
     cli_trajedit.main(
@@ -552,7 +551,6 @@ def test_cli_trajedit_1_unwrap():
         traj_output='traj.dcd',
         top_output='topooo.pdb',
         unwrap=True,
-        unwrap_compound='residues',
         align='name CA',
         )
     p1 = Path('traj.dcd')
