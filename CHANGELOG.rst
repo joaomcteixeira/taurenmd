@@ -10,6 +10,9 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+v0.10.1 (2021-11-24)
+------------------------------------------------------------
+
 * Add support for CIF topologies in libmda using openmm.app.pdbxfile
 * removes the install*.yml gitactions
 
