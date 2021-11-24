@@ -154,7 +154,7 @@ def main(
         traj_output='traj_out.dcd',
         top_output=None,
         unwrap=False,
-        unwrap_reference=None,
+        unwrap_reference='com',
         unwrap_compound='fragments',
         align=False,
         **kwargs,
@@ -165,7 +165,12 @@ def main(
     topology = Path(topology)
     trajectories = [Path(t) for t in trajectories]
 
-    u = libmda.load_universe(topology, *trajectories, insort=insort)
+    u = libmda.load_universe(
+        topology,
+        *trajectories,
+        insort=insort,
+        guess_bonds=unwrap,
+        )
 
     if unwrap:
         log.info(T('unwrapping'))

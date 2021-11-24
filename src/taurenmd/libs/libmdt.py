@@ -27,7 +27,7 @@ from taurenmd.logger import S, T
 
 
 try:
-    from simtk.openmm import app as app
+    from simtk.openmm.app import PDBxFile
     SIMTK = True
 except ImportError:
     SIMTK = False
@@ -106,7 +106,7 @@ def attempt_to_load_top_from_simtk(topology):
     topp = Path(topology)
 
     if topp.suffix == '.cif' and SIMTK:
-        mol = app.PDBxFile(topp.str())
+        mol = PDBxFile(topp.str())
         return mdtraj.Topology.from_openmm(mol.topology)
 
     elif topp.suffix == '.cif' and not SIMTK:

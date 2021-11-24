@@ -22,7 +22,11 @@ from taurenmd.logger import S, T
 
 
 @libcli.add_reference(tcore.ref_mda)
-def load_universe(topology, *trajectories, insort=False):
+def load_universe(
+        topology,
+        *trajectories,
+        insort=False,
+        **universe_args):
     """
     Load MDAnalysis universe.
 
@@ -54,6 +58,13 @@ def load_universe(topology, *trajectories, insort=False):
         Paths to trajectory file(s). Trajectory files will be used
         sequentially to create the Universe.
 
+    insort : bool
+        Whether to sort trajectory files by suffix number.
+        See :func:`libio.sort_numbered_input`.
+
+    universe_args : any
+        Other arguments to be passed to `MDAnalysis Universe`.
+
     Return
     ------
     MDAnalysis Universe
@@ -65,6 +76,7 @@ def load_universe(topology, *trajectories, insort=False):
     universe = mda.Universe(
         Path(topology).str(),
         [Path(i).str() for i in trajectories],
+        **universe_args,
         )
     report(universe)
     return universe

@@ -530,6 +530,26 @@ def test_cli_trajedit_1():
         selection='name CA',
         traj_output='traj.dcd',
         top_output='topooo.pdb',
+        unwrap=False,
+        align='name CA',
+        )
+    p1 = Path('traj.dcd')
+    p2 = Path('topooo.pdb')
+    assert p1.exists()
+    assert p2.exists()
+    p1.unlink()
+    p2.unlink()
+
+
+def test_cli_trajedit_1_unwrap():
+    """Test trajedit 1."""
+    cli_trajedit.main(
+        toptest,
+        [trajtest],
+        insort=True,
+        selection='name CA',
+        traj_output='traj.dcd',
+        top_output='topooo.pdb',
         unwrap=True,
         align='name CA',
         )

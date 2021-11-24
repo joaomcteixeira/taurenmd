@@ -1,4 +1,7 @@
 """Test libmdt."""
+import importlib
+import sys
+
 import mdtraj as md
 import pytest
 
@@ -46,8 +49,10 @@ def test_attempt_load_cif_SIMTK_2():
 
 
 def test_load_traj_cif_import_error():
+    """Test loadtraj_cif import error as if simtk was not installed."""
+    sys.modules['simtk.openmm.app'] = None
+    importlib.reload(libmdt)
     """Test loading traj."""
-    libmdt.SIMTK = False
     with pytest.raises(SystemExit) as err:
         libmdt.load_traj(toptest_cif, trajtest)
     assert err.type == SystemExit
@@ -58,6 +63,6 @@ def test_simtk_import_error():
     """Test import error message."""
     with pytest.raises(SystemExit) as err:
         libmdt._log_simtkimport_error()
-    
+
     assert err.type == SystemExit
     assert err.value.code == 0

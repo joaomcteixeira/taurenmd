@@ -4,12 +4,10 @@ channels:
     - omnia
     - defaults
 dependencies:
-    - python=3.7
-    - tox
-    - tox-conda
-    - mdanalysis
-    - mdtraj
-    - openmm
+    - tox=3
+    - mdanalysis=2
+    - mdtraj>=1.9,<2
+    - openmm>=7.6,<8
     - matplotlib=3
     - numpy=1
     - pip
