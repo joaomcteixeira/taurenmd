@@ -15,34 +15,14 @@ libraries.
 .. _Simtk OpenMM: http://openmm.org/
 """
 import os
-import sys
 
 import mdtraj
 
 from taurenmd import Path
 from taurenmd import core as tcore
 from taurenmd import log
-from taurenmd.libs import libcli, libio
+from taurenmd.libs import libcli, libio, libopenmm
 from taurenmd.logger import S, T
-
-
-try:
-    from simtk.openmm.app import PDBxFile
-    SIMTK = True
-except ImportError:
-    SIMTK = False
-
-
-def _log_simtkimport_error():
-    msg = (
-        "To use .cif files as Topologies taurenmd requires OpenMM, "
-        "which is currently not installed. "
-        "Please visit our Installation instruction at "
-        "https://taurenmd.readthedocs.io/"
-        )
-    log.error(T('Dependency Error'))
-    log.error(S(msg))
-    sys.exit(0)
 
 
 @libcli.add_reference(tcore.ref_mdt)
@@ -65,7 +45,8 @@ def load_traj(topology, trajectories, insort=False):
     trajectory : str or Path
         Path to the trajectory file. Accepts MDTraj compatible `files <http://mdtraj.org/1.9.3/load_functions.html#trajectory-reference>`_
 
-    Returns -------
+    Returns
+    -------
     MDTraj trajectory
         `Trajectory object <http://mdtraj.org/1.9.3/api/generated/mdtraj.Trajectory.html#mdtraj-trajectory>`_.
     """  # noqa: E501
@@ -79,41 +60,16 @@ def load_traj(topology, trajectories, insort=False):
         trajs = os.fspath(trajectories)
 
     libio.report_input(topology, trajs)
-    top = attempt_to_load_top_from_simtk(topology)
+
+    if Path(topology).suffix == '.cif':
+        _top = libopenmm.attempt_to_load_top_from_simtk(topology)
+        top = mdtraj.Topology.from_openmm(_top.topology)
+    else:
+        top = Path(topology).str()
+
     mdtrajectory = mdtraj.load(trajs, top=top)
 
     return mdtrajectory
-
-
-@libcli.add_reference(tcore.ref_openmm)
-def attempt_to_load_top_from_simtk(topology):
-    """
-    Load topology from SIMTK.
-
-    Parameters
-    ----------
-    topology : str or Path
-
-    Returns
-    -------
-    topology from mdtraj.Topology.from_openmm`
-
-    Raises
-    ------
-    Dependency error from :func:`_log_simtkimport_error`, program
-    halts.
-    """
-    topp = Path(topology)
-
-    if topp.suffix == '.cif' and SIMTK:
-        mol = PDBxFile(topp.str())
-        return mdtraj.Topology.from_openmm(mol.topology)
-
-    elif topp.suffix == '.cif' and not SIMTK:
-        _log_simtkimport_error()
-
-    else:
-        return topp.str()
 
 
 @libcli.add_reference(tcore.ref_mdt)

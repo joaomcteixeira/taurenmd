@@ -50,7 +50,7 @@ taurenmd
     :target: https://pypistats.org/packages/taurenmd
 
 **A command-line interface for analysis routines of Molecular Dynamics data.**
-  
+
 **Taurenmd** provides an easy, flexible and extensible, **command-line** interface for the most common *(and not so common)* routines of analysis and representation of Molecular Dynamics (MD) data.
 
 It bridges the gap between the highly complex (and powerful) Python libraries available for analysis of MD data and the *non-developer* users that lack the programming skills to perform a thorough and proficient use those libraries. *But not only*, **taurenmd** also facilitates high throughput operations, even to those proficient *devs*, because complex executions are reduced to single argument-rich command-lines that can be concatenated or aliased.

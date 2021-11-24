@@ -17,7 +17,7 @@ from MDAnalysis.analysis import align as mdaalign
 from taurenmd import Path
 from taurenmd import core as tcore
 from taurenmd import log
-from taurenmd.libs import libcli, libio
+from taurenmd.libs import libcli, libio, libopenmm
 from taurenmd.logger import S, T
 
 
@@ -73,11 +73,17 @@ def load_universe(
         trajectories = libio.sort_numbered_input(*trajectories)
 
     libio.report_input(topology, trajectories)
-    universe = mda.Universe(
-        Path(topology).str(),
-        [Path(i).str() for i in trajectories],
-        **universe_args,
-        )
+
+    topo_path = Path(topology).str()
+    traj_path = [Path(i).str() for i in trajectories],
+
+    try:
+        universe = mda.Universe(topo_path, traj_path, **universe_args)
+
+    except ValueError:
+        pdbx = libopenmm.attempt_to_load_top_from_simtk(topo_path)
+        universe = mda.Universe(pdbx, traj_path, **universe_args)
+
     report(universe)
     return universe
 

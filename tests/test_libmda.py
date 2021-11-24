@@ -7,13 +7,23 @@ import pytest
 
 from taurenmd.libs import libmda as la
 
-from . import toptest, trajtest
+from . import toptest, toptest_cif, trajtest
 
 
 def test_load_universe_1():
     """Test load MDA Universe."""
     universe = la.load_universe(
         toptest,
+        trajtest,
+        )
+    assert isinstance(universe, mda.Universe)
+    assert len(universe.trajectory) == 10
+
+
+def test_load_universe_1_cif():
+    """Test load MDA Universe."""
+    universe = la.load_universe(
+        toptest_cif,
         trajtest,
         )
     assert isinstance(universe, mda.Universe)
