@@ -18,7 +18,6 @@ v0.10.0 (2021-11-24)
 * Updates MDAnalysis to version 2.0.0
 * Defines versions for all other dependencies
 * Updates CI
->>>>>>> master
 
 v0.9.9 (2021-11-22)
 ------------------------------------------------------------
