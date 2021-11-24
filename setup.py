@@ -44,7 +44,7 @@ supdeps = [
 # Molecular Dynamics deps
 mddeps = [
     'MDAnalysis==2',
-    'mdtraj>=1,<2',
+    'mdtraj>=1.9,<2',
     ]
 
 alldeps = mddeps + supdeps
