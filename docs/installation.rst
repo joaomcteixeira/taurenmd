@@ -37,9 +37,10 @@ If you use `Anaconda`_ as your Python package manager just do the following on y
 
 If for some reason the above does not work, just open the link on your WebBrowser and save the text to a file (or save the file).
 
-2. Create a new Anaconda Python environment to host *taurenmd*::
+2. Create a new Anaconda Python environment to host *taurenmd*. Choose the python version that best fits your needs; if you are not sure chose 3.7.::
 
-    conda env create -f taurenmdenv.yml
+    conda create -n taurenmd python=3.8
+    conda env update -n taurenmd --file taurenmddev.yml
 
 Where ``taurenmdenv.yml`` is the file downloaded in the previous step.
 
@@ -87,21 +88,25 @@ We do not provide support for other distribution platforms such as `HomeBrew <ht
 From GitHub
 ```````````
 
-If you are a proficient Pythonista you might want to install **taurenmd** from a development branch on GitHub. If that is the case you might not need to read this section because you already know well what to do; nonetheless, let's go through it:
+If you are a proficient Pythonista you might want to install **taurenmd** directly from the GitHub repository. If that is the case you might not need to read this section because you already know well what to do; nonetheless, let's go through it:
 
 .. note::
 
     ``taurenmd`` follows :ref:`Semantic Version 2.0 <Versioning>`, meaning that every single new addition to the master branch gets released on PyPI with a new version number. Therefore, installing from the ``master`` GitHub branch actually adds no benefit to installing with ``pip``.
 
-#. Install the MD analysis libraries as described in the above sections
 #. Clone our repository: ``git clone https://github.com/joaomcteixeira/taurenmd``
 #. Place yourself in the new ``taurenmd`` folder, in Linux-like systems: ``cd taurenmd``.
-#. ``git checkout -b the-branch-you-want-to-use``
-#. Install **taurenmd** with the following command: ``python setup.py develop``
+#. Install the dependencies using Anaconda. Choose your preferred python version.::
+
+    conda create -n taurenmd python=3.8
+    conda env update -n taurenmd --file requirements-dev.yml
+
+#. Install **taurenmd** with the following command: ``python setup.py develop --no-deps``
 #. In the future, to keep your installation up to the latest:
 
   #. pull repository updates from the upstream repository: ``git pull`` (from within ``taurenmd`` git folder)
-  #. because taurenmd developments are mostly reflected on new interfaces you need to update those as well: ``python setup.py develop``
+  #. because taurenmd developments are mostly reflected on new interfaces you need to update those as well: ``python setup.py develop --no-deps``
+  #. beaware, if the version increment denotes API breaks you might need to reinstall ``taurenmd`` from scratch.
 
 Running taurenmd
 ----------------
@@ -115,9 +120,15 @@ Please read our :ref:`Usage` page for, *whatelse*, usage instructions and exampl
 Upgrade
 -------
 
-To upgrade *taurenmd* and all its dependencies to the latest version::
+To upgrade *taurenmd* and all its dependencies to the latest version:
 
-   pip3 install -U --force-reinstall taurenmd
+#. If you installed from PyPI::
+
+    pip3 install -U --force-reinstall taurenmd
+
+#. If you installed from Anaconda::
+
+    pip3 install -U --force-reinstall taurenmd --no-deps
 
 Something failed
 ----------------

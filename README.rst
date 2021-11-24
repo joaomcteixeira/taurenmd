@@ -18,7 +18,7 @@ taurenmd
     :alt: Zenodo
 
 .. image:: https://github.com/joaomcteixeira/taurenmd/workflows/Tests/badge.svg?branch=master
-    :target: https://github.com/joaomcteixeira/taurenmd/actions?workflow=test_py37
+    :target: https://github.com/joaomcteixeira/taurenmd/actions?workflow=pytest_py37
     :alt: Test Status
 
 .. image:: https://img.shields.io/readthedocs/taurenmd/latest?label=Read%20the%20Docs
