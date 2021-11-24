@@ -65,7 +65,7 @@ def load_traj(topology, trajectories, insort=False):
         _top = libopenmm.attempt_to_load_top_from_simtk(topology)
         top = mdtraj.Topology.from_openmm(_top.topology)
     else:
-        top = topology
+        top = Path(topology).str()
 
     mdtrajectory = mdtraj.load(trajs, top=top)
 
