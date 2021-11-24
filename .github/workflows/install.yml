@@ -20,14 +20,18 @@ jobs:
       uses: conda-incubator/setup-miniconda@v2
       with:
         activate-environment: taurenmd
+        environment-file: requirements.yml
         python-version: ${{ matrix.python-version }}
         channels: conda-forge
+        auto-activate-base: false
 
-    - name: Install dependencies
+    - shell: bash -l {0}
       run: |
-        conda env update -n taurenmd --file requirements.yml
+        conda info
+        conda list
 
     - name: Test versions
+      shell: bash -l {0}
       run: |
         python -c "from mdtraj import version; print('mdtraj version: ', version.version)"
         python -c "from openmm import version; print('openmm version: ', version.version)"

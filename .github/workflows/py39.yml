@@ -1,4 +1,4 @@
-name: test_py39
+name: pytest_py39
 
 on:
   push:
