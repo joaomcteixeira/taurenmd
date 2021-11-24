@@ -20,7 +20,6 @@ def test_load_universe_1():
     assert len(universe.trajectory) == 10
 
 
-@pytest.mark.skip(reason="It works in the CLI, can't make it work here")
 def test_load_universe_1_cif():
     """Test load MDA Universe."""
     universe = la.load_universe(
