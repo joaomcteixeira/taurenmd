@@ -27,7 +27,6 @@ from taurenmd.logger import S, T
 
 
 try:
-    # import simtk.openmm.app.PDBxFile as PDBxFile
     from simtk.openmm.app import PDBxFile
     SIMTK = True
 except ImportError:
