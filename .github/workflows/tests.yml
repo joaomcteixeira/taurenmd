@@ -26,7 +26,8 @@ jobs:
 
     - name: Install dependencies
       run: |
-        conda install pip setuptools wheel tox tox-gh-actions coverage[toml]
+        conda install pip setuptools wheel tox coverage[toml]
+        python -m pip install tox-gh-actions
 
     - name: Test with tox
       run: tox
