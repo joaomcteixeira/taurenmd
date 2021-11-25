@@ -10,6 +10,11 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+* Dropped `python-bioplottemplates`
+* Added plots to `taurenmd rotations`
+* Added plots to `taurenmd dist`
+* `taurenmd dist` now can take multiple `--sel2`, and all are plotted
+
 v0.10.1 (2021-11-24)
 ------------------------------------------------------------
 
