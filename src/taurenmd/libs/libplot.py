@@ -7,7 +7,7 @@ References
 
 * https://python-bioplottemplates.readthedocs.io/en/latest/
 """
-from bioplottemplates.plots import plotlabeld, plotparam
+#from bioplottemplates.plots import plotlabeld, plotparam
 
 from taurenmd import core as tcore
 from taurenmd.libs import libcli

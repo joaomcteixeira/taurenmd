@@ -68,8 +68,9 @@ import numpy as np
 from taurenmd import _BANNER, Path
 from taurenmd import core as tcore
 from taurenmd import log
-from taurenmd.libs import libcalc, libcli, libio, libmda, libplot  # noqa: F401
+from taurenmd.libs import libcalc, libcli, libio, libmda
 from taurenmd.logger import S, T
+from taurenmd.plots import plotparams
 
 
 __author__ = 'Joao M.C. Teixeira'
@@ -265,14 +266,32 @@ def main(
             )
 
     if plot:
-        plotvars = plotvars or dict()
-        plotvars.setdefault('labels', ['roll', 'pitch', 'yaw'])
+        log.info(T("Plotting results:"))
 
-        libplot.param(
+        subtitle = ' · '.join(plane_selection)
+        ymax = max(map(np.max, [roll_torsion, pitch_torsion, yaw_torsion]))
+        ymin = min(map(np.min, [roll_torsion, pitch_torsion, yaw_torsion]))
+        filename = 'plot_rotations.pdf'
+
+        cli_defaults = {
+            'ymax': ymax * 1.1 if ymax > 0 else ymax * 0.9,
+            'ymin': ymin * 1.1 if ymin < 0 else ymin * 0.9,
+            'filename': filename,
+            'title': f'Roll, pitch, and yaw angles\n{subtitle}',
+            'xlabel': 'Frames',
+            'ylabel': aunit,
+            'labels': ['roll', 'pitch', 'yaw'],
+            }
+
+        cli_defaults.update(plotvars or dict())
+
+        plotparams.plot(
             list(range(len(u.trajectory))[fSlice]),
             [roll_torsion, pitch_torsion, yaw_torsion],
-            **plotvars,
+            **cli_defaults,
             )
+
+        log.info(S(f'saved plot: {cli_defaults["filename"]}'))
 
     return
 
