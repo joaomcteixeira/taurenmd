@@ -38,8 +38,9 @@ from datetime import datetime
 from taurenmd import _BANNER, Path
 from taurenmd import core as tcore
 from taurenmd import log
-from taurenmd.libs import libcalc, libcli, libio, libmda, libplot
+from taurenmd.libs import libcalc, libcli, libio, libmda
 from taurenmd.logger import S, T
+from taurenmd.plots import plotparams
 
 
 __author__ = 'Joao M.C. Teixeira'
@@ -137,18 +138,33 @@ def main(
             )
 
     if plot:
-        plotvars = plotvars or dict()
-        plotvars.setdefault('labels', selections)
+        log.info(T("Plotting results:"))
 
-        log.info(T('plot params:'))
-        for k, v in plotvars.items():
-            log.info(S('{} = {!r}', k, v))
+        subtitle = 'Selections: {}'.format(' · '.format(selections))
+        ymax = max(max(_r) for _r in rmsds)
+        ymin = min(min(_r) for _r in rmsds)
+        filename = 'plot_rmsds.pdf'
 
-        libplot.param(
+        cli_defaults = {
+            'ymax': ymax * 1.1 if ymax > 0 else ymax * 0.9,
+            'ymin': ymin * 1.1 if ymin < 0 else ymin * 0.9,
+            'filename': filename,
+            'title': f'RMSDs\n{subtitle}',
+            'xlabel': 'Frames',
+            'ylabel': r'RMSDs',
+            'labels': selections,
+            }
+
+        cli_defaults.update(plotvars or dict())
+
+        plotparams.plot(
             list(range(len(u.trajectory))[frame_slice]),
             rmsds,
-            **plotvars,
+            legend=True,
+            **cli_defaults,
             )
+
+        log.info(S(f'saved plot: {cli_defaults["filename"]}'))
 
     return
 
