@@ -39,7 +39,7 @@ import functools
 from taurenmd import _BANNER, Path
 from taurenmd import core as tcore
 from taurenmd import log
-from taurenmd.libs import libcalc, libcli, libio, libmda, libplot
+from taurenmd.libs import libcalc, libcli, libio, libmda
 from taurenmd.logger import S, T
 
 

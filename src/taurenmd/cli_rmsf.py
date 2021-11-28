@@ -40,11 +40,14 @@ import argparse
 import functools
 from datetime import datetime
 
+import numpy as np
+
 from taurenmd import _BANNER, Path
 from taurenmd import core as tcore
 from taurenmd import log
-from taurenmd.libs import libcalc, libcli, libio, libmda, libplot
+from taurenmd.libs import libcalc, libcli, libio, libmda
 from taurenmd.logger import S, T
+from taurenmd.plots import labeldots
 
 
 __author__ = 'Joao M.C. Teixeira'
@@ -72,6 +75,7 @@ libcli.add_topology_arg(ap)
 libcli.add_trajectories_arg(ap)
 libcli.add_insort_arg(ap)
 libcli.add_atom_selections_arg(ap)
+libcli.add_inverted_array(ap)
 libcli.add_slice_arg(ap)
 libcli.add_data_export_arg(ap)
 libcli.add_plot_arg(ap)
@@ -89,12 +93,14 @@ def main(
         stop=None,
         step=None,
         selections=None,
+        inverted_selections=None,
         export=False,
         plot=False,
         plotvars=None,
         **kwargs
         ):
     """Execute client main logic."""
+    print(inverted_selections)
     log.info(T('starting RMSFs calculation'))
 
     topology = Path(topology)
@@ -108,55 +114,63 @@ def main(
         step=step,
         )
 
-    if selections is None:
-        selections = ['all']
+    selections = selections or ['protein and CA']
 
-    if not isinstance(selections, list) or len(selections) == 0:
-        raise TypeError('selections must be LIST with at least one element')
+    log.info(T('calculating RMSFs'))
 
-    log.info(T('calculating'))
-    for sel in selections:
-        labels = []
-        rmsfs = []
-        log.info(S('for selection: {}', sel))
+    labels = []
+    rmsfs = []
+    inv_sels = [
+        slice(None, None, -1) if bool(int(inv)) else slice(None, None, None)
+        for inv in inverted_selections
+        ] if inverted_selections else [slice(None, None, None)] * len(selections)
+
+    for i, sel in enumerate(selections):
+        log.info(S('for sel: {}', sel))
         atom_group = u.select_atoms(sel)
-        labels = libmda.draw_atom_label_from_atom_group(atom_group)
+        labels.append(libmda.draw_atom_label_from_atom_group(atom_group)[inv_sels[i]])
+        rmsfs.append(libcalc.mda_rmsf(atom_group, frame_slice=frame_slice)[inv_sels[i]])
 
-        rmsfs = libcalc.mda_rmsf(
-            atom_group,
-            frame_slice=frame_slice,
+
+    if export:
+        libio.export_data_to_file(
+            labels,
+            *rmsfs,
+            fname=export,
+            header=(
+                "# Date: {}\n"
+                "# Topology: {}\n"
+                "# Trajectories {}\n"
+                "# {}\n"
+                ).format(
+                    datetime.now().strftime("%d/%m/%Y, %H:%M:%S"),
+                    Path(topology).resolve(),
+                    ','.join(f.resolve().str() for f in trajectories),
+                    ','.join(f'Atom,{sel}' for sel in selections),
+                    ),
             )
 
-        if export:
-            libio.export_data_to_file(
-                labels,
-                rmsfs,
-                fname=export,
-                header=(
-                    "# Date: {}\n"
-                    "# Topology: {}\n"
-                    "# Trajectories {}\n"
-                    "# Atom,RMSF\n"
-                    ).format(
-                        datetime.now().strftime("%d/%m/%Y, %H:%M:%S"),
-                        Path(topology).resolve(),
-                        ', '.join(f.resolve().str() for f in trajectories),
-                        ),
-                )
+    if plot:
+        log.info(T("Plotting results:"))
 
-        if plot:
-            plotvars = plotvars or dict()
-            plotvars.setdefault('series_labels', selections)
+        armsfs = np.array(rmsfs)
+        ymax = np.max(armsfs)
 
-            log.info(T('plot params:'))
-            for k, v in plotvars.items():
-                log.info(S('{} = {!r}', k, v))
+        cli_defaults = {
+            'ymax': ymax * 1.1 if ymax > 0 else ymax * 0.9,
+            'filename': 'plot_rmsfs.pdf',
+            'title': f'RMSFs',
+            'xlabel': 'Atoms',
+            'ylabel': r'RMSFs',
+            'x_labels': labels,
+            'labels': selections,
+            }
 
-            libplot.label_dots(
-                labels,
-                rmsfs,
-                **plotvars,
-                )
+        cli_defaults.update(plotvars or dict())
+
+        labeldots.plot(armsfs, **cli_defaults)
+
+        log.info(S(f'saved plot: {cli_defaults["filename"]}'))
 
     return
 

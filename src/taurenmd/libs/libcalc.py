@@ -159,7 +159,7 @@ def mda_rmsf(
 
     R.run()
 
-    return R.rmsf
+    return R.results.rmsf
 
 
 def calc_plane_normal(p1, p2, p3):

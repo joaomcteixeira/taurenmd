@@ -176,19 +176,6 @@ def main(
                     ),
             )
 
-    #if plot:
-    #    plotvars = plotvars or dict()
-    #    plotvars.setdefault('labels', '{} dist {}'.format(sel1, sel2))
-
-    #    log.info(T('plot params:'))
-    #    for k, v in plotvars.items():
-    #        log.info(S('{} = {!r}', k, v))
-
-    #    libplot.param(
-    #        list(range(len(u.trajectory))[frame_slice]),
-    #        distances,
-    #        **plotvars,
-    #        )
     if plot:
         log.info(T("Plotting results:"))
 

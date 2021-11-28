@@ -452,6 +452,27 @@ def add_atom_selections_arg(parser):
         )
 
 
+def add_inverted_array(parser):
+    """
+    Add inverted selections optional argument.
+
+    Saves an array of 0s and 1s to invert the order of selections.
+
+    Parameters
+    ----------
+    parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
+        The argument parser to which add the selections argument.
+    """  # noqa: E501
+    parser.add_argument(
+        '--inverted-selections',
+        help=(
+            'Invert order of selections.'
+            ),
+        default=None,
+        nargs='+',
+        type=int,
+        )
+
 def add_frame_list_arg(parser):
     """
     Add frame list argument.

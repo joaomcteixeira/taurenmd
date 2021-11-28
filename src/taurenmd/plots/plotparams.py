@@ -28,7 +28,7 @@ def plot(
         grid_alpha=0.5,
         legend=True,
         legend_fs=8,
-        legend_loc=4,
+        legend_loc=0,
         vert_lines=None,
         figsize=(8, 5),
         filename='plot_param.pdf',
@@ -81,12 +81,12 @@ def plot(
     plot_colors = libutil.make_list(colors)
     plot_colors = itertools.cycle(plot_colors)
 
-    assert y_data.shape[0] == len(plot_labels), (
+    assert y_data.shape[1] == len(plot_labels), (
         '{} vs {}'.format(y_data.shape[0], len(plot_labels)))
     # done data preparation
 
-    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=figsize)
-    plt.tight_layout(rect=[0.05, 0.02, 0.995, 0.985])
+    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=figsize, constrained_layout=False)
+    plt.tight_layout(rect=[0.05, 0.02, 0.995, 1])
 
     fig.suptitle(
         title,
