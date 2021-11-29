@@ -287,7 +287,7 @@ def main(
 
         plotparams.plot(
             list(range(len(u.trajectory))[fSlice]),
-            [roll_torsion, pitch_torsion, yaw_torsion],
+            np.vstack((roll_torsion, pitch_torsion, yaw_torsion)),
             **cli_defaults,
             )
 

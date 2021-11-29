@@ -53,9 +53,9 @@ def plot(
         Container of the X axis data. Should be accepted
         by matplotlib.
 
-    y_data : np.ndarray, shape=(M,)
+    y_data : np.ndarray, shape=(M, len(x_data))
         Container of the Y axis data.
-        Where M is the RMSDs data for the combined chains.
+        Where M is the number of series.
 
     labels : str, optional
         The label to represent in plot legend.
@@ -72,6 +72,7 @@ def plot(
     fig_size : tuple of float or int
         The size ratio of the subplot in the figure.
     """
+    print(y_data.shape)
     # prepares data in
     y_data = np.array(y_data)
     if y_data.ndim == 1:
@@ -81,7 +82,8 @@ def plot(
     plot_colors = libutil.make_list(colors)
     plot_colors = itertools.cycle(plot_colors)
 
-    assert y_data.shape[1] == len(plot_labels), (
+    assert len(x_data) == y_data.shape[1]
+    assert y_data.shape[0] == len(plot_labels), (
         '{} vs {}'.format(y_data.shape[0], len(plot_labels)))
     # done data preparation
 
