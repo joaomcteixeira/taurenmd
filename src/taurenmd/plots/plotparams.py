@@ -32,6 +32,7 @@ def plot(
         vert_lines=None,
         figsize=(8, 5),
         filename='plot_param.pdf',
+        dpi=150,
         **kwargs
         ):
     """
@@ -82,7 +83,8 @@ def plot(
     plot_colors = libutil.make_list(colors)
     plot_colors = itertools.cycle(plot_colors)
 
-    assert len(x_data) == y_data.shape[1]
+    assert len(x_data) == y_data.shape[1], \
+        '{} vs {}'.format(len(x_data), y_data.shape[1])
     assert y_data.shape[0] == len(plot_labels), (
         '{} vs {}'.format(y_data.shape[0], len(plot_labels)))
     # done data preparation
@@ -138,7 +140,7 @@ def plot(
             loc=legend_loc,
             )
     plt.subplots_adjust(top=.9)
-    fig.savefig(filename)
+    fig.savefig(filename, dpi=dpi)
 
     plt.close("all")
 

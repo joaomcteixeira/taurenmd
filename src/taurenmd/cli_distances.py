@@ -179,7 +179,6 @@ def main(
     if plot:
         log.info(T("Plotting results:"))
 
-        subtitle = 'Main selection: {}'.format(sel1)
         ymax = np.max(distances)
         ymin = np.min(distances)
         filename = 'plot_distances.pdf'
@@ -188,17 +187,18 @@ def main(
             'ymax': ymax * 1.1 if ymax > 0 else ymax * 0.9,
             'ymin': ymin * 1.1 if ymin < 0 else ymin * 0.9,
             'filename': filename,
-            'title': f'Distance between a main selectio and others\n{subtitle}',
+            'title': f'Distance between a main selection and others\n{sel1}',
             'xlabel': 'Frames',
             'ylabel': r'Distance ($\AA$)',
             'labels': sel2,
             }
 
         cli_defaults.update(plotvars or dict())
-
+        print(distances.shape)
         plotparams.plot(
             list(range(len(u.trajectory))[frame_slice]),
-            [distances[:, d] for d in range(distances.shape[1])],
+            distances.T,
+            #[distances[:, d] for d in range(distances.shape[1])],
             legend=True,
             **cli_defaults,
             )
