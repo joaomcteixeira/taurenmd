@@ -6,6 +6,7 @@ client interfaces. It contains also others used to enhance the user
 experience.
 """
 import argparse
+import ast
 import os
 import sys
 from datetime import datetime
@@ -124,13 +125,13 @@ class ParamsToDict(argparse.Action):
                 if ',' in v:
                     vs = v.split(',')
                     try:
-                        param_dict[k] = tuple(float(i) for i in vs)
+                        param_dict[k] = tuple(ast.literal_eval(i) for i in vs)
                     except (ValueError, TypeError):
                         param_dict[k] = tuple(i for i in vs)
 
                 else:
                     try:
-                        param_dict[k] = float(v)
+                        param_dict[k] = ast.literal_eval(v)
                     except (ValueError, TypeError):  # is string or list
                         param_dict[k] = bool_value.get(v.lower(), v)
 

@@ -159,10 +159,10 @@ def main(
         cli_defaults = {
             'ymax': ymax * 1.1 if ymax > 0 else ymax * 0.9,
             'filename': 'plot_rmsfs.pdf',
-            'title': f'RMSFs',
+            'title': 'RMSFs',
             'xlabel': 'Atoms',
-            'ylabel': r'RMSFs',
-            'x_labels': labels,
+            'ylabel': r'RMSFs ($\AA$)',
+            'x_labels': [' | '.join(str(_l)) for _l in zip(*labels)],
             'labels': selections,
             }
 

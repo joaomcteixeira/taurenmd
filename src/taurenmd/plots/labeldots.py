@@ -11,6 +11,7 @@ from taurenmd.libs import libutil
 def plot(
         y_data,
         x_labels=None,
+        x_label_rot=90,
         labels=None,
         ymax=None,
         title=None,
@@ -90,8 +91,7 @@ def plot(
     ax.set_xticks(list(range(y_data.shape[1])))
 
     if x_labels:
-        super_labels = [' | '.join(_l) for _l in zip(*x_labels)]
-        ax.set_xticklabels(super_labels, rotation=90)
+        ax.set_xticklabels(x_labels, rotation=x_label_rot)
 
     if grid:
         ax.grid(
