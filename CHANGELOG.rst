@@ -13,7 +13,14 @@ Changelog
 * Dropped `python-bioplottemplates`
 * Added plots to `taurenmd rotations`
 * Added plots to `taurenmd dist`
+* Added plots to `taurenmd rmsf`
 * `taurenmd dist` now can take multiple `--sel2`, and all are plotted
+* `ParamsToDict` now uses `ast.literal_eval`
+
+v0.10.2 (2021-12-03)
+------------------------------------------------------------
+
+* Add frame timestep and whole trajectory duration to `report` (#61)
 
 v0.10.1 (2021-11-24)
 ------------------------------------------------------------
