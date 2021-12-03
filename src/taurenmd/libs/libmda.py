@@ -124,6 +124,11 @@ def report(universe):
 
     log.info(T('Reporting on universe'))
     log.info(S('number of frames: {}', len(universe.trajectory)))
+    log.info(S('duration: {:.2f} ns', universe.trajectory[-1].time / 1000))
+
+    ts2 = universe.trajectory[1].time
+    ts1 = universe.trajectory[0].time
+    log.info(S('timestep per frame: {:.2f} ns', (ts2 - ts1) / 1000))
     log.info(S('number of atoms: {}', len(universe.atoms)))
     log.info(S('components:\n{}', '\n'.join(info_)))
 

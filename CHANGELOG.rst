@@ -10,6 +10,8 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+* Add frame timestep and whole trajectory duration to `report` (#61)
+
 v0.10.1 (2021-11-24)
 ------------------------------------------------------------
 
