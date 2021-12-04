@@ -31,6 +31,7 @@ def plot(
         grid_alpha=0.5,
         figsize=(10, 6),
         filename='plot_param.pdf',
+        dpi=300,
         **kwargs,
         ):
     """
@@ -110,5 +111,5 @@ def plot(
             )
 
     fig.tight_layout()
-    fig.savefig(filename)
+    fig.savefig(filename, dpi=dpi)
 

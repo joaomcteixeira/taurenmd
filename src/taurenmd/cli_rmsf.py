@@ -38,6 +38,7 @@ you can also use ``tmdrmsf`` instead of ``taurenmd rmsf``.
 """  # noqa: E501
 import argparse
 import functools
+import os
 from datetime import datetime
 
 import numpy as np
@@ -133,22 +134,26 @@ def main(
 
 
     if export:
-        libio.export_data_to_file(
-            labels,
-            *rmsfs,
-            fname=export,
-            header=(
-                "# Date: {}\n"
-                "# Topology: {}\n"
-                "# Trajectories {}\n"
-                "# {}\n"
-                ).format(
-                    datetime.now().strftime("%d/%m/%Y, %H:%M:%S"),
-                    Path(topology).resolve(),
-                    ','.join(f.resolve().str() for f in trajectories),
-                    ','.join(f'Atom,{sel}' for sel in selections),
-                    ),
-            )
+
+        data_str =(
+            "# Date: {1}{0}"
+            "# Topology: {2}{0}"
+            "# Trajectories {3}{0}"
+            "# Atom,RMSF combinations{0}"
+            "# {4}{0}"
+            "{5}"
+            ).format(
+                os.linesep,
+                datetime.now().strftime("%d/%m/%Y, %H:%M:%S"),
+                Path(topology).resolve(),
+                ','.join(f.resolve().str() for f in trajectories),
+                ','.join(f'{sel},RMSF' for sel in selections),
+                make_csv_lines_in_interleaved_manner(rmsfs, labels),
+                )
+
+        log.info(T('Saving data'))
+        log.info(S('to: {}', export))
+        Path(export).write_text(data_str)
 
     if plot:
         log.info(T("Plotting results:"))
@@ -161,7 +166,7 @@ def main(
             'filename': 'plot_rmsfs.pdf',
             'title': 'RMSFs',
             'xlabel': 'Atoms',
-            'ylabel': r'RMSFs ($\AA$)',
+            'ylabel': r'RMSF ($\AA$)',
             'x_labels': [' | '.join(str(_l)) for _l in zip(*labels)],
             'labels': selections,
             }

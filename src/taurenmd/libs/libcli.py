@@ -126,7 +126,7 @@ class ParamsToDict(argparse.Action):
                     vs = v.split(',')
                     try:
                         param_dict[k] = tuple(ast.literal_eval(i) for i in vs)
-                    except (ValueError, TypeError):
+                    except (ValueError, TypeError, SyntaxError):
                         param_dict[k] = tuple(i for i in vs)
 
                 else:
@@ -134,7 +134,10 @@ class ParamsToDict(argparse.Action):
                         param_dict[k] = ast.literal_eval(v)
                     except (ValueError, TypeError):  # is string or list
                         param_dict[k] = bool_value.get(v.lower(), v)
+                    except (SyntaxError):
+                        param_dict[k] = v
 
+        print(param_dict)
         namespace.plotvars = param_dict
         setattr(namespace, self.dest, True)
 
