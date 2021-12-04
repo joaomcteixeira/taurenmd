@@ -17,7 +17,6 @@ def plot(
         title=None,
         xlabel=None,
         ylabel=None,
-        series_labels=None,
         legend=True,
         legend_fs=6,
         legend_loc=4,
@@ -39,18 +38,6 @@ def plot(
     y_data = np.array(y_data)
     if y_data.ndim == 1:
         y_data = y_data[np.newaxis, :]
-
-#    # prepares data
-#    if isinstance(y_data, (list, np.ndarray)):
-#        if not isinstance(y_data[0], (list, np.ndarray)):
-#            y_data = [y_data]
-#    else:
-#        raise ValueError('y_data must be list or np.ndarray')
-
-    if not isinstance(series_labels, list):
-        series_labels = [series_labels]
-    elif series_labels is None:
-        series_labels = [None] * len(y_data)
 
     plot_colors = itertools.cycle(libutil.make_list(colors))
 
@@ -76,7 +63,6 @@ def plot(
         ax.scatter(
             range(len(yy)),
             yy,
-            #label=series_labels[i],
             label=labels[i],
             color=next(plot_colors),
             alpha=alpha,
