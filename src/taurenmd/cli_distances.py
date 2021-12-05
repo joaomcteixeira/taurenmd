@@ -122,11 +122,7 @@ def main(
 
     u = libmda.load_universe(topology, *trajectories, insort=insort)
 
-    frame_slice = libio.frame_slice(
-        start=start,
-        stop=stop,
-        step=step,
-        )
+    frame_slice = libmda.get_frame_slices(u, start, stop, step)
 
     log.info(T('defining atom seletions'))
     log.info(S('atom selection #1: {}', sel1))

@@ -103,12 +103,7 @@ def main(
 
     u = libmda.load_universe(topology, *trajectories, insort=insort)
 
-    frame_slice = libio.frame_slice(
-        start=start,
-        stop=stop,
-        step=step,
-        )
-    log.info(S('for slice {}', frame_slice))
+    frame_slice = libmda.get_frame_slices(u, start, stop, step)
 
     log.info(T('calculating plane eq. for reference frame'))
     log.info(S('using frame: {}', ref_frame))

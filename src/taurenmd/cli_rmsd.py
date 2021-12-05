@@ -98,11 +98,7 @@ def main(
 
     u = libmda.load_universe(topology, *trajectories, insort=insort)
 
-    frame_slice = libio.frame_slice(
-        start=start,
-        stop=stop,
-        step=step,
-        )
+    frame_slice = libmda.get_frame_slices(u, start, stop, step)
 
     selections = make_list(selections)
     rmsds = []

@@ -124,11 +124,11 @@ def report(universe):
 
     log.info(T('Reporting on universe'))
     log.info(S('number of frames: {}', len(universe.trajectory)))
-    log.info(S('duration: {:.2f} ns', universe.trajectory[-1].time / 1000))
+    dt = get_timestep(universe, i1=-1)
+    log.info(S('duration: {:.2f} ns', dt / 1000))
 
-    ts2 = universe.trajectory[1].time
-    ts1 = universe.trajectory[0].time
-    log.info(S('timestep per frame: {:.2f} ns', (ts2 - ts1) / 1000))
+    dt = get_timestep(universe)
+    log.info(S('timestep per frame: {:.2f} ns', dt / 1000))
     log.info(S('number of atoms: {}', len(universe.atoms)))
     log.info(S('components:\n{}', '\n'.join(info_)))
 
@@ -202,6 +202,12 @@ def draw_atom_label_from_atom_group(atom_group):
 
 
 @tcore.add_reference(tcore.ref_mda)
+def get_timestep(u, i0=0, i1=1):
+    """Get time step of the trajectory."""
+    return u.trajectory[i1].time - u.trajectory[i0].time  # in picoseconds
+
+
+@tcore.add_reference(tcore.ref_mda)
 def convert_time_to_frame(x, dt, base_unit='ps'):
     """
     Convert a string `x` into a frame number based on given `dt`.
@@ -233,6 +239,7 @@ def convert_time_to_frame(x, dt, base_unit='ps'):
     ValueError
         The input does not contain any units but is not an integer.
     """  # noqa: E501
+    assert isinstance(x, str)
     # regex to split value and units while handling scientific input
     val, unit = libutil.split_time_unit(x)
     if unit != "":
@@ -245,6 +252,12 @@ def convert_time_to_frame(x, dt, base_unit='ps'):
             )
     else:
         return int(val)
+
+
+def convert_time_or_frame_to_frame(s, u):
+    """."""
+    dt = get_timestep(u)
+    return convert_time_to_frame(s, dt)
 
 
 def get_frame_list_from_slice(u, frame_slice):
@@ -272,7 +285,7 @@ def create_x_data(u, xdata_in_time, frame_list):
     if xdata_in_time:
         xdata = [
             mda.units.convert(
-                u.trajectory[i].time - u.trajectory[0].time,
+                get_timestep(u, i1=i),
                 'ps',
                 xdata_in_time,
                 )
@@ -284,3 +297,32 @@ def create_x_data(u, xdata_in_time, frame_list):
         xlabel = 'Frames'
 
     return xdata, xlabel
+
+
+def get_frame_slices(u, start=None, stop=None, step=None):
+    """Make a frame slice for a universe given start, stop, and step.
+
+    Parameters
+    ----------
+    start, stop, step: None or int or str.
+        If string, accepts :func:`libutil.split_time_unit`.
+
+    Returns
+    -------
+    slice object
+    """
+    log.info(T('Creating trajectory frame slicing from:'))
+    log.info(S(f'start: {start}'))
+    log.info(S(f'stop : {stop}'))
+    log.info(S(f'step : {step}'))
+
+    frame_slice = libio.frame_slice(
+        start=None if start is None else convert_time_or_frame_to_frame(str(start), u),  # noqa: E501
+        stop=None if stop is None else convert_time_or_frame_to_frame(str(stop), u),  # noqa: E501
+        step=None if step is None else convert_time_or_frame_to_frame(str(step), u),  # noqa: E501
+        )
+
+    log.info(S('created slice: {}', frame_slice))
+
+    assert isinstance(frame_slice, slice)
+    return frame_slice

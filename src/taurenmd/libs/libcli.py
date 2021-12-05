@@ -347,7 +347,7 @@ def add_slice_arg(parser):
             'Defaults to None, considers from the beginning.'
             ),
         default=None,
-        type=int,
+        type=str,
         )
 
     parser.add_argument(
@@ -361,7 +361,7 @@ def add_slice_arg(parser):
             'Defaults to None, considers to the end.'
             ),
         default=None,
-        type=int,
+        type=str,
         )
 
     parser.add_argument(
@@ -373,7 +373,7 @@ def add_slice_arg(parser):
             'Defaults to None, considers every 1 frame.'
             ),
         default=None,
-        type=int,
+        type=str,
         )
 
 

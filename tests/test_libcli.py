@@ -220,10 +220,10 @@ def test_trajectory_error():
 @pytest.mark.parametrize(
     'cmd,expected',
     [
-        ('-s 1 -e 100 -p 4', (1, 100, 4)),
-        ('-e 100 -p 4', (None, 100, 4)),
-        ('-s 100 -p 4', (100, None, 4)),
-        ('-s 100 -e 4', (100, 4, None)),
+        ('-s 1 -e 100 -p 4', ('1', '100', '4')),
+        ('-e 100 -p 4', (None, '100', '4')),
+        ('-s 100 -p 4', ('100', None, '4')),
+        ('-s 100 -e 4', ('100', '4', None)),
         ]
     )
 def test_slice_arg(cmd, expected):

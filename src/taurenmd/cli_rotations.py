@@ -130,8 +130,7 @@ def main(
     trajectories = list(map(Path, trajectories))
     u = libmda.load_universe(topology, *trajectories, insort=insort)
 
-    log.info(T('slicing'))
-    frame_slice = libio.frame_slice(start=start, stop=stop, step=step)
+    frame_slice = libmda.get_frame_slices(u, start, stop, step)
 
     log.info(T('computing planes'))
     log.info(S('for reference frame: {}', ref_frame))
