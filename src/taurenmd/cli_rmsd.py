@@ -139,30 +139,31 @@ def main(
 
     if plot:
         log.info(T("Plotting results:"))
+        plotvars = plotvars or dict()
+
+        xdata_in_time = plotvars.pop('xdata_in_time', 'ns')
+        frame_list = libmda.get_frame_list_from_slice(u, frame_slice)
+        xdata, xlabel = libmda.create_x_data(u, xdata_in_time, frame_list)
 
         subtitle = 'Selections: {}'.format(' · '.join(selections))
         ymax = max(max(_r) for _r in rmsds)
         ymin = min(min(_r) for _r in rmsds)
-        filename = 'plot_rmsds.pdf'
 
         cli_defaults = {
             'ymax': ymax * 1.1 if ymax > 0 else ymax * 0.9,
             'ymin': ymin * 1.1 if ymin < 0 else ymin * 0.9,
-            'filename': filename,
+            'filename': 'plot_rmsd.png',
             'title': f'RMSDs\n{subtitle}',
-            'xlabel': 'Frames',
+            'xlabel': xlabel,
             'ylabel': r'RMSDs',
             'labels': selections,
+            'dpi': 600,
+            'legend': True,
             }
 
-        cli_defaults.update(plotvars or dict())
+        cli_defaults.update(plotvars)
 
-        plotparams.plot(
-            list(range(len(u.trajectory))[frame_slice]),
-            rmsds,
-            legend=True,
-            **cli_defaults,
-            )
+        plotparams.plot(xdata, rmsds, **cli_defaults)
 
         log.info(S(f'saved plot: {cli_defaults["filename"]}'))
 

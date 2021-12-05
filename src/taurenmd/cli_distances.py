@@ -181,28 +181,29 @@ def main(
 
     if plot:
         log.info(T("Plotting results:"))
+        plotvars = plotvars or dict()
+
+        xdata_in_time = plotvars.pop('xdata_in_time', 'ns')
+        frame_list = libmda.get_frame_list_from_slice(u, frame_slice)
+        xdata, xlabel = libmda.create_x_data(u, xdata_in_time, frame_list)
 
         ymax = np.max(distances)
         ymin = np.min(distances)
-        filename = 'plot_distances.pdf'
 
         cli_defaults = {
+            'dpi': 600,
+            'filename': 'plot_distances.png',
+            'labels': sels2,
+            'legend': True,
+            'title': f'Distance between a main selection and others\n{sel1}',
+            'xlabel': xlabel,
+            'ylabel': r'Distance ($\AA$)',
             'ymax': ymax * 1.1 if ymax > 0 else ymax * 0.9,
             'ymin': ymin * 1.1 if ymin < 0 else ymin * 0.9,
-            'filename': filename,
-            'title': f'Distance between a main selection and others\n{sel1}',
-            'xlabel': 'Frames',
-            'ylabel': r'Distance ($\AA$)',
-            'labels': sels2,
             }
 
-        cli_defaults.update(plotvars or dict())
-        plotparams.plot(
-            list(range(len(u.trajectory))[frame_slice]),
-            distances.T,
-            legend=True,
-            **cli_defaults,
-            )
+        cli_defaults.update(plotvars)
+        plotparams.plot(xdata, distances.T, **cli_defaults)
 
         log.info(S(f'saved plot: {cli_defaults["filename"]}'))
 

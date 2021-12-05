@@ -168,21 +168,31 @@ def main(
             )
 
     if plot:
+        log.info(T("Plotting results:"))
         plotvars = plotvars or dict()
-        plotvars.setdefault(
-            'labels',
-            'plane: {}'.format(' and '.join(plane_selection)),
-            )
 
-        log.info(T('plot params:'))
-        for k, v in plotvars.items():
-            log.info(S('{} = {!r}', k, v))
+        xdata_in_time = plotvars.pop('xdata_in_time', 'ns')
+        frame_list = libmda.get_frame_list_from_slice(u, frame_slice)
+        xdata, xlabel = libmda.create_x_data(u, xdata_in_time, frame_list)
 
-        plotparams.plot(
-            list(range(len(u.trajectory))[frame_slice]),
-            angles,
-            **plotvars,
-            )
+        ymax = max(angles)
+        ymin = min(angles)
+
+        cli_defaults = {
+            'labels': 'plane: {}'.format(' and '.join(plane_selection)),
+            'dpi': 600,
+            'filename': 'plot_plane.png',
+            'legend': True,
+            'title': 'Plane oscilations',
+            'xlabel': xlabel,
+            'ylabel': aunit,
+            'ymax': ymax * 1.1 if ymax > 0 else ymax * 0.9,
+            'ymin': ymin * 1.1 if ymin < 0 else ymin * 0.9,
+            }
+
+        cli_defaults.update(plotvars)
+
+        plotparams.plot(frame_list, angles, **cli_defaults)
 
     log.info(S('done'))
     return

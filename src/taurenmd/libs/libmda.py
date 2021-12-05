@@ -245,3 +245,42 @@ def convert_time_to_frame(x, dt, base_unit='ps'):
             )
     else:
         return int(val)
+
+
+def get_frame_list_from_slice(u, frame_slice):
+    """
+    Create a frame number list from a slice for a Universe.
+
+    Parameters
+    ----------
+    u : mda.Universe
+        The MDAnalysis universe.
+
+    frame_slice : slice object
+
+    Returns
+    -------
+    list of ints
+        A list with the number of frames corresponding to that Universe
+        and slice.
+    """
+    return list(range(len(u.trajectory))[frame_slice])
+
+
+def create_x_data(u, xdata_in_time, frame_list):
+    """."""
+    if xdata_in_time:
+        xdata = [
+            mda.units.convert(
+                u.trajectory[i].time - u.trajectory[0].time,
+                'ps',
+                xdata_in_time,
+                )
+            for i in frame_list
+            ]
+        xlabel = f'Time ({xdata_in_time})'
+    else:
+        xdata = frame_list
+        xlabel = 'Frames'
+
+    return xdata, xlabel

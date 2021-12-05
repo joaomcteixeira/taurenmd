@@ -532,7 +532,7 @@ def test_cli_rotations_3():
         plot=True,
         )
 
-    Path('plot_rotations.pdf').unlink()
+    Path('plot_rotations.png').unlink()
 
 
 def test_cli_trajedit_1():
