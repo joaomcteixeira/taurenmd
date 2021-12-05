@@ -47,6 +47,7 @@ from taurenmd import _BANNER, Path
 from taurenmd import core as tcore
 from taurenmd import log
 from taurenmd.libs import libcalc, libcli, libio, libmda
+from taurenmd.libs.libutil import make_list
 from taurenmd.logger import S, T
 from taurenmd.plots import labeldots
 
@@ -93,7 +94,7 @@ def main(
         start=None,
         stop=None,
         step=None,
-        selections=None,
+        selections=('protein and name CA',),
         inverted_selections=None,
         export=False,
         plot=False,
@@ -115,7 +116,13 @@ def main(
         step=step,
         )
 
-    selections = selections or ['protein and CA']
+    selections_list = make_list(selections)
+    if not selections_list:
+        emsg = (
+            'No selections defined. Check your `selections` argument input: '
+            f'{selections}'
+            )
+        raise ValueError(emsg)
 
     log.info(T('calculating RMSFs'))
 
@@ -131,9 +138,9 @@ def main(
             for inv in inverted_selections
             ]
     else:
-        inv_sels = [slice(None, None, None)] * len(selections)
+        inv_sels = [slice(None, None, None)] * len(selections_list)
 
-    for i, sel in enumerate(selections):
+    for i, sel in enumerate(selections_list):
         log.info(S('for sel: {}', sel))
 
         atom_group = u.select_atoms(sel)
@@ -158,7 +165,7 @@ def main(
                 datetime.now().strftime("%d/%m/%Y, %H:%M:%S"),
                 Path(topology).resolve(),
                 ','.join(f.resolve().str() for f in trajectories),
-                ','.join(f'{sel},RMSF' for sel in selections),
+                ','.join(f'{sel},RMSF' for sel in selections_list),
                 libio.make_csv_lines_in_interleaved_manner(rmsfs, labels),
                 )
 
@@ -179,7 +186,7 @@ def main(
             'xlabel': 'Atoms',
             'ylabel': r'RMSF ($\AA$)',
             'x_labels': [' | '.join(str(_l)) for _l in zip(*labels)],
-            'labels': selections,
+            'labels': selections_list,
             }
 
         cli_defaults.update(plotvars or dict())

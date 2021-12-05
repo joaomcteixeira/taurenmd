@@ -47,6 +47,7 @@ from taurenmd import _BANNER, Path
 from taurenmd import core as tcore
 from taurenmd import log
 from taurenmd.libs import libcli, libio, libmda
+from taurenmd.libs.libutil import make_list
 from taurenmd.logger import S, T
 from taurenmd.plots import plotparams
 
@@ -129,12 +130,14 @@ def main(
 
     log.info(T('defining atom seletions'))
     log.info(S('atom selection #1: {}', sel1))
-    log.info(S('atom selection #2: {}', ', '.join(sel2)))
+
+    sels2 = make_list(sel2)
+    log.info(S('atom selection #2: {}', ', '.join(sels2)))
     atom_sel1 = u.select_atoms(sel1)
-    atom_sels2 = [u.select_atoms(_sel) for _sel in sel2]
+    atom_sels2 = [u.select_atoms(_sel) for _sel in sels2]
 
     distances = np.empty(
-        (len(u.trajectory[frame_slice]), len(sel2)),
+        (len(u.trajectory[frame_slice]), len(sels2)),
         dtype=np.float64,
         )
 
@@ -144,7 +147,7 @@ def main(
 
     with libcli.ProgressBar(distances.shape[0], suffix='frames') as pb:
         for i, _ts in enumerate(u.trajectory[frame_slice]):
-            for j, _sel2 in enumerate(sel2):
+            for j, _sel2 in enumerate(atom_sels2):
 
                 distances[i, j] = np.linalg.norm(
                     np.subtract(
@@ -172,7 +175,7 @@ def main(
                     topology,
                     ', '.join(t.resolve().str() for t in trajectories),
                     sel1,
-                    ', '.join(sel2),
+                    ', '.join(sels2),
                     ),
             )
 
@@ -190,11 +193,10 @@ def main(
             'title': f'Distance between a main selection and others\n{sel1}',
             'xlabel': 'Frames',
             'ylabel': r'Distance ($\AA$)',
-            'labels': sel2,
+            'labels': sels2,
             }
 
         cli_defaults.update(plotvars or dict())
-        print(distances.shape)
         plotparams.plot(
             list(range(len(u.trajectory))[frame_slice]),
             distances.T,

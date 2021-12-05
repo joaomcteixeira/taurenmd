@@ -425,7 +425,32 @@ def test_cli_rmsd_2():
     cli_rmsd.main(
         toptest,
         [trajtest],
-        selections=None,
+        export='rmsds.csv',
+        plot=True,
+        plotvars={'filename': 'rmsds.pdf'},
+        )
+    p1 = Path('rmsds.csv')
+    p2 = Path('rmsds.pdf')
+    assert p1.exists()
+    assert p2.exists()
+    p1.unlink()
+    p2.unlink()
+
+
+@pytest.mark.parametrize(
+    'selection',
+    [
+        'name CA',
+        ['name CA', 'name C'],
+        ['all', 'segid A'],
+        ],
+    )
+def test_cli_rmsd_3(selection):
+    """Test cli rmsd."""
+    cli_rmsd.main(
+        toptest,
+        [trajtest],
+        selections=selection,
         export='rmsds.csv',
         plot=True,
         plotvars={'filename': 'rmsds.pdf'},
@@ -452,7 +477,6 @@ def test_cli_rmsf_2():
     cli_rmsf.main(
         toptest,
         [trajtest],
-        selections=None,
         export='rmsfs.csv',
         plot=True,
         plotvars={'filename': 'rmsfs.pdf'},
@@ -465,19 +489,9 @@ def test_cli_rmsf_2():
     p2.unlink()
 
 
-def test_cli_rmsf_error1():
-    """Test cli rmsd."""
-    with pytest.raises(TypeError):
-        cli_rmsf.main(
-            toptest,
-            [trajtest],
-            selections='name CA',
-            )
-
-
 def test_cli_rmsf_error2():
     """Test cli rmsd."""
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         cli_rmsf.main(
             toptest,
             [trajtest],
@@ -518,7 +532,7 @@ def test_cli_rotations_3():
         plot=True,
         )
 
-    Path('plot_param.pdf').unlink()
+    Path('plot_rotations.pdf').unlink()
 
 
 def test_cli_trajedit_1():

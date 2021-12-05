@@ -39,6 +39,7 @@ from taurenmd import _BANNER, Path
 from taurenmd import core as tcore
 from taurenmd import log
 from taurenmd.libs import libcalc, libcli, libio, libmda
+from taurenmd.libs.libutil import make_list
 from taurenmd.logger import S, T
 from taurenmd.plots import plotparams
 
@@ -86,7 +87,7 @@ def main(
         stop=None,
         step=None,
         ref_frame=0,
-        selections=None,
+        selections='all',
         export=False,
         plot=False,
         plotvars=None,
@@ -103,9 +104,7 @@ def main(
         step=step,
         )
 
-    if selections is None:
-        selections = ['all']
-
+    selections = make_list(selections)
     rmsds = []
     for selection in selections:
         rmsds.append(
@@ -116,6 +115,7 @@ def main(
                 ref_frame=ref_frame,
                 )
             )
+
     if export:
         libio.export_data_to_file(
             list(range(len(u.trajectory))[frame_slice]),
