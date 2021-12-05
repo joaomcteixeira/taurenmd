@@ -77,8 +77,6 @@ log.addHandler(_db)
 log.addHandler(_info)
 log.addHandler(_ch)
 
-references = set()
-
 
 def _controlled_exit():
     log.info(core.controlled_exit)

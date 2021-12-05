@@ -140,7 +140,7 @@ def main(
     if plot:
         log.info(T("Plotting results:"))
 
-        subtitle = 'Selections: {}'.format(' · '.format(selections))
+        subtitle = 'Selections: {}'.format(' · '.join(selections))
         ymax = max(max(_r) for _r in rmsds)
         ymin = min(min(_r) for _r in rmsds)
         filename = 'plot_rmsds.pdf'

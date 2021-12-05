@@ -198,7 +198,6 @@ def main(
         plotparams.plot(
             list(range(len(u.trajectory))[frame_slice]),
             distances.T,
-            #[distances[:, d] for d in range(distances.shape[1])],
             legend=True,
             **cli_defaults,
             )

@@ -1,7 +1,7 @@
 """Plot a single parameter."""
 import itertools
-import numpy as np
 
+import numpy as np
 from matplotlib import pyplot as plt
 
 from taurenmd.libs import libutil
@@ -36,7 +36,7 @@ def plot(
         **kwargs
         ):
     """
-    Plot a single plot with the combined RMSD.
+    Plot a parameter.
 
     Bellow parameters concern data representation and are considered
     of highest importance because their incorrect use can mislead
@@ -73,9 +73,8 @@ def plot(
     fig_size : tuple of float or int
         The size ratio of the subplot in the figure.
     """
-    print(y_data.shape)
-    # prepares data in
     y_data = np.array(y_data)
+
     if y_data.ndim == 1:
         y_data = y_data[np.newaxis, :]
 
@@ -87,9 +86,13 @@ def plot(
         '{} vs {}'.format(len(x_data), y_data.shape[1])
     assert y_data.shape[0] == len(plot_labels), (
         '{} vs {}'.format(y_data.shape[0], len(plot_labels)))
-    # done data preparation
 
-    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=figsize, constrained_layout=False)
+    fig, ax = plt.subplots(
+        nrows=1,
+        ncols=1,
+        figsize=figsize,
+        constrained_layout=False,
+        )
     plt.tight_layout(rect=[0.05, 0.02, 0.995, 1])
 
     fig.suptitle(

@@ -121,21 +121,32 @@ def main(
 
     labels = []
     rmsfs = []
-    inv_sels = [
-        slice(None, None, -1) if bool(int(inv)) else slice(None, None, None)
-        for inv in inverted_selections
-        ] if inverted_selections else [slice(None, None, None)] * len(selections)
+
+    # Create a list of slice objects according to `inverted_selections`
+    # If true, create [::-1] slice, and the data for that selection will be
+    # inverted. This is useful for plotting DNA or other antiparallel chains.
+    if inverted_selections:
+        inv_sels = [
+            slice(None, None, -1) if bool(int(inv)) else slice(None, None, None)
+            for inv in inverted_selections
+            ]
+    else:
+        inv_sels = [slice(None, None, None)] * len(selections)
 
     for i, sel in enumerate(selections):
         log.info(S('for sel: {}', sel))
-        atom_group = u.select_atoms(sel)
-        labels.append(libmda.draw_atom_label_from_atom_group(atom_group)[inv_sels[i]])
-        rmsfs.append(libcalc.mda_rmsf(atom_group, frame_slice=frame_slice)[inv_sels[i]])
 
+        atom_group = u.select_atoms(sel)
+
+        _ = libmda.draw_atom_label_from_atom_group(atom_group)[inv_sels[i]]
+        labels.append(_)
+
+        _ = libcalc.mda_rmsf(atom_group, frame_slice=frame_slice)[inv_sels[i]]
+        rmsfs.append(_)
 
     if export:
 
-        data_str =(
+        data_str = (
             "# Date: {1}{0}"
             "# Topology: {2}{0}"
             "# Trajectories {3}{0}"
@@ -148,7 +159,7 @@ def main(
                 Path(topology).resolve(),
                 ','.join(f.resolve().str() for f in trajectories),
                 ','.join(f'{sel},RMSF' for sel in selections),
-                make_csv_lines_in_interleaved_manner(rmsfs, labels),
+                libio.make_csv_lines_in_interleaved_manner(rmsfs, labels),
                 )
 
         log.info(T('Saving data'))

@@ -10,13 +10,12 @@ import ast
 import os
 import sys
 from datetime import datetime
-from functools import wraps
 
 import numpy as np
 
 from taurenmd import _BANNER, __version__
 from taurenmd import core as tcore
-from taurenmd import log, references
+from taurenmd import log
 from taurenmd.logger import CMDFILE
 
 
@@ -49,33 +48,12 @@ def maincli(ap, main):
     return result
 
 
-def add_reference(ref):
-    """
-    Add reference decorator.
-
-    Example
-    -------
-
-        >>> @add_reference(str)
-        >>> def myfunct():
-        >>>     ...
-    """
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            references.add(ref)
-            result = func(*args, **kwargs)
-            return result
-        return wrapper
-    return decorator
-
-
 def save_references():
     """Save used references to log file."""
     with open(CMDFILE, 'a') as fh:
         fh.write('References:\n')
         fh.write(tcore.ref_taurenmd)
-        fh.write('\n'.join(sorted(list(references))))
+        fh.write('\n'.join(sorted(list(tcore.references))))
         fh.write('\n\n')
 
 
@@ -137,7 +115,6 @@ class ParamsToDict(argparse.Action):
                     except (SyntaxError):
                         param_dict[k] = v
 
-        print(param_dict)
         namespace.plotvars = param_dict
         setattr(namespace, self.dest, True)
 
@@ -476,6 +453,7 @@ def add_inverted_array(parser):
         nargs='+',
         type=int,
         )
+
 
 def add_frame_list_arg(parser):
     """

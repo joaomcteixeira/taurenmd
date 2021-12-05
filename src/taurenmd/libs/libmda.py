@@ -17,11 +17,11 @@ from MDAnalysis.analysis import align as mdaalign
 from taurenmd import Path
 from taurenmd import core as tcore
 from taurenmd import log
-from taurenmd.libs import libcli, libio, libopenmm, libutil
+from taurenmd.libs import libio, libopenmm, libutil
 from taurenmd.logger import S, T
 
 
-@libcli.add_reference(tcore.ref_mda)
+@tcore.add_reference(tcore.ref_mda)
 def load_universe(
         topology,
         *trajectories,
@@ -88,7 +88,7 @@ def load_universe(
     return universe
 
 
-@libcli.add_reference(tcore.ref_mda)
+@tcore.add_reference(tcore.ref_mda)
 def report(universe):
     """
     Report information about the Universe.
@@ -133,7 +133,7 @@ def report(universe):
     log.info(S('components:\n{}', '\n'.join(info_)))
 
 
-@libcli.add_reference(tcore.ref_mda)
+@tcore.add_reference(tcore.ref_mda)
 def mdaalignto(universe, reference, selection='all'):
     """
     Align universe to reference.
@@ -164,7 +164,7 @@ def mdaalignto(universe, reference, selection='all'):
         raise err
 
 
-@libcli.add_reference(tcore.ref_mda)
+@tcore.add_reference(tcore.ref_mda)
 def draw_atom_label_from_atom_group(atom_group):
     """
     Translate MDAnalysis Atom Group to list of strings for each atom.
@@ -201,7 +201,7 @@ def draw_atom_label_from_atom_group(atom_group):
     return labels
 
 
-@libcli.add_reference(tcore.ref_mda)
+@tcore.add_reference(tcore.ref_mda)
 def convert_time_to_frame(x, dt, base_unit='ps'):
     """
     Convert a string `x` into a frame number based on given `dt`.
@@ -232,7 +232,7 @@ def convert_time_to_frame(x, dt, base_unit='ps'):
     ------
     ValueError
         The input does not contain any units but is not an integer.
-    """
+    """  # noqa: E501
     # regex to split value and units while handling scientific input
     val, unit = libutil.split_time_unit(x)
     if unit != "":

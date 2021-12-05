@@ -3,9 +3,7 @@ import re
 
 
 def make_list(*items):
-    """
-    Makes a list out of objects.
-    """
+    """Make a list out of objects."""
     new = []
 
     for item in items:

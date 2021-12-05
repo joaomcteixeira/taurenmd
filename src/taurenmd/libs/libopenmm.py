@@ -20,11 +20,10 @@ except ImportError:
 from taurenmd import Path
 from taurenmd import core as tcore
 from taurenmd import log
-from taurenmd.libs import libcli
 from taurenmd.logger import S, T
 
 
-@libcli.add_reference(tcore.ref_openmm)
+@tcore.add_reference(tcore.ref_openmm)
 def attempt_to_load_top_from_simtk(topology):
     """
     Load topology from SIMTK.

@@ -41,6 +41,7 @@ from taurenmd import core as tcore
 from taurenmd import log
 from taurenmd.libs import libcalc, libcli, libio, libmda
 from taurenmd.logger import S, T
+from taurenmd.plots import plotparams
 
 
 __author__ = 'Joao M.C. Teixeira'
@@ -177,7 +178,7 @@ def main(
         for k, v in plotvars.items():
             log.info(S('{} = {!r}', k, v))
 
-        libplot.param(
+        plotparams.plot(
             list(range(len(u.trajectory))[frame_slice]),
             angles,
             **plotvars,

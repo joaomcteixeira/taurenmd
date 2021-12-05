@@ -29,11 +29,11 @@ from MDAnalysis.analysis.rms import RMSF as mdaRMSF
 
 from taurenmd import core as tcore
 from taurenmd import log
-from taurenmd.libs import libcli, libio
+from taurenmd.libs import libio
 from taurenmd.logger import S, T
 
 
-@libcli.add_reference(tcore.ref_mda)
+@tcore.add_reference(tcore.ref_mda)
 def mda_rmsd(
         universe,
         frame_slice=None,
@@ -113,7 +113,7 @@ def mda_rmsd(
     return R.rmsd[frame_slice, 2]
 
 
-@libcli.add_reference(tcore.ref_mda)
+@tcore.add_reference(tcore.ref_mda)
 def mda_rmsf(
         atom_group,
         frame_slice=None,

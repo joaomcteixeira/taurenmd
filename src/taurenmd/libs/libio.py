@@ -265,16 +265,16 @@ def parse_top_output(top_output, traj_output=None):
 def make_csv_lines_in_interleaved_manner(data, labels):
     """."""
     lines = []
-    max_data = max(len(_r) for _r in rmsfs)
+    max_data = max(len(_r) for _r in data)
     for i in range(max_data):
         line = ''
-        for j in range(len(selections)):
+        for j in range(len(data)):
             try:
                 _l = labels[j][i]
             except IndexError:
                 _l = ''
             try:
-                _r = rmsfs[j][i]
+                _r = data[j][i]
             except IndexError:
                 _r = ''
             line += f'{_l},{_r},'

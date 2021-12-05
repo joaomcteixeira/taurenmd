@@ -1,9 +1,8 @@
 """Plot a single parameter."""
 import itertools
+
 import numpy as np
-
 from matplotlib import pyplot as plt
-
 
 from taurenmd.libs import libutil
 
@@ -33,8 +32,7 @@ def plot(
         dpi=300,
         **kwargs,
         ):
-    """
-    """
+    """Plot label dots template."""
     y_data = np.array(y_data)
     if y_data.ndim == 1:
         y_data = y_data[np.newaxis, :]
@@ -56,7 +54,6 @@ def plot(
         ha="center",
         )
 
-    #ax.margins(x=1)
     labels = labels or [None] * len(y_data)
     for i, yy in enumerate(y_data):
 
@@ -68,11 +65,9 @@ def plot(
             alpha=alpha,
             zorder=10)
 
-
     ax.set_xlabel(xlabel, weight='bold')
     ax.set_ylabel(ylabel, weight='bold')
 
-    #ax.set_xlim(x_data[0], x_data[-1])
     ax.set_ylim((0, ymax or np.max(y_data)))
 
     ax.set_xticks(list(range(y_data.shape[1])))
@@ -98,4 +93,3 @@ def plot(
 
     fig.tight_layout()
     fig.savefig(filename, dpi=dpi)
-

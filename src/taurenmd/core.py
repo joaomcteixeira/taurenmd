@@ -1,5 +1,6 @@
 """Library wide core utils."""
 import os
+from functools import wraps
 from pathlib import Path as _Path
 
 
@@ -41,6 +42,30 @@ class Path(type(_Path())):
             Parent paths. Name file or folder are excluded.
         """
         return self.resolve().parents[0]
+
+
+def add_reference(ref):
+    """
+    Add reference decorator.
+
+    Example
+    -------
+
+        >>> @add_reference(str)
+        >>> def myfunct():
+        >>>     ...
+    """
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            references.add(ref)
+            result = func(*args, **kwargs)
+            return result
+        return wrapper
+    return decorator
+
+
+references = set()
 
 
 ref_taurenmd = "* Cite taurenmd according to: https://taurenmd.readthedocs.io/en/latest/citing.html\n"  # noqa: E501

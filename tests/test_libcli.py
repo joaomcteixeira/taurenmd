@@ -3,7 +3,8 @@ import argparse
 
 import pytest
 
-from taurenmd import Path, references
+from taurenmd import Path
+from taurenmd.core import references
 from taurenmd.libs import libcli as lc
 from taurenmd.logger import CMDFILE
 
