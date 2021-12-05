@@ -17,7 +17,7 @@ from MDAnalysis.analysis import align as mdaalign
 from taurenmd import Path
 from taurenmd import core as tcore
 from taurenmd import log
-from taurenmd.libs import libcli, libio, libopenmm
+from taurenmd.libs import libcli, libio, libopenmm, libutil
 from taurenmd.logger import S, T
 
 
@@ -199,3 +199,49 @@ def draw_atom_label_from_atom_group(atom_group):
         labels.append(s)
 
     return labels
+
+
+@libcli.add_reference(tcore.ref_mda)
+def convert_time_to_frame(x, dt, base_unit='ps'):
+    """
+    Convert a string `x` into a frame number based on given `dt`.
+
+    If `x` does not contain any units its assumed to be a frame number
+    already.
+
+    Original function taken from `MDAnalysis.mdacli` project, from
+    commit: https://github.com/MDAnalysis/mdacli/blob/15f6981df7b14ef5d52d64b56953d276291068ab/src/mdacli/utils.py#L25-L66
+    The original function was modified internally without modifying its
+    API.
+
+    See also: https://github.com/MDAnalysis/mdacli/pull/81
+
+    Parameters
+    ----------
+    x : str
+        the input string
+    dt : float
+        the time step in ps
+
+    Returns
+    -------
+    int
+        frame number
+
+    Raises
+    ------
+    ValueError
+        The input does not contain any units but is not an integer.
+    """
+    # regex to split value and units while handling scientific input
+    val, unit = libutil.split_time_unit(x)
+    if unit != "":
+        val = mda.units.convert(val, unit, base_unit)
+        return int(val // dt)
+    elif val % 1 != 0:  # the number is not int'able
+        raise ValueError(
+            "Only integers or time step combinations (`12ps`) "
+            "are valid for frame selection."
+            )
+    else:
+        return int(val)

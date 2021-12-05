@@ -96,3 +96,47 @@ def test_draw_atom_label():
     labels = la.draw_atom_label_from_atom_group(atom_group)
     assert isinstance(labels, list)
     assert labels == ['A.10Ser.CA', 'A.11Ile.CA', 'A.12Leu.CA']
+
+
+@pytest.mark.parametrize(
+    'x, frame',
+     (('1', 1),
+      ('-1', -1),
+      ('1ns', 1000),
+      ('1.5ns', 1500),
+      ('12e3', 12e3),
+      ('12e3ps', 12e3)),
+    )
+def test_convert_str_time(x, frame):
+    """
+    Test convert string to time.
+
+    Tests taken from: https://github.com/MDAnalysis/mdacli/blob/15f6981df7b14ef5d52d64b56953d276291068ab/tests/test_utils.py#L22-L41
+    """
+    assert frame == la.convert_time_to_frame(x, dt=1)
+
+
+def test_convert_str_time_dt():
+    """
+    Test convert string to time in ps.
+
+    Tests taken from: https://github.com/MDAnalysis/mdacli/blob/15f6981df7b14ef5d52d64b56953d276291068ab/tests/test_utils.py#L22-L41
+    """
+    assert 1 == la.convert_time_to_frame("10ps", dt=10)
+
+
+@pytest.mark.parametrize(
+    'value',
+    [
+        '0.1',
+        'nothing',
+        ],
+    )
+def test_convert_str_time_raise(value):
+    """
+    Test convert string to time ValueError.
+
+    Tests taken from: https://github.com/MDAnalysis/mdacli/blob/15f6981df7b14ef5d52d64b56953d276291068ab/tests/test_utils.py#L22-L41
+    """
+    with pytest.raises(ValueError):
+        la.convert_time_to_frame(value, dt=1)
