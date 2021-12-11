@@ -110,7 +110,7 @@ def mda_rmsd(
 
     # rmsds[:, ii] = R.rmsd[:, 2][self._fslicer]
 
-    return R.rmsd[frame_slice, 2]
+    return R.results.rmsd[frame_slice, 2]
 
 
 @tcore.add_reference(tcore.ref_mda)

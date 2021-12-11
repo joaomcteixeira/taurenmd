@@ -141,7 +141,7 @@ def main(
         frame_list = libmda.get_frame_list_from_slice(u, frame_slice)
         xdata, xlabel = libmda.create_x_data(u, xdata_in_time, frame_list)
 
-        subtitle = 'Selections: {}'.format(' · '.join(selections))
+        # subtitle = 'Selections: {}'.format(' · '.join(selections))
         ymax = max(max(_r) for _r in rmsds)
         ymin = min(min(_r) for _r in rmsds)
 
@@ -149,9 +149,9 @@ def main(
             'ymax': ymax * 1.1 if ymax > 0 else ymax * 0.9,
             'ymin': ymin * 1.1 if ymin < 0 else ymin * 0.9,
             'filename': 'plot_rmsd.png',
-            'title': f'RMSDs\n{subtitle}',
+            'title': f'RMSD',
             'xlabel': xlabel,
-            'ylabel': r'RMSDs',
+            'ylabel': r'RMSDs ($\AA$)',
             'labels': selections,
             'dpi': 600,
             'legend': True,

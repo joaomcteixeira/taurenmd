@@ -118,10 +118,10 @@ def plot(
 
     # setting axes scales
 
-    xmin = xmin or x_data[0]
-    xmax = xmax or x_data[-1]
-    ymin = ymin or np.array(y_data).min()
-    ymax = ymax or np.array(y_data).max()
+    xmin = xmin if xmin is not None else x_data[0]
+    xmax = xmax if xmax is not None else x_data[-1]
+    ymin = ymin if ymin is not None else np.array(y_data).min()
+    ymax = ymax if ymax is not None else np.array(y_data).max()
 
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)

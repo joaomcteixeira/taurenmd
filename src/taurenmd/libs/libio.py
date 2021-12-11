@@ -279,7 +279,7 @@ def make_csv_lines_in_interleaved_manner(data, labels):
                 _r = ''
             line += f'{_l},{_r},'
         lines.append(line.rstrip(','))
-    return os.linesep.join(lines),
+    return os.linesep.join(lines)
 
 
 def export_data_to_file(

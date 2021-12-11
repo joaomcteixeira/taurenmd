@@ -13,7 +13,7 @@ from datetime import datetime
 
 import numpy as np
 
-from taurenmd import _BANNER, __version__
+from taurenmd import _BANNER, __version__, Path
 from taurenmd import core as tcore
 from taurenmd import log
 from taurenmd.logger import CMDFILE
@@ -306,6 +306,7 @@ def add_trajectories_arg(parser):
             'trajectories will be concatenated by input order.'
             ),
         nargs='+',
+        type=Path,
         )
 
 

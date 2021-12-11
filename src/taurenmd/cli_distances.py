@@ -199,6 +199,7 @@ def main(
             }
 
         cli_defaults.update(plotvars)
+        print(cli_defaults)
         plotparams.plot(xdata, distances.T, **cli_defaults)
 
         log.info(S(f'saved plot: {cli_defaults["filename"]}'))

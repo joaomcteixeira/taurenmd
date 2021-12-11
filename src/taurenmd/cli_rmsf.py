@@ -113,6 +113,7 @@ def main(
     frame_slice = libmda.get_frame_slices(u, start, stop, step)
 
     selections_list = make_list(selections)
+    print(selections_list)
     if not selections_list:
         emsg = (
             'No selections defined. Check your `selections` argument input: '
@@ -181,11 +182,13 @@ def main(
             'title': 'RMSFs',
             'xlabel': 'Atoms',
             'ylabel': r'RMSF ($\AA$)',
-            'x_labels': [' | '.join(str(_l)) for _l in zip(*labels)],
+            'x_labels': [_l.split('.')[-1] for _l in labels[0]], #[' | '.join(str(_l)) for _l in zip(*labels)],
             'labels': selections_list,
             }
 
         cli_defaults.update(plotvars or dict())
+        
+        print(plotvars)
 
         labeldots.plot(armsfs, **cli_defaults)
 
