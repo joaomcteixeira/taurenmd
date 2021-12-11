@@ -1,7 +1,7 @@
 """
-# Decompose Eurler angle rotations of a selection.
+# Decompose Eurler angle rotations for a selection.
 
-*Calculate the Roll, Pitch and Yaw angles along the trajectory.*
+*Calculate the Roll, Pitch and Yaw angles of a plane along the trajectory.*
 
 Read further on roll, pitch and yaw angles (Euler Angles) -
 [wikipedia](https://en.wikipedia.org/wiki/Euler_angles).
@@ -9,27 +9,27 @@ Read further on roll, pitch and yaw angles (Euler Angles) -
 Here we decompose these movements around the three different axis
 centered at an origin.
 
-## Algorithm
+## Calculation algorithm
 
 Given a selection of three regions, ``selection A``, ``selection B``
 and ``selection C``:
 
-1. Centers the system to the three selections center of geometry for
-every frame, this is called the *origin*,
+1. Center the system to the three selections center of geometry for
+every frame, this is called the *origin*;
 
-2. Calculates a plane given by the center of geometries of the three
-selections, plane ABC,
+2. Calculate a plane given by the center of geometries of the three
+selections, plane ABC;
 
-3. Defines the vector OA that goes from the origin to the center of
-geometry of ``selection A``, this represents the Yaw axis.
+3. Define the vector OA that goes from the origin to the center of
+geometry of ``selection A``, this represents the Yaw axis;
 
-4. Defines the normal vector to the plane ABC (ABCn), this represents the
-Roll axis,
+4. Define the normal vector to the plane ABC (ABCn), this represents the
+Roll axis;
 
-5. Defines the cross product betwee vectors OA and ABCn (AONn), this is the
-Pitch axis,
+5. Define the cross product betwee vectors OA and ABCn (AONn), this is the
+Pitch axis;
 
-6. Calculates this axis of reference for every frame
+6. Repeat this process for every frame.
 
 Calculating the angles:
 
@@ -55,7 +55,7 @@ OA, and AONni (in frame), displaced along OA.
 
 In the case of an homotrimer, define the axis and the origin on the trimers:
 
-    taurenmd rorations -z 'segid A' 'segid B' 'segid C' -x rotations.csv
+    taurenmd rotations -z 'segid A' 'segid B' 'segid C' -x rotations.csv
 
 ## References
 
