@@ -10,6 +10,9 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+v0.10.3 (2021-12-11)
+------------------------------------------------------------
+
 * Improved documentation for `cli_rotations`
 * Added illustration explaining the roll, pitch, and yaw angles
 
