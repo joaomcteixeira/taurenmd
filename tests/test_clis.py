@@ -479,7 +479,40 @@ def test_cli_rmsf_2():
         [trajtest],
         export='rmsfs.csv',
         plot=True,
-        plotvars={'filename': 'rmsfs.pdf'},
+        plotvars={
+            'filename': 'rmsfs.pdf',
+            'x_labels': None,
+            'grid': False,
+            'xlabel': False,
+            'ylabel': False,
+            'legend': False,
+            },
+        )
+    p1 = Path('rmsfs.csv')
+    p2 = Path('rmsfs.pdf')
+    assert p1.exists()
+    assert p2.exists()
+    p1.unlink()
+    p2.unlink()
+
+
+def test_cli_rmsf_3():
+    """Test cli rmsd."""
+    cli_rmsf.main(
+        toptest,
+        [trajtest],
+        export='rmsfs.csv',
+        selections=('protein and name CA', 'protein and name CA'),
+        inverted_selections=(0, 1),
+        plot=True,
+        plotvars={
+            'filename': 'rmsfs.pdf',
+            'x_labels': None,
+            'grid': False,
+            'xlabel': False,
+            'ylabel': False,
+            'legend': False,
+            },
         )
     p1 = Path('rmsfs.csv')
     p2 = Path('rmsfs.pdf')

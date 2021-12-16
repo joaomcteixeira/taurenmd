@@ -11,11 +11,14 @@ Changelog
 =========
 
 * Dropped `python-bioplottemplates`
+* updated export statements
 * Added plots to `taurenmd rotations`
 * Added plots to `taurenmd dist`
 * Added plots to `taurenmd rmsf`
+* Added plots to `taurenmd rmsd`
 * `taurenmd dist` now can take multiple `--sel2`, and all are plotted
 * `ParamsToDict` now uses `ast.literal_eval`
+* trajectory slice now accepts timesteps (10ns, for example)
 
 v0.10.2 (2021-12-03)
 ------------------------------------------------------------

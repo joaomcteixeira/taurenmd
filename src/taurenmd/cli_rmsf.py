@@ -46,7 +46,7 @@ import numpy as np
 from taurenmd import _BANNER, Path
 from taurenmd import core as tcore
 from taurenmd import log
-from taurenmd.libs import libcalc, libcli, libio, libmda
+from taurenmd.libs import libcalc, libcli, libmda, libutil
 from taurenmd.libs.libutil import make_list
 from taurenmd.logger import S, T
 from taurenmd.plots import labeldots
@@ -163,7 +163,7 @@ def main(
                 Path(topology).resolve(),
                 ','.join(f.resolve().str() for f in trajectories),
                 ','.join(f'{sel},RMSF' for sel in selections_list),
-                libio.make_csv_lines_in_interleaved_manner(rmsfs, labels),
+                libutil.make_csv_lines_in_interleaved_manner(rmsfs, labels),
                 )
 
         log.info(T('Saving data'))
@@ -182,13 +182,11 @@ def main(
             'title': 'RMSFs',
             'xlabel': 'Atoms',
             'ylabel': r'RMSF ($\AA$)',
-            'x_labels': [_l.split('.')[-1] for _l in labels[0]], #[' | '.join(str(_l)) for _l in zip(*labels)],
+            'x_labels': [_l.split('.')[-1] for _l in labels[0]],
             'labels': selections_list,
             }
 
         cli_defaults.update(plotvars or dict())
-        
-        print(plotvars)
 
         labeldots.plot(armsfs, **cli_defaults)
 

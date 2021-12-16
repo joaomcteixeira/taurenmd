@@ -149,7 +149,7 @@ def main(
             'ymax': ymax * 1.1 if ymax > 0 else ymax * 0.9,
             'ymin': ymin * 1.1 if ymin < 0 else ymin * 0.9,
             'filename': 'plot_rmsd.png',
-            'title': f'RMSD',
+            'title': 'RMSD',
             'xlabel': xlabel,
             'ylabel': r'RMSDs ($\AA$)',
             'labels': selections,

@@ -33,7 +33,6 @@ def plot(
         figsize=(8, 5),
         filename='plot_param.pdf',
         dpi=150,
-        **kwargs
         ):
     """
     Plot a parameter.
@@ -133,6 +132,7 @@ def plot(
             linewidth=grid_lw,
             alpha=grid_alpha,
             )
+
     if isinstance(vert_lines, (list, tuple)):
         for line in vert_lines:
             ax.axvline(x=float(line), color='k')

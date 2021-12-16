@@ -1,5 +1,4 @@
 """Handle input and output general operations."""
-import os
 import re
 from pprint import PrettyPrinter
 
@@ -260,26 +259,6 @@ def parse_top_output(top_output, traj_output=None):
 
     else:
         return Path(top_output)
-
-
-def make_csv_lines_in_interleaved_manner(data, labels):
-    """."""
-    lines = []
-    max_data = max(len(_r) for _r in data)
-    for i in range(max_data):
-        line = ''
-        for j in range(len(data)):
-            try:
-                _l = labels[j][i]
-            except IndexError:
-                _l = ''
-            try:
-                _r = data[j][i]
-            except IndexError:
-                _r = ''
-            line += f'{_l},{_r},'
-        lines.append(line.rstrip(','))
-    return os.linesep.join(lines)
 
 
 def export_data_to_file(

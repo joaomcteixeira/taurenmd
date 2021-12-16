@@ -19,7 +19,6 @@ def plot(
         legend=True,
         legend_fs=6,
         legend_loc=4,
-        numeric_x_labels=False,
         colors=('b', 'g', 'r', 'c', 'm', 'y', 'k'),
         alpha=0.7,
         grid=True,
@@ -30,7 +29,6 @@ def plot(
         figsize=(10, 6),
         filename='plot_param.pdf',
         dpi=300,
-        **kwargs,
         ):
     """Plot label dots template."""
     y_data = np.array(y_data)

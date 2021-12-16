@@ -183,9 +183,9 @@ def test_topology_input_error():
 @pytest.mark.parametrize(
     'cmd,expected',
     [
-        ('traj1.dcd', ['traj1.dcd']),
-        ('traj1.dcd traj2.dcd', ['traj1.dcd', 'traj2.dcd']),
-        ]
+        ('traj1.dcd', list(map(Path, ['traj1.dcd']))),
+        ('traj1.dcd traj2.dcd', list(map(Path, ['traj1.dcd', 'traj2.dcd']))),
+        ],
     )
 def test_trajectories(cmd, expected):
     """Test trajectories argument."""
@@ -521,3 +521,18 @@ def test_ProgressBar_2():
 
     with pytest.raises(IndexError):
         PB.increment()
+
+
+@pytest.mark.parametrize(
+    'cmd,expected',
+    [
+        ('--inverted-selections 1 1', [1, 1]),
+        ('--inverted-selections 0 1', [0, 1]),
+        ]
+    )
+def test_inverted_selection(cmd, expected):
+    """Test inverted selection."""
+    parser = argparse.ArgumentParser()
+    lc.add_inverted_array(parser)
+    v = vars(parser.parse_args(cmd.split()))
+    assert v['inverted_selections'] == expected

@@ -203,7 +203,14 @@ def draw_atom_label_from_atom_group(atom_group):
 
 @tcore.add_reference(tcore.ref_mda)
 def get_timestep(u, i0=0, i1=1):
-    """Get time step of the trajectory."""
+    """
+    Get time step between two trajectory frames in picoseconds.
+
+    Parameters
+    ----------
+    it0, it1 : int
+        The initial and end frame, respectively.
+    """
     return u.trajectory[i1].time - u.trajectory[i0].time  # in picoseconds
 
 
@@ -222,10 +229,14 @@ def convert_time_to_frame(x, dt, base_unit='ps'):
 
     See also: https://github.com/MDAnalysis/mdacli/pull/81
 
+    Note that in case of decimal values, for example, 10.3ps, the
+    integer division between the value and `dt` remains.
+
     Parameters
     ----------
-    x : str
+    x : str, int or float
         the input string
+
     dt : float
         the time step in ps
 
@@ -239,23 +250,35 @@ def convert_time_to_frame(x, dt, base_unit='ps'):
     ValueError
         The input does not contain any units but is not an integer.
     """  # noqa: E501
-    assert isinstance(x, str)
+    x = str(x)
+
     # regex to split value and units while handling scientific input
     val, unit = libutil.split_time_unit(x)
+    print(val, unit, dt)
+
     if unit != "":
-        val = mda.units.convert(val, unit, base_unit)
-        return int(val // dt)
-    elif val % 1 != 0:  # the number is not int'able
-        raise ValueError(
-            "Only integers or time step combinations (`12ps`) "
-            "are valid for frame selection."
-            )
+        converted = mda.units.convert(val, unit, base_unit)
+        return round(converted / dt, 0)
     else:
         return int(val)
 
 
 def convert_time_or_frame_to_frame(s, u):
-    """."""
+    """
+    Convert a time or frame string to frame.
+
+    Parameters
+    ----------
+    s : str or int or float
+        A string defining the time ('12ns') or frame.
+
+    u : mda.Universe
+
+    Returns
+    -------
+    int
+        see :func:`convert_time_to_frame`
+    """
     dt = get_timestep(u)
     return convert_time_to_frame(s, dt)
 
@@ -278,25 +301,6 @@ def get_frame_list_from_slice(u, frame_slice):
         and slice.
     """
     return list(range(len(u.trajectory))[frame_slice])
-
-
-def create_x_data(u, xdata_in_time, frame_list):
-    """."""
-    if xdata_in_time:
-        xdata = [
-            mda.units.convert(
-                get_timestep(u, i1=i),
-                'ps',
-                xdata_in_time,
-                )
-            for i in frame_list
-            ]
-        xlabel = f'Time ({xdata_in_time})'
-    else:
-        xdata = frame_list
-        xlabel = 'Frames'
-
-    return xdata, xlabel
 
 
 def get_frame_slices(u, start=None, stop=None, step=None):
@@ -326,3 +330,33 @@ def get_frame_slices(u, start=None, stop=None, step=None):
 
     assert isinstance(frame_slice, slice)
     return frame_slice
+
+
+def create_x_data(u, xdata_in_time, frame_list):
+    """
+    Create X data for plotting.
+
+    Create a frame list given a time or else return the frame_list given.
+
+    Parameters
+    ----------
+    u : mda.Universe
+
+    xdata_in_time : bool
+        Whether to select frames based on a time duration.
+
+    frame_list : list of int
+        A list of integers referring to the number of frames in the
+        trajectory.
+    """
+    if xdata_in_time:
+        xdata = [
+            mda.units.convert(get_timestep(u, i1=i), 'ps', xdata_in_time)
+            for i in frame_list
+            ]
+        xlabel = f'Time ({xdata_in_time})'
+    else:
+        xdata = frame_list
+        xlabel = 'Frames'
+
+    return xdata, xlabel

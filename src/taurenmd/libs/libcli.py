@@ -13,7 +13,7 @@ from datetime import datetime
 
 import numpy as np
 
-from taurenmd import _BANNER, __version__, Path
+from taurenmd import _BANNER, Path, __version__
 from taurenmd import core as tcore
 from taurenmd import log
 from taurenmd.logger import CMDFILE
@@ -447,9 +447,7 @@ def add_inverted_array(parser):
     """  # noqa: E501
     parser.add_argument(
         '--inverted-selections',
-        help=(
-            'Invert order of selections.'
-            ),
+        help='Invert order of selections.',
         default=None,
         nargs='+',
         type=int,
