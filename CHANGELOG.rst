@@ -20,6 +20,12 @@ Changelog
 * `ParamsToDict` now uses `ast.literal_eval`
 * trajectory slice now accepts timesteps (10ns, for example)
 
+v0.10.3 (2021-12-11)
+------------------------------------------------------------
+
+* Improved documentation for `cli_rotations`
+* Added illustration explaining the roll, pitch, and yaw angles
+
 v0.10.2 (2021-12-03)
 ------------------------------------------------------------
 

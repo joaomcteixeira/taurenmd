@@ -43,7 +43,7 @@ project = 'taurenmd'
 year = '2019'
 author = 'Joao MC Teixeira'
 copyright = '{0}, {1}'.format(year, author)
-version = release = '0.10.2'
+version = release = '0.10.3'
 
 todo_include_todos = True
 pygments_style = 'trac'
@@ -63,7 +63,7 @@ linkcheck_ignore = [r'https://codecov.io/*']
 if not on_rtd:  # only set the theme if we're building docs locally
     html_theme = 'sphinx_rtd_theme'
 
-html_logo = 'logo/taurenmd_logo_black.png'
+html_logo = 'img/taurenmd_logo_black.png'
 html_use_smartypants = True
 html_last_updated_fmt = '%b %d, %Y'
 html_split_index = False
