@@ -22,7 +22,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        conda install pip setuptools wheel tox coverage[toml]
+        conda install pip setuptools wheel tox
 
     - name: Test with tox
       run: tox -e py37
