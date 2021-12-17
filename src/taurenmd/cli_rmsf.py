@@ -61,7 +61,6 @@ __status__ = 'Production'
 __doc__ += (
     f'{tcore.ref_mda}'
     f'{tcore.ref_mda_selection}'
-    f'{tcore.ref_plottemplates_labeldots}'
     )
 
 _help = 'Calculate RMSFS for a selection and trajectory slice.'

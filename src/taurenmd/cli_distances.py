@@ -54,9 +54,7 @@ from taurenmd.plots import plotparams
 
 __doc__ += (
     f'{tcore.ref_mda}'
-    f'{tcore.ref_mda_selection}'
-    f'{tcore.ref_plottemplates_param}'
-    )
+    f'{tcore.ref_mda_selection}')
 
 _help = 'Calculates distances between geometric centers of selections. '
 _name = 'dist'
@@ -199,7 +197,6 @@ def main(
             }
 
         cli_defaults.update(plotvars)
-        print(cli_defaults)
         plotparams.plot(xdata, distances.T, **cli_defaults)
 
         log.info(S(f'saved plot: {cli_defaults["filename"]}'))

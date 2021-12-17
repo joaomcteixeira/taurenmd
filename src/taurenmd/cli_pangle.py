@@ -53,7 +53,6 @@ __status__ = 'Production'
 __doc__ += (
     f'{tcore.ref_mda}'
     f'{tcore.ref_mda_selection}'
-    f'{tcore.ref_plottemplates_param}'
     )
 
 _help = 'Calculate angular oscillation of a plane along the trajectory.'
