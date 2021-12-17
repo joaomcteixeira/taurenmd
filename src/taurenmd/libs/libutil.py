@@ -1,6 +1,7 @@
 """General utilities."""
 import os
 import re
+from itertools import zip_longest
 
 
 def make_list(*items):
@@ -65,19 +66,11 @@ def make_csv_lines_in_interleaved_manner(data, labels):
     assert all(len(i) == len(j) for i, j in zip(data, labels)), \
         'data and labels size do not match'
 
+    dataz = zip_longest(*data, fillvalue='')
+    labelz = zip_longest(*labels, fillvalue='')
+
     lines = []
-    max_data = max(len(_r) for _r in data)
-    for i in range(max_data):
-        line = ''
-        for j in range(len(data)):
-
-            try:
-                _l = labels[j][i]
-                _r = data[j][i]
-            except IndexError:
-                _l, _r = '', ''
-
-            line += f'{_l},{_r},'
-
-        lines.append(line.rstrip(','))
+    for di, li in zip(dataz, labelz):
+        _lines = (f'{_l},{_d}' for _d, _l in zip(di, li) if _d)
+        lines.append(','.join(_lines))
     return os.linesep.join(lines)
