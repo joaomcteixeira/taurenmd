@@ -108,7 +108,7 @@ def main(
     log.info(S('using frame: {}', ref_frame))
     u.trajectory[ref_frame]
 
-    log.info(T(f'calculating plane eq for reference points: '))
+    log.info(T('calculating plane eq for reference points: '))
     for _sel in plane_selection:
         log.info(S(_sel))
     reference_point_1 = u.select_atoms(plane_selection[0]).center_of_geometry()
