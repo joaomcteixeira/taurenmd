@@ -13,6 +13,7 @@ def test_plotparams_0():
         list(range(100)),
         )
 
+    assert Path('plot_param.pdf').exists()
     Path('plot_param.pdf').unlink()
     return
 
@@ -36,7 +37,9 @@ def test_plotparams_1():
         filename='this_plot.png',
         )
 
-    Path('this_plot.png').unlink(missing_ok=False)
+    # py37 compatibility
+    assert Path('this_plot.png').exists()
+    Path('this_plot.png').unlink()
     return
 
 
@@ -60,7 +63,9 @@ def test_plotparams_2():
         filename='this_plot.png',
         )
 
-    Path('this_plot.png').unlink(missing_ok=False)
+    # py37 compatibility
+    assert Path('this_plot.png').exists()
+    Path('this_plot.png').unlink()
     return
 
 
@@ -70,7 +75,9 @@ def test_labeldots_0():
         list(range(50)),
         )
 
-    Path('plot_param.pdf').unlink(missing_ok=False)
+    # py37 compatibility
+    assert Path('plot_param.pdf').exists()
+    Path('plot_param.pdf').unlink()
 
 
 def test_labeldots_1():
@@ -87,7 +94,9 @@ def test_labeldots_1():
         filename='plot_test.png',
         )
 
-    Path('plot_test.png').unlink(missing_ok=False)
+    # py37 compatibility
+    assert Path('plot_test.png').exists()
+    Path('plot_test.png').unlink()
 
 
 def test_labeldots_2():
@@ -104,4 +113,6 @@ def test_labeldots_2():
         filename='plot_test.png',
         )
 
-    Path('plot_test.png').unlink(missing_ok=False)
+    # py37 compatibility
+    assert Path('plot_test.png').exists()
+    Path('plot_test.png').unlink()
