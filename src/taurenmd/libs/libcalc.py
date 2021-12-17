@@ -243,7 +243,7 @@ def calc_planes_angle(a1, b1, c1, a2, b2, c2, aunit='radians'):
     d = (a1 * a2 + b1 * b2 + c1 * c2)
     e1 = math.sqrt(a1 * a1 + b1 * b1 + c1 * c1)
     e2 = math.sqrt(a2 * a2 + b2 * b2 + c2 * c2)
-    d = d / (e1 * e2)
+    d = round(d / (e1 * e2), 2)
     angle = math.acos(d)
     if aunit == 'degrees':
         return math.degrees(angle)

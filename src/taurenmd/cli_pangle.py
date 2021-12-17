@@ -107,6 +107,10 @@ def main(
     log.info(T('calculating plane eq. for reference frame'))
     log.info(S('using frame: {}', ref_frame))
     u.trajectory[ref_frame]
+
+    log.info(T(f'calculating plane eq for reference points: '))
+    for _sel in plane_selection:
+        log.info(S(_sel))
     reference_point_1 = u.select_atoms(plane_selection[0]).center_of_geometry()
     reference_point_2 = u.select_atoms(plane_selection[1]).center_of_geometry()
     reference_point_3 = u.select_atoms(plane_selection[2]).center_of_geometry()
@@ -116,7 +120,7 @@ def main(
         reference_point_2,
         reference_point_3,
         )
-    log.info(S('the equation is {}x + {}y + {}z = {}', ra, rb, rc, rd))
+    log.info(S('the plane equation is {}x + {}y + {}z = {}', ra, rb, rc, rd))
 
     log.info(T('Calculating angles'))
     angles = []
