@@ -10,6 +10,9 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+v0.10.4 (2022-01-14)
+------------------------------------------------------------
+
 * update logo link in README #63
 
 v0.10.3 (2021-12-11)
