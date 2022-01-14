@@ -15,12 +15,23 @@ def plot(
         title=None,
         xlabel=None,
         ylabel=None,
+        xlabel_fs=8,
+        ylabel_fs=8,
+        xticks=None,
+        yticks=None,
+        xticks_labels=None,
+        yticks_labels=None,
         colors=('b', 'g', 'r', 'c', 'm', 'y', 'k'),
         alpha=0.7,
         xmax=None,
         xmin=None,
         ymax=None,
         ymin=None,
+        hline=None,
+        hline_color="black",
+        hline_lw=1,
+        xticks_fs=10,
+        yticks_fs=10,
         grid=True,
         grid_color="lightgrey",
         grid_ls="-",
@@ -92,13 +103,13 @@ def plot(
         figsize=figsize,
         constrained_layout=False,
         )
-    plt.tight_layout(rect=[0.05, 0.02, 0.995, 1])
+    plt.tight_layout(rect=[0.05, 0.05, 0.995, 1])
 
-    fig.suptitle(
+    ax.set_title(
         title,
         x=0.5,
-        y=.98,
-        va="top",
+        y=1,
+        va="bottom",
         ha="center",
         fontweight='bold',
         )
@@ -110,10 +121,11 @@ def plot(
             label=ll,
             color=next(plot_colors),
             alpha=alpha,
+            zorder=2,
             )
 
-    ax.set_xlabel(xlabel, weight='bold')
-    ax.set_ylabel(ylabel, weight='bold')
+    ax.set_xlabel(xlabel, weight='bold', fontsize=xlabel_fs)
+    ax.set_ylabel(ylabel, weight='bold', fontsize=ylabel_fs)
 
     # setting axes scales
 
@@ -125,13 +137,32 @@ def plot(
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)
 
+    if xticks:
+        ax.set_xticks(ticks=xticks)
+
+    if xticks_labels:
+        ax.set_xticklabels(xticks_labels)
+
+    if yticks:
+        ax.set_yticks(ticks=yticks)
+
+    if yticks_labels:
+        ax.set_yticklabels(yticks_labels)
+
+    ax.tick_params(axis="x", labelsize=xticks_fs)
+    ax.tick_params(axis="y", labelsize=yticks_fs)
+
     if grid:
         ax.grid(
             color=grid_color,
             linestyle=grid_ls,
             linewidth=grid_lw,
             alpha=grid_alpha,
+            zorder=1,
             )
+
+    if hline is not None:
+        ax.axhline(hline, zorder=1, color=hline_color, lw=hline_lw)
 
     if isinstance(vert_lines, (list, tuple)):
         for line in vert_lines:

@@ -150,7 +150,7 @@ def main(
             'filename': 'plot_rmsd.png',
             'title': 'RMSD',
             'xlabel': xlabel,
-            'ylabel': r'RMSDs ($\AA$)',
+            'ylabel': r'RMSD ($\AA$)',
             'labels': selections,
             'dpi': 600,
             'legend': True,
