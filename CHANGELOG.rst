@@ -20,6 +20,11 @@ Changelog
 * `ParamsToDict` now uses `ast.literal_eval`
 * trajectory slice now accepts timesteps (10ns, for example)
 
+v0.10.4 (2022-01-14)
+------------------------------------------------------------
+
+* update logo link in README #63
+
 v0.10.3 (2021-12-11)
 ------------------------------------------------------------
 
