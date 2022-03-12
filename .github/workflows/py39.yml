@@ -25,7 +25,7 @@ jobs:
         conda install pip setuptools wheel tox
 
     - name: Test with tox
-      run: tox -e py39
+      run: tox -e py39 -rvv
 
     # from https://github.com/codecov/codecov-action
     - name: Upload coverage to Codecov
