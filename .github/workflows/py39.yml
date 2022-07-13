@@ -1,4 +1,4 @@
-name: pytest_py39
+name: test
 
 on:
   push:
@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9]
     defaults:
       run:
         shell: bash -l {0}
@@ -17,7 +20,7 @@ jobs:
     - uses: conda-incubator/setup-miniconda@v2
       with:
         activate-environment: test
-        python-version: 3.9
+        python-version: ${{ matrix.python-version }}
         channels: conda-forge
 
     - name: Install dependencies
@@ -25,7 +28,7 @@ jobs:
         conda install pip setuptools wheel tox
 
     - name: Test with tox
-      run: tox -e py39 -rvv
+      run: tox -e test -rvv
 
     # from https://github.com/codecov/codecov-action
     - name: Upload coverage to Codecov

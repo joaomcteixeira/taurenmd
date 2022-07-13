@@ -108,7 +108,7 @@ setup(
         'Molecular Biology',
         'Biochemistry',
         ],
-    python_requires='>=3.6, <3.10',
+    python_requires='>=3.8, <3.10',
     install_requires=install_requires,
     extras_require={
         'all': alldeps,
