@@ -10,6 +10,9 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+v0.11.0 (2022-07-13)
+------------------------------------------------------------
+
 * Dropped `python-bioplottemplates`
 * updated export statements
 * Added plots to `taurenmd rotations`
