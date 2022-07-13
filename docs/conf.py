@@ -11,13 +11,12 @@ mock_modules = [
     'MDAnalysis',
     'MDAnalysis.analysis',
     'MDAnalysis.analysis.rms',
+    'matplotlib',
     'mdtraj',
-    'simtk.openmm.app',
-    'simtk.openmm',
+    'numpy',
     'simtk',
-    'bioplottemplates',
-    'bioplottemplates.plots',
-    'pyquaternion',
+    'simtk.openmm',
+    'simtk.openmm.app',
     ]
 
 for modulename in mock_modules:

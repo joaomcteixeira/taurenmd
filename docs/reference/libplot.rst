@@ -1,5 +1,8 @@
-libplot
-~~~~~~~
+plots
+~~~~~
 
-.. automodule:: taurenmd.libs.libplot
+.. automodule:: taurenmd.plots.plotparams
+    :members:
+
+.. automodule:: taurenmd.plots.labeldots
     :members:
