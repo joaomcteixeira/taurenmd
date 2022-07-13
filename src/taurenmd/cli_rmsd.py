@@ -38,8 +38,10 @@ from datetime import datetime
 from taurenmd import _BANNER, Path
 from taurenmd import core as tcore
 from taurenmd import log
-from taurenmd.libs import libcalc, libcli, libio, libmda, libplot
+from taurenmd.libs import libcalc, libcli, libio, libmda
+from taurenmd.libs.libutil import make_list
 from taurenmd.logger import S, T
+from taurenmd.plots import plotparams
 
 
 __author__ = 'Joao M.C. Teixeira'
@@ -51,7 +53,6 @@ __status__ = 'Production'
 __doc__ += (
     f'{tcore.ref_mda}'
     f'{tcore.ref_mda_selection}'
-    f'{tcore.ref_plottemplates_param}'
     )
 
 _help = 'Calculates RMSDs for a selection and trajectory slice.'
@@ -85,7 +86,7 @@ def main(
         stop=None,
         step=None,
         ref_frame=0,
-        selections=None,
+        selections='all',
         export=False,
         plot=False,
         plotvars=None,
@@ -96,15 +97,9 @@ def main(
 
     u = libmda.load_universe(topology, *trajectories, insort=insort)
 
-    frame_slice = libio.frame_slice(
-        start=start,
-        stop=stop,
-        step=step,
-        )
+    frame_slice = libmda.get_frame_slices(u, start, stop, step)
 
-    if selections is None:
-        selections = ['all']
-
+    selections = make_list(selections)
     rmsds = []
     for selection in selections:
         rmsds.append(
@@ -115,6 +110,7 @@ def main(
                 ref_frame=ref_frame,
                 )
             )
+
     if export:
         libio.export_data_to_file(
             list(range(len(u.trajectory))[frame_slice]),
@@ -137,18 +133,34 @@ def main(
             )
 
     if plot:
+        log.info(T("Plotting results:"))
         plotvars = plotvars or dict()
-        plotvars.setdefault('labels', selections)
 
-        log.info(T('plot params:'))
-        for k, v in plotvars.items():
-            log.info(S('{} = {!r}', k, v))
+        xdata_in_time = plotvars.pop('xdata_in_time', 'ns')
+        frame_list = libmda.get_frame_list_from_slice(u, frame_slice)
+        xdata, xlabel = libmda.create_x_data(u, xdata_in_time, frame_list)
 
-        libplot.param(
-            list(range(len(u.trajectory))[frame_slice]),
-            rmsds,
-            **plotvars,
-            )
+        # subtitle = 'Selections: {}'.format(' · '.join(selections))
+        ymax = max(max(_r) for _r in rmsds)
+        ymin = min(min(_r) for _r in rmsds)
+
+        cli_defaults = {
+            'ymax': ymax * 1.1 if ymax > 0 else ymax * 0.9,
+            'ymin': ymin * 1.1 if ymin < 0 else ymin * 0.9,
+            'filename': 'plot_rmsd.png',
+            'title': 'RMSD',
+            'xlabel': xlabel,
+            'ylabel': r'RMSD ($\AA$)',
+            'labels': selections,
+            'dpi': 600,
+            'legend': True,
+            }
+
+        cli_defaults.update(plotvars)
+
+        plotparams.plot(xdata, rmsds, **cli_defaults)
+
+        log.info(S(f'saved plot: {cli_defaults["filename"]}'))
 
     return
 

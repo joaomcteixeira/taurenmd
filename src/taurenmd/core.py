@@ -1,5 +1,6 @@
 """Library wide core utils."""
 import os
+from functools import wraps
 from pathlib import Path as _Path
 
 
@@ -43,6 +44,30 @@ class Path(type(_Path())):
         return self.resolve().parents[0]
 
 
+def add_reference(ref):
+    """
+    Add reference decorator.
+
+    Example
+    -------
+
+        >>> @add_reference(str)
+        >>> def myfunct():
+        >>>     ...
+    """
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            references.add(ref)
+            result = func(*args, **kwargs)
+            return result
+        return wrapper
+    return decorator
+
+
+references = set()
+
+
 ref_taurenmd = "* Cite taurenmd according to: https://taurenmd.readthedocs.io/en/latest/citing.html\n"  # noqa: E501
 """How to cite taurenmd project."""
 
@@ -63,15 +88,6 @@ ref_mda_unwrap = "* unwrap performed by MDAnalysis [unwrap](https://www.mdanalys
 
 ref_mda_alignto = "* align performed by MDAnalysis [unwrap](https://www.mdanalysis.org/docs/documentation_pages/analysis/align.html?highlight=alignto#MDAnalysis.analysis.align.alignto).\n"  # noqa: E501
 """Command-line docstring to reference MDAnalysis alignto function."""
-
-ref_plottemplates_param = "* plotting performed by [python-bioplottemplates plot param function](https://python-bioplottemplates.readthedocs.io/en/latest/reference/plots.html#bioplottemplates.plots.param.plot).\n"  # noqa: E501
-"""Command-line docstring to reference python-bioplottemplates param plot."""
-
-ref_plottemplates_labeldots = "* plotting performed by [python-bioplottemplates plot labeldots function](https://python-bioplottemplates.readthedocs.io/en/latest/reference/plots.html#bioplottemplates.plots.label_dots.plot).\n"  # noqa: E501
-"""Command-line docstring to reference python-bioplottemplates labeldots plot."""  # noqa: E501
-
-ref_pyquaternion = "* Quaterion operations performed with [pyquaterion](http://kieranwynn.github.io/pyquaternion/).\n"  # noqa: E501
-"""Command-line docstring to reference pyquaterion lib."""
 
 ref_numpy = '* Matrix operations performed with [Numpy](https://www.scipy.org/citing.html).'  # noqa: E501
 """Command-line docstring to reference numpy lib."""

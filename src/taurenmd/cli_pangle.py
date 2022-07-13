@@ -39,8 +39,9 @@ import functools
 from taurenmd import _BANNER, Path
 from taurenmd import core as tcore
 from taurenmd import log
-from taurenmd.libs import libcalc, libcli, libio, libmda, libplot
+from taurenmd.libs import libcalc, libcli, libio, libmda
 from taurenmd.logger import S, T
+from taurenmd.plots import plotparams
 
 
 __author__ = 'Joao M.C. Teixeira'
@@ -52,7 +53,6 @@ __status__ = 'Production'
 __doc__ += (
     f'{tcore.ref_mda}'
     f'{tcore.ref_mda_selection}'
-    f'{tcore.ref_plottemplates_param}'
     )
 
 _help = 'Calculate angular oscillation of a plane along the trajectory.'
@@ -102,16 +102,15 @@ def main(
 
     u = libmda.load_universe(topology, *trajectories, insort=insort)
 
-    frame_slice = libio.frame_slice(
-        start=start,
-        stop=stop,
-        step=step,
-        )
-    log.info(S('for slice {}', frame_slice))
+    frame_slice = libmda.get_frame_slices(u, start, stop, step)
 
     log.info(T('calculating plane eq. for reference frame'))
     log.info(S('using frame: {}', ref_frame))
     u.trajectory[ref_frame]
+
+    log.info(T('calculating plane eq for reference points: '))
+    for _sel in plane_selection:
+        log.info(S(_sel))
     reference_point_1 = u.select_atoms(plane_selection[0]).center_of_geometry()
     reference_point_2 = u.select_atoms(plane_selection[1]).center_of_geometry()
     reference_point_3 = u.select_atoms(plane_selection[2]).center_of_geometry()
@@ -121,7 +120,7 @@ def main(
         reference_point_2,
         reference_point_3,
         )
-    log.info(S('the equation is {}x + {}y + {}z = {}', ra, rb, rc, rd))
+    log.info(S('the plane equation is {}x + {}y + {}z = {}', ra, rb, rc, rd))
 
     log.info(T('Calculating angles'))
     angles = []
@@ -167,21 +166,31 @@ def main(
             )
 
     if plot:
+        log.info(T("Plotting results:"))
         plotvars = plotvars or dict()
-        plotvars.setdefault(
-            'labels',
-            'plane: {}'.format(' and '.join(plane_selection)),
-            )
 
-        log.info(T('plot params:'))
-        for k, v in plotvars.items():
-            log.info(S('{} = {!r}', k, v))
+        xdata_in_time = plotvars.pop('xdata_in_time', 'ns')
+        frame_list = libmda.get_frame_list_from_slice(u, frame_slice)
+        xdata, xlabel = libmda.create_x_data(u, xdata_in_time, frame_list)
 
-        libplot.param(
-            list(range(len(u.trajectory))[frame_slice]),
-            angles,
-            **plotvars,
-            )
+        ymax = max(angles)
+        ymin = min(angles)
+
+        cli_defaults = {
+            'labels': 'plane: {}'.format(' and '.join(plane_selection)),
+            'dpi': 600,
+            'filename': 'plot_plane.png',
+            'legend': True,
+            'title': 'Plane oscilations',
+            'xlabel': xlabel,
+            'ylabel': aunit,
+            'ymax': ymax * 1.1 if ymax > 0 else ymax * 0.9,
+            'ymin': ymin * 1.1 if ymin < 0 else ymin * 0.9,
+            }
+
+        cli_defaults.update(plotvars)
+
+        plotparams.plot(frame_list, angles, **cli_defaults)
 
     log.info(S('done'))
     return

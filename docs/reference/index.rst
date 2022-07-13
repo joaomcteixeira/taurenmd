@@ -10,3 +10,4 @@ Thorough documentation on the *command-line* interfaces exists in :ref:`this pag
 
     core
     lib*
+    plots

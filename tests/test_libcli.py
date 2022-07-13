@@ -3,7 +3,8 @@ import argparse
 
 import pytest
 
-from taurenmd import Path, references
+from taurenmd import Path
+from taurenmd.core import references
 from taurenmd.libs import libcli as lc
 from taurenmd.logger import CMDFILE
 
@@ -182,9 +183,9 @@ def test_topology_input_error():
 @pytest.mark.parametrize(
     'cmd,expected',
     [
-        ('traj1.dcd', ['traj1.dcd']),
-        ('traj1.dcd traj2.dcd', ['traj1.dcd', 'traj2.dcd']),
-        ]
+        ('traj1.dcd', list(map(Path, ['traj1.dcd']))),
+        ('traj1.dcd traj2.dcd', list(map(Path, ['traj1.dcd', 'traj2.dcd']))),
+        ],
     )
 def test_trajectories(cmd, expected):
     """Test trajectories argument."""
@@ -219,10 +220,10 @@ def test_trajectory_error():
 @pytest.mark.parametrize(
     'cmd,expected',
     [
-        ('-s 1 -e 100 -p 4', (1, 100, 4)),
-        ('-e 100 -p 4', (None, 100, 4)),
-        ('-s 100 -p 4', (100, None, 4)),
-        ('-s 100 -e 4', (100, 4, None)),
+        ('-s 1 -e 100 -p 4', ('1', '100', '4')),
+        ('-e 100 -p 4', (None, '100', '4')),
+        ('-s 100 -p 4', ('100', None, '4')),
+        ('-s 100 -e 4', ('100', '4', None)),
         ]
     )
 def test_slice_arg(cmd, expected):
@@ -520,3 +521,18 @@ def test_ProgressBar_2():
 
     with pytest.raises(IndexError):
         PB.increment()
+
+
+@pytest.mark.parametrize(
+    'cmd,expected',
+    [
+        ('--inverted-selections 1 1', [1, 1]),
+        ('--inverted-selections 0 1', [0, 1]),
+        ]
+    )
+def test_inverted_selection(cmd, expected):
+    """Test inverted selection."""
+    parser = argparse.ArgumentParser()
+    lc.add_inverted_array(parser)
+    v = vars(parser.parse_args(cmd.split()))
+    assert v['inverted_selections'] == expected

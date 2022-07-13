@@ -68,8 +68,9 @@ import numpy as np
 from taurenmd import _BANNER, Path
 from taurenmd import core as tcore
 from taurenmd import log
-from taurenmd.libs import libcalc, libcli, libio, libmda, libplot  # noqa: F401
+from taurenmd.libs import libcalc, libcli, libio, libmda
 from taurenmd.logger import S, T
+from taurenmd.plots import plotparams
 
 
 __author__ = 'Joao M.C. Teixeira'
@@ -129,8 +130,7 @@ def main(
     trajectories = list(map(Path, trajectories))
     u = libmda.load_universe(topology, *trajectories, insort=insort)
 
-    log.info(T('slicing'))
-    fSlice = libio.frame_slice(start=start, stop=stop, step=step)
+    frame_slice = libmda.get_frame_slices(u, start, stop, step)
 
     log.info(T('computing planes'))
     log.info(S('for reference frame: {}', ref_frame))
@@ -179,7 +179,7 @@ def main(
     log.info(S('Cross vector to pA and Normal vector: {}', ref_plane_cross))
 
     log.info(T('Calculating tilt angles'))
-    total_frames = len(u.trajectory[fSlice])
+    total_frames = len(u.trajectory[frame_slice])
     log.info(S('for {} frames', total_frames))
     sizet = (total_frames, 3)
     roll_vectors = np.empty(sizet, dtype=np.float64)
@@ -187,7 +187,7 @@ def main(
     yaw_vectors = np.empty(sizet, dtype=np.float64)
 
     with libcli.ProgressBar(total_frames, suffix='frames') as pb:
-        for i, _ts in enumerate(u.trajectory[fSlice]):
+        for i, _ts in enumerate(u.trajectory[frame_slice]):
 
             pABC_cog_ts = pABC_atomG.center_of_geometry().copy()
             pABC_atomG.positions = pABC_atomG.positions - pABC_cog_ts
@@ -248,7 +248,7 @@ def main(
 
     if export:
         libio.export_data_to_file(
-            list(range(len(u.trajectory))[fSlice]),
+            list(range(len(u.trajectory))[frame_slice]),
             roll_torsion, pitch_torsion, yaw_torsion,
             fname=export,
             header=(
@@ -265,14 +265,39 @@ def main(
             )
 
     if plot:
-        plotvars = plotvars or dict()
-        plotvars.setdefault('labels', ['roll', 'pitch', 'yaw'])
+        log.info(T("Plotting results:"))
 
-        libplot.param(
-            list(range(len(u.trajectory))[fSlice]),
-            [roll_torsion, pitch_torsion, yaw_torsion],
-            **plotvars,
+        plotvars = plotvars or dict()
+
+        xdata_in_time = plotvars.pop('xdata_in_time', 'ns')
+        frame_list = libmda.get_frame_list_from_slice(u, frame_slice)
+        xdata, xlabel = libmda.create_x_data(u, xdata_in_time, frame_list)
+
+        subtitle = ' · '.join(plane_selection)
+        ymax = max(map(np.max, [roll_torsion, pitch_torsion, yaw_torsion]))
+        ymin = min(map(np.min, [roll_torsion, pitch_torsion, yaw_torsion]))
+
+        cli_defaults = {
+            'dpi': 600,
+            'filename': 'plot_rotations.png',
+            'labels': ['roll', 'pitch', 'yaw'],
+            'legend': True,
+            'title': f'Roll, pitch, and yaw angles\n{subtitle}',
+            'xlabel': xlabel,
+            'ylabel': aunit,
+            'ymax': ymax * 1.1 if ymax > 0 else ymax * 0.9,
+            'ymin': ymin * 1.1 if ymin < 0 else ymin * 0.9,
+            }
+
+        cli_defaults.update(plotvars or dict())
+
+        plotparams.plot(
+            xdata,
+            np.vstack((roll_torsion, pitch_torsion, yaw_torsion)),
+            **cli_defaults,
             )
+
+        log.info(S(f'saved plot: {cli_defaults["filename"]}'))
 
     return
 

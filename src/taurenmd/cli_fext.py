@@ -118,6 +118,9 @@ def main(
 
     u = libmda.load_universe(topology, *trajectories, insort=insort)
 
+    frame_slice = libmda.get_frame_slices(u, start, stop, step)
+    start, stop, step = frame_slice.start, frame_slice.stop, frame_slice.step
+
     frames_to_extract = libio.frame_list(
         len(u.trajectory),
         start=start,

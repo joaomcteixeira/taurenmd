@@ -184,8 +184,7 @@ def main(
         log.info(S('- {}', align, indent=2))
         align_reference = mda.Universe(Path(topology).str())
 
-    log.info(T('transformation'))
-    sliceObj = libio.frame_slice(start, stop, step)
+    frame_slice = libmda.get_frame_slices(u, start, stop, step)
 
     log.info(S('selecting: {}', selection))
     atom_selection = u.select_atoms(selection)
@@ -194,11 +193,11 @@ def main(
     log.info(T('saving trajectory'))
     traj_output = Path(traj_output)
     log.info(S('destination: {}', traj_output.resolve().str()))
-    total_frames = len(u.trajectory[sliceObj])
+    total_frames = len(u.trajectory[frame_slice])
 
     with mda.Writer(traj_output.str(), atom_selection.n_atoms) as W, \
             libcli.ProgressBar(total_frames, suffix='frames') as pb:
-        for _ts in u.trajectory[sliceObj]:
+        for _ts in u.trajectory[frame_slice]:
 
             if unwrap:
                 log.debug(S('unwrapping', indent=2))
@@ -224,7 +223,7 @@ def main(
         fout = libio.parse_top_output(top_output, traj_output)
         log.info(S('saving frame 0 to: {}', fout.resolve()))
         with mda.Writer(fout.str(), atom_selection.n_atoms) as W:
-            for _ts in u.trajectory[sliceObj][0:1]:
+            for _ts in u.trajectory[frame_slice][0:1]:
                 if unwrap:
                     log.debug(S('unwrapping for topology', indent=2))
                     atom_selection.unwrap(

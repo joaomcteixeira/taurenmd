@@ -29,11 +29,11 @@ from MDAnalysis.analysis.rms import RMSF as mdaRMSF
 
 from taurenmd import core as tcore
 from taurenmd import log
-from taurenmd.libs import libcli, libio
+from taurenmd.libs import libio
 from taurenmd.logger import S, T
 
 
-@libcli.add_reference(tcore.ref_mda)
+@tcore.add_reference(tcore.ref_mda)
 def mda_rmsd(
         universe,
         frame_slice=None,
@@ -110,10 +110,10 @@ def mda_rmsd(
 
     # rmsds[:, ii] = R.rmsd[:, 2][self._fslicer]
 
-    return R.rmsd[frame_slice, 2]
+    return R.results.rmsd[frame_slice, 2]
 
 
-@libcli.add_reference(tcore.ref_mda)
+@tcore.add_reference(tcore.ref_mda)
 def mda_rmsf(
         atom_group,
         frame_slice=None,
@@ -159,7 +159,7 @@ def mda_rmsf(
 
     R.run()
 
-    return R.rmsf
+    return R.results.rmsf
 
 
 def calc_plane_normal(p1, p2, p3):
@@ -243,7 +243,7 @@ def calc_planes_angle(a1, b1, c1, a2, b2, c2, aunit='radians'):
     d = (a1 * a2 + b1 * b2 + c1 * c2)
     e1 = math.sqrt(a1 * a1 + b1 * b1 + c1 * c1)
     e2 = math.sqrt(a2 * a2 + b2 * b2 + c2 * c2)
-    d = d / (e1 * e2)
+    d = round(d / (e1 * e2), 2)
     angle = math.acos(d)
     if aunit == 'degrees':
         return math.degrees(angle)

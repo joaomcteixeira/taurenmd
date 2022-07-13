@@ -38,13 +38,18 @@ you can also use ``tmdrmsf`` instead of ``taurenmd rmsf``.
 """  # noqa: E501
 import argparse
 import functools
+import os
 from datetime import datetime
+
+import numpy as np
 
 from taurenmd import _BANNER, Path
 from taurenmd import core as tcore
 from taurenmd import log
-from taurenmd.libs import libcalc, libcli, libio, libmda, libplot
+from taurenmd.libs import libcalc, libcli, libmda, libutil
+from taurenmd.libs.libutil import make_list
 from taurenmd.logger import S, T
+from taurenmd.plots import labeldots
 
 
 __author__ = 'Joao M.C. Teixeira'
@@ -56,7 +61,6 @@ __status__ = 'Production'
 __doc__ += (
     f'{tcore.ref_mda}'
     f'{tcore.ref_mda_selection}'
-    f'{tcore.ref_plottemplates_labeldots}'
     )
 
 _help = 'Calculate RMSFS for a selection and trajectory slice.'
@@ -72,6 +76,7 @@ libcli.add_topology_arg(ap)
 libcli.add_trajectories_arg(ap)
 libcli.add_insort_arg(ap)
 libcli.add_atom_selections_arg(ap)
+libcli.add_inverted_array(ap)
 libcli.add_slice_arg(ap)
 libcli.add_data_export_arg(ap)
 libcli.add_plot_arg(ap)
@@ -88,13 +93,15 @@ def main(
         start=None,
         stop=None,
         step=None,
-        selections=None,
+        selections=('protein and name CA',),
+        inverted_selections=None,
         export=False,
         plot=False,
         plotvars=None,
         **kwargs
         ):
     """Execute client main logic."""
+    print(inverted_selections)
     log.info(T('starting RMSFs calculation'))
 
     topology = Path(topology)
@@ -102,61 +109,87 @@ def main(
 
     u = libmda.load_universe(topology, *trajectories, insort=insort)
 
-    frame_slice = libio.frame_slice(
-        start=start,
-        stop=stop,
-        step=step,
-        )
+    frame_slice = libmda.get_frame_slices(u, start, stop, step)
 
-    if selections is None:
-        selections = ['all']
-
-    if not isinstance(selections, list) or len(selections) == 0:
-        raise TypeError('selections must be LIST with at least one element')
-
-    log.info(T('calculating'))
-    for sel in selections:
-        labels = []
-        rmsfs = []
-        log.info(S('for selection: {}', sel))
-        atom_group = u.select_atoms(sel)
-        labels = libmda.draw_atom_label_from_atom_group(atom_group)
-
-        rmsfs = libcalc.mda_rmsf(
-            atom_group,
-            frame_slice=frame_slice,
+    selections_list = make_list(selections)
+    print(selections_list)
+    if not selections_list:
+        emsg = (
+            'No selections defined. Check your `selections` argument input: '
+            f'{selections}'
             )
+        raise ValueError(emsg)
 
-        if export:
-            libio.export_data_to_file(
-                labels,
-                rmsfs,
-                fname=export,
-                header=(
-                    "# Date: {}\n"
-                    "# Topology: {}\n"
-                    "# Trajectories {}\n"
-                    "# Atom,RMSF\n"
-                    ).format(
-                        datetime.now().strftime("%d/%m/%Y, %H:%M:%S"),
-                        Path(topology).resolve(),
-                        ', '.join(f.resolve().str() for f in trajectories),
-                        ),
+    log.info(T('calculating RMSFs'))
+
+    labels = []
+    rmsfs = []
+
+    # Create a list of slice objects according to `inverted_selections`
+    # If true, create [::-1] slice, and the data for that selection will be
+    # inverted. This is useful for plotting DNA or other antiparallel chains.
+    if inverted_selections:
+        inv_sels = [
+            slice(None, None, -1) if bool(int(inv)) else slice(None, None, None)
+            for inv in inverted_selections
+            ]
+    else:
+        inv_sels = [slice(None, None, None)] * len(selections_list)
+
+    for i, sel in enumerate(selections_list):
+        log.info(S('for sel: {}', sel))
+
+        atom_group = u.select_atoms(sel)
+
+        _ = libmda.draw_atom_label_from_atom_group(atom_group)[inv_sels[i]]
+        labels.append(_)
+
+        _ = libcalc.mda_rmsf(atom_group, frame_slice=frame_slice)[inv_sels[i]]
+        rmsfs.append(_)
+
+    if export:
+
+        data_str = (
+            "# Date: {1}{0}"
+            "# Topology: {2}{0}"
+            "# Trajectories {3}{0}"
+            "# Atom,RMSF combinations{0}"
+            "# {4}{0}"
+            "{5}"
+            ).format(
+                os.linesep,
+                datetime.now().strftime("%d/%m/%Y, %H:%M:%S"),
+                Path(topology).resolve(),
+                ','.join(f.resolve().str() for f in trajectories),
+                ','.join(f'{sel},RMSF' for sel in selections_list),
+                libutil.make_csv_lines_in_interleaved_manner(rmsfs, labels),
                 )
 
-        if plot:
-            plotvars = plotvars or dict()
-            plotvars.setdefault('series_labels', selections)
+        log.info(T('Saving data'))
+        log.info(S('to: {}', export))
+        Path(export).write_text(data_str)
 
-            log.info(T('plot params:'))
-            for k, v in plotvars.items():
-                log.info(S('{} = {!r}', k, v))
+    if plot:
+        log.info(T("Plotting results:"))
 
-            libplot.label_dots(
-                labels,
-                rmsfs,
-                **plotvars,
-                )
+        armsfs = np.array(rmsfs)
+        ymax = np.max(armsfs)
+
+        cli_defaults = {
+            'ymax': ymax * 1.1 if ymax > 0 else ymax * 0.9,
+            'filename': 'plot_rmsfs.pdf',
+            'title': 'RMSFs',
+            'xlabel': 'Atoms',
+            'ylabel': r'RMSF ($\AA$)',
+            'x_labels': [_l.split('.')[-1] for _l in labels[0]],
+            'labels': selections_list,
+            }
+
+        cli_defaults.update(plotvars or dict())
+
+        labeldots.plot(armsfs, **cli_defaults)
+
+        log.info(S(f'saved plot: {cli_defaults["filename"]}'))
 
     return
 

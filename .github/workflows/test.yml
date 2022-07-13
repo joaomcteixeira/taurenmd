@@ -1,4 +1,4 @@
-name: pytest_py37
+name: test
 
 on:
   push:
@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, "3.10"]
     defaults:
       run:
         shell: bash -l {0}
@@ -17,19 +20,19 @@ jobs:
     - uses: conda-incubator/setup-miniconda@v2
       with:
         activate-environment: test
-        python-version: 3.7
+        python-version: ${{ matrix.python-version }}
         channels: conda-forge
 
     - name: Install dependencies
       run: |
-        conda install pip setuptools wheel tox coverage[toml]
+        conda install pip setuptools wheel tox
 
     - name: Test with tox
-      run: tox -e py37
+      run: tox -e test -rvv
 
     # from https://github.com/codecov/codecov-action
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
+      uses: codecov/codecov-action@v2
       with:
         files: ./coverage.xml
         fail_ci_if_error: true

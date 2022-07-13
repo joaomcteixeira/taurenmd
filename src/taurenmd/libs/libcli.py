@@ -6,16 +6,16 @@ client interfaces. It contains also others used to enhance the user
 experience.
 """
 import argparse
+import ast
 import os
 import sys
 from datetime import datetime
-from functools import wraps
 
 import numpy as np
 
-from taurenmd import _BANNER, __version__
+from taurenmd import _BANNER, Path, __version__
 from taurenmd import core as tcore
-from taurenmd import log, references
+from taurenmd import log
 from taurenmd.logger import CMDFILE
 
 
@@ -48,33 +48,12 @@ def maincli(ap, main):
     return result
 
 
-def add_reference(ref):
-    """
-    Add reference decorator.
-
-    Example
-    -------
-
-        >>> @add_reference(str)
-        >>> def myfunct():
-        >>>     ...
-    """
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            references.add(ref)
-            result = func(*args, **kwargs)
-            return result
-        return wrapper
-    return decorator
-
-
 def save_references():
     """Save used references to log file."""
     with open(CMDFILE, 'a') as fh:
         fh.write('References:\n')
         fh.write(tcore.ref_taurenmd)
-        fh.write('\n'.join(sorted(list(references))))
+        fh.write('\n'.join(sorted(list(tcore.references))))
         fh.write('\n\n')
 
 
@@ -124,15 +103,17 @@ class ParamsToDict(argparse.Action):
                 if ',' in v:
                     vs = v.split(',')
                     try:
-                        param_dict[k] = tuple(float(i) for i in vs)
-                    except (ValueError, TypeError):
+                        param_dict[k] = tuple(ast.literal_eval(i) for i in vs)
+                    except (ValueError, TypeError, SyntaxError):
                         param_dict[k] = tuple(i for i in vs)
 
                 else:
                     try:
-                        param_dict[k] = float(v)
+                        param_dict[k] = ast.literal_eval(v)
                     except (ValueError, TypeError):  # is string or list
                         param_dict[k] = bool_value.get(v.lower(), v)
+                    except (SyntaxError):
+                        param_dict[k] = v
 
         namespace.plotvars = param_dict
         setattr(namespace, self.dest, True)
@@ -325,6 +306,7 @@ def add_trajectories_arg(parser):
             'trajectories will be concatenated by input order.'
             ),
         nargs='+',
+        type=Path,
         )
 
 
@@ -366,7 +348,7 @@ def add_slice_arg(parser):
             'Defaults to None, considers from the beginning.'
             ),
         default=None,
-        type=int,
+        type=str,
         )
 
     parser.add_argument(
@@ -380,7 +362,7 @@ def add_slice_arg(parser):
             'Defaults to None, considers to the end.'
             ),
         default=None,
-        type=int,
+        type=str,
         )
 
     parser.add_argument(
@@ -392,7 +374,7 @@ def add_slice_arg(parser):
             'Defaults to None, considers every 1 frame.'
             ),
         default=None,
-        type=int,
+        type=str,
         )
 
 
@@ -449,6 +431,26 @@ def add_atom_selections_arg(parser):
             ),
         default=None,
         nargs='+',
+        )
+
+
+def add_inverted_array(parser):
+    """
+    Add inverted selections optional argument.
+
+    Saves an array of 0s and 1s to invert the order of selections.
+
+    Parameters
+    ----------
+    parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
+        The argument parser to which add the selections argument.
+    """  # noqa: E501
+    parser.add_argument(
+        '--inverted-selections',
+        help='Invert order of selections.',
+        default=None,
+        nargs='+',
+        type=int,
         )
 
 

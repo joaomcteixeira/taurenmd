@@ -29,7 +29,6 @@ from setuptools import find_packages, setup
 
 
 install_requires = [
-    'bioplottemplates>0.1',
     ]
 
 if os.getenv('READTHEDOCS'):
@@ -89,8 +88,6 @@ setup(
         'Environment :: Console',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Topic :: Utilities',
@@ -109,7 +106,7 @@ setup(
         'Molecular Biology',
         'Biochemistry',
         ],
-    python_requires='>=3.6, <3.10',
+    python_requires='>=3.8, <3.11',
     install_requires=install_requires,
     extras_require={
         'all': alldeps,

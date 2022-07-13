@@ -21,11 +21,11 @@ import mdtraj
 from taurenmd import Path
 from taurenmd import core as tcore
 from taurenmd import log
-from taurenmd.libs import libcli, libio, libopenmm
+from taurenmd.libs import libio, libopenmm
 from taurenmd.logger import S, T
 
 
-@libcli.add_reference(tcore.ref_mdt)
+@tcore.add_reference(tcore.ref_mdt)
 def load_traj(topology, trajectories, insort=False):
     """
     Load trajectory with `MDTraj <http://mdtraj.org/1.9.3/index.html>`_.
@@ -72,7 +72,7 @@ def load_traj(topology, trajectories, insort=False):
     return mdtrajectory
 
 
-@libcli.add_reference(tcore.ref_mdt)
+@tcore.add_reference(tcore.ref_mdt)
 def imagemol_protocol1(traj):
     """Attempt to image molecules acting on the whole traj."""
     log.info(T('running reimage protocol #1'))
@@ -91,7 +91,7 @@ def imagemol_protocol1(traj):
     return reimaged
 
 
-@libcli.add_reference(tcore.ref_mdt)
+@tcore.add_reference(tcore.ref_mdt)
 def imagemol_protocol2(traj):
     """Attempt to image molecules frame by frame."""
     reimaged = []
