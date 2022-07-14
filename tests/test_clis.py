@@ -273,6 +273,31 @@ def test_cli_fext_1():
     p2.unlink()
 
 
+def test_cli_fext_2():
+    """Test client frame extract with output folder."""
+    dd = "dummy_dir_random_dir_qBnbL9G"
+
+    cli_fext.main(
+        toptest,
+        [trajtest],
+        start=4,
+        stop=6,
+        step=None,
+        prefix='timestep_',
+        ext='pdb',
+        selection='name CA',
+        odir=dd
+        )
+
+    p1 = Path(dd, 'timestep_04.pdb')
+    p2 = Path(dd, 'timestep_05.pdb')
+    assert p1.exists()
+    assert p2.exists()
+    p1.unlink()
+    p2.unlink()
+    Path(dd).rmdir()
+
+
 def test_cli_imagemol():
     """Test imagemol."""
     cli_imagemol.main(

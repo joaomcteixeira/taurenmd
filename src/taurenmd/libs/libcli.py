@@ -192,6 +192,7 @@ def add_subparser(parser, module):
 # i: sort input by trail int
 # l: selection
 # o: topology output
+# odir: output dir
 # p: slice step
 # r: reference frame
 # s: slice start
@@ -646,6 +647,28 @@ def add_data_export_arg(parser):
         default=False,
         const='results.csv',
         nargs='?',
+        )
+
+
+def add_output_dir_arg(parser):
+    """
+    Add output dir to client.
+
+    Client gains `--odir` option.
+
+    Parameters
+    ----------
+    parser : `argparse.ArgumentParser <https://docs.python.org/3/library/argparse.html#argparse.ArgumentParser>`_
+        The argument parser to which add the export argument.
+    """  # noqa: E501
+    parser.add_argument(
+        '--odir',
+        help=(
+            "Save output to directory. Creates directory if doesn't exist. "
+            "Defaults to the current working directory."
+            ),
+        default=Path.cwd(),
+        type=Path,
         )
 
 

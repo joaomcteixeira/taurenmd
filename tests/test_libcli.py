@@ -536,3 +536,26 @@ def test_inverted_selection(cmd, expected):
     lc.add_inverted_array(parser)
     v = vars(parser.parse_args(cmd.split()))
     assert v['inverted_selections'] == expected
+
+
+@pytest.mark.parametrize(
+    'cmd,expected',
+    [
+        ('--odir my_folder', Path("my_folder")),
+        ('--odir my_folder/other', Path("my_folder", "other")),
+        ]
+    )
+def test_output_dir(cmd, expected):
+    """Test output directory."""
+    parser = argparse.ArgumentParser()
+    lc.add_output_dir_arg(parser)
+    v = vars(parser.parse_args(cmd.split()))
+    assert v['odir'] == expected
+
+
+def test_output_dir_default():
+    """Test output directory."""
+    parser = argparse.ArgumentParser()
+    lc.add_output_dir_arg(parser)
+    v = vars(parser.parse_args([]))
+    assert v['odir'] == Path.cwd()
