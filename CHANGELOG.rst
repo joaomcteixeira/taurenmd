@@ -10,6 +10,9 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+v0.11.1 (2022-07-14)
+------------------------------------------------------------
+
 * Update badges after 0.11 #65
 
 v0.11.0 (2022-07-13)
