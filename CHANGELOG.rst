@@ -10,6 +10,8 @@ Upon version 0.8, and before version 1, SV2 major version increments are reflect
 Changelog
 =========
 
+* Add output dir option to `fext` #66
+
 v0.11.0 (2022-07-13)
 ------------------------------------------------------------
 

@@ -96,6 +96,8 @@ ap.add_argument(
     default='.pdb',
     )
 
+libcli.add_output_dir_arg(ap)
+
 
 def _ap():
     return ap
@@ -112,9 +114,14 @@ def main(
         prefix='frame_',
         ext='pdb',
         selection='all',
-        **kwargs):
+        odir=None,
+        **kwargs
+        ):
     """Execute main client logic."""
     log.info('Starting...')
+
+    odir = Path(odir) if odir else Path.cwd()
+    odir.mkdir(parents=True, exist_ok=True)
 
     u = libmda.load_universe(topology, *trajectories, insort=insort)
 
@@ -145,7 +152,7 @@ def main(
                 )
 
             atom_group.write(
-                filename=Path(file_name),
+                filename=Path(odir, file_name),
                 frames=[frame],
                 )
 
